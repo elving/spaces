@@ -10,7 +10,7 @@ import { startCache, clearCache } from './api/cache'
 
 dotenv.load()
 
-const port = 5000
+const port = 5001
 const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost'
 const server = express()
 const redisConfig = getRedisConfig()

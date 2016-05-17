@@ -1,0 +1,27 @@
+.page-crud-spaceType {
+  background-color: #f8f8f8;
+}
+
+.page-crud-spaceType .page-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spaceType-form-container {
+  width: 100%;
+}
+
+.spaceType-form {
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  background-color: #ffffff;
+  width: 100%;
+  margin: 30px auto;
+  display: flex;
+  padding: 30px;
+  max-width: 620px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}

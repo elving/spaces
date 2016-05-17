@@ -1,0 +1,60 @@
+input:-webkit-autofill {
+  border-color: #dadada;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+  transition: unset;
+}
+
+.textfield {
+  color: #555;
+  border: 1px solid #dadada;
+  border-radius: 4px;
+  background-color: #ffffff;
+  transition: opacity 0.2s linear, border-color 0.2s linear, background-color 0.2s linear;
+  padding: 10px;
+  min-height: 47px;
+}
+
+textarea.textfield {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.textfield:focus,
+.textfield:active {
+  border-color: #c0c0c0;
+  background-color: #fcfcfc;
+}
+
+.textfield:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.textfield--error {
+  color: #fb5465;
+  border-color: #fb5465;
+}
+
+.textfield-icon {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+
+.textfield-icon > .icon {
+  top: 50%;
+  left: 10px;
+  position: absolute;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.textfield-icon .icon-fill {
+  fill: #aaaaaa;
+}
+
+.textfield-icon > .textfield {
+  width: 100%;
+  padding-left: 40px;
+}

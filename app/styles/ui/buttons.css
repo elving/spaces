@@ -1,0 +1,165 @@
+.button,
+.button:active {
+  color: #555555;
+  cursor: pointer;
+  border: 1px solid #ececec;
+  border-radius: 4px;
+  background-color: #ececec;
+  transition: opacity 0.2s linear, border-color 0.2s linear, background-color 0.2s linear, color 0.2s linear;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  padding: 10px 15px;
+  min-height: 47px;
+  align-items: center;
+  justify-content: center;
+}
+
+.button:hover {
+  color: #555555;
+  border-color: #dedede;
+  background-color: #dedede;
+  text-decoration: none;
+}
+
+.button:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.button .icon {
+  margin-right: 10px;
+}
+
+.button--icon-right .icon {
+  margin-left: 10px;
+  margin-right: 0;
+}
+
+.button .icon-fill {
+  fill: #555555;
+  transition: fill 0.2s linear;
+}
+
+.button-text {
+  text-align: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button--icon .icon {
+  margin: 0 auto;
+}
+
+.button--transparent,
+.button--transparent:active {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.button--transparent:hover {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.button--link,
+.button--link:active {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.button--link:hover {
+  border-color: #f5f5f5;
+  background-color: #f5f5f5;
+}
+
+.button--primary,
+.button--primary:active {
+  color: #ffffff;
+  border-color: #2ecc71;
+  background-color: #2ecc71;
+}
+
+.button--primary:hover {
+  color: #ffffff;
+  border-color: #27bf67;
+  background-color: #27bf67;
+}
+
+.button--primary .icon-fill {
+  fill: #ffffff;
+}
+
+.button--primary-outline,
+.button--primary-outline:active {
+  color: #2ecc71;
+  border-color: #2ecc71;
+  background-color: transparent;
+}
+
+.button--primary-outline:hover {
+  color: #ffffff;
+  border-color: #2ecc71;
+  background-color: #2ecc71;
+}
+
+.button--primary-outline .icon-fill {
+  fill: #2ecc71;
+}
+
+.button--primary-outline:hover .icon-fill {
+  fill: #ffffff;
+}
+
+.button--danger,
+.button--danger:active {
+  color: #ffffff;
+  border-color: #fb5465;
+  background-color: #fb5465;
+}
+
+.button--danger:hover {
+  color: #ffffff;
+  border-color: #e34c5b;
+  background-color: #e34c5b;
+}
+
+.button--danger .icon-fill {
+  fill: #ffffff;
+}
+
+.button--facebook,
+.button--facebook:active {
+  color: #ffffff;
+  border-color: #4e69a2;
+  background-color: #4e69a2;
+}
+
+.button--facebook:hover {
+  color: #ffffff;
+  border-color: #466098;
+  background-color: #466098;
+}
+
+.button--facebook .icon-fill {
+  fill: #fff;
+}
+
+.button--twitter,
+.button--twitter:active {
+  color: #ffffff;
+  border-color: #55acee;
+  background-color: #55acee;
+}
+
+.button--twitter:hover {
+  color: #ffffff;
+  border-color: #4fa4e4;
+  background-color: #4fa4e4;
+}
+
+.button--twitter .icon-fill {
+  fill: #fff;
+}

@@ -1,0 +1,28 @@
+# OSX
+.DS_Store
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# SublimeText project files
+/*.sublime-project
+
+# NPM packages folder.
+npm-debug.log
+node_modules/
+
+# S3
+rootkey.csv
+
+# Env File
+.env
+
+# Static
+public/*.map
+
+# Redis dump
+dump.*
+
+# Dev Procfile
+Procfile.dev

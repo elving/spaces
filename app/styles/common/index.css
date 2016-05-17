@@ -1,0 +1,6 @@
+.page-content {
+  min-height: calc(100vh - 130px);
+}
+
+@import './header.css';
+@import './footer.css';

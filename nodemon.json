@@ -1,0 +1,13 @@
+{
+  "ext": "js json",
+  "env": { "NODE_ENV": "development" },
+  "watch": ["app/*"],
+  "ignore": [
+    "build/*",
+    "app/views/*",
+    "app/styles/*",
+    "app/public/*",
+    "app/components/*"
+  ],
+  "verbose": true
+}

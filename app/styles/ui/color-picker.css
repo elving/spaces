@@ -1,0 +1,15 @@
+.react-colorpicker-panel {
+  width: auto;
+  align-self: flex-start;
+}
+
+.react-colorpicker-panel-inner {
+  box-shadow: none;
+}
+
+.react-colorpicker-panel-params-input,
+.react-colorpicker-panel-params-lable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

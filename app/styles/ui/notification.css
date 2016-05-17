@@ -1,0 +1,52 @@
+.notification {
+  border: 1px solid transparent;
+  box-shadow: 0 0 8px rgba(0,0,0,0.15);
+  border-radius: 4px;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  padding: 15px;
+  display: flex;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification--default {
+  border-color: #dadada;
+  background-color: #ffffff;
+}
+
+.notification--success {
+  color: #ffffff;
+  background-color: #2ecc71;
+}
+
+.notification--success .icon-fill {
+  fill: #ffffff;
+}
+
+.notification--error {
+  color: #ffffff;
+  background-color: #fb5465;
+}
+
+.notification--error .icon-fill {
+  fill: #ffffff;
+}
+
+.notification--error a,
+.notification--success a {
+  color: #ffffff;
+}
+
+.notification-content {
+  font-size: 16px;
+}
+
+.notification-close,
+.notification-close:active {
+  padding: 0;
+  min-height: inherit;
+  margin-left: 5px;
+}

@@ -1,0 +1,124 @@
+.page-add-product {
+  background-color: #f8f8f8;
+}
+
+.page-add-product .page-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-form-container {
+  width: 100%;
+}
+
+.product-form-scrape {
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  background-color: #ffffff;
+  width: 100%;
+  margin: 30px auto;
+  padding: 30px;
+  display: flex;
+  max-width: 620px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.product-form {
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  background-color: #ffffff;
+  width: 100%;
+  margin: 30px auto;
+  display: flex;
+  padding: 30px;
+  max-width: 620px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.image-picker {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.image-picker-current {
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  background-color: #ffffff;
+  transition: height 0.2s linear;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  padding: 15px;
+  position: relative;
+  overflow: hidden;
+  min-height: 300px;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-picker-current--loading .image-picker-current-image {
+  top: -9999px;
+  left: -9999px;
+  position: absolute;
+}
+
+.image-picker-current-image {
+  border-radius: 4px;
+  width: auto;
+  height: auto;
+  display: block;
+  max-width: 500px;
+  max-height: 280px;
+}
+
+.image-picker-no-images-icon .icon-fill {
+  fill: #d5d5d5;
+}
+
+.image-picker-actions,
+.image-picker-url-form {
+  width: 100%;
+  display: flex;
+  margin-top: 15px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.image-picker-actions-left,
+.image-picker-actions-right {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.image-picker-actions-left > .button,
+.image-picker-actions-right > .button {
+  margin-right: 15px;
+}
+
+.image-picker-actions-left > .button:last-child,
+.image-picker-actions-right > .button:last-child {
+  margin-right: 0;
+}
+
+.image-picker-url-form-input {
+  width: 100%;
+  margin-right: 15px;
+}
+
+.image-picker-url-form > .button {
+  flex-shrink: 0;
+  margin-right: 15px;
+}
+
+.image-picker-url-form > .button:last-child {
+  margin-right: 0;
+}

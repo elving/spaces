@@ -1,0 +1,27 @@
+.loader-top,
+.loader-left,
+.loader-right {
+  opacity: 0;
+}
+
+.loader-left {
+  animation: loader 0.7s ease-in 0.15s infinite forwards;
+}
+
+.loader-top {
+  animation: loader 0.7s ease-in 0.35s infinite forwards;
+}
+
+.loader-right {
+  animation: loader 0.7s ease-in 0.55s infinite forwards;
+}
+
+@keyframes loader {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

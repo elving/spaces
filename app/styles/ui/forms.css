@@ -1,0 +1,89 @@
+.form-title {
+  border-bottom: 1px solid #e5e5e5;
+  font-weight: 300;
+  width: 100%;
+  margin: 0 auto 30px;
+  display: flex;
+  align-items: center;
+  padding-bottom: 15px;
+  justify-content: space-between;
+}
+
+.form-title-link {
+  color: #888888;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-title-link:hover {
+  text-decoration: none;
+}
+
+.form-title-link .icon {
+  margin-right: 5px;
+}
+
+.form-title-link .icon-fill {
+  fill: #888888;
+}
+
+.form-text {
+  margin: 0;
+}
+
+.form-label {
+  font-weight: 600;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  justify-content: space-between;
+}
+
+.form-label > small {
+  color: #aaa;
+  font-size: 13px;
+  font-weight: 400;
+  margin-left: 5px;
+}
+
+.form-group {
+  width: 100%;
+  margin: 0 auto 30px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-group > * {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.form-group > *:last-child {
+  margin-bottom: 0;
+}
+
+.form > .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group--inline {
+  align-items: flex-start;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.form-group--inline > * {
+  width: calc(50% - 7.5px);
+  margin: 0;
+}
+
+.form-error {
+  color: #fb5465;
+}

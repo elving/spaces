@@ -1,0 +1,196 @@
+.select {
+  transition: opacity 0.2s linear, border-color 0.2s linear, background-color 0.2s linear;
+}
+
+.select .Select-control {
+  color: #555;
+  cursor: text;
+  border: 1px solid #dadada;
+  border-radius: 4px;
+  background-color: #ffffff;
+  transition: opacity 0.2s linear, border-color 0.2s linear, background-color 0.2s linear;
+  height: auto;
+  padding: 0 50px 10px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 47px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.select--error .Select-control {
+  color: #fb5465;
+  border-color: #fb5465;
+}
+
+.select.is-disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.select .Select-control:hover {
+  box-shadow: none;
+}
+
+.select.is-focused .Select-control,
+.select.is-focused:not(.is-open) > .Select-control {
+  box-shadow: none;
+  border-color: #c0c0c0;
+}
+
+.select.is-open .Select-control {
+  border-radius: 4px 4px 0 0;
+}
+
+.select .Select-input {
+  margin-top: 9px;
+}
+
+.select .Select-input,
+.select .Select-input > input,
+.select .Select-arrow-zone,
+.select .Select-placeholder {
+  height: auto;
+  padding: 0;
+}
+
+.select .Select-placeholder,
+.select.Select--single .Select-value {
+  line-height: normal;
+  top: 50%;
+  left: 0;
+  padding: 0 10px;
+  transform: translateY(-55%);
+}
+
+.select.Select--multi .Select-item,
+.select.Select--multi .Select-value {
+  border-color: #c0c0c0;
+  border-radius: 3px;
+  background-color: #f8f8f8;
+  margin: 9px 10px -1px -1px;
+  display: flex;
+  align-self: center;
+  justify-content: flex-start;
+}
+
+.select.Select--multi .Select-item-icon,
+.select.Select--multi .Select-value-icon,
+.select.Select--multi .Select-item-label,
+.select.Select--multi .Select-value-label {
+  color: #666666;
+  display: flex;
+  position: relative;
+  align-self: center;
+  justify-content: center;
+}
+
+.select.Select--multi .Select-item-icon,
+.select.Select--multi .Select-value-icon {
+  border-radius: 3px 0 0 3px;
+  font-size: 18px;
+  border-color: #c0c0c0;
+  transition: color 0.2s linear;
+  padding: 0 8px;
+}
+
+.select.Select--multi .Select-item-icon:hover,
+.select.Select--multi .Select-value-icon:hover {
+  color: #e74c3c;
+  background-color: #f8f8f8;
+}
+
+.select.Select--multi .Select-item-label,
+.select.Select--multi .Select-value-label {
+  border-radius: 0 3px 3px 0;
+  font-size: 14px;
+  top: -1px;
+  padding: 0 8px;
+}
+
+.select .Select-clear-zone,
+.select .Select-arrow-zone {
+  top: 50%;
+  right: 10px;
+  width: auto;
+  height: auto;
+  z-index: 5;
+  position: absolute;
+  transform: translateY(-50%);
+}
+
+.select .Select-clear-zone {
+  transition: color 0.2s linear;
+  right: 30px;
+}
+
+.select .Select-clear-zone:hover {
+  color: #e74c3c;
+}
+
+.select .Select-arrow {
+  border-color: #c0c0c0 transparent transparent;
+  border-width: 7px 6px 3px;
+  transition: opacity 0.2s linear, border-color 0.2s linear, background-color 0.2s linear;
+}
+
+.select.is-open .Select-arrow,
+.select .Select-arrow-zone:hover > .Select-arrow {
+  border-top-color: #a0a0a0;
+}
+
+.select .Select-menu-outer {
+  border: 1px solid #c0c0c0;
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.05);
+  border-radius: 0 0 4px 4px;
+  background-color: #ffffff;
+}
+
+.Select-option {
+  color: #555555;
+  font-size: 16px;
+  transition: opacity 0.2s linear, border-color 0.2s linear, background-color 0.2s linear;
+  padding: 8px 10px;
+}
+
+.Select-option:last-child {
+  border-radius: 0 0 4px 4px;
+}
+
+.Select-option.is-selected {
+  color: #444444;
+  background-color: #f2f2f2;
+}
+
+.Select-option.is-focused {
+  color: #444444;
+  background-color: #f2f2f2;
+}
+
+.select-option-color-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.select-option-color {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  display: flex;
+  margin-right: 10px;
+}
+
+.select-value-color-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.select-value-color {
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  display: flex;
+  margin-right: 5px;
+}

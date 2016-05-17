@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title><%= metadata.title %></title>
+
+    <meta charSet="utf-8"/>
+    <meta httpEquiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="description" content="<%= ogDescription %>"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="p:domain_verify" content="d852f83724170b801212b6bdc3b6be3f"/>
+    <meta name="google-site-verification" content="6exAOz-gyyXQBFmCzgUu2IvROo_5XmetNz617HFXI7U"/>
+
+    <meta property="fb:app_id" content="<%= fbId %>"/>
+    <meta property="og:url" content="<%= ogUrl %>"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="<%= ogTitle %>"/>
+    <meta property="og:image" content="<%= ogImage %>"/>
+    <meta property="og:site_name" content="<%= ogSiteName %>"/>
+    <meta property="og:description" content="<%= ogDescription %>"/>
+
+    <meta content="@joinspaces" name="twitter:site"/>
+    <meta content="@joinspaces" name="twitter:creator"/>
+    <meta content="<%= ogTitle %>" name="twitter:title"/>
+    <meta content="<%= ogImage %>" name="twitter:image"/>
+    <meta content="summary_large_image" name="twitter:card"/>
+
+    <link rel="apple-touch-icon" sizes="57x57" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-57x57.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="60x60" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-60x60.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-72x72.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="76x76" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-76x76.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-114x114.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="120x120" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-120x120.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="144x144" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-144x144.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="152x152" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-152x152.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-180x180.png?<%= version %>"/>
+    <link rel="icon" type="image/png" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/favicon-32x32.png?<%= version %>" sizes="32x32"/>
+    <link rel="icon" type="image/png" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/favicon-194x194.png?<%= version %>?<%= version %>" sizes="194x194"/>
+    <link rel="icon" type="image/png" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/favicon-96x96.png?<%= version %>" sizes="96x96"/>
+    <link rel="icon" type="image/png" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/android-chrome-192x192.png?<%= version %>" sizes="192x192"/>
+    <link rel="icon" type="image/png" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/favicon-16x16.png?<%= version %>" sizes="16x16"/>
+    <link rel="manifest" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/manifest.json">
+    <link rel="mask-icon" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/safari-pinned-tab.svg" color="#ffffff">
+    <link rel="shortcut icon" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/mstile-144x144.png">
+    <meta name="msapplication-config" content="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <% if (env === 'production') { %>
+      <link rel="stylesheet" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/bundle.css?<%= version %>"/>
+    <% } %>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,300,100,400italic,700,900&subset=latin,latin-ext"/>
+
+    <% if (env !== 'production') { %>
+      <script>window.__REACT_PROPS__ = <%- JSON.stringify(reactProps) %>;</script>
+      <script src="/public/bundle.js"></script>
+    <% } %>
+  </head>
+  <body id="<%= metadata.bodyId %>" class="<%= metadata.bodyClass %>">
+    <div id="app"><%- html %></div>
+
+    <% if (env === 'production') { %>
+      <script>window.__REACT_PROPS__ = <%- JSON.stringify(reactProps) %>;</script>
+      <script src="https://d3bjxaeqvrvffj.cloudfront.net/assets/bundle.js?<%= version %>"></script>
+
+      <!-- Facebook Pixel Code -->
+      <script>
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+      fbq('init', '720565481417299');
+      fbq('track', "PageView");</script>
+      <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=720565481417299&ev=PageView&noscript=1"
+      /></noscript>
+      <!-- End Facebook Pixel Code -->
+    <% } %>
+  </body>
+</html>

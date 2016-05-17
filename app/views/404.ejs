@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Page Not Found | Spaces</title>
+
+    <meta charSet="utf-8"/>
+    <meta httpEquiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="description" content="Curated products from inspiring spaces."/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="p:domain_verify" content="d852f83724170b801212b6bdc3b6be3f"/>
+    <meta name="google-site-verification" content="6exAOz-gyyXQBFmCzgUu2IvROo_5XmetNz617HFXI7U"/>
+    <meta name="msapplication-TileColor" content="#da532c"/>
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png?<%= version %>"/>
+    <meta name="theme-color" content="#ffffff"/>
+
+    <link rel="apple-touch-icon" sizes="57x57" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-57x57.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="60x60" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-60x60.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-72x72.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="76x76" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-76x76.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-114x114.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="120x120" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-120x120.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="144x144" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-144x144.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="152x152" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-152x152.png?<%= version %>"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/apple-touch-icon-180x180.png?<%= version %>"/>
+    <link rel="icon" type="image/png" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/favicon-32x32.png?<%= version %>" sizes="32x32"/>
+    <link rel="icon" type="image/png" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/favicon-194x194.png?<%= version %>?<%= version %>" sizes="194x194"/>
+    <link rel="icon" type="image/png" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/favicon-96x96.png?<%= version %>" sizes="96x96"/>
+    <link rel="icon" type="image/png" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/android-chrome-192x192.png?<%= version %>" sizes="192x192"/>
+    <link rel="icon" type="image/png" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/favicon-16x16.png?<%= version %>" sizes="16x16"/>
+    <link rel="manifest" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/manifest.json?<%= version %>?<%= version %>"/>
+    <link rel="mask-icon" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/favicon/safari-pinned-tab.svg?<%= version %>" color="#ffe200"/>
+
+    <% if (env === 'production') { %>
+      <link rel="stylesheet" href="https://d3bjxaeqvrvffj.cloudfront.net/assets/bundle.css?<%= version %>"/>
+    <% } %>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700,800&subset=latin,greek-ext,greek,latin-ext,cyrillic,vietnamese,cyrillic-ext"/>
+
+    <% if (env !== 'production') { %>
+      <script>window.__REACT_PROPS__ = <%- JSON.stringify(reactProps) %>;</script>
+      <script src="/public/bundle.js"></script>
+    <% } %>
+  </head>
+  <body id="not-found-page">
+    <section class="not-found-content">
+      <a href="/">
+        <svg width="55" height="55" viewBox="0 0 400 400" class="ui-icon icon-logo not-found-logo" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+          <g stroke="none" stroke-width="1" fill="none">
+            <circle class="ui-icon-path" fill="#FFCC2F" cx="200" cy="200" r="200"/>
+            <path class="ui-icon-path" fill="#FFFFFF" d="M313.272727,100 L199.636364,172.727273 L313.272727,300 L313.272727,100 Z M199.636364,172.727273 L313.272727,100 L86,100 L199.636364,172.727273 Z M86,100 L199.636364,172.727273 L154.181818,230.909091 L154.181818,201.818182 L121.123967,201.818182 L121.123967,260 L86,300 L86,100 Z"/>
+          </g>
+        </svg>
+      </a>
+      <h1 class="not-found-title">
+        The page you are looking for is not here...
+      </h1>
+      <h2 class="not-found-subtitle">
+        In the meantime, check out some beautiful products for your home.
+      </h2>
+      <a href="/products/" class="ui-button not-found-cta" data-type="primary">
+        Shop Products
+      </a>
+    </section>
+
+    <% if (env === 'production') { %>
+      <script>window.__REACT_PROPS__ = <%- JSON.stringify(reactProps) %>;</script>
+      <script src="https://d3bjxaeqvrvffj.cloudfront.net/assets/bundle.js?<%= version %>"></script>
+
+      <!-- Facebook Pixel Code -->
+      <script>
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+      fbq('init', '720565481417299');
+      fbq('track', "PageView");</script>
+      <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=720565481417299&ev=PageView&noscript=1"
+      /></noscript>
+      <!-- End Facebook Pixel Code -->
+    <% } %>
+  </body>
+</html>

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 mkdir ./dump
-ssh root@joinspaces.co 'dokku mongo:export mongo_joinspaces' > ./dump/export.tar
+ssh root@joinspaces.co 'dokku mongo:export next' > ./dump/export.tar
 tar -xf ./dump/export.tar -C ./dump
-mongorestore -d spacesdb ./dump/mongo_joinspaces/ --drop
+mongorestore -d spaces ./dump/next/ --drop
 rm -rf ./dump

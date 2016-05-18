@@ -55,7 +55,7 @@ module.exports = {
       }
     }, {
       test: /\.css$/,
-      loader: ExtractTextPlugin.extract('css-loader?sourceMap!postcss-loader!'),
+      loader: ExtractTextPlugin.extract('style', 'css-loader?sourceMap!postcss-loader!'),
       exclude: /node_modules/,
       include: path.join(__dirname, 'build/styles')
     }]
@@ -67,7 +67,7 @@ module.exports = {
 
   resolve: {
     root: path.join(__dirname, 'build'),
-    extensions: ['', '.js', '.jsx', '.css', '.styl'],
+    extensions: ['', '.js', '.jsx', '.css'],
     modulesDirectories: ['node_modules']
   }
 }

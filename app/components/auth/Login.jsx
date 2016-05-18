@@ -117,7 +117,7 @@ export default class Login extends Component {
               onClick={::this.onClickFacebook}
               disabled={isFetching}
               className="button button--facebook">
-              <Icon name="facebook" viewBox="0 0 56.693 56.693"/>
+              <Icon name="facebook"/>
               Login with Facebook
             </a>
             <a
@@ -125,7 +125,7 @@ export default class Login extends Component {
               onClick={::this.onClickTwitter}
               disabled={isFetching}
               className="button button--twitter">
-              <Icon name="twitter" viewBox="0 0 56.693 56.693"/>
+              <Icon name="twitter"/>
               Login with Twitter
             </a>
           </div>

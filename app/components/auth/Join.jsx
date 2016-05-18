@@ -189,7 +189,7 @@ export default class Join extends Component {
                 onClick={::this.onClickFacebook}
                 disabled={isFetching}
                 className="button button--facebook">
-                <Icon name="facebook" viewBox="0 0 56.693 56.693"/>
+                <Icon name="facebook"/>
                 Join with Facebook
               </a>
               <a
@@ -197,7 +197,7 @@ export default class Join extends Component {
                 onClick={::this.onClickTwitter}
                 disabled={isFetching}
                 className="button button--twitter">
-                <Icon name="twitter" viewBox="0 0 56.693 56.693"/>
+                <Icon name="twitter"/>
                 Join with Twitter
               </a>
             </div>

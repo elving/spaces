@@ -3,6 +3,7 @@ import get from 'lodash/get'
 import map from 'lodash/map'
 import keys from 'lodash/keys'
 import split from 'lodash/split'
+import result from 'lodash/result'
 import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import forEach from 'lodash/forEach'
@@ -50,9 +51,9 @@ export const toIdsFromPath = (docs, path = 'id') => {
 
 export const toJSON = (doc) => {
   if (isArray(doc)) {
-    return map(doc, (doc) => !isEmpty(doc.toJSON) ? doc.toJSON() : doc)
+    return map(doc, (doc) => result(doc, 'toJSON', {}))
   } else {
-    return !isEmpty(doc.toJSON) ? doc.toJSON() : doc
+    return result(doc, 'toJSON', {})
   }
 }
 

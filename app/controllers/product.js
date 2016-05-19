@@ -26,7 +26,7 @@ export const renderAllProducts = async (req, res, next) => {
     const products = await getAll()
 
     res.locals.metadata = {
-      title: 'All Colors | Spaces',
+      title: 'All Products | Spaces',
       bodyId: 'all-products',
       bodyClass: 'page page-all-products page-admin-table'
     }

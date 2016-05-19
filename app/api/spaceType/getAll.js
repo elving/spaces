@@ -12,6 +12,7 @@ export default () => {
       mongoose
         .model('SpaceType')
         .find()
+        .sort({ name: 'asc' })
         .exec(async (err, spaceTypes) => {
           if (err) {
             return reject(parseError(err))

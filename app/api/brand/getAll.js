@@ -12,6 +12,7 @@ export default () => {
       mongoose
         .model('Brand')
         .find()
+        .sort({ name: 'asc' })
         .exec(async (err, brands) => {
           if (err) {
             return reject(parseError(err))

@@ -12,6 +12,7 @@ export default () => {
       mongoose
         .model('Color')
         .find()
+        .sort({ name: 'asc' })
         .exec(async (err, colors) => {
           if (err) {
             return reject(parseError(err))

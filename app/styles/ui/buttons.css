@@ -53,6 +53,17 @@
   margin: 0 auto;
 }
 
+.button--outline,
+.button--outline:active {
+  border-color: #ececec;
+  background-color: transparent;
+}
+
+.button--outline:hover {
+  border-color: #dedede;
+  background-color: transparent;
+}
+
 .button--transparent,
 .button--transparent:active {
   border-color: transparent;

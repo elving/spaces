@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import React, { Component, PropTypes as Type } from 'react'
 
 import Dropdown, {
@@ -20,7 +19,8 @@ export default class CurrentUserNav extends Component {
       <div className="admin-nav">
         {currentUserIsAdmin() ? (
           <Dropdown className="dropdown">
-            <DropdownTrigger className="dropdown-trigger">
+            <DropdownTrigger
+              className="dropdown-trigger button button--outline">
               <Icon name="settings"/> Admin
             </DropdownTrigger>
             <DropdownContent className="dropdown-content">

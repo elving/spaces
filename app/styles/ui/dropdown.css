@@ -4,7 +4,6 @@
 
 .dropdown-trigger {
   cursor: pointer;
-  border: 1px solid transparent;
   text-decoration: none;
   display: flex;
   align-items: center;

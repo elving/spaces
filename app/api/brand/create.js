@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 
 import sanitize from './sanitize'
 import { parseError } from '../utils'
+import { removeFromCache } from '../cache'
 
 export default (props) => {
   return new Promise(async (resolve, reject) => {
@@ -14,11 +15,12 @@ export default (props) => {
       return reject(parseError(errors))
     }
 
-    brand.save((err) => {
+    brand.save(async (err) => {
       if (err) {
         return reject(parseError(err))
       }
 
+      await removeFromCache('brand-all')
       resolve(brand)
     })
   })

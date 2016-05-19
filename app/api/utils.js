@@ -49,12 +49,9 @@ export const toIdsFromPath = (docs, path = 'id') => {
   )
 }
 
-export const toJSON = (doc) => {
-  if (isArray(doc)) {
-    return map(doc, (doc) => result(doc, 'toJSON', {}))
-  } else {
-    return result(doc, 'toJSON', {})
-  }
+export const toJSON = (docs) => {
+  docs = isArray(docs) ? docs : [docs]
+  return map(docs, (doc) => result(doc, 'toJSON', {}))
 }
 
 export const getFromCacheOrQuery = async (key, query, resolve) => {

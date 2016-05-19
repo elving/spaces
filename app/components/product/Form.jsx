@@ -840,7 +840,9 @@ export default class ProductForm extends Component {
               'select': true,
               'select--error': hasSpaceTypesError
             })}
-            placeholder="E.g. Kitchen, Patio"/>
+            placeholder="E.g. Kitchen, Patio"
+            allowCreate={true}
+            addLabelText={'Add "{label}" as a new space type'}/>
 
           {hasSpaceTypesError ? (
             <small className="form-error">{spaceTypesError}</small>

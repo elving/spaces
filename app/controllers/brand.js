@@ -95,7 +95,7 @@ export const renderUpdateBrand = async (req, res, next) => {
 
     next()
   } catch (err) {
-    res.redirect('/500/')
+    next(err)
   }
 }
 

@@ -95,7 +95,7 @@ export const renderUpdateColor = async (req, res, next) => {
 
     next()
   } catch (err) {
-    res.redirect('/500/')
+    next(err)
   }
 }
 

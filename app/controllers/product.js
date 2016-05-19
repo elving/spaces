@@ -109,7 +109,7 @@ export const renderAddProduct = async (req, res, next) => {
 
     next()
   } catch (err) {
-    return res.redirect('/500/')
+    next(err)
   }
 }
 
@@ -175,7 +175,7 @@ export const renderUpdateProduct = async (req, res, next) => {
 
     next()
   } catch (err) {
-    res.redirect('/500/')
+    next(err)
   }
 }
 

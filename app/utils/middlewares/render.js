@@ -34,6 +34,7 @@ export default (req, res) => {
     if (redirect) {
       res.redirect(301, redirect.pathname + redirect.search)
     } else if (err) {
+      console.log(err)
       res.redirect('/500/')
     } else if (isEmpty(routerProps)) {
       res.redirect('/400/')

@@ -42,6 +42,8 @@ const configRoutes = (server) => {
   })
 
   server.use((err, req, res, next) => {
+    console.error(err)
+
     res.render('500', {
       err,
       env: process.env.NODE_ENV || 'development',

@@ -23,7 +23,8 @@ export default class CurrentUserNav extends Component {
       <div className="current-user-nav">
         {userLoggedIn() ? (
           <Dropdown className="dropdown">
-            <DropdownTrigger className="dropdown-trigger">
+            <DropdownTrigger
+              className="dropdown-trigger">
               <CurrentUserAvatar/>
             </DropdownTrigger>
             <DropdownContent className="dropdown-content">

@@ -1,18 +1,18 @@
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import React, { Component, PropTypes as T } from 'react'
+import React, { Component, PropTypes as Type } from 'react'
 
 export default class Avatar extends Component {
   static contextTypes = {
-    user: T.object
+    user: Type.object
   };
 
   static propTypes = {
-    width: T.number,
-    height: T.number,
-    imageUrl: T.string,
-    initials: T.string,
-    className: T.string
+    width: Type.number,
+    height: Type.number,
+    imageUrl: Type.string,
+    initials: Type.string,
+    className: Type.string
   };
 
   static defaultProps = {

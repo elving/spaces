@@ -137,6 +137,7 @@ export default (props) => {
 
         await removeFromCache('brand-all')
         await removeFromCache('color-all')
+        await removeFromCache('product-all')
         await removeFromCache('category-all')
         await removeFromCache('spaceType-all')
 

@@ -49,11 +49,11 @@ export const toIdsFromPath = (docs, path = 'id') => {
   )
 }
 
-export const toJSON = (docs) => {
-  docs = isArray(docs) ? docs : [docs]
-
-  return map(docs, (doc) => (
-    result(doc, 'toJSON', (!isEmpty(doc) ? doc : {})))
+export const toJSON = (value) => {
+  return isArray(value) ? map(value, (doc) => (
+    result(doc, 'toJSON', (!isEmpty(doc) ? doc : {}))
+  )) : (
+    result(value, 'toJSON', (!isEmpty(value) ? value : {}))
   )
 }
 

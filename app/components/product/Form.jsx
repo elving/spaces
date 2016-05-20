@@ -63,7 +63,7 @@ export default class ProductForm extends Component {
 
   static contextTypes = {
     csrf: Type.string,
-    user: Type.object
+    currentUserIsAdmin: Type.func
   };
 
   static propTypes = {
@@ -557,7 +557,7 @@ export default class ProductForm extends Component {
   }
 
   renderProductForm() {
-    const { csrf } = this.context
+    const { csrf, currentUserIsAdmin } = this.context
 
     const {
       errors,
@@ -841,7 +841,7 @@ export default class ProductForm extends Component {
               'select--error': hasSpaceTypesError
             })}
             placeholder="E.g. Kitchen, Patio"
-            allowCreate={true}
+            allowCreate={currentUserIsAdmin() ? true : false}
             addLabelText={'Add "{label}" as a new space type'}/>
 
           {hasSpaceTypesError ? (

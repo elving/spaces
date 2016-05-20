@@ -47,7 +47,7 @@ export const saveToCache = (
 
 export const getFromCache = (key) => {
   return new Promise((resolve, reject) => {
-    if (!has(mappings, key)) {
+    if (!inCache(key)) {
       return resolve()
     }
 

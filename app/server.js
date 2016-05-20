@@ -29,7 +29,7 @@ mongoose.connection.on('open', () => {
   console.log('Mongoose connection open.')
 
   // Setup redis cache
-  startCache('spaces-cache', {
+  startCache('spaces-next-cache', {
     port: redisConfig.port,
     host: redisConfig.host,
     engine: 'redis'

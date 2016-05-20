@@ -51,23 +51,26 @@ export const toIdsFromPath = (docs, path = 'id') => {
 
 export const toJSON = (docs) => {
   docs = isArray(docs) ? docs : [docs]
-  return map(docs, (doc) => result(doc, 'toJSON', {}))
+
+  return map(docs, (doc) => (
+    result(doc, 'toJSON', (!isEmpty(doc) ? doc : {})))
+  )
 }
 
 export const getFromCacheOrQuery = async (key, query, resolve) => {
-  if (inCache(key)) {
-    try {
-      const data = await getFromCache(key)
+  if (!inCache(key)) {
+    return query()
+  }
 
-      if (isEmpty(data)) {
-        query()
-      } else {
-        resolve(data)
-      }
-    } catch (err) {
+  try {
+    const data = await getFromCache(key)
+
+    if (isEmpty(data)) {
       query()
+    } else {
+      resolve(data)
     }
-  } else {
+  } catch (err) {
     query()
   }
 }

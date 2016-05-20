@@ -1,25 +1,20 @@
+import size from 'lodash/size'
 import isEmpty from 'lodash/isEmpty'
 
 export default (schema) => {
   schema
-    .path('title')
-    .required(true, 'Space title cannot be blank')
+    .path('name')
+    .required(true, 'A name is required to create a space')
 
   schema
-    .path('category')
-    .required(true, 'Space category cannot be blank')
-
-  schema
-    .path('images')
+    .path('description')
     .validate((value) => {
-      return !isEmpty(value)
-    }, 'Space has to have an image')
-
-  schema
-    .path('products')
-    .validate((value) => {
-      return !isEmpty(value)
-    }, 'Space has to have products')
-
-  return schema
+      if (isEmpty(value)) {
+        return true
+      } else if (!isEmpty(value) && size(value) <= 500) {
+        return true
+      } else {
+        return false
+      }
+    }, 'The space\'s description can\'t be longer than 500 characters')
 }

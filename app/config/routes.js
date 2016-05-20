@@ -4,6 +4,7 @@ import isAuthenticatedUser from '../utils/isAuthenticatedUser'
 import { default as authRouter } from '../routes/auth'
 import { default as colorRouter } from '../routes/color'
 import { default as brandRouter } from '../routes/brand'
+import { default as spaceRouter } from '../routes/space'
 import { default as searchRouter } from '../routes/search'
 import { default as productRouter } from '../routes/product'
 import { default as categoryRouter } from '../routes/category'
@@ -13,6 +14,7 @@ const configRoutes = (server) => {
   server.use(authRouter)
   server.use(colorRouter)
   server.use(brandRouter)
+  server.use(spaceRouter)
   server.use(searchRouter)
   server.use(productRouter)
   server.use(categoryRouter)

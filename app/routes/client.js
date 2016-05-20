@@ -29,6 +29,8 @@ import AddSpaceType from '../components/spaceType/Add'
 import UpdateSpaceType from '../components/spaceType/Update'
 import SpaceTypesTable from '../components/spaceType/Table'
 
+import CreateSpace from '../components/space/Create'
+
 const routes = (
   <Route component={App}>
     <Route path="join" component={Join}/>
@@ -56,6 +58,8 @@ const routes = (
     <Route path="admin/space-types" component={SpaceTypesTable}/>
     <Route path="admin/space-types/add" component={AddSpaceType}/>
     <Route path="admin/space-types/:id/update" component={UpdateSpaceType}/>
+
+    <Route path="spaces/create" component={CreateSpace}/>
   </Route>
 )
 

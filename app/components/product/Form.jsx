@@ -586,6 +586,9 @@ export default class ProductForm extends Component {
       ? '/products/new/'
       : `/products/${get(product, 'customId')}/update/`
 
+    const urlError = get(errors, 'url')
+    const hasUrlError = !isEmpty(urlError)
+
     const nameError = get(errors, 'name')
     const hasNameError = !isEmpty(nameError)
 
@@ -621,7 +624,32 @@ export default class ProductForm extends Component {
           {isEqual(formMethod, 'POST') ? 'Add Product' : 'Update Product'}
         </h1>
 
-        <input type="hidden" name="url" value={get(this.state, 'url', '')}/>
+        {!isAdding ? (
+          <div className="form-group">
+            <label className="form-label">
+              Url <small>required</small>
+            </label>
+
+            <input
+              type="text"
+              name="url"
+              value={get(this.state, 'url', '')}
+              required
+              onChange={(event) => {
+                this.setState({ url: event.currentTarget.value })
+              }}
+              disabled={isSaving}
+              className={classNames({
+                'textfield': true,
+                'textfield--error': hasUrlError
+              })}
+              placeholder="Name"/>
+
+            {hasUrlError ? (
+              <small className="form-error">{urlError}</small>
+            ) : null}
+          </div>
+        ) : null}
 
         <div className="form-group">
           <label className="form-label">

@@ -24,6 +24,7 @@ export default () => {
         .populate('createdBy')
         .populate('categories')
         .populate('spaceTypes')
+        .sort('-createdAt')
         .exec(async (err, products) => {
           if (err) {
             return reject(parseError(err))

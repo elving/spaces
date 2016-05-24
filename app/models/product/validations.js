@@ -1,7 +1,6 @@
 import size from 'lodash/size'
 import isEmpty from 'lodash/isEmpty'
 import mongoose from 'mongoose'
-import kebabCase from 'lodash/kebabCase'
 
 export default (schema) => {
   schema
@@ -26,21 +25,6 @@ export default (schema) => {
   schema
     .path('name')
     .required(true, 'A name is required to add a product')
-
-  schema
-    .path('name')
-    .validate(function(name, next) {
-      if (this.isNew || this.isModified('name')) {
-        mongoose
-          .model('Product')
-          .findOne({ slug: kebabCase(name) })
-          .exec((err, product) => {
-            next(isEmpty(err) && isEmpty(product))
-          })
-      } else {
-        next(true)
-      }
-    }, 'The product "{VALUE}" already exists')
 
   schema
     .path('price')

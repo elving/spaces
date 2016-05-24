@@ -80,6 +80,9 @@ export default class ProductCard extends Component {
           'product-card-image-container': true,
           'product-card-image-container--loading': imageIsLoading
         })}>
+        <div className="card-actions-overlay"/>
+        {this.renderActions()}
+
         {imageIsLoading ? (
           <Loader size={50}/>
         ) : null}

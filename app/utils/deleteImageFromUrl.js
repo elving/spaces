@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual'
 
 import knoxConfig from '../config/knox'
 
-export const deleteImages = (folder, url) => {
+export default (folder, url) => {
   const regx = new RegExp(`\/${folder}.+`)
   const client = knox.createClient(knoxConfig())
 

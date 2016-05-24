@@ -13,6 +13,7 @@ export default (params = {}) => {
       .limit(30)
       .populate('brand')
       .populate('colors')
+      .populate('createdBy')
       .populate('categories')
       .populate('spaceTypes')
       .exec((err, products) => {

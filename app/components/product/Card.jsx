@@ -2,8 +2,11 @@ import get from 'lodash/get'
 import classNames from 'classnames'
 import React, { Component, PropTypes as Type } from 'react'
 
-import Icon from '../common/Icon'
 import Loader from '../common/Loader'
+import Avatar from '../user/Avatar'
+import CardTags from '../card/CardTags'
+import CardTitle from '../card/CardTitle'
+import MaterialIcon from '../common/MaterialIcon'
 
 export default class ProductCard extends Component {
   constructor(props) {
@@ -24,7 +27,24 @@ export default class ProductCard extends Component {
     id: Type.string,
     url: Type.string,
     name: Type.string,
-    image: Type.string
+    brand: Type.object,
+    image: Type.string,
+    colors: Type.array,
+    createdBy: Type.object,
+    categories: Type.array,
+    spaceTypes: Type.array
+  };
+
+  static defaultProps = {
+    id: '',
+    url: '',
+    name: '',
+    brand: {},
+    image: '',
+    colors: [],
+    createdBy: {},
+    categories: [],
+    spaceTypes: []
   };
 
   componentDidMount() {
@@ -74,31 +94,72 @@ export default class ProductCard extends Component {
     )
   }
 
-  renderInfo() {
-    const { url, name, brand, price } = this.props
+  renderActions() {
+    return (
+      <div className="product-card-actions card-actions">
+        <div className="card-actions-left">
+          <button
+            type="button"
+            className="card-action button button--icon">
+            <MaterialIcon name="add" color="#2ECC71"/>
+          </button>
+          <button
+            type="button"
+            className="card-action button button--icon">
+            <MaterialIcon name="like" color="#E74C3C"/>
+          </button>
+        </div>
+        <div className="card-actions-right">
+          <button
+            type="button"
+            className="card-action button button--icon">
+            <MaterialIcon name="send"/>
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  renderTitle() {
+    const { url, name, brand } = this.props
 
     return (
-      <div className="product-card-info">
-        <div className="product-card-info-left">
-          <span className="product-card-info-brand">
-            {get(brand, 'name', '')}
-          </span>
-          <span className="product-card-info-name">
-            {name}
-          </span>
-        </div>
-        <div className="product-card-info-right">
-          <a
-            href={url}
-            className={classNames({
-              'button': true,
-              'button--icon-right': true,
-              'button--primary-outline': true,
-              'product-card-info-price': true
-            })}>
-            {`$${price}`} <Icon name="next" width={18} height={18}/>
+      <CardTitle
+        title={name}
+        titleUrl={url}
+        subTitle={get(brand, 'name')}
+        className="product-title"/>
+    )
+  }
+
+  renderTags() {
+    const { colors, spaceTypes, categories } = this.props
+
+    return (
+      <CardTags
+        tags={[spaceTypes, categories, colors]}
+        className="product-tags"/>
+    )
+  }
+
+  renderDesigner() {
+    const { createdBy } = this.props
+
+    return (
+      <div className="product-card-designer">
+        <Avatar
+          width={30}
+          height={30}
+          imageUrl={get(createdBy, 'avatar', '')}
+          initials={get(createdBy, 'initials', '')}
+          className="product-card-designer-avatar"/>
+        <span className="product-card-designer-name">
+          Added by <a
+            href={`/${get(createdBy, 'detailUrl', '#')}/`}
+            className="product-card-designer-link">
+            {get(createdBy, 'name')}
           </a>
-        </div>
+        </span>
       </div>
     )
   }
@@ -107,7 +168,10 @@ export default class ProductCard extends Component {
     return (
       <div className="product product-card">
         {this.renderImage()}
-        {this.renderInfo()}
+        {this.renderActions()}
+        {this.renderTitle()}
+        {this.renderTags()}
+        {this.renderDesigner()}
       </div>
     )
   }

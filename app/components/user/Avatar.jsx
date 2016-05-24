@@ -27,6 +27,9 @@ export default class Avatar extends Component {
     const initials = get(this.props, 'initials', '')
     const { width, height, className } = this.props
 
+    const fontSize = (height - 46) > 14 ? (height - 46) : 14
+    const lineHeight = fontSize + 2
+
     return (
       <div className={`user-avatar ${className}`}>
         {!isEmpty(avatar) ? (
@@ -37,11 +40,7 @@ export default class Avatar extends Component {
             className="user-avatar-image"/>
           ) : (
           <span
-            style={{
-              width,
-              height,
-              fontSize: (height - 46) > 14 ? (height - 46) : 14
-            }}
+            style={{ width, height, fontSize, lineHeight }}
             className="user-avatar-initials">
             {initials}
           </span>

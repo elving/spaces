@@ -21,6 +21,7 @@ export default () => {
         .find()
         .populate('brand')
         .populate('colors')
+        .populate('createdBy')
         .populate('categories')
         .populate('spaceTypes')
         .exec(async (err, products) => {

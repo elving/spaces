@@ -1,0 +1,21 @@
+.card-tags {
+  width: 100%;
+  padding: 15px;
+  display: flex;
+  overflow-x: scroll;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.card-tag {
+  color: #666666;
+  border-radius: 4px;
+  background-color: #ececec;
+  font-size: 13px;
+  display: flex;
+  padding: 4px 8px;
+  flex-shrink: 0;
+  align-items: center;
+  margin-right: 10px;
+  justify-content: center;
+}

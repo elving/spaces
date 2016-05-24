@@ -1,0 +1,12 @@
+.card-title-container {
+  padding: 15px;
+}
+
+.card-subtitle {
+  color: #999999;
+  font-size: 14px;
+}
+
+.card-title-link {
+  text-decoration: none;
+}

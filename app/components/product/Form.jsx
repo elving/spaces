@@ -649,7 +649,9 @@ export default class ProductForm extends Component {
               <small className="form-error">{urlError}</small>
             ) : null}
           </div>
-        ) : null}
+        ) : (
+          <input type="hidden" name="url" value={get(this.state, 'url', '')}/>
+        )}
 
         <div className="form-group">
           <label className="form-label">

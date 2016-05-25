@@ -20,7 +20,7 @@ export default class CardTags extends Component {
     return (
       <div className={`${className} card-tags`}>
         {map(flattenDeep(tags), (tag) => (
-          <div className="card-tag">
+          <div key={`tag-${get(tag, 'sid', '')}`} className="card-tag">
             {get(tag, 'name')}
           </div>
         ))}

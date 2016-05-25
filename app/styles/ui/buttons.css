@@ -1,5 +1,4 @@
-.button,
-.button:active {
+.button {
   color: #555555;
   cursor: pointer;
   border: 1px solid #ececec;
@@ -13,6 +12,12 @@
   min-height: 47px;
   align-items: center;
   justify-content: center;
+}
+
+.button:active {
+  color: #555555;
+  border: 1px solid #ececec;
+  background-color: #ececec;
 }
 
 .button:hover {

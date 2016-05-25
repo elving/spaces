@@ -1,0 +1,10 @@
+.card .popup {
+  top: 70px;
+  left: -1px;
+  width: calc(100% + 2px);
+}
+
+.card .popup:after,
+.card .popup:before {
+  right: 25px;
+}

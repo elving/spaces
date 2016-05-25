@@ -6,7 +6,8 @@ import Loader from '../common/Loader'
 import Avatar from '../user/Avatar'
 import CardTags from '../card/CardTags'
 import CardTitle from '../card/CardTitle'
-import MaterialIcon from '../common/MaterialIcon'
+import CardShare from '../card/CardShare'
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 export default class ProductCard extends Component {
   constructor(props) {
@@ -14,7 +15,8 @@ export default class ProductCard extends Component {
 
     this.state = {
       imageIsLoaded: false,
-      imageIsLoading: false
+      imageIsLoading: false,
+      sharePopupIsOpen: false
     }
   }
 
@@ -70,6 +72,18 @@ export default class ProductCard extends Component {
     })
   }
 
+  openShareModal() {
+    this.setState({
+      sharePopupIsOpen: true
+    })
+  }
+
+  closeShareModal() {
+    this.setState({
+      sharePopupIsOpen: false
+    })
+  }
+
   renderImage() {
     const { name, image } = this.props
     const { imageIsLoaded, imageIsLoading } = this.state
@@ -80,7 +94,6 @@ export default class ProductCard extends Component {
           'product-card-image-container': true,
           'product-card-image-container--loading': imageIsLoading
         })}>
-        <div className="card-actions-overlay"/>
         {this.renderActions()}
 
         {imageIsLoading ? (
@@ -99,25 +112,32 @@ export default class ProductCard extends Component {
 
   renderActions() {
     return (
-      <div className="product-card-actions card-actions">
-        <div className="card-actions-left">
-          <button
-            type="button"
-            className="card-action button button--icon">
-            <MaterialIcon name="add" color="#2ECC71"/>
-          </button>
-          <button
-            type="button"
-            className="card-action button button--icon">
-            <MaterialIcon name="like" color="#E74C3C"/>
-          </button>
-        </div>
-        <div className="card-actions-right">
-          <button
-            type="button"
-            className="card-action button button--icon">
-            <MaterialIcon name="send"/>
-          </button>
+      <div className="product-card-actions card-actions-container">
+        <div className="card-actions-overlay"/>
+        <div className="card-actions">
+          <div className="card-actions-left">
+            <button
+              type="button"
+              className="card-action button button--icon"
+              data-action="add">
+              <MaterialDesignIcon name="add" fill="#2ECC71"/>
+            </button>
+            <button
+              type="button"
+              className="card-action button button--icon"
+              data-action="like">
+              <MaterialDesignIcon name="like" fill="#E74C3C"/>
+            </button>
+          </div>
+          <div className="card-actions-right">
+            <button
+              type="button"
+              onClick={::this.openShareModal}
+              className="card-action button button--icon"
+              data-action="send">
+              <MaterialDesignIcon name="send"/>
+            </button>
+          </div>
         </div>
       </div>
     )
@@ -168,10 +188,22 @@ export default class ProductCard extends Component {
   }
 
   render() {
+    const { sharePopupIsOpen } = this.state
+
     return (
-      <div className="product product-card">
+      <div
+        className={classNames({
+          'product': true,
+          'product-card card': true,
+          'product-card--popup-open': sharePopupIsOpen
+        })}>
+        <div className="product-card-overlay"/>
+
+        <CardShare
+          isOpen={sharePopupIsOpen}
+          onClickClose={::this.closeShareModal}/>
+
         {this.renderImage()}
-        {this.renderActions()}
         {this.renderTitle()}
         {this.renderTags()}
         {this.renderDesigner()}

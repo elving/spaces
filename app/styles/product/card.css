@@ -75,16 +75,21 @@
   position: relative;
 }
 
-.product-card-info-price,
-.product-card-info-price:active {
+.product-card-price,
+.product-card-price:active {
+  background-color: #ffffff;
   font-size: 14px;
   width: auto;
+  right: 15px;
+  bottom: 15px;
   padding: 3px 8px 4px;
-  min-height: inherit;
+  z-index: 5;
+  position: absolute;
+  min-height: 30px;
 }
 
-.product-card-info-price .icon {
-  margin-left: 5px;
+.product-card-price .icon {
+  margin-right: 5px;
 }
 
 .product-card-designer {

@@ -31,6 +31,7 @@ export default class ProductCard extends Component {
     name: Type.string,
     brand: Type.object,
     image: Type.string,
+    price: Type.number,
     colors: Type.array,
     createdBy: Type.object,
     categories: Type.array,
@@ -43,6 +44,7 @@ export default class ProductCard extends Component {
     name: '',
     brand: {},
     image: '',
+    price: 0,
     colors: [],
     createdBy: {},
     categories: [],
@@ -106,6 +108,8 @@ export default class ProductCard extends Component {
             style={{ backgroundImage: `url(${image})` }}
             className="product-card-image"/>
         ) : null}
+
+        {this.renderPrice()}
       </div>
     )
   }
@@ -140,6 +144,24 @@ export default class ProductCard extends Component {
           </div>
         </div>
       </div>
+    )
+  }
+
+  renderPrice() {
+    const { url, price } = this.props
+
+    return (
+      <a
+        href={url}
+        target="_blank"
+        className={classNames({
+          'button': true,
+          'button--primary-outline': true,
+          'product-card-price': true
+        })}>
+        <MaterialDesignIcon name="cart" size={16} color="#2ECC71"/>
+        {`$${price}`}
+      </a>
     )
   }
 

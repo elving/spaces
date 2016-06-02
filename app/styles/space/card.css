@@ -2,16 +2,68 @@
   border: 1px solid #dadada;
   border-radius: 4px;
   background-color: #ffffff;
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
-.space-card-image-container {
-  border-radius: 4px 4px 0 0;
+.space-card > * {
+  border-bottom: 1px solid #dadada;
   width: 100%;
-  height: 240px;
-  padding: 30px;
+}
+
+.space-card > *:last-child {
+  border-bottom: 0 none;
+}
+
+.space-card:hover .card-actions-overlay {
+  display: block;
+}
+
+.space-card:hover .card-actions,
+.space-card--popup-open .card-actions {
   display: flex;
+}
+
+.space-card--popup-open .space-card-overlay {
+  display: block;
+}
+
+.space-card--popup-open:hover .card-actions-overlay {
+  display: none;
+}
+
+.space-card-overlay {
+  border: 0 none;
+  background-color: rgba(0, 0, 0, 0.055);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: none;
+  position: absolute;
+}
+
+.space-card-images-container {
+  border-radius: 4px 4px 0 0;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+  display: flex;
+  position: relative;
+  flex-wrap: wrap;
+  align-self: stretch;
+  min-height: 265px;
   align-items: stretch;
   justify-content: center;
+}
+
+.space-card-images-container--loading {
+  align-items: center;
 }
 
 .space-card-image {
@@ -19,46 +71,32 @@
   background-color: #ffffff;
   background-repeat: no-repeat;
   background-position: 50%;
+  width: 50%;
+  z-index: 1;
+  position: relative;
+}
+
+.space-card-images-container[data-images="1"] .space-card-image,
+.space-card-images-container[data-images="3"] .space-card-image:last-child {
   width: 100%;
 }
 
-.space-card-info {
-  border-top: 1px solid #dadada;
-  border-radius: 0 0 4px 4px;
+.space-card-designer {
+  display: flex;
   padding: 15px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
-.space-card-info-right {
-  display: flex;
-  margin-left: 15px;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
-.space-card-info-brand {
+.space-card-designer-avatar {
+  margin-right: 10px;
+}
+
+.space-card-designer-name {
   color: #999999;
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  display: block;
-}
-
-.space-card-info-name {
-  display: block;
   font-size: 16px;
 }
 
-.space-card-info-price,
-.space-card-info-price:active {
-  font-size: 14px;
-  width: auto;
-  padding: 3px 8px 4px;
-  min-height: inherit;
-}
-
-.space-card-info-price .icon {
-  margin-left: 5px;
+.space-card-designer-link {
+  text-decoration: none;
 }

@@ -23,7 +23,9 @@ const UserSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, default: false },
   provider: { type: String, default: 'local' },
   isCurator: { type: Boolean, default: false },
-  categories: [{ type: mongoose.Schema.ObjectId, ref: 'Category' }]
+  categories: [{ type: mongoose.Schema.ObjectId, ref: 'Category' }],
+  spacesLiked: [{ type: mongoose.Schema.ObjectId, ref: 'Space' }],
+  poductsLiked: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }]
 }, { timestamps: true })
 
 applyHooks(UserSchema)

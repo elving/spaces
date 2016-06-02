@@ -8,8 +8,8 @@ import { default as applyValidations } from './validations'
 const ColorSchema = new mongoose.Schema({
   sid: { type: String, default: shortid.generate },
   hex: { type: String, trim: true, default: '' },
-  name: { type: String, trim: true, default: '' },
-  slug: { type: String, trim: true, default: '', unique: true },
+  name: { type: String, trim: true, default: '', unique: true },
+  slug: { type: String, trim: true, default: '' },
   createdBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
   updatedBy: { type: mongoose.Schema.ObjectId, ref: 'User' }
 }, { timestamps: true })

@@ -86,7 +86,7 @@ export default class CategoryForm extends Component {
     const isAdding = isEqual(formMethod, 'POST')
     const ajaxEndpoint = isAdding
       ? '/ajax/categories/'
-      : `/ajax/categories/${get(category, 'sid', '')}/`
+      : `/ajax/categories/${get(category, 'id', '')}/`
 
     event.preventDefault()
 
@@ -129,7 +129,7 @@ export default class CategoryForm extends Component {
     if (isEqual(window.prompt(deleteMessage), 'DELETE')) {
       this.setState({ errors: {}, isDeleting: true }, () => {
         axios({
-          url: `/ajax/categories/${get(category, 'sid', '')}/`,
+          url: `/ajax/categories/${get(category, 'id', '')}/`,
           data: { _csrf: csrf, _method: 'delete' },
           method: 'POST'
         }).then(() => {

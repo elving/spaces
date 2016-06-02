@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import get from 'lodash/get'
+import trim from 'lodash/trim'
 import head from 'lodash/head'
 import keys from 'lodash/keys'
 import uniq from 'lodash/uniq'
@@ -138,9 +139,9 @@ export default (url) => {
 
                 if (!(/(https?:\/\/.*\.(?:png|gif|svg))/i).test(src)) {
                   if (!isEmpty(width) && parseInt(width) >= 200) {
-                    images.push(src)
+                    images.push(trim(src))
                   } else if (isEmpty(width)) {
-                    images.push(src)
+                    images.push(trim(src))
                   }
                 }
               }
@@ -165,31 +166,36 @@ export default (url) => {
 
         if ((/(amazon|amzn)/).test(urlHost)) {
           if ($ogBrand && $ogBrand.length) {
-            metadata.brand = $ogBrand.text()
+            metadata.brand = trim($ogBrand.text())
           }
 
           if ($ogPrice && $ogPrice.length) {
-            metadata.price = $ogPrice.text()
+            metadata.price = trim($ogPrice.text())
           }
         } else {
           if ($ogBrand && $ogBrand.length) {
-            metadata.brand = $ogBrand.attr('content')
+            metadata.brand = trim($ogBrand.attr('content'))
           }
 
           if ($ogPrice && $ogPrice.length) {
-            metadata.price = $ogPrice.attr('content')
+            metadata.price = trim($ogPrice.attr('content'))
           }
 
           if ($ogStore && $ogStore.length) {
-            metadata.store = $ogStore.attr('content')
+            metadata.store = trim($ogStore.attr('content'))
           }
 
           if ($ogCurrency && $ogCurrency.length) {
-            metadata.currency = $ogCurrency.attr('content')
+            metadata.currency = trim($ogCurrency.attr('content'))
           }
         }
 
-        resolve({ title, images, ...metadata, description })
+        resolve({
+          title: trim(title),
+          images,
+          ...metadata,
+          description: trim(description)
+        })
       }
     })
   })

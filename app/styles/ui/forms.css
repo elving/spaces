@@ -36,7 +36,6 @@
 }
 
 .form-label {
-  font-weight: 600;
   width: 100%;
   display: flex;
   align-items: center;
@@ -58,6 +57,14 @@
   align-items: center;
   flex-direction: column;
   justify-content: center;
+}
+
+.form-group--small {
+  margin: 0 auto 15px;
+}
+
+.form-group--small .form-label {
+  font-size: 16px;
 }
 
 .form-group > * {

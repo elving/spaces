@@ -9,7 +9,8 @@ export default (sid, props) => {
     try {
       const spaceType = await findBySid(sid, true)
 
-      spaceType.set(sanitize(props))
+      spaceType.set(sanitize(props, false))
+
       spaceType.save(async (err) => {
         if (err) {
           return reject(parseError(err))

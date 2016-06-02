@@ -10,76 +10,67 @@
 }
 
 .card-actions {
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 15px;
   display: none;
   z-index: 11;
   position: absolute;
-  align-items: center;
-  justify-content: space-between;
 }
 
-.card-actions-left,
-.card-actions-right {
-  width: 50%;
-  display: flex;
+.card-actions--left,
+.card-actions--right {
+  top: 15px;
   align-items: center;
 }
 
-.card-actions-left {
+.card-actions--left {
+  left: 15px;
   justify-content: flex-start;
 }
 
-.card-actions-right {
+.card-actions--right {
+  right: 15px;
   justify-content: flex-end;
 }
 
-.card-actions-left > .card-action {
+.card-actions--left > .card-action {
   margin-right: 10px;
 }
 
-.card-actions-left > .card-action:last-child {
+.card-actions--left > .card-action:last-child {
   margin-right: 0;
 }
 
-.card-actions-right > .card-action {
+.card-actions--right > .card-action {
   margin-left: 10px;
 }
 
-.card-actions-right > .card-action:first-child {
+.card-actions--right > .card-action:first-child {
   margin-left: 0;
 }
 
 .card-action {
-  border-color: #dadada;
-  background-color: #ffffff;
   width: 40px;
   height: 40px;
   padding: 5px;
   min-height: 40px;
 }
 
-.card-action:hover {
+.card-action:not(.like-button) {
+  border-color: #dadada;
+  background-color: #ffffff;
+}
+
+.card-action:not(.like-button):hover {
   border-color: #c0c0c0;
   background-color: #ffffff;
 }
 
-.card-action[data-action="add"]:hover {
+.card-action[data-action="add"]:hover,
+.card-action[data-action="redesign"]:hover {
   border-color: #2ECC71;
   background-color: #2ECC71;
 }
 
-.card-action[data-action="add"]:hover .icon-fill {
-  fill: #FFFFFF;
-}
-
-.card-action[data-action="like"]:hover {
-  border-color: #E74C3C;
-  background-color: #E74C3C;
-}
-
-.card-action[data-action="like"]:hover .icon-fill {
+.card-action[data-action="add"]:hover .icon-fill,
+.card-action[data-action="redesign"]:hover .icon-fill {
   fill: #FFFFFF;
 }

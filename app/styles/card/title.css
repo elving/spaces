@@ -1,12 +1,13 @@
 .card-title-container {
+  text-decoration: none;
   padding: 15px;
+}
+
+.card-title-container:hover {
+  text-decoration: none;
 }
 
 .card-subtitle {
   color: #999999;
   font-size: 14px;
-}
-
-.card-title-link {
-  text-decoration: none;
 }

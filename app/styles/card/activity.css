@@ -1,0 +1,25 @@
+.card-activity {
+  width: 100%;
+  display: flex;
+  margin-top: 5px;
+  align-items: center;
+}
+
+.card-activity-count {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.card-activity-count-icon {
+  margin-right: 5px;
+}
+
+.card-activity-count-icon .icon-fill {
+  fill: #C0C0C0;
+}
+
+.card-activity-count-number {
+  color: #999999;
+  font-size: 12px;
+}

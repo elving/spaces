@@ -3,6 +3,7 @@ import get from 'lodash/get'
 import { toJSON } from '../api/utils'
 import { default as getAllBrands } from '../api/brand/getAll'
 import { default as getAllColors } from '../api/color/getAll'
+import { default as getAllUserData } from '../api/user/getData'
 import { default as getAllCategories } from '../api/category/getAll'
 import { default as getAllSpaceTypes } from '../api/spaceType/getAll'
 import { default as searchAllProducts } from '../api/product/search'
@@ -17,12 +18,14 @@ export const renderProductsSearch = async (req, res, next) => {
   try {
     const brands = await getAllBrands()
     const colors = await getAllColors()
+    const userData = await getAllUserData(get(req, 'user.id'))
     const categories = await getAllCategories()
     const spaceTypes = await getAllSpaceTypes()
 
     res.locals.props = {
       brands: toJSON(brands),
       colors: toJSON(colors),
+      userData: toJSON(userData),
       categories: toJSON(categories),
       spaceTypes: toJSON(spaceTypes)
     }

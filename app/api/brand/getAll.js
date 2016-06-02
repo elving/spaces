@@ -5,7 +5,7 @@ import { saveToCache } from '../cache'
 import { toIds, toJSON, parseError, getFromCacheOrQuery } from '../utils'
 
 export default () => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const cacheKey = 'brand-all'
 
     getFromCacheOrQuery(cacheKey, () => {

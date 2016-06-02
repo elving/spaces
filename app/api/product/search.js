@@ -9,6 +9,7 @@ export default (params = {}) => {
     mongoose
       .model('Product')
       .where(makeSearchQuery(params))
+      .sort('-createdAt')
       .skip(parseInt(get(params, 'skip', 0)))
       .limit(30)
       .populate('brand')

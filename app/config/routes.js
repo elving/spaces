@@ -2,6 +2,7 @@ import getVersion from '../utils/getVersion'
 import isAuthenticatedUser from '../utils/isAuthenticatedUser'
 
 import { default as authRouter } from '../routes/auth'
+import { default as likeRouter } from '../routes/like'
 import { default as colorRouter } from '../routes/color'
 import { default as brandRouter } from '../routes/brand'
 import { default as spaceRouter } from '../routes/space'
@@ -12,6 +13,7 @@ import { default as spaceTypeRouter } from '../routes/spaceType'
 
 const configRoutes = (server) => {
   server.use(authRouter)
+  server.use(likeRouter)
   server.use(colorRouter)
   server.use(brandRouter)
   server.use(spaceRouter)
@@ -44,8 +46,6 @@ const configRoutes = (server) => {
   })
 
   server.use((err, req, res, next) => {
-    console.error(err)
-
     res.render('500', {
       err,
       env: process.env.NODE_ENV || 'development',

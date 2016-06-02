@@ -6,7 +6,8 @@ import Loader from '../common/Loader'
 import Avatar from '../user/Avatar'
 import CardTags from '../card/CardTags'
 import CardTitle from '../card/CardTitle'
-import CardShare from '../card/CardShare'
+import SharePopup from '../card/SharePopup'
+import SpacesPopup from './SpacesPopup'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 export default class ProductCard extends Component {
@@ -16,7 +17,10 @@ export default class ProductCard extends Component {
     this.state = {
       imageIsLoaded: false,
       imageIsLoading: false,
-      sharePopupIsOpen: false
+      sharePopupIsOpen: false,
+      spacesPopupIsOpen: false,
+      sharePopupIsCreated: false,
+      spacesPopupIsCreated: false
     }
   }
 
@@ -74,15 +78,29 @@ export default class ProductCard extends Component {
     })
   }
 
-  openShareModal() {
+  openSharePopup() {
     this.setState({
-      sharePopupIsOpen: true
+      sharePopupIsOpen: true,
+      sharePopupIsCreated: true
     })
   }
 
-  closeShareModal() {
+  closeSharePopup() {
     this.setState({
       sharePopupIsOpen: false
+    })
+  }
+
+  openSpacesPopup() {
+    this.setState({
+      spacesPopupIsOpen: true,
+      spacesPopupIsCreated: true
+    })
+  }
+
+  closeSpacesPopup() {
+    this.setState({
+      spacesPopupIsOpen: false
     })
   }
 
@@ -115,33 +133,36 @@ export default class ProductCard extends Component {
   }
 
   renderActions() {
+    const { detailUrl } = this.props
+
     return (
       <div className="product-card-actions card-actions-container">
-        <div className="card-actions-overlay"/>
-        <div className="card-actions">
-          <div className="card-actions-left">
-            <button
-              type="button"
-              className="card-action button button--icon"
-              data-action="add">
-              <MaterialDesignIcon name="add" fill="#2ECC71"/>
-            </button>
-            <button
-              type="button"
-              className="card-action button button--icon"
-              data-action="like">
-              <MaterialDesignIcon name="like" fill="#E74C3C"/>
-            </button>
-          </div>
-          <div className="card-actions-right">
-            <button
-              type="button"
-              onClick={::this.openShareModal}
-              className="card-action button button--icon"
-              data-action="send">
-              <MaterialDesignIcon name="send"/>
-            </button>
-          </div>
+        <a href={`/${detailUrl}/`} className="card-actions-overlay"/>
+
+        <div className="card-actions card-actions--left">
+          <button
+            type="button"
+            onClick={::this.openSpacesPopup}
+            className="card-action button button--icon"
+            data-action="add">
+            <MaterialDesignIcon name="add" fill="#2ECC71"/>
+          </button>
+          <button
+            type="button"
+            className="card-action button button--icon"
+            data-action="like">
+            <MaterialDesignIcon name="like" fill="#E74C3C"/>
+          </button>
+        </div>
+
+        <div className="card-actions card-actions--right">
+          <button
+            type="button"
+            onClick={::this.openSharePopup}
+            className="card-action button button--icon"
+            data-action="send">
+            <MaterialDesignIcon name="send"/>
+          </button>
         </div>
       </div>
     )
@@ -166,12 +187,12 @@ export default class ProductCard extends Component {
   }
 
   renderTitle() {
-    const { url, name, brand } = this.props
+    const { name, brand, detailUrl } = this.props
 
     return (
       <CardTitle
+        url={`/${detailUrl}/`}
         title={name}
-        titleUrl={url}
         subTitle={get(brand, 'name')}
         className="product-title"/>
     )
@@ -210,20 +231,42 @@ export default class ProductCard extends Component {
   }
 
   render() {
-    const { sharePopupIsOpen } = this.state
+    const { id } = this.props
+
+    const {
+      sharePopupIsOpen,
+      spacesPopupIsOpen,
+      sharePopupIsCreated,
+      spacesPopupIsCreated
+    } = this.state
 
     return (
       <div
         className={classNames({
           'product': true,
           'product-card card': true,
-          'product-card--popup-open': sharePopupIsOpen
+          'product-card--popup-open': (
+            sharePopupIsOpen ||
+            spacesPopupIsOpen
+          )
         })}>
         <div className="product-card-overlay"/>
 
-        <CardShare
-          isOpen={sharePopupIsOpen}
-          onClickClose={::this.closeShareModal}/>
+        {spacesPopupIsCreated ? (
+          <SpacesPopup
+            isOpen={spacesPopupIsOpen}
+            className="spaces-popup"
+            productId={id}
+            onClickClose={::this.closeSpacesPopup}/>
+        ) : null}
+
+        {sharePopupIsCreated ? (
+          <SharePopup
+            title="Share this product"
+            isOpen={sharePopupIsOpen}
+            className="share-popup"
+            onClickClose={::this.closeSharePopup}/>
+        ) : null}
 
         {this.renderImage()}
         {this.renderTitle()}

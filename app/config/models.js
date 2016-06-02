@@ -3,6 +3,11 @@ import {
 } from '../models/user/schema'
 
 import {
+  default as registerLikeModel
+} from '../models/like/schema'
+
+
+import {
   default as registerBrandModel
 } from '../models/brand/schema'
 
@@ -32,8 +37,10 @@ import {
 
 const configModels = () => {
   registerUserModel()
+  registerLikeModel()
   registerBrandModel()
   registerColorModel()
+  registerSpaceModel()
   registerProductModel()
   registerCategoryModel()
   registerSpaceTypeModel()

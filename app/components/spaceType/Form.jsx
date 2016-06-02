@@ -88,7 +88,7 @@ export default class SpaceTypeForm extends Component {
     const isAdding = isEqual(formMethod, 'POST')
     const ajaxEndpoint = isAdding
       ? '/ajax/space-types/'
-      : `/ajax/space-types/${get(spaceType, 'sid', '')}/`
+      : `/ajax/space-types/${get(spaceType, 'id', '')}/`
 
     event.preventDefault()
 
@@ -135,7 +135,7 @@ export default class SpaceTypeForm extends Component {
     if (isEqual(window.prompt(deleteMessage), 'DELETE')) {
       this.setState({ errors: {}, isDeleting: true }, () => {
         axios({
-          url: `/ajax/space-types/${get(spaceType, 'sid', '')}/`,
+          url: `/ajax/space-types/${get(spaceType, 'id', '')}/`,
           data: { _csrf: csrf, _method: 'delete' },
           method: 'POST'
         }).then(() => {

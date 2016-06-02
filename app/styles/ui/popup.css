@@ -1,5 +1,6 @@
 .popup {
   border: 1px solid #dadada;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
   border-radius: 4px;
   background-color: #ffffff;
   display: none;
@@ -42,16 +43,7 @@
   min-height: auto;
 }
 
-.popup-list > .popup-list-item:last-child {
-  border-bottom: 1px solid #dadada;
-}
-
-.popup-list--is-last > .popup-list-item:last-child {
-  border-bottom: 0;
-  border-radius: 0 0 4px 4px;
-}
-
-.popup-list-item {
+.popup-item {
   border-bottom: 1px solid #dadada;
   width: 100%;
   padding: 15px;
@@ -60,17 +52,40 @@
   justify-content: flex-start;
 }
 
-.popup-list-item--clickable {
-  transition: background-color 0.2s linear;
+.popup-item--clickable {
+  cursor: pointer;
+  border: 0 none;
+  border-bottom: 1px solid #dadada;
+  background-color: #ffffff;
+  transition: opacity 0.2s linear, background-color 0.2s linear;
   text-decoration: none;
 }
 
-.popup-list-item--clickable:hover,
-.popup-list-item--clickable:active {
+.popup-item--clickable:hover,
+.popup-item--clickable:active {
   background-color: #fafafa;
   text-decoration: none;
 }
 
-.popup-list-item-icon {
+.popup-item--clickable:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.popup-list--is-last,
+.popup-item--is-last,
+.popup-list--is-last > .popup-item:last-child {
+  border-bottom: 0;
+  border-radius: 0 0 4px 4px;
+}
+
+.popup-item-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.popup-item-icon {
+  flex-shrink: 0;
   margin-right: 10px;
 }

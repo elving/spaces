@@ -1,0 +1,49 @@
+.user-mini-profile {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-mini-profile:hover {
+  text-decoration: none;
+}
+
+.user-mini-profile-left {
+  margin-right: 10px
+}
+
+.user-mini-profile-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  justify-content: flex-start;
+}
+
+.user-mini-profile-username {
+  margin-right: 10px;
+}
+
+.user-mini-profile-username-text {
+  font-size: 16px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 160px;
+  overflow-x: hidden;
+}
+
+.user-mini-profile-stats {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.user-mini-profile-stats > .user-mini-profile-stat:last-child {
+  margin-right: 0;
+}
+
+.user-mini-profile-stat {
+  color: #999999;
+  font-size: 13px;
+  margin-right: 10px;
+}

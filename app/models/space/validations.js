@@ -7,14 +7,30 @@ export default (schema) => {
     .required(true, 'A name is required to create a space')
 
   schema
-    .path('description')
+    .path('name')
     .validate((value) => {
       if (isEmpty(value)) {
         return true
-      } else if (!isEmpty(value) && size(value) <= 500) {
+      } else if (!isEmpty(value) && size(value) <= 120) {
         return true
       } else {
         return false
       }
-    }, 'The space\'s description can\'t be longer than 500 characters')
+    }, 'The space\'s description can\'t be longer than 120 characters')
+
+  schema
+    .path('spaceType')
+    .required(true, 'A type is required to create a space')
+
+  schema
+    .path('description')
+    .validate((value) => {
+      if (isEmpty(value)) {
+        return true
+      } else if (!isEmpty(value) && size(value) <= 250) {
+        return true
+      } else {
+        return false
+      }
+    }, 'The space\'s description can\'t be longer than 250 characters')
 }

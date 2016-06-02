@@ -1,6 +1,7 @@
 *,
 *:after,
 *:before {
+  color: inherit;
   font-size: inherit;
   font-family: inherit;
   font-weight: inherit;

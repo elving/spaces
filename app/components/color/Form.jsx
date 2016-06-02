@@ -89,7 +89,7 @@ export default class ColorForm extends Component {
     const isAdding = isEqual(formMethod, 'POST')
     const ajaxEndpoint = isAdding
       ? '/ajax/colors/'
-      : `/ajax/colors/${get(color, 'sid', '')}/`
+      : `/ajax/colors/${get(color, 'id', '')}/`
 
     event.preventDefault()
 
@@ -145,7 +145,7 @@ export default class ColorForm extends Component {
     if (isEqual(window.prompt(deleteMessage), 'DELETE')) {
       this.setState({ errors: {}, isDeleting: true }, () => {
         axios({
-          url: `/ajax/colors/${get(color, 'sid', '')}/`,
+          url: `/ajax/colors/${get(color, 'id', '')}/`,
           data: { _csrf: csrf, _method: 'delete' },
           method: 'POST'
         }).then(() => {

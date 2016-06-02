@@ -14,9 +14,20 @@ input:-webkit-autofill {
   min-height: 47px;
 }
 
+.textfield--small {
+  font-size: 16px;
+  padding: 5px 10px;
+  min-height: 40px;
+}
+
 textarea.textfield {
   resize: vertical;
   min-height: 110px;
+}
+
+textarea.textfield--small {
+  padding: 10px;
+  min-height: 80px;
 }
 
 .textfield:focus,
@@ -56,5 +67,5 @@ textarea.textfield {
 
 .textfield-icon > .textfield {
   width: 100%;
-  padding-left: 40px;
+  padding-left: 35px;
 }

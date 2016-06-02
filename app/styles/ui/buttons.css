@@ -32,6 +32,24 @@
   pointer-events: none;
 }
 
+.button--small {
+  font-size: 16px;
+  padding: 5px 10px;
+  min-height: 40px;
+}
+
+.button--tiny {
+  font-size: 14px;
+  padding: 5px 10px;
+  min-height: 100%;
+}
+
+.button--mini {
+  font-size: 12px;
+  padding: 3px 8px;
+  min-height: 100%;
+}
+
 .button .icon {
   margin-right: 10px;
 }
@@ -39,6 +57,22 @@
 .button--icon-right .icon {
   margin-left: 10px;
   margin-right: 0;
+}
+
+.button--tiny .icon {
+  margin-right: 5px;
+}
+
+.button--tiny.button--icon-right .icon {
+  margin-left: 5px;
+}
+
+.button--mini .icon {
+  margin-right: 4px;
+}
+
+.button--mini.button--icon-right .icon {
+  margin-left: 4px;
 }
 
 .button .icon-fill {
@@ -177,4 +211,35 @@
 
 .button--twitter .icon-fill {
   fill: #fff;
+}
+
+.like-button--white {
+  border-color: #dadada;
+  background-color: #ffffff;
+}
+
+.like-button .icon-fill,
+.like-button--white .icon-fill {
+  fill: #e74c3c;
+}
+
+.like-button:hover,
+.like-button:active,
+.like-button--liked,
+.like-button--liked:hover,
+.like-button--liked:active,
+.like-button--white:hover,
+.like-button--white:active {
+  border-color: #e74c3c;
+  background-color: #e74c3c;
+}
+
+.like-button:hover .icon-fill,
+.like-button:active .icon-fill,
+.like-button--liked .icon-fill,
+.like-button--liked:hover .icon-fill,
+.like-button--liked:active .icon-fill,
+.like-button--white:hover .icon-fill,
+.like-button--white:active .icon-fill {
+  fill: #ffffff;
 }

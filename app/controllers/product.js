@@ -180,14 +180,18 @@ export const renderUpdateProduct = async (req, res, next) => {
 }
 
 export const updateProduct = async (req, res) => {
-  const sid = get(req, 'params.sid')
+  const id = get(req, 'params.id')
 
   if (!isAuthenticatedUser(req.user)) {
     res.status(500).json({ err: 'Not authorized' })
   }
 
   try {
-    const product = await update(sid, req.body)
+    const product = await update(
+      id, merge(req.body, {
+        updatedBy: get(req, 'user.id')
+      })
+    )
     res.status(200).json(product)
   } catch (err) {
     res.status(500).json({ err })

@@ -18,6 +18,12 @@
   justify-content: flex-start;
 }
 
+.select--small .Select-control {
+  font-size: 16px;
+  padding: 5px 10px;
+  min-height: 40px;
+}
+
 .select--error .Select-control {
   color: #fb5465;
   border-color: #fb5465;
@@ -44,6 +50,10 @@
 
 .select .Select-input {
   margin-top: 9px;
+}
+
+.select--small .Select-input {
+  margin-top: 0;
 }
 
 .select .Select-input,

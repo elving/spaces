@@ -23,8 +23,7 @@ export default class ProductSearch extends Component {
   static propTypes = {
     brands: Type.array,
     colors: Type.array,
-    categories: Type.array,
-    spaceTypes: Type.array
+    categories: Type.array
   };
 
   renderResults() {

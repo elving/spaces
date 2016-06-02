@@ -7,7 +7,9 @@ import result from 'lodash/result'
 import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import forEach from 'lodash/forEach'
-import toString from 'lodash/toString'
+import isString from 'lodash/isString'
+import isObject from 'lodash/isObject'
+import mongoose from 'mongoose'
 import flattenDeep from 'lodash/flattenDeep'
 
 import { inCache, getFromCache } from './cache'
@@ -33,7 +35,7 @@ export const parseError = (err) => {
 
 export const toIds = (docs) => {
   docs = isArray(docs) ? docs : [docs]
-  return flattenDeep(map(docs, (doc) => toString(doc.get('id'))))
+  return flattenDeep(map(docs, (doc) => get(doc, 'id')))
 }
 
 export const toIdsFromPath = (docs, path = 'id') => {
@@ -44,7 +46,7 @@ export const toIdsFromPath = (docs, path = 'id') => {
       let pathValue
       pathValue = doc.get(path)
       pathValue = isArray(pathValue) ? pathValue : [pathValue]
-      return map(pathValue, (value) => toString(value))
+      return map(pathValue, (value) => value)
     })
   )
 }
@@ -55,6 +57,20 @@ export const toJSON = (value) => {
   )) : (
     result(value, 'toJSON', (!isEmpty(value) ? value : {}))
   )
+}
+
+export const toObjectId = (value) => {
+  const getObjectId = (value) => {
+    if (isString(value)) {
+      return mongoose.Types.ObjectId(value)
+    } else if (value instanceof mongoose.Schema.Types.ObjectId) {
+      return value
+    } else if (isObject(value)) {
+      return get(value, 'id')
+    }
+  }
+
+  return isArray(value) ? map(value, getObjectId) : getObjectId(value)
 }
 
 export const getFromCacheOrQuery = async (key, query, resolve) => {

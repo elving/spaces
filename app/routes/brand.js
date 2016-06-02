@@ -6,9 +6,9 @@ const router = express.Router()
 const ajaxRoot = '/ajax/brands'
 const adminRoot = '/admin/brands'
 
-router.get(`${ajaxRoot}/`, isAdmin, controller.renderAllBrands)
-router.get(`${ajaxRoot}/add/`, isAdmin, controller.renderAddBrand)
-router.get(`${ajaxRoot}/:sid/update/`, isAdmin, controller.renderUpdateBrand)
+router.get(`${adminRoot}/`, isAdmin, controller.renderAllBrands)
+router.get(`${adminRoot}/add/`, isAdmin, controller.renderAddBrand)
+router.get(`${adminRoot}/:sid/update/`, isAdmin, controller.renderUpdateBrand)
 
 router.post(`${ajaxRoot}/`, isAdmin, controller.addBrand)
 router.put(`${ajaxRoot}/:sid/`, isAdmin, controller.updateBrand)

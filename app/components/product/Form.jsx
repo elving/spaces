@@ -300,7 +300,7 @@ export default class ProductForm extends Component {
     const formData = serialize(form, { hash: true })
     const ajaxEndpoint = isAdding
       ? '/ajax/products/add/'
-      : `/ajax/products/${get(product, 'sid', '')}/`
+      : `/ajax/products/${get(product, 'id', '')}/`
 
     this.setState({ errors: {}, isSaving: true }, () => {
       axios({
@@ -341,7 +341,7 @@ export default class ProductForm extends Component {
     if (isEqual(window.prompt(deleteMessage), 'DELETE')) {
       this.setState({ errors: {}, isDeleting: true }, () => {
         axios({
-          url: `/ajax/products/${get(product, 'sid', '')}/`,
+          url: `/ajax/products/${get(product, 'id', '')}/`,
           data: { _csrf: csrf, _method: 'delete' },
           method: 'POST'
         }).then(() => {
@@ -941,6 +941,8 @@ export default class ProductForm extends Component {
       productAlreadyExists
     } = this.state
 
+    const isUpdating = isEqual(formMethod, 'PUT')
+
     const sid = get(product, 'sid', '')
     const name = get(product, 'name', 'Color')
 
@@ -948,7 +950,7 @@ export default class ProductForm extends Component {
     const hasGenericError = !isEmpty(genericError)
 
     const onClose = () => {
-      if (deletingSuccessful || !isAddingForSpace) {
+      if (deletingSuccessful || !isAddingForSpace && !isUpdating) {
         window.onbeforeunload = () => {}
         window.location.href = '/products/add/'
       } else {

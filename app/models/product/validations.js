@@ -27,6 +27,21 @@ export default (schema) => {
     .required(true, 'A name is required to add a product')
 
   schema
+    .path('name')
+    .validate(function(name, next) {
+      if (this.isNew || this.isModified('name')) {
+        mongoose
+          .model('Product')
+          .findOne({ name })
+          .exec((err, product) => {
+            next(isEmpty(err) && isEmpty(product))
+          })
+      } else {
+        next(true)
+      }
+    }, 'A product with the name "{VALUE}" already exists')
+
+  schema
     .path('price')
     .required(true, 'A price is required to add a product')
 

@@ -10,7 +10,7 @@ const BrandSchema = new mongoose.Schema({
   url: { type: String, trim: true, default: '' },
   logo: { type: String, trim: true, default: '' },
   name: { type: String, trim: true, default: '', unique: true },
-  slug: { type: String, trim: true, default: '', unique: true },
+  slug: { type: String, trim: true, default: '' },
   description: { type: String, trim: true, default: '' },
   createdBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
   updatedBy: { type: mongoose.Schema.ObjectId, ref: 'User' }

@@ -4,7 +4,7 @@ import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 
 import sanitize from './sanitize'
-import findBySid from './findBySid'
+import findById from './findById'
 import uploadImageFromUrl from '../../utils/uploadImageFromUrl'
 
 import { invalidateFromCache } from '../cache'
@@ -15,7 +15,7 @@ import { default as getOrCreateBrand } from '../brand/getOrCreate'
 import { default as getOrCreateCategory } from '../category/getOrCreate'
 import { default as findSpaceTypeByName } from '../spaceType/findByName'
 
-export default (sid, props) => {
+export default (id, props) => {
   return new Promise(async (resolve, reject) => {
     try {
       let brand = null
@@ -23,8 +23,8 @@ export default (sid, props) => {
       let categories = []
       let spaceTypes = []
 
-      const product = await findBySid(sid, true)
-      const sanitizedProps = sanitize(props)
+      const product = await findById(id)
+      const sanitizedProps = sanitize(props, false)
 
       try {
         brand = await getOrCreateBrand(get(sanitizedProps, 'brand'), true)

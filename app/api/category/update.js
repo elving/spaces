@@ -1,16 +1,15 @@
 import sanitize from './sanitize'
-import findBySid from './findBySid'
+import findById from './findById'
 
 import { parseError } from '../utils'
 import { invalidateFromCache } from '../cache'
 
-export default (sid, props) => {
+export default (id, props) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const category = await findBySid(sid, true)
+      const category = await findById(id)
 
-      category.set(sanitize(props))
-      category.save(async (err) => {
+      category.update(sanitize(props, false), async (err) => {
         if (err) {
           return reject(parseError(err))
         }

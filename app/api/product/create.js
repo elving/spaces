@@ -56,6 +56,7 @@ export default (props) => {
         }
       }
 
+      console.log(toIds(categories))
       set(sanitizedProps, 'categories', toIds(categories))
     } catch (err) {
       if (has(err, 'name')) {

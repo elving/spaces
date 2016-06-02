@@ -8,6 +8,7 @@ import { toIds, toJSON, parseError, getFromCacheOrQuery } from '../utils'
 export default (name, returnDocument = false) => {
   return new Promise((resolve, reject) => {
     const key = `color-${kebabCase(name)}`
+
     const query = () => {
       mongoose
         .model('Color')

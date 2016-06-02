@@ -1,0 +1,227 @@
+import get from 'lodash/get'
+import map from 'lodash/map'
+import size from 'lodash/size'
+import slice from 'lodash/slice'
+import classNames from 'classnames'
+import React, { Component, PropTypes as Type } from 'react'
+
+import Loader from '../common/Loader'
+import Avatar from '../user/Avatar'
+import CardTags from '../card/CardTags'
+import CardTitle from '../card/CardTitle'
+import SharePopup from '../card/SharePopup'
+import LikeButton from '../common/LikeButton'
+import CardActivity from '../card/CardActivity'
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
+
+import preloadImages from '../../utils/preloadImages'
+import getTagsFromProducts from '../../utils/getTagsFromProducts'
+
+export default class SpaceCard extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      images: [],
+      imagesAreLoaded: false,
+      imagesAreLoading: false,
+      sharePopupIsOpen: false,
+      sharePopupIsCreated: false
+    }
+  }
+
+  static contextTypes = {
+    csrf: Type.string,
+    userLoggedIn: Type.func
+  };
+
+  static propTypes = {
+    sid: Type.string,
+    name: Type.string,
+    products: Type.array,
+    createdBy: Type.object,
+    spaceType: Type.object,
+    likesCount: Type.number,
+    description: Type.string,
+    isRedesigned: Type.bool,
+    originalSpace: Type.object
+  };
+
+  componentDidMount() {
+    const { products } = this.props
+    const firstProducts = slice(products, 0, 4)
+
+    const images = map(firstProducts, (product) => (
+      get(product, 'image', '')
+    ))
+
+    this.setState({ images, imagesAreLoading: true }, () => {
+      preloadImages(images).then(() => {
+        this.setState({
+          imagesAreLoaded: true,
+          imagesAreLoading: false
+        })
+      })
+    })
+  }
+
+  openSharePopup() {
+    this.setState({
+      sharePopupIsOpen: true,
+      sharePopupIsCreated: true
+    })
+  }
+
+  closeSharePopup() {
+    this.setState({
+      sharePopupIsOpen: false
+    })
+  }
+
+  renderImages() {
+    const { images, imagesAreLoaded, imagesAreLoading } = this.state
+
+    return (
+      <div
+        className={classNames({
+          'space-card-images-container': true,
+          'space-card-images-container--loading': imagesAreLoading
+        })}
+        data-images={size(images)}>
+        {this.renderActions()}
+
+        {imagesAreLoading ? (
+          <Loader size={50}/>
+        ) : null}
+
+        {imagesAreLoaded ? (
+          map(images, (src) => (
+            <div
+              key={`space-image-${src}`}
+              style={{ backgroundImage: `url(${src})` }}
+              className="space-card-image"/>
+          ))
+        ) : null}
+      </div>
+    )
+  }
+
+  renderActions() {
+    const { id, detailUrl } = this.props
+
+    return (
+      <div className="space-card-actions card-actions-container">
+        <a href={`/${detailUrl}/`} className="card-actions-overlay"/>
+
+        <div className="card-actions card-actions--left">
+          <button
+            type="button"
+            className="card-action button button--icon"
+            data-action="redesign">
+            <MaterialDesignIcon name="redesign" fill="#2ECC71"/>
+          </button>
+          <LikeButton
+            parent={id}
+            isWhite={true}
+            className="card-action"
+            parentType="space"/>
+        </div>
+
+        <div className="card-actions card-actions--right">
+          <button
+            type="button"
+            onClick={::this.openSharePopup}
+            className="card-action button button--icon"
+            data-action="send">
+            <MaterialDesignIcon name="send"/>
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  renderTitle() {
+    const { name, spaceType, detailUrl } = this.props
+
+    return (
+      <CardTitle
+        url={`/${detailUrl}/`}
+        title={name}
+        subTitle={get(spaceType, 'name')}
+        className="space-title">
+      {this.renderActivity()}
+      </CardTitle>
+    )
+  }
+
+  renderActivity() {
+    const { likesCount } = this.props
+
+    return (
+      <CardActivity likes={likesCount}/>
+    )
+  }
+
+  renderTags() {
+    const { products } = this.props
+    const tags = getTagsFromProducts(products)
+    const colors = get(tags, 'colors', [])
+    const categories = get(tags, 'categories', [])
+
+    return (
+      <CardTags
+        tags={[categories, colors]}
+        className="space-tags"/>
+    )
+  }
+
+  renderDesigner() {
+    const { createdBy } = this.props
+
+    return (
+      <div className="space-card-designer">
+        <Avatar
+          width={30}
+          height={30}
+          imageUrl={get(createdBy, 'avatar', '')}
+          initials={get(createdBy, 'initials', '')}
+          className="space-card-designer-avatar"/>
+        <span className="space-card-designer-name">
+          Designed by <a
+            href={`/${get(createdBy, 'detailUrl', '#')}/`}
+            className="space-card-designer-link">
+            {get(createdBy, 'name')}
+          </a>
+        </span>
+      </div>
+    )
+  }
+
+  render() {
+    const { sharePopupIsOpen, sharePopupIsCreated } = this.state
+
+    return (
+      <div
+        className={classNames({
+          'product': true,
+          'space-card card': true,
+          'space-card--popup-open': false
+        })}>
+        <div className="space-card-overlay"/>
+
+        {sharePopupIsCreated ? (
+          <SharePopup
+            title="Share this space"
+            isOpen={sharePopupIsOpen}
+            className="share-popup"
+            onClickClose={::this.closeSharePopup}/>
+        ) : null}
+
+        {this.renderImages()}
+        {this.renderTitle()}
+        {this.renderTags()}
+        {this.renderDesigner()}
+      </div>
+    )
+  }
+}

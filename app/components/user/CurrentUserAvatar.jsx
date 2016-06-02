@@ -9,11 +9,13 @@ export default class CurrentUserAvatar extends Component {
   };
 
   render() {
+    const { user } = this.context
+
     return (
       <Avatar
         {...this.props}
-        initials={get(this.context.user, 'initials', '')}
-        imageUrl={get(this.context.user, 'avatar.url', '')}/>
+        initials={get(user, 'initials', '')}
+        imageUrl={get(user, 'avatar', '')}/>
     )
   }
 }

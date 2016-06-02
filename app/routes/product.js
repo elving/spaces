@@ -11,7 +11,7 @@ router.get('/products/:sid/update/', controller.renderUpdateProduct)
 
 router.get(`${ajaxRoot}/fetch/`, controller.fetchProductInfo)
 router.post(`${ajaxRoot}/add/`, controller.addProduct)
-router.put(`${ajaxRoot}/:sid/`, controller.updateProduct)
-router.delete(`${ajaxRoot}/:sid/`, controller.destroyProduct)
+router.put(`${ajaxRoot}/:id/`, controller.updateProduct)
+router.delete(`${ajaxRoot}/:id/`, controller.destroyProduct)
 
 export default router

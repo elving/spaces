@@ -23,6 +23,8 @@ export default class SpaceCard extends Component {
 
     this.state = {
       images: [],
+      likesCount: get(props, 'likesCount', 0),
+      redesignsCount: get(props, 'redesignsCount', 0),
       imagesAreLoaded: false,
       imagesAreLoading: false,
       sharePopupIsOpen: false,
@@ -44,7 +46,8 @@ export default class SpaceCard extends Component {
     likesCount: Type.number,
     description: Type.string,
     isRedesigned: Type.bool,
-    originalSpace: Type.object
+    originalSpace: Type.object,
+    redesignsCount: Type.number
   };
 
   componentDidMount() {
@@ -107,6 +110,7 @@ export default class SpaceCard extends Component {
   }
 
   renderActions() {
+    const { likesCount } = this.state
     const { id, detailUrl } = this.props
 
     return (
@@ -123,6 +127,8 @@ export default class SpaceCard extends Component {
           <LikeButton
             parent={id}
             isWhite={true}
+            onLike={() => this.setState({ likesCount: likesCount + 1 })}
+            onUnlike={() => this.setState({ likesCount: likesCount - 1 })}
             className="card-action"
             parentType="space"/>
         </div>
@@ -155,7 +161,7 @@ export default class SpaceCard extends Component {
   }
 
   renderActivity() {
-    const { likesCount } = this.props
+    const { likesCount } = this.state
 
     return (
       <CardActivity likes={likesCount}/>

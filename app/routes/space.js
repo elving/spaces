@@ -6,6 +6,7 @@ const router = express.Router()
 const ajaxRoot = '/ajax/spaces'
 
 router.get('/spaces/', controller.renderIndex)
+router.get('/s/:sid/', controller.renderDetail)
 router.get('/spaces/:sid/:name/', controller.renderDetail)
 router.get('/spaces/create/', controller.renderCreateSpace)
 // router.get('/admin/spaces/', isAdmin, controller.renderAllProducts)

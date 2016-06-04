@@ -1,6 +1,7 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
+import head from 'lodash/head'
 import slice from 'lodash/slice'
 import classNames from 'classnames'
 import React, { Component, PropTypes as Type } from 'react'
@@ -9,7 +10,7 @@ import Loader from '../common/Loader'
 import Avatar from '../user/Avatar'
 import CardTags from '../card/CardTags'
 import CardTitle from '../card/CardTitle'
-import SharePopup from '../card/SharePopup'
+import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
 import CardActivity from '../card/CardActivity'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
@@ -40,9 +41,11 @@ export default class SpaceCard extends Component {
   static propTypes = {
     sid: Type.string,
     name: Type.string,
+    shortUrl: Type.string,
     products: Type.array,
     createdBy: Type.object,
     spaceType: Type.object,
+    detailUrl: Type.string,
     likesCount: Type.number,
     description: Type.string,
     isRedesigned: Type.bool,
@@ -137,8 +140,9 @@ export default class SpaceCard extends Component {
           <button
             type="button"
             onClick={::this.openSharePopup}
-            className="card-action button button--icon"
-            data-action="send">
+            className="card-action button button--icon tooltip"
+            data-action="send"
+            data-tooltip="Share this space">
             <MaterialDesignIcon name="send"/>
           </button>
         </div>
@@ -203,30 +207,43 @@ export default class SpaceCard extends Component {
     )
   }
 
+  renderSharePopup() {
+    const { images, sharePopupIsOpen, sharePopupIsCreated } = this.state
+    const { name, shortUrl, products, detailUrl, createdBy } = this.props
+
+    return sharePopupIsCreated ? (
+      <SharePopup
+        url={() => `${window.location.origin}/${shortUrl}/`}
+        title="Share this space"
+        isOpen={sharePopupIsOpen}
+        shareUrl={() => `${window.location.origin}/${detailUrl}/`}
+        className="share-popup"
+        shareText={(
+          `${name} — Designed by ${get(createdBy, 'username', '')}, ` +
+          `featuring ${size(products)} products.`
+        )}
+        shareImage={head(images)}
+        onClickClose={::this.closeSharePopup}/>
+    ) : null
+  }
+
   render() {
-    const { sharePopupIsOpen, sharePopupIsCreated } = this.state
+    const { sharePopupIsOpen } = this.state
 
     return (
       <div
         className={classNames({
           'product': true,
           'space-card card': true,
-          'space-card--popup-open': false
+          'space-card--popup-open': sharePopupIsOpen,
         })}>
         <div className="space-card-overlay"/>
-
-        {sharePopupIsCreated ? (
-          <SharePopup
-            title="Share this space"
-            isOpen={sharePopupIsOpen}
-            className="share-popup"
-            onClickClose={::this.closeSharePopup}/>
-        ) : null}
 
         {this.renderImages()}
         {this.renderTitle()}
         {this.renderTags()}
         {this.renderDesigner()}
+        {this.renderSharePopup()}
       </div>
     )
   }

@@ -62,6 +62,7 @@ const routes = (
     <Route path="admin/space-types/:id/update" component={UpdateSpaceType}/>
 
     <Route path="spaces" component={SpacesIndex}/>
+    <Route path="s/:sid" component={SpaceDetail}/>
     <Route path="spaces/:sid/:name" component={SpaceDetail}/>
     <Route path="spaces/create" component={CreateSpace}/>
   </Route>

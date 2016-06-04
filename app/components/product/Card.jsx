@@ -6,7 +6,7 @@ import Loader from '../common/Loader'
 import Avatar from '../user/Avatar'
 import CardTags from '../card/CardTags'
 import CardTitle from '../card/CardTitle'
-import SharePopup from '../card/SharePopup'
+import SharePopup from '../common/SharePopup'
 import SpacesPopup from './SpacesPopup'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 

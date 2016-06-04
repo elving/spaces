@@ -1,10 +1,12 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
+import head from 'lodash/head'
 import React, { Component, PropTypes as Type } from 'react'
 
 import Layout from '../common/Layout'
 import Product from '../product/Card'
+import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
 import MiniProfile from '../user/MiniProfile'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
@@ -19,7 +21,9 @@ export default class SpaceDetail extends Component {
     this.state = {
       likesCount: get(props, 'space.likesCount', 0),
       commentsCount: get(props, 'space.commentsCount', 0),
-      redesignsCount: get(props, 'space.redesignsCount', 0)
+      redesignsCount: get(props, 'space.redesignsCount', 0),
+      sharePopupIsOpen: false,
+      sharePopupIsCreated: false
     }
   }
 
@@ -30,6 +34,25 @@ export default class SpaceDetail extends Component {
   static propTypes = {
     space: Type.object
   };
+
+  static defaultProps = {
+    space: {}
+  };
+
+  openSharePopup() {
+    this.setState({
+      sharePopupIsOpen: true,
+      sharePopupIsCreated: true
+    })
+  }
+
+  closeSharePopup() {
+    console.log('closeSharePopup')
+
+    this.setState({
+      sharePopupIsOpen: false
+    })
+  }
 
   renderHeader() {
     const name = get(this.props, 'space.name', '')
@@ -120,6 +143,27 @@ export default class SpaceDetail extends Component {
     )
   }
 
+  renderSharePopup() {
+    const { sharePopupIsOpen, sharePopupIsCreated } = this.state
+    const { name, shortUrl, products, detailUrl, createdBy } = this.props.space
+
+    return sharePopupIsCreated ? (
+      <SharePopup
+        url={() => `${window.location.origin}/${shortUrl}/`}
+        title="Share this space"
+        isOpen={sharePopupIsOpen}
+        shareUrl={() => `${window.location.origin}/${detailUrl}/`}
+        className="share-popup"
+        shareText={(
+          `${name} — Designed by ${get(createdBy, 'username', '')}, ` +
+          `featuring ${size(products)} products.`
+        )}
+        shareImage={get(head(products), 'image', '')}
+        onClickClose={::this.closeSharePopup}/>
+    ) : null
+  }
+
+
   renderActions() {
     const { user } = this.context
     const { likesCount } = this.state
@@ -137,11 +181,18 @@ export default class SpaceDetail extends Component {
           onUnlike={() => this.setState({ likesCount: likesCount - 1 })}
           className="space-detail-action"
           parentType="space"/>
-        <button
-          type="button"
-          className="button button--icon button--small space-detail-action">
-          <MaterialDesignIcon name="send"/>
-        </button>
+        <div className="space-detail-action">
+          <button
+            type="button"
+            onClick={::this.openSharePopup}
+            className={(
+              "button button--icon button--small tooltip"
+            )}
+            data-tooltip="Share this space">
+            <MaterialDesignIcon name="send"/>
+          </button>
+          {this.renderSharePopup()}
+        </div>
         {canModify(user, get(this.props, 'space')) ? (
           <button
             type="button"

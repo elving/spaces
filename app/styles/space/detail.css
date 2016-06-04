@@ -65,7 +65,14 @@
 }
 
 .space-detail-action {
+  position: relative;
   margin-left: 10px;
+}
+
+.space-detail-action .popup {
+  top: calc(100% + 15px);
+  right: -15px;
+  width: 300px;
 }
 
 .space-detail-description-container {

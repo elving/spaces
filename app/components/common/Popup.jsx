@@ -27,6 +27,16 @@ export default class Popup extends Component {
     onClickClose: (() => {})
   };
 
+  componentDidMount() {
+    const $body = document.querySelector('body')
+
+    if (this.props.isOpen) {
+      $body.addEventListener('click', this.onBodyClick)
+    } else {
+      $body.removeEventListener('click', this.onBodyClick)
+    }
+  }
+
   componentWillReceiveProps(newProps) {
     const $body = document.querySelector('body')
 

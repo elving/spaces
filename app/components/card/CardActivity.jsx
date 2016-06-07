@@ -45,10 +45,25 @@ export default class CardTags extends Component {
     ) : null
   }
 
+  renderComments() {
+    const { comments } = this.props
+
+    return isNumber(comments) && comments > 0 ? (
+      <div data-activity="comments" className="card-activity-count">
+        <MaterialDesignIcon
+          name="comment"
+          size={14}
+          className="card-activity-count-icon"/>
+        <span className="card-activity-count-number">{comments}</span>
+      </div>
+    ) : null
+  }
+
   render() {
     return this.hasActivity() ? (
       <div className="card-activity">
         {this.renderLikes()}
+        {this.renderComments()}
       </div>
     ) : null
   }

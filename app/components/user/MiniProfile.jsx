@@ -1,12 +1,17 @@
 import get from 'lodash/get'
 import size from 'lodash/size'
 import merge from 'lodash/merge'
+import isEqual from 'lodash/isEqual'
 import React, { Component, PropTypes as Type } from 'react'
 
 import Avatar from './Avatar'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 export default class MiniProfile extends Component {
+  static contextTypes = {
+    user: Type.object
+  };
+
   static propTypes = {
     user: Type.object
   };
@@ -21,7 +26,10 @@ export default class MiniProfile extends Component {
 
   render() {
     const { user } = this.props
+
+    const userId = get(user, 'id', '')
     const username = get(user, 'username', '')
+    const currentUserId = get(this.context, 'user.id', '')
 
     return (
       <a
@@ -51,14 +59,16 @@ export default class MiniProfile extends Component {
                 </div>
               )}
             </div>
-            <button
-              type="button"
-              onClick={::this.toggleFollow}
-              className="button button--primary button--mini"
-              data-action="follow-user">
-              <MaterialDesignIcon name="follow-user" size={14}/>
-              Follow
-            </button>
+            {!isEqual(userId, currentUserId) ? (
+              <button
+                type="button"
+                onClick={::this.toggleFollow}
+                className="button button--primary button--mini"
+                data-action="follow-user">
+                <MaterialDesignIcon name="follow-user" size={14}/>
+                Follow
+              </button>
+            ) : null}
           </div>
           <div className="user-mini-profile-stats">
             <div className="user-mini-profile-stat">

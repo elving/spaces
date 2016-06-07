@@ -1,7 +1,9 @@
 import get from 'lodash/get'
+import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 import isAuthenticatedUser from '../utils/isAuthenticatedUser'
 
+import getAll from '../api/like/getAll'
 import create from '../api/like/create'
 import destroy from '../api/like/destroy'
 import hasLiked from '../api/like/hasLiked'
@@ -34,9 +36,13 @@ export const like = async (req, res) => {
       const like = await create(req.body)
 
       if (isEqual(parentType, 'space')) {
-        await updateSpace(parent, {$inc: { likesCount: 1 }}, true)
+        await updateSpace(parent, {
+          $inc: { likesCount: 1 }
+        }, true)
       } else {
-        await updateProduct(parent, {$inc: { likesCount: 1 }}, true)
+        await updateProduct(parent, {
+          $inc: { likesCount: 1 }
+        }, true)
       }
 
       await updateUserLikes(req, like)
@@ -68,9 +74,13 @@ export const unlike = async (req, res) => {
     const like = await destroy(parentType, parent, createdBy)
 
     if (isEqual(parentType, 'space')) {
-      await updateSpace(parent, {$inc: { likesCount: -1 }}, true)
+      await updateSpace(parent, {
+        $inc: { likesCount: -1 }
+      }, true)
     } else {
-      await updateProduct(parent, {$inc: { likesCount: -1 }}, true)
+      await updateProduct(parent, {
+        $inc: { likesCount: -1 }
+      }, true)
     }
 
     await updateUserLikes(req, like, 'remove')
@@ -79,6 +89,27 @@ export const unlike = async (req, res) => {
     res.status(500).json({
       err: {
         genereic: `There was an error while trying to unlike ${parentType}.`
+      }
+    })
+  }
+}
+
+export const getSpaceLikes = async (req, res) => {
+  const space = get(req.params, 'space', '')
+
+  if (isEmpty(space)) {
+    return res.status(200).json({ likes: [] })
+  }
+
+  try {
+    const likes = await getAll(space)
+    res.status(200).json({ likes })
+  } catch (err) {
+    res.status(500).json({
+      err: {
+        genereic: (
+          'There was an error while trying to fetch likes from this space.'
+        )
       }
     })
   }

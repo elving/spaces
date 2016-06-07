@@ -1,0 +1,8 @@
+.comments-widget {
+  width: 100%;
+  max-width: 620px;
+}
+
+@import './list.css';
+@import './form.css';
+@import './comment.css';

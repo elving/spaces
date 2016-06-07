@@ -94,3 +94,9 @@
 .form-error {
   color: #fb5465;
 }
+
+.form-note {
+  text-align: right;
+  align-self: center;
+  margin-left: 10px;
+}

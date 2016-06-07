@@ -2,7 +2,8 @@ import isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
 import React, { Component, PropTypes as Type } from 'react'
 
-import { hasParent } from '../../utils/dom'
+import hasParent from '../../utils/dom/hasParent'
+import { default as $ } from '../../utils/dom/selector'
 
 export default class Popup extends Component {
   constructor(props) {
@@ -28,7 +29,7 @@ export default class Popup extends Component {
   };
 
   componentDidMount() {
-    const $body = document.querySelector('body')
+    const $body = $('body')
 
     if (this.props.isOpen) {
       $body.addEventListener('click', this.onBodyClick)
@@ -38,7 +39,7 @@ export default class Popup extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const $body = document.querySelector('body')
+    const $body = $('body')
 
     if (newProps.isOpen) {
       $body.addEventListener('click', this.onBodyClick)

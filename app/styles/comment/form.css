@@ -1,0 +1,7 @@
+.comment-form {
+  width: 100%;
+}
+
+.comment-form [data-action="post"] {
+  width: 180px;
+}

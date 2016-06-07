@@ -3,5 +3,5 @@ import isEqual from 'lodash/isEqual'
 
 export default (user, model) => (
   get(user, 'isAdmin', false) ||
-  isEqual(get(user, 'id', ''), get(model, 'createdBy', ''))
+  isEqual(get(user, 'id', user), get(model, 'createdBy', model))
 )

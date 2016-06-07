@@ -6,13 +6,16 @@ import React, { Component, PropTypes as Type } from 'react'
 
 import Layout from '../common/Layout'
 import Product from '../product/Card'
+import LikesModal from '../modal/Likes'
 import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
 import MiniProfile from '../user/MiniProfile'
+import CommentsWidget from '../comment/Widget'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import inflect from '../../utils/inflect'
 import canModify from '../../utils/user/canMondify'
+import { default as $ } from '../../utils/dom/selector'
 
 export default class SpaceDetail extends Component {
   constructor(props) {
@@ -22,6 +25,8 @@ export default class SpaceDetail extends Component {
       likesCount: get(props, 'space.likesCount', 0),
       commentsCount: get(props, 'space.commentsCount', 0),
       redesignsCount: get(props, 'space.redesignsCount', 0),
+      likesModalIsOpen: false,
+      createLikesModal: false,
       sharePopupIsOpen: false,
       sharePopupIsCreated: false
     }
@@ -47,10 +52,21 @@ export default class SpaceDetail extends Component {
   }
 
   closeSharePopup() {
-    console.log('closeSharePopup')
-
     this.setState({
       sharePopupIsOpen: false
+    })
+  }
+
+  openLikesModal() {
+    this.setState({
+      likesModalIsOpen: true,
+      createLikesModal: true
+    })
+  }
+
+  closeLikesModal() {
+    this.setState({
+      likesModalIsOpen: false
     })
   }
 
@@ -97,7 +113,12 @@ export default class SpaceDetail extends Component {
           </div>
         ) : null}
         {likesCount ? (
-          <div
+          <a
+            href="#"
+            onClick={(event) => {
+              event.preventDefault()
+              this.openLikesModal()
+            }}
             className="space-detail-counter"
             data-action="likes">
             <div className="space-detail-counter-number">
@@ -106,10 +127,11 @@ export default class SpaceDetail extends Component {
             <div className="space-detail-counter-text">
               {inflect(likesCount, 'Like')}
             </div>
-          </div>
+          </a>
         ) : null}
         {commentsCount ? (
-          <div
+          <a
+            href="#comments"
             className="space-detail-counter"
             data-action="comments">
             <div className="space-detail-counter-number">
@@ -118,7 +140,7 @@ export default class SpaceDetail extends Component {
             <div className="space-detail-counter-text">
               {inflect(commentsCount, 'Comment')}
             </div>
-          </div>
+          </a>
         ) : null}
       </div>
     )
@@ -193,6 +215,18 @@ export default class SpaceDetail extends Component {
           </button>
           {this.renderSharePopup()}
         </div>
+        <a
+          href="#comments"
+          onClick={(event) => {
+            event.preventDefault()
+            $('#comments textarea[name="content"]').focus()
+          }}
+          className={(
+            "space-detail-action button button--icon button--small tooltip"
+          )}
+          data-tooltip="Comment on this space">
+          <MaterialDesignIcon name="comment"/>
+        </a>
         {canModify(user, get(this.props, 'space')) ? (
           <button
             type="button"
@@ -230,6 +264,29 @@ export default class SpaceDetail extends Component {
     )
   }
 
+  renderLikesModal() {
+    const parent = get(this.props, 'space.id')
+    const { createLikesModal, likesModalIsOpen } = this.state
+
+    return createLikesModal ? (
+      <LikesModal
+        parent={parent}
+        onClose={::this.closeLikesModal}
+        isVisible={likesModalIsOpen}
+        parentType="space"/>
+    ) : null
+  }
+
+  renderComments() {
+    const parent = get(this.props, 'space.id')
+
+    return (
+      <div id="comments">
+        <CommentsWidget parent={parent} parentType="space"/>
+      </div>
+    )
+  }
+
   render() {
     return (
       <Layout>
@@ -238,6 +295,8 @@ export default class SpaceDetail extends Component {
           {this.renderSubHeader()}
           {this.renderDescription()}
           {this.renderProducts()}
+          {this.renderLikesModal()}
+          {this.renderComments()}
         </div>
       </Layout>
     )

@@ -13,26 +13,26 @@ import {
 
 export default (parent) => {
   return new Promise(async (resolve, reject) => {
-    const key = `like-all-${parent}`
+    const key = `comment-all-${parent}`
 
     getFromCacheOrQuery(key, () => {
       mongoose
-        .model('Like')
+        .model('Comment')
         .where({ parent })
         .populate('createdBy')
         .sort('createdAt')
-        .exec(async (err, likes) => {
+        .exec(async (err, comments) => {
           if (err) {
             return reject(parseError(err))
           }
 
-          if (!isEmpty(likes)) {
-            await saveToCache(key, toJSON(likes), [
-              toIds(likes),
-              toIdsFromPath(likes, 'createdBy')
+          if (!isEmpty(comments)) {
+            await saveToCache(key, toJSON(comments), [
+              toIds(comments),
+              toIdsFromPath(comments, 'createdBy')
             ])
 
-            resolve(likes)
+            resolve(comments)
           } else {
             resolve()
           }

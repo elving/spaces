@@ -1,0 +1,7 @@
+.ReactModal__Overlay {
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 10000;
+  overflow-y: auto;
+}
+
+@import './likes.css';

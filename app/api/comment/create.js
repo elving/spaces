@@ -7,16 +7,16 @@ import { removeFromCache } from '../cache'
 
 export default (props) => {
   return new Promise(async (resolve, reject) => {
-    const Like = mongoose.model('Like')
-    const like = new Like(sanitize(props))
+    const Comment = mongoose.model('Comment')
+    const comment = new Comment(sanitize(props))
 
-    like.save(async (err, like) => {
+    comment.save(async (err, comment) => {
       if (err) {
         return reject(parseError(err))
       }
 
-      await removeFromCache(`like-all-${get(props, 'parent')}`)
-      resolve(like)
+      await removeFromCache(`comment-all-${get(props, 'parent')}`)
+      resolve(comment)
     })
   })
 }

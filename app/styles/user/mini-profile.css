@@ -1,8 +1,8 @@
 .user-mini-profile {
   text-decoration: none;
   display: flex;
+  max-width: 250px;
   align-items: center;
-  justify-content: space-between;
 }
 
 .user-mini-profile:hover {

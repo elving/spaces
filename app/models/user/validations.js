@@ -53,7 +53,7 @@ export default (schema) => {
     .validate(function(value) {
       if (isEmpty(value)) {
         return true
-      } else if (!isEmpty(value) && size(value) < 254) {
+      } else if (!isEmpty(value) && size(value) <= 254) {
         return true
       } else {
         return false
@@ -110,7 +110,7 @@ export default (schema) => {
     .validate(function(value) {
       if (isEmpty(value)) {
         return true
-      } else if (!isEmpty(value) && size(value) < 80) {
+      } else if (!isEmpty(value) && size(value) <= 80) {
         return true
       } else {
         return false
@@ -138,7 +138,7 @@ export default (schema) => {
     .validate(function(value) {
       if (isEmpty(value)) {
         return true
-      } else if (!isEmpty(value) && size(value) < 165) {
+      } else if (!isEmpty(value) && size(value) <= 165) {
         return true
       } else {
         return false

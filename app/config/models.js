@@ -20,6 +20,10 @@ import {
 } from '../models/space/schema'
 
 import {
+  default as registerCommentModel
+} from '../models/comment/schema'
+
+import {
   default as registerProductModel
 } from '../models/product/schema'
 
@@ -41,6 +45,7 @@ const configModels = () => {
   registerBrandModel()
   registerColorModel()
   registerSpaceModel()
+  registerCommentModel()
   registerProductModel()
   registerCategoryModel()
   registerSpaceTypeModel()

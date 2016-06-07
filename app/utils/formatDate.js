@@ -1,14 +1,13 @@
 export default (str) => {
-  let day, year, month
   const date = new Date(str)
+  const months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+  ]
 
-  day = date.getDate() + 1
-  if (day <= 9) day = `0${day}`
+  const day = date.getDate() + 1
+  const year = date.getFullYear()
+  const month = date.getMonth()
 
-  year = date.getFullYear()
-
-  month = date.getMonth() + 1
-  if (month <= 9) month = `0${month}`
-
-  return `${month}-${day}-${year}`
+  return `${months[month]} ${day}, ${year}`
 }

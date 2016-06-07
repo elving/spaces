@@ -49,6 +49,7 @@ export default class SpaceCard extends Component {
     likesCount: Type.number,
     description: Type.string,
     isRedesigned: Type.bool,
+    commentsCount: Type.number,
     originalSpace: Type.object,
     redesignsCount: Type.number
   };
@@ -166,9 +167,12 @@ export default class SpaceCard extends Component {
 
   renderActivity() {
     const { likesCount } = this.state
+    const { commentsCount } = this.props
 
     return (
-      <CardActivity likes={likesCount}/>
+      <CardActivity
+        likes={likesCount}
+        comments={commentsCount}/>
     )
   }
 

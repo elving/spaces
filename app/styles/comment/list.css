@@ -1,0 +1,21 @@
+.comments-list > .loader {
+  margin: 0 auto;
+  display: block;
+}
+
+.comments-title {
+  font-size: 22px;
+  text-align: center;
+  margin: 0 auto 35px;
+}
+
+.comments-list {
+  width: 100%;
+  margin-bottom: 35px;
+}
+
+.comments-list > .comment:last-child {
+  border-bottom: 0 none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}

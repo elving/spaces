@@ -8,6 +8,7 @@ export default (_id, props) => {
     mongoose
       .model('User')
       .findOneAndUpdate({ _id }, sanitize(props), {
+        new: true,
         runValidators: true
       }, (err, user) => {
         if (err) {

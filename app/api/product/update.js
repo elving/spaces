@@ -5,7 +5,7 @@ import isEmpty from 'lodash/isEmpty'
 
 import sanitize from './sanitize'
 import findById from './findById'
-import uploadImageFromUrl from '../../utils/uploadImageFromUrl'
+import uploadImageFromUrl from '../../utils/image/uploadImageFromUrl'
 
 import { invalidateFromCache } from '../cache'
 import { toIds, parseError, toIdsFromPath } from '../utils'

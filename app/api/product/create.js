@@ -6,7 +6,7 @@ import mongoose from 'mongoose'
 
 import validate from './validate'
 import sanitize from './sanitize'
-import uploadImageFromUrl from '../../utils/uploadImageFromUrl'
+import uploadImageFromUrl from '../../utils/image/uploadImageFromUrl'
 
 import { removeFromCache } from '../cache'
 import { toIds, parseError } from '../utils'

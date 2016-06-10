@@ -14,7 +14,7 @@ import Popup from '../common/Popup'
 import PopupTitle from '../common/PopupTitle'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
-import productInSpace from '../../utils/productInSpace'
+import productInSpace from '../../utils/product/productInSpace'
 import searchCollection from '../../utils/searchCollection'
 
 export default class SpacesPopup extends Component {
@@ -43,7 +43,7 @@ export default class SpacesPopup extends Component {
     userData: Type.object,
     spaceTypes: Type.array,
     addUserSpace: Type.func,
-    updateUserSpace: Type.func
+    onSpaceUpdated: Type.func
   };
 
   static propTypes = {
@@ -87,7 +87,7 @@ export default class SpacesPopup extends Component {
 
   toggleProduct(space, add = true) {
     const { productId } = this.props
-    const { csrf, updateUserSpace } = this.context
+    const { csrf, onSpaceUpdated } = this.context
 
     const id = get(space, 'id', '')
     const products = get(space, 'products', [])
@@ -105,7 +105,7 @@ export default class SpacesPopup extends Component {
         },
         method: 'PUT'
       }).then((res) => {
-        updateUserSpace(get(res, 'data', {}))
+        onSpaceUpdated(get(res, 'data', {}))
         this.setState({ isUpdatingSpace: false })
       }).catch(() => {
         this.setState({ isUpdatingSpace: false })

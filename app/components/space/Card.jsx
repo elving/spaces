@@ -3,6 +3,7 @@ import map from 'lodash/map'
 import size from 'lodash/size'
 import head from 'lodash/head'
 import slice from 'lodash/slice'
+import reverse from 'lodash/reverse'
 import classNames from 'classnames'
 import React, { Component, PropTypes as Type } from 'react'
 
@@ -56,9 +57,9 @@ export default class SpaceCard extends Component {
 
   componentDidMount() {
     const { products } = this.props
-    const firstProducts = slice(products, 0, 4)
+    const lastProducts = slice(reverse(products), 0, 4)
 
-    const images = map(firstProducts, (product) => (
+    const images = map(lastProducts, (product) => (
       get(product, 'image', '')
     ))
 
@@ -212,8 +213,8 @@ export default class SpaceCard extends Component {
   }
 
   renderSharePopup() {
-    const { images, sharePopupIsOpen, sharePopupIsCreated } = this.state
-    const { name, shortUrl, products, detailUrl, createdBy } = this.props
+    const { sharePopupIsOpen, sharePopupIsCreated } = this.state
+    const { name, image, shortUrl, products, detailUrl, createdBy } = this.props
 
     return sharePopupIsCreated ? (
       <SharePopup
@@ -226,7 +227,7 @@ export default class SpaceCard extends Component {
           `${name} — Designed by ${get(createdBy, 'username', '')}, ` +
           `featuring ${size(products)} products.`
         )}
-        shareImage={head(images)}
+        shareImage={image}
         onClickClose={::this.closeSharePopup}/>
     ) : null
   }

@@ -1,7 +1,7 @@
 {
   "ext": "js json",
   "env": { "NODE_ENV": "development" },
-  "watch": ["app/*"],
+  "watch": ["app/**/*"],
   "ignore": [
     "build/*",
     "app/views/*",

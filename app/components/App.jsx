@@ -1,12 +1,11 @@
 import ga from 'react-ga'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import isEqual from 'lodash/isEqual'
 import cloneDeep from 'lodash/cloneDeep'
 import React, { Component, PropTypes as Type } from 'react'
 
 import metadata from '../constants/metadata'
-import insertOrUpdate from '../utils/insertOrUpdate'
+import updateSpace from '../utils/space/updateSpace'
 
 export default class App extends Component {
   constructor(props) {
@@ -26,7 +25,7 @@ export default class App extends Component {
     spaceTypes: Type.array,
     userLoggedIn: Type.func,
     addUserSpace: Type.func,
-    updateUserSpace: Type.func,
+    onSpaceUpdated: Type.func,
     currentUserIsOwner: Type.func,
     currentUserIsAdmin: Type.func,
     currentUserIsCurator: Type.func
@@ -44,14 +43,9 @@ export default class App extends Component {
         userData.spaces.push(space)
         this.setState({ userData })
       }),
-      updateUserSpace: ((newSpace) => {
-        const userData = cloneDeep(this.state.userData)
-
-        userData.spaces = insertOrUpdate(userData.spaces, newSpace, (space) => (
-          isEqual(get(newSpace, 'id'), get(space, 'id'))
-        ))
-
-        this.setState({ userData })
+      onSpaceUpdated: ((space) => {
+        const { userData } = this.state
+        this.setState({ userData: updateSpace(userData, space) })
       }),
       currentUserIsAdmin: (() => get(this.props, 'user.isAdmin')),
       currentUserIsOwner: ((id) => get(this.props, 'user.id') === id),

@@ -1,5 +1,5 @@
 import getVersion from '../utils/getVersion'
-import isAuthenticatedUser from '../utils/isAuthenticatedUser'
+import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import { default as authRouter } from '../routes/auth'
 import { default as likeRouter } from '../routes/like'

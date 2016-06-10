@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
-import isAuthenticatedUser from '../utils/isAuthenticatedUser'
+import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import getAll from '../api/like/getAll'
 import create from '../api/like/create'

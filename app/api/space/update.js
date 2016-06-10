@@ -1,63 +1,62 @@
+import has from 'lodash/has'
 import get from 'lodash/get'
-import isEmpty from 'lodash/isEmpty'
-import isEqual from 'lodash/isEqual'
+import map from 'lodash/map'
+import compact from 'lodash/compact'
+import mongoose from 'mongoose'
 
 import sanitize from './sanitize'
-import findById from './findById'
 
+import generateHeader from '../../utils/space/generateHeader'
 import { invalidateFromCache } from '../cache'
 import { toIds, parseError, toIdsFromPath } from '../utils'
 
-export default (id, props, forceUpdate = false) => {
+export default (_id, props) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const space = await findById(id)
-      const updatedBy = get(props, 'updatedBy')
-      const updatedByAdmin = get(props, 'updatedByAdmin', false)
+      const shouldUpdateImage = has(props, 'products')
+      const updates = sanitize(props, false)
+      const options = { new: true }
 
-      if (!forceUpdate && updatedByAdmin) {
-        forceUpdate = true
-      }
+      mongoose
+        .model('Space')
+        .findOneAndUpdate({ _id }, updates, options, async (err, space) => {
+          if (err) {
+            return reject(parseError(err))
+          }
 
-      if (isEmpty(space)) {
-        return reject({
-          generic: `Space ${id} not found.`
+          space.set('forcedUpdate', false)
+
+          await invalidateFromCache([
+            toIds(space),
+            toIdsFromPath(space, 'products'),
+            toIdsFromPath(space, 'createdBy'),
+            toIdsFromPath(space, 'spaceType'),
+            toIdsFromPath(space, 'redesigns'),
+            toIdsFromPath(space, 'originalSpace')
+          ])
+
+          space
+            .populate('products')
+            .populate('createdBy')
+            .populate('spaceType', (err, space) => {
+              if (err) {
+                return reject(parseError(err))
+              }
+
+              if (shouldUpdateImage) {
+                generateHeader(
+                  compact(map(space.get('products'), (product) => (
+                    get(product, 'image')
+                  )))
+                ).then((image) => {
+                  space.set({ image })
+                  space.save(() => invalidateFromCache(toIds(space)))
+                })
+              }
+
+              resolve(space)
+            })
         })
-      }
-
-      if (!forceUpdate) {
-        if (!isEqual(updatedBy, space.get('createdBy.id'))) {
-          return reject({
-            err: {
-              genereic: 'Not authorized'
-            }
-          })
-        }
-      }
-
-      space.update(sanitize(props, false), (err) => {
-        if (err) {
-          return reject(parseError(err))
-        }
-
-        space
-          .populate('products')
-          .populate('spaceType')
-          .populate('originalSpace', async (err, space) => {
-            if (err) {
-              return reject(parseError(err))
-            }
-
-            await invalidateFromCache([
-              toIds(space),
-              toIdsFromPath(space, 'products'),
-              toIdsFromPath(space, 'createdBy'),
-              toIdsFromPath(space, 'redesigns')
-            ])
-
-            resolve(space)
-          })
-      })
     } catch (err) {
       reject(err)
     }

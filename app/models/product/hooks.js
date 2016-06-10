@@ -1,8 +1,8 @@
-import deleteImageFromUrl from '../../utils/deleteImageFromUrl'
+import deleteImage from '../../utils/image/deleteImage'
 
 export default (schema) => {
   schema.pre('remove', function(next) {
-    deleteImageFromUrl('products', this.get('image'))
+    deleteImage('products', this.get('image'))
       .then(next)
       .catch(next)
   })

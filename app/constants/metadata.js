@@ -2,9 +2,7 @@
 const METADATA = {
   url: 'https://joinspaces.co/',
   type: 'website',
-  title: (
-    'Spaces | A visual shopping guide for your home.'
-  ),
+  title: 'Spaces | A visual shopping guide for your home.',
   image: 'https://d3bjxaeqvrvffj.cloudfront.net/assets/screenshots/home-m.png',
   siteName: 'Spaces',
   imageWidth: '800',
@@ -18,9 +16,7 @@ const METADATA = {
     'A visual shopping guide for your home. Join Spaces to collect and ' +
     'share spaces that inspire you.'
   ),
-  shortDescription: (
-    'A visual shopping guide for your home.'
-  ),
+  shortDescription: 'A visual shopping guide for your home.',
 
   facebookAppId: '549973938496886',
   twitterUsername: 'joinspaces',

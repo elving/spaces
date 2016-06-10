@@ -1,6 +1,8 @@
 import get from 'lodash/get'
 import merge from 'lodash/merge'
-import isAuthenticatedUser from '../utils/isAuthenticatedUser'
+
+import isAdmin from '../utils/user/isAdmin'
+import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import create from '../api/space/create'
 import update from '../api/space/update'
@@ -94,9 +96,7 @@ export const updateSpace = async (req, res) => {
 
   if (!isAuthenticatedUser(req.user)) {
     res.status(500).json({
-      err: {
-        genereic: 'Not authorized'
-      }
+      err: { genereic: 'Not authorized' }
     })
   }
 
@@ -104,7 +104,7 @@ export const updateSpace = async (req, res) => {
     const space = await update(
       id, merge(req.body, {
         updatedBy: get(req, 'user.id'),
-        updatedByAdmin: get(req, 'user.isAdmin', false)
+        forcedUpdate: isAdmin(get(req, 'user'))
       })
     )
 

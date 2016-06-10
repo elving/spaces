@@ -1,4 +1,5 @@
 import getSpaces from './getSpaces'
+import arrayToObject from '../../utils/arrayToObject'
 
 export default (id) => {
   return new Promise(async (resolve, reject) => {
@@ -6,7 +7,7 @@ export default (id) => {
       const spaces = await getSpaces(id)
 
       resolve({
-        spaces
+        spaces: arrayToObject(spaces)
       })
     } catch (err) {
       reject(err)

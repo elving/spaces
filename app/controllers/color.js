@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 
 import { toJSON } from '../api/utils'
-import isAuthenticatedUser from '../utils/isAuthenticatedUser'
+import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import getAll from '../api/color/getAll'
 import create from '../api/color/create'

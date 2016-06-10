@@ -3,14 +3,14 @@ import head from 'lodash/head'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 
-import knoxConfig from '../config/knox'
+import knoxConfig from '../../config/knox'
 
-export default (folder, url) => {
+export default (folder, name) => {
   const regx = new RegExp(`\/${folder}.+`)
   const client = knox.createClient(knoxConfig())
 
   return new Promise((resolve, reject) => {
-    const fileName = head(url.match(regx))
+    const fileName = head(name.match(regx))
 
     if (isEmpty(fileName)) {
       reject('Error extracting file name.')

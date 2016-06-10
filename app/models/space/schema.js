@@ -1,6 +1,7 @@
 import shortid from 'shortid'
 import mongoose from 'mongoose'
 
+import { default as applyHooks } from './hooks'
 import { default as applyVirtuals } from './virtuals'
 import { default as applyValidations } from './validations'
 
@@ -9,6 +10,7 @@ const SpaceSchema = new mongoose.Schema({
   sid: { type: String, default: shortid.generate },
   name: { type: String, trim: true, default: '' },
   slug: { type: String, trim: true, default: '' },
+  image: { type: String, trim: true, default: '' },
   products: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }],
   redesigns: [{ type: mongoose.Schema.ObjectId, ref: 'Space' }],
   createdBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
@@ -22,6 +24,7 @@ const SpaceSchema = new mongoose.Schema({
   redesignsCount: { type: Number, default: 0 }
 }, { timestamps: true })
 
+applyHooks(SpaceSchema)
 applyVirtuals(SpaceSchema)
 applyValidations(SpaceSchema)
 

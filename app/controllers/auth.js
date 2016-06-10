@@ -5,7 +5,7 @@ import { default as queryString } from 'query-string'
 
 import sendMail from '../utils/sendMail'
 import metadata from '../constants/metadata'
-import isAuthenticatedUser from '../utils/isAuthenticatedUser'
+import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import { default as findUser } from '../api/user/find'
 import { default as createUser } from '../api/user/create'

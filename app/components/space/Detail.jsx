@@ -1,7 +1,6 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
-import head from 'lodash/head'
 import React, { Component, PropTypes as Type } from 'react'
 
 import Layout from '../common/Layout'
@@ -167,7 +166,15 @@ export default class SpaceDetail extends Component {
 
   renderSharePopup() {
     const { sharePopupIsOpen, sharePopupIsCreated } = this.state
-    const { name, shortUrl, products, detailUrl, createdBy } = this.props.space
+
+    const {
+      name,
+      image,
+      products,
+      shortUrl,
+      detailUrl,
+      createdBy
+    } = this.props.space
 
     return sharePopupIsCreated ? (
       <SharePopup
@@ -180,7 +187,7 @@ export default class SpaceDetail extends Component {
           `${name} — Designed by ${get(createdBy, 'username', '')}, ` +
           `featuring ${size(products)} products.`
         )}
-        shareImage={get(head(products), 'image', '')}
+        shareImage={image}
         onClickClose={::this.closeSharePopup}/>
     ) : null
   }

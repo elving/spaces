@@ -3,10 +3,10 @@ import merge from 'lodash/merge'
 import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 
-import isAdmin from '../utils/isAdmin'
-import isOwner from '../utils/isOwner'
+import isAdmin from '../utils/user/isAdmin'
+import isOwner from '../utils/user/isOwner'
 import userCanAddProducts from '../utils/userCanAddProducts'
-import isAuthenticatedUser from '../utils/isAuthenticatedUser'
+import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import getAll from '../api/product/getAll'
 import create from '../api/product/create'

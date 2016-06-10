@@ -10,7 +10,7 @@ import routes from '../../routes/client'
 import metadata from '../../constants/metadata'
 import getVersion from '../getVersion'
 import getFullUrl from '../getFullUrl'
-import isAuthenticatedUser from '../isAuthenticatedUser'
+import isAuthenticatedUser from '../user/isAuthenticatedUser'
 
 export default (req, res) => {
   const { user } = req

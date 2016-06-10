@@ -17,5 +17,10 @@ export default (schema) => {
       return `s/${this.get('sid')}`
     })
 
+  schema
+    .virtual('forcedUpdate')
+    .get(function() { return this.__forcedUpdate })
+    .set(function(force = false) { this.__forcedUpdate = force })
+
   return schema
 }

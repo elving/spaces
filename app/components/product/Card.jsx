@@ -92,10 +92,18 @@ export default class ProductCard extends Component {
   }
 
   openSpacesPopup() {
-    this.setState({
-      spacesPopupIsOpen: true,
-      spacesPopupIsCreated: true
-    })
+    const { spacesPopupIsCreated } = this.state
+
+    if (!spacesPopupIsCreated) {
+      this.setState({
+        spacesPopupIsOpen: true,
+        spacesPopupIsCreated: true
+      })
+    } else {
+      this.setState({
+        spacesPopupIsOpen: true
+      })
+    }
   }
 
   closeSpacesPopup() {

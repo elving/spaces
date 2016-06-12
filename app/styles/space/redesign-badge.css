@@ -1,0 +1,35 @@
+.redesign-badge {
+  width: 40px;
+  height: 40px;
+  position: relative;
+}
+
+.redesign-badge-link {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  position: relative;
+}
+
+.redesign-badge-link,
+.redesign-badge-link:hover {
+  text-decoration: none;
+}
+
+.redesign-badge-icon-container {
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  background-color: #2ecc71;
+  right: -5px;
+  width: 22px;
+  bottom: -5px;
+  height: 22px;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+}
+
+.redesign-badge-icon .icon-fill {
+  fill: #ffffff;
+}

@@ -6,10 +6,12 @@ import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import create from '../api/space/create'
 import update from '../api/space/update'
+import findById from '../api/space/findById'
 import findBySid from '../api/space/findBySid'
 import getLatest from '../api/space/getLatest'
+import updateUser from '../api/user/update'
 
-import { toJSON } from '../api/utils'
+import { toJSON, toObjectId } from '../api/utils'
 import { default as getAllUserData } from '../api/user/getData'
 
 export const renderIndex = async (req, res, next) => {
@@ -59,6 +61,8 @@ export const renderDetail = async (req, res, next) => {
 }
 
 export const createSpace = async (req, res) => {
+  const userId = get(req, 'user.id')
+
   if (!isAuthenticatedUser(req.user)) {
     res.status(500).json({ err: 'Not authorized' })
   }
@@ -66,12 +70,24 @@ export const createSpace = async (req, res) => {
   try {
     const space = await create(
       merge(req.body, {
-        createdBy: get(req, 'user.id'),
-        updatedBy: get(req, 'user.id')
+        createdBy: userId,
+        updatedBy: userId
       })
     )
 
-    res.status(200).json(space)
+    const user = await updateUser(userId, {
+      $addToSet: { spaces: toObjectId(space) }
+    })
+
+    req.login(user, (err) => {
+      if (err) {
+        return res.status(500).json({
+          err: { generic: 'There was an error while trying to redesign space.' }
+        })
+      }
+
+      res.status(200).json(space)
+    })
   } catch (err) {
     res.status(500).json({ err })
   }
@@ -109,6 +125,48 @@ export const updateSpace = async (req, res) => {
     )
 
     res.status(200).json(space)
+  } catch (err) {
+    res.status(500).json({ err })
+  }
+}
+
+export const redesignSpace = async (req, res) => {
+  const userId = get(req, 'user.id')
+  const spaceId = get(req, 'params.id')
+
+  if (!isAuthenticatedUser(req.user)) {
+    res.status(500).json({
+      err: { genereic: 'Not authorized' }
+    })
+  }
+
+  try {
+    const originalSpace = await findById(spaceId)
+    const originalSpaceProps = toJSON(originalSpace)
+
+    const space = await create(
+      merge(req.body, {
+        image: get(originalSpaceProps, 'image', ''),
+        products: get(originalSpaceProps, 'products', []),
+        spaceType: get(originalSpaceProps, 'spaceType', {}),
+        createdBy: userId,
+        updatedBy: userId
+      })
+    )
+
+    const user = await updateUser(userId, {
+      $addToSet: { spaces: space }
+    })
+
+    req.login(user, (err) => {
+      if (err) {
+        return res.status(500).json({
+          err: { generic: 'There was an error while trying to redesign space.' }
+        })
+      }
+
+      res.status(200).json(space)
+    })
   } catch (err) {
     res.status(500).json({ err })
   }

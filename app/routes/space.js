@@ -14,6 +14,7 @@ router.get('/spaces/create/', controller.renderCreateSpace)
 
 router.post(`${ajaxRoot}/`, controller.createSpace)
 router.put(`${ajaxRoot}/:id/`, controller.updateSpace)
+router.post(`${ajaxRoot}/:id/redesign/`, controller.redesignSpace)
 // router.delete(`${ajaxRoot}/:sid/`, controller.destroyProduct)
 
 export default router

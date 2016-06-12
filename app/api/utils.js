@@ -66,7 +66,7 @@ export const toObjectId = (value) => {
     } else if (value instanceof mongoose.Schema.Types.ObjectId) {
       return value
     } else if (isObject(value)) {
-      return get(value, 'id')
+      return mongoose.Types.ObjectId(get(value, 'id'))
     }
   }
 

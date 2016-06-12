@@ -19,9 +19,7 @@ export const like = async (req, res) => {
 
   if (!isAuthenticatedUser(req.user)) {
     return res.status(500).json({
-      err: {
-        generic: 'Not authorized'
-      }
+      err: { generic: 'Not authorized' }
     })
   }
 
@@ -38,11 +36,11 @@ export const like = async (req, res) => {
       if (isEqual(parentType, 'space')) {
         await updateSpace(parent, {
           $inc: { likesCount: 1 }
-        }, true)
+        })
       } else {
         await updateProduct(parent, {
           $inc: { likesCount: 1 }
-        }, true)
+        })
       }
 
       await updateUserLikes(req, like)
@@ -76,11 +74,11 @@ export const unlike = async (req, res) => {
     if (isEqual(parentType, 'space')) {
       await updateSpace(parent, {
         $inc: { likesCount: -1 }
-      }, true)
+      })
     } else {
       await updateProduct(parent, {
         $inc: { likesCount: -1 }
-      }, true)
+      })
     }
 
     await updateUserLikes(req, like, 'remove')

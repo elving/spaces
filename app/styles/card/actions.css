@@ -64,13 +64,29 @@
   background-color: #ffffff;
 }
 
+.card-action:not(.like-button):hover .icon-fill {
+  fill: #888888;
+}
+
+.card-action[data-action="share"].button--active {
+  border-color: #c0c0c0;
+}
+
+.card-action[data-action="share"].button--active .icon-fill {
+  fill: #888888;
+}
+
 .card-action[data-action="add"]:hover,
-.card-action[data-action="redesign"]:hover {
+.card-action[data-action="add"].button--active,
+.card-action[data-action="redesign"]:hover,
+.card-action[data-action="redesign"].button--active {
   border-color: #2ECC71;
   background-color: #2ECC71;
 }
 
 .card-action[data-action="add"]:hover .icon-fill,
-.card-action[data-action="redesign"]:hover .icon-fill {
+.card-action[data-action="add"].button--active .icon-fill,
+.card-action[data-action="redesign"]:hover .icon-fill,
+.card-action[data-action="redesign"].button--active .icon-fill {
   fill: #FFFFFF;
 }

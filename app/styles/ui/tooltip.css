@@ -34,6 +34,7 @@
   color: #ffffff;
   font-size: 12px;
   text-align: center;
+  word-break: break-word;
   opacity: 0;
   pointer-events: none;
 }

@@ -9,6 +9,7 @@ import { toObjectId } from '../utils'
 export default (props, isNew = true) => {
   const slug = get(props, 'slug', '')
   const products = get(props, 'products', '')
+  const spaceType = get(props, 'spaceType', '')
 
   if (isNew) {
     if (isEmpty(slug)) {
@@ -18,6 +19,10 @@ export default (props, isNew = true) => {
 
   if (!isEmpty(products)) {
     set(props, 'products', toObjectId(products))
+  }
+
+  if (!isEmpty(spaceType)) {
+    set(props, 'spaceType', toObjectId(spaceType))
   }
 
   Reflect.deleteProperty(props, 'updatedByAdmin')

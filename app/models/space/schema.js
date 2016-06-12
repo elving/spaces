@@ -17,7 +17,6 @@ const SpaceSchema = new mongoose.Schema({
   updatedBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
   spaceType: { type: mongoose.Schema.ObjectId, ref: 'SpaceType' },
   description: { type: String, trim: true, default: '' },
-  isRedesigned: { type: Boolean, default: false },
   originalSpace: { type: mongoose.Schema.ObjectId, ref: 'Space' },
   likesCount: { type: Number, default: 0 },
   commentsCount: { type: Number, default: 0 },

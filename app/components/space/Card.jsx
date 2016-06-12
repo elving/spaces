@@ -1,7 +1,6 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
-import head from 'lodash/head'
 import slice from 'lodash/slice'
 import reverse from 'lodash/reverse'
 import classNames from 'classnames'
@@ -14,8 +13,11 @@ import CardTitle from '../card/CardTitle'
 import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
 import CardActivity from '../card/CardActivity'
+import RedesignPopup from './RedesignPopup'
+import RedesignBadge from './RedesignBadge'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
+import isRedesign from '../../utils/space/isRedesign'
 import preloadImages from '../../utils/preloadImages'
 import getTagsFromProducts from '../../utils/getTagsFromProducts'
 
@@ -30,7 +32,8 @@ export default class SpaceCard extends Component {
       imagesAreLoaded: false,
       imagesAreLoading: false,
       sharePopupIsOpen: false,
-      sharePopupIsCreated: false
+      sharePopupIsCreated: false,
+      redesignPopupIsOpen: false
     }
   }
 
@@ -86,6 +89,18 @@ export default class SpaceCard extends Component {
     })
   }
 
+  openRedesignPopup() {
+    this.setState({
+      redesignPopupIsOpen: true
+    })
+  }
+
+  closeRedesignPopup() {
+    this.setState({
+      redesignPopupIsOpen: false
+    })
+  }
+
   renderImages() {
     const { images, imagesAreLoaded, imagesAreLoading } = this.state
 
@@ -97,6 +112,7 @@ export default class SpaceCard extends Component {
         })}
         data-images={size(images)}>
         {this.renderActions()}
+        {this.renderRedesignBadge()}
 
         {imagesAreLoading ? (
           <Loader size={50}/>
@@ -114,9 +130,16 @@ export default class SpaceCard extends Component {
     )
   }
 
+  renderRedesignBadge() {
+    return isRedesign(this.props) ? (
+      <RedesignBadge space={this.props}/>
+    ) : null
+  }
+
   renderActions() {
     const { likesCount } = this.state
     const { id, detailUrl } = this.props
+    const { sharePopupIsOpen, redesignPopupIsOpen } = this.state
 
     return (
       <div className="space-card-actions card-actions-container">
@@ -125,8 +148,16 @@ export default class SpaceCard extends Component {
         <div className="card-actions card-actions--left">
           <button
             type="button"
-            className="card-action button button--icon"
-            data-action="redesign">
+            onClick={::this.openRedesignPopup}
+            className={classNames({
+              'button': true,
+              'tooltip': true,
+              'card-action': true,
+              'button--icon': true,
+              'button--active': redesignPopupIsOpen
+            })}
+            data-action="redesign"
+            data-tooltip="Redesign this space">
             <MaterialDesignIcon name="redesign" fill="#2ECC71"/>
           </button>
           <LikeButton
@@ -142,8 +173,14 @@ export default class SpaceCard extends Component {
           <button
             type="button"
             onClick={::this.openSharePopup}
-            className="card-action button button--icon tooltip"
-            data-action="send"
+            className={classNames({
+              'button': true,
+              'tooltip': true,
+              'card-action': true,
+              'button--icon': true,
+              'button--active': sharePopupIsOpen
+            })}
+            data-action="share"
             data-tooltip="Share this space">
             <MaterialDesignIcon name="send"/>
           </button>
@@ -202,7 +239,7 @@ export default class SpaceCard extends Component {
           initials={get(createdBy, 'initials', '')}
           className="space-card-designer-avatar"/>
         <span className="space-card-designer-name">
-          Designed by <a
+          {isRedesign(this.props) ? 'Redesigned' : 'Designed'} by <a
             href={`/${get(createdBy, 'detailUrl', '#')}/`}
             className="space-card-designer-link">
             {get(createdBy, 'name')}
@@ -232,23 +269,43 @@ export default class SpaceCard extends Component {
     ) : null
   }
 
+  renderRedesignPopup() {
+    const { id, spaceType } = this.props
+    const { redesignPopupIsOpen } = this.state
+
+    return (
+      <RedesignPopup
+        isOpen={redesignPopupIsOpen}
+        spaceId={id}
+        spaceType={get(spaceType, 'id', spaceType)}
+        className="redesign-popup"
+        onClickClose={::this.closeRedesignPopup}/>
+    )
+  }
+
   render() {
-    const { sharePopupIsOpen } = this.state
+    const { sharePopupIsOpen, redesignPopupIsOpen } = this.state
 
     return (
       <div
         className={classNames({
           'product': true,
           'space-card card': true,
-          'space-card--popup-open': sharePopupIsOpen,
+          'space-card--redesign': isRedesign(this.props),
+          'space-card--popup-open': (
+            sharePopupIsOpen ||
+            redesignPopupIsOpen
+          )
         })}>
         <div className="space-card-overlay"/>
+
+        {this.renderSharePopup()}
+        {this.renderRedesignPopup()}
 
         {this.renderImages()}
         {this.renderTitle()}
         {this.renderTags()}
         {this.renderDesigner()}
-        {this.renderSharePopup()}
       </div>
     )
   }

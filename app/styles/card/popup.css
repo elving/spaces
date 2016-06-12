@@ -10,7 +10,9 @@
 }
 
 .spaces-popup:after,
-.spaces-popup:before {
+.spaces-popup:before,
+.redesign-popup:after,
+.redesign-popup:before {
   left: 25px;
   right: auto;
 }
@@ -26,11 +28,8 @@
   height: 120px;
 }
 
-.spaces-popup-form {
-  padding: 15px;
-}
-
-.spaces-popup-form {
+.spaces-popup-form,
+.redesign-popup-form {
   padding: 15px;
 }
 

@@ -18,6 +18,17 @@
   border-bottom: 0 none;
 }
 
+.space-card .redesign-badge {
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+  position: absolute;
+}
+
+.space-card:hover .redesign-badge {
+  z-index: 100;
+}
+
 .space-card:hover .card-actions-overlay {
   display: block;
 }
@@ -25,6 +36,10 @@
 .space-card:hover .card-actions,
 .space-card--popup-open .card-actions {
   display: flex;
+}
+
+.space-card--redesign:hover .card-actions--right {
+  right: 65px;
 }
 
 .space-card--popup-open .space-card-overlay {

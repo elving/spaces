@@ -17,17 +17,17 @@
 
 .card-actions--left,
 .card-actions--right {
-  top: 15px;
+  top: 10px;
   align-items: center;
 }
 
 .card-actions--left {
-  left: 15px;
+  left: 10px;
   justify-content: flex-start;
 }
 
 .card-actions--right {
-  right: 15px;
+  right: 10px;
   justify-content: flex-end;
 }
 

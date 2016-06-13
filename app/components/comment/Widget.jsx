@@ -17,23 +17,33 @@ export default class CommentsWidget extends Component {
 
   static propTypes = {
     parent: Type.string,
-    parentType: Type.string
+    parentType: Type.string,
+    onCommentAdded: Type.func,
+    onCommentRemoved: Type.func
+  };
+
+  static defaultProps = {
+    onCommentAdded: (() => {}),
+    onCommentRemoved: (() => {})
   };
 
   addNewComment(comment) {
     const { newComments } = this.state
+    const { onCommentAdded } = this.props
+
     newComments.push(comment)
-    this.setState({ newComments })
+    this.setState({ newComments }, onCommentAdded)
   }
 
   removeComment(id) {
     const { newComments } = this.state
+    const { onCommentRemoved } = this.props
 
     this.setState({
       newComments: filter(newComments, (comment) => (
         !isEqual(get(comment, 'id'), id)
       ))
-    })
+    }, onCommentRemoved)
   }
 
   render() {

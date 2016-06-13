@@ -23,12 +23,12 @@ const UserSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, default: false },
   provider: { type: String, default: 'local' },
   isCurator: { type: Boolean, default: false },
+  likes: [{ type: mongoose.Schema.ObjectId, ref: 'Like' }],
   spaces: [{ type: mongoose.Schema.ObjectId, ref: 'Space' }],
   products: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }],
   comments: [{ type: mongoose.Schema.ObjectId, ref: 'Comment' }],
-  categories: [{ type: mongoose.Schema.ObjectId, ref: 'Category' }],
-  spacesLiked: [{ type: mongoose.Schema.ObjectId, ref: 'Space' }],
-  poductsLiked: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }]
+  // following: [{ type: mongoose.Schema.ObjectId, ref: 'Follow' }]
+  followersCount: { type: Number, default: 0 }
 }, { timestamps: true })
 
 applyHooks(UserSchema)

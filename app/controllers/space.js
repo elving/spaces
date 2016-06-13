@@ -79,15 +79,7 @@ export const createSpace = async (req, res) => {
       $addToSet: { spaces: toObjectId(space) }
     })
 
-    req.login(user, (err) => {
-      if (err) {
-        return res.status(500).json({
-          err: { generic: 'There was an error while trying to redesign space.' }
-        })
-      }
-
-      res.status(200).json(space)
-    })
+    req.login(user, () => res.status(200).json(space))
   } catch (err) {
     res.status(500).json({ err })
   }
@@ -154,19 +146,15 @@ export const redesignSpace = async (req, res) => {
       })
     )
 
+    await update(spaceId, {
+      $inc: { redesignsCount: 1 }
+    })
+
     const user = await updateUser(userId, {
-      $addToSet: { spaces: space }
+      $addToSet: { spaces: toObjectId(space) }
     })
 
-    req.login(user, (err) => {
-      if (err) {
-        return res.status(500).json({
-          err: { generic: 'There was an error while trying to redesign space.' }
-        })
-      }
-
-      res.status(200).json(space)
-    })
+    req.login(user, () => res.status(200).json(space))
   } catch (err) {
     res.status(500).json({ err })
   }

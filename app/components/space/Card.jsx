@@ -233,8 +233,8 @@ export default class SpaceCard extends Component {
     return (
       <div className="space-card-designer">
         <Avatar
-          width={30}
-          height={30}
+          width={26}
+          height={26}
           imageUrl={get(createdBy, 'avatar', '')}
           initials={get(createdBy, 'initials', '')}
           className="space-card-designer-avatar"/>

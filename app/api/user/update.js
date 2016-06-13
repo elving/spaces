@@ -12,8 +12,6 @@ export default (id, props) => {
       const updates = sanitize(props, false)
       const options = { new: true }
 
-      console.log(updates)
-
       mongoose
         .model('User')
         .findOneAndUpdate(query, updates, options, async (err, user) => {
@@ -29,7 +27,17 @@ export default (id, props) => {
             toIdsFromPath(user, 'comments')
           ])
 
-          resolve(user)
+          user
+            .populate('likes')
+            .populate('spaces')
+            .populate('products')
+            .populate('comments', (err, user) => {
+              if (err) {
+                return reject(parseError(err))
+              }
+
+              resolve(user)
+            })
         })
     } catch (err) {
       reject(err)

@@ -1,6 +1,6 @@
 .card-tags {
   width: 100%;
-  padding: 15px;
+  padding: 10px;
   display: flex;
   overflow-x: scroll;
   align-items: center;
@@ -8,10 +8,10 @@
 }
 
 .card-tag {
-  color: #666666;
-  border-radius: 4px;
+  border-radius: 3px;
   background-color: #ececec;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 500;
   display: flex;
   padding: 4px 8px;
   flex-shrink: 0;

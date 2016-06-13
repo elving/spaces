@@ -1,6 +1,6 @@
 .card-title-container {
   text-decoration: none;
-  padding: 15px;
+  padding: 10px;
 }
 
 .card-title-container:hover {
@@ -9,5 +9,9 @@
 
 .card-subtitle {
   color: #999999;
-  font-size: 14px;
+  font-size: 13px;
+}
+
+.card-title {
+  font-size: 16px;
 }

@@ -130,6 +130,8 @@ export default class SpacesPopup extends Component {
       }).then((res) => {
         addUserSpace(get(res, 'data', {}))
 
+        console.log(':D')
+
         this.setState({
           type: '',
           name: '',

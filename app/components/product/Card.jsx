@@ -222,8 +222,8 @@ export default class ProductCard extends Component {
     return (
       <div className="product-card-designer">
         <Avatar
-          width={30}
-          height={30}
+          width={26}
+          height={26}
           imageUrl={get(createdBy, 'avatar', '')}
           initials={get(createdBy, 'initials', '')}
           className="product-card-designer-avatar"/>

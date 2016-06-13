@@ -951,7 +951,7 @@ export default class ProductForm extends Component {
 
     const onClose = () => {
       if (deletingSuccessful || !isAddingForSpace && !isUpdating) {
-        window.onbeforeunload = () => {}
+        window.onbeforeunload = null
         window.location.href = '/products/add/'
       } else {
         this.setState({

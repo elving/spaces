@@ -7,12 +7,14 @@ import getAll from '../api/like/getAll'
 import create from '../api/like/create'
 import destroy from '../api/like/destroy'
 import hasLiked from '../api/like/hasLiked'
+import updateUser from '../api/user/update'
 import updateSpace from '../api/space/update'
 import updateProduct from '../api/product/update'
 
-import { default as updateUserLikes } from '../api/user/updateLikes'
+import { toObjectId } from '../api/utils'
 
 export const like = async (req, res) => {
+  const userId = get(req, 'user.id')
   const parent = get(req.body, 'parent', '')
   const createdBy = get(req.body, 'createdBy', '')
   const parentType = get(req.body, 'parentType', '')
@@ -27,9 +29,7 @@ export const like = async (req, res) => {
     const userHasLiked = await hasLiked(parentType, parent, createdBy)
 
     if (userHasLiked) {
-      res.status(500).json({
-        err: `User: ${createdBy} already likes ${parentType}: ${parent}`
-      })
+      res.status(200).json({ success: true })
     } else {
       const like = await create(req.body)
 
@@ -43,8 +43,11 @@ export const like = async (req, res) => {
         })
       }
 
-      await updateUserLikes(req, like)
-      res.status(200).json(like)
+      const user = await updateUser(userId, {
+        $addToSet: { likes: toObjectId(like) }
+      })
+
+      req.login(user, () => res.status(200).json(like))
     }
   } catch (err) {
     res.status(500).json({
@@ -56,15 +59,14 @@ export const like = async (req, res) => {
 }
 
 export const unlike = async (req, res) => {
+  const userId = get(req, 'user.id')
   const parent = get(req.params, 'parent', '')
   const createdBy = get(req.params, 'createdBy', '')
   const parentType = get(req.params, 'parentType', '')
 
   if (!isAuthenticatedUser(req.user)) {
     return res.status(500).json({
-      err: {
-        generic: 'Not authorized'
-      }
+      err: { generic: 'Not authorized' }
     })
   }
 
@@ -81,8 +83,11 @@ export const unlike = async (req, res) => {
       })
     }
 
-    await updateUserLikes(req, like, 'remove')
-    res.status(200).json({ success: true })
+    const user = await updateUser(userId, {
+      $pull: { likes: toObjectId(like) }
+    })
+
+    req.login(user, () => res.status(200).json({ success: true }))
   } catch (err) {
     res.status(500).json({
       err: {

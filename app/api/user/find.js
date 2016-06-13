@@ -7,6 +7,10 @@ export default (emailOrUsername) => {
       .model('User')
       .findOne()
       .or([{ email: emailOrUsername }, { username: emailOrUsername }])
+      .populate('likes')
+      .populate('spaces')
+      .populate('products')
+      .populate('comments')
       .exec((err, user) => {
         if (err) {
           return reject(parseError(err))

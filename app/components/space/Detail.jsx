@@ -1,6 +1,7 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
+import isEmpty from 'lodash/isEmpty'
 import React, { Component, PropTypes as Type } from 'react'
 
 import Layout from '../common/Layout'
@@ -248,11 +249,11 @@ export default class SpaceDetail extends Component {
   renderDescription() {
     const description = get(this.props, 'space.description', [])
 
-    return (
+    return !isEmpty(description) ? (
       <div className="space-detail-description-container">
         <p className="space-detail-description">{description}</p>
       </div>
-    )
+    ) : null
   }
 
   renderProducts() {
@@ -285,11 +286,16 @@ export default class SpaceDetail extends Component {
   }
 
   renderComments() {
+    const count = get(this.state, 'commentsCount', 0)
     const parent = get(this.props, 'space.id')
 
     return (
       <div id="comments">
-        <CommentsWidget parent={parent} parentType="space"/>
+        <CommentsWidget
+          parent={parent}
+          parentType="space"
+          onCommentAdded={() => this.setState({ commentsCount: count + 1 })}
+          onCommentRemoved={() => this.setState({ commentsCount: count - 1 })}/>
       </div>
     )
   }

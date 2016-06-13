@@ -23,6 +23,7 @@
 
 .spaces-popup-empty {
   color: #999999;
+  border-bottom: 0 none;
   font-size: 22px;
   text-align: center;
   height: 120px;

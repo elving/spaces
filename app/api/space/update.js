@@ -5,8 +5,8 @@ import compact from 'lodash/compact'
 import mongoose from 'mongoose'
 
 import sanitize from './sanitize'
-
 import generateHeader from '../../utils/space/generateHeader'
+
 import { invalidateFromCache } from '../cache'
 import { toIds, parseError, toIdsFromPath } from '../utils'
 

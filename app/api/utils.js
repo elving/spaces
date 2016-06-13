@@ -38,17 +38,9 @@ export const toIds = (docs) => {
   return flattenDeep(map(docs, (doc) => get(doc, 'id')))
 }
 
-export const toIdsFromPath = (docs, path = 'id') => {
+export const toIdsFromPath = (docs, path) => {
   docs = isArray(docs) ? docs : [docs]
-
-  return flattenDeep(
-    map(docs, (doc) => {
-      let pathValue
-      pathValue = doc.get(path)
-      pathValue = isArray(pathValue) ? pathValue : [pathValue]
-      return map(pathValue, (value) => value)
-    })
-  )
+  return flattenDeep(map(docs, (doc) => toIds(get(doc, path, doc))))
 }
 
 export const toJSON = (value) => {

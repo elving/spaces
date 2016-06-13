@@ -7,6 +7,8 @@ import React, { Component, PropTypes as Type } from 'react'
 import Avatar from './Avatar'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
+import inflect from '../../utils/inflect'
+
 export default class MiniProfile extends Component {
   static contextTypes = {
     user: Type.object
@@ -29,7 +31,9 @@ export default class MiniProfile extends Component {
 
     const userId = get(user, 'id', '')
     const username = get(user, 'username', '')
+    const spacesCount = size(get(user, 'spaces', []))
     const currentUserId = get(this.context, 'user.id', '')
+    const followersCount = get(user, 'followersCount', 0)
 
     return (
       <a
@@ -72,10 +76,10 @@ export default class MiniProfile extends Component {
           </div>
           <div className="user-mini-profile-stats">
             <div className="user-mini-profile-stat">
-              9999 Followers
+              {`${followersCount} ${inflect(followersCount, 'Follower')}`}
             </div>
             <div className="user-mini-profile-stat">
-              9999 Spaces
+              {`${spacesCount} ${inflect(spacesCount, 'Space')}`}
             </div>
           </div>
         </div>

@@ -6,14 +6,14 @@ import React, { Component, PropTypes as Type } from 'react'
 
 import MaterialDesignIcon from './MaterialDesignIcon'
 
-import hasLikedSpace from '../../utils/user/hasLikedSpace'
+import hasLiked from '../../utils/user/hasLiked'
 
 export default class LikeButton extends Component {
   constructor(props, context) {
     super(props, context)
 
     this.state = {
-      liked: hasLikedSpace(get(context, 'user'), get(props, 'parent')),
+      liked: hasLiked(get(context, 'user'), get(props, 'parent')),
       isSaving: false
     }
   }

@@ -51,7 +51,7 @@ export const join = async (req, res, next) => {
   try {
     const user = await createUser(req.body)
 
-    req.login(user, (err) => {
+    req.logIn(user, (err) => {
       if (err) {
         return next(err)
       }
@@ -85,7 +85,9 @@ export const renderLogin = (req, res, next) => {
 export const login = (req, res, next) => {
   passport.authenticate('local', (err, user, failure) => {
     if (err) {
-      return next(err)
+      return res.status(500).json({
+        err: { generic: 'There was an error while trying to login.' }
+      })
     }
 
     if (isEmpty(user)) {
@@ -94,14 +96,14 @@ export const login = (req, res, next) => {
       })
     }
 
-    req.login(user, (err) => {
+    req.logIn(user, (err) => {
       if (err) {
-        return next(err)
+        return res.status(500).json({
+          err: { generic: 'There was an error while trying to login.' }
+        })
       }
 
-      const returnTo = req.session.returnTo || '/'
-      Reflect.deleteProperty(req.session, 'returnTo')
-      res.status(200).json({ user, returnTo })
+      res.status(200).json({ user })
     })
   })(req, res, next)
 }
@@ -237,7 +239,7 @@ export const setPassword = async (req, res) => {
     try {
       const user = await resetUserPassword(req.body)
 
-      req.login(user, async (err) => {
+      req.logIn(user, async (err) => {
         if (err) {
           return res.status(500).json({ err })
         }
@@ -255,6 +257,6 @@ export const setPassword = async (req, res) => {
 }
 
 export const logout = (req, res) => {
-  req.logout()
+  req.logOut()
   res.redirect('/login/')
 }

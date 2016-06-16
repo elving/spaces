@@ -26,7 +26,7 @@ export default (req, like, action = 'add') => {
     try {
       await update(get(user, 'id'), { [key]: toObjectId(newLikes) })
 
-      req.login(user, (err) => {
+      req.logIn(user, (err) => {
         if (err) {
           return reject(err)
         }

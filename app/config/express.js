@@ -75,6 +75,7 @@ const configExpress = (server, connection) => {
       mongooseConnection: connection
     }),
     cookie : {
+      secure: !isInDevelopment,
       maxAge: 604800,
       httpOnly: true
     }

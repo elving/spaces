@@ -47,7 +47,7 @@ export const like = async (req, res) => {
         $addToSet: { likes: toObjectId(like) }
       })
 
-      req.login(user, () => res.status(200).json(like))
+      req.logIn(user, () => res.status(200).json(like))
     }
   } catch (err) {
     res.status(500).json({
@@ -87,7 +87,7 @@ export const unlike = async (req, res) => {
       $pull: { likes: toObjectId(like) }
     })
 
-    req.login(user, () => res.status(200).json({ success: true }))
+    req.logIn(user, () => res.status(200).json({ success: true }))
   } catch (err) {
     res.status(500).json({
       err: {

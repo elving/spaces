@@ -40,7 +40,7 @@ export const comment = async (req, res) => {
       $addToSet: { comments: toObjectId(comment) }
     })
 
-    req.login(user, () => res.status(200).json(comment))
+    req.logIn(user, () => res.status(200).json(comment))
   } catch (err) {
     res.status(500).json({ err })
   }
@@ -73,7 +73,7 @@ export const deleteComment = async (req, res) => {
       $pull: { comments: toObjectId(comment) }
     })
 
-    req.login(user, () => res.status(200).json({ success: true }))
+    req.logIn(user, () => res.status(200).json({ success: true }))
   } catch (err) {
     res.status(500).json({
       err: {

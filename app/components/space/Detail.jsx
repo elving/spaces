@@ -14,7 +14,7 @@ import CommentsWidget from '../comment/Widget'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import inflect from '../../utils/inflect'
-import canModify from '../../utils/user/canMondify'
+import canModify from '../../utils/user/canModify'
 import { default as $ } from '../../utils/dom/selector'
 
 export default class SpaceDetail extends Component {

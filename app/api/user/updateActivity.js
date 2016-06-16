@@ -24,7 +24,7 @@ export default (req, key, value, action = 'add') => {
         [key]: toObjectId(newValues)
       })
 
-      req.login(user, (err) => {
+      req.logIn(user, (err) => {
         if (err) {
           return reject(err)
         }

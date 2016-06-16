@@ -12,12 +12,10 @@ import getLatest from '../api/space/getLatest'
 import updateUser from '../api/user/update'
 
 import { toJSON, toObjectId } from '../api/utils'
-import { default as getAllUserData } from '../api/user/getData'
 
 export const renderIndex = async (req, res, next) => {
   try {
     const latest = await getLatest()
-    const userData = await getAllUserData(get(req, 'user.id'))
 
     res.locals.metadata = {
       title: 'Discover Spaces | Spaces',
@@ -26,8 +24,7 @@ export const renderIndex = async (req, res, next) => {
     }
 
     res.locals.props = {
-      latest: toJSON(latest),
-      userData: toJSON(userData)
+      latest: toJSON(latest)
     }
 
     next()
@@ -41,7 +38,6 @@ export const renderDetail = async (req, res, next) => {
 
   try {
     const space = await findBySid(sid)
-    const userData = await getAllUserData(get(req, 'user.id'))
 
     res.locals.metadata = {
       title: `${get(space, 'name', '')} | Spaces`,
@@ -50,8 +46,7 @@ export const renderDetail = async (req, res, next) => {
     }
 
     res.locals.props = {
-      space: toJSON(space),
-      userData: toJSON(userData)
+      space: toJSON(space)
     }
 
     next()
@@ -79,7 +74,7 @@ export const createSpace = async (req, res) => {
       $addToSet: { spaces: toObjectId(space) }
     })
 
-    req.login(user, () => res.status(200).json(space))
+    req.logIn(user, () => res.status(200).json(space))
   } catch (err) {
     res.status(500).json({ err })
   }
@@ -154,7 +149,7 @@ export const redesignSpace = async (req, res) => {
       $addToSet: { spaces: toObjectId(space) }
     })
 
-    req.login(user, () => res.status(200).json(space))
+    req.logIn(user, () => res.status(200).json(space))
   } catch (err) {
     res.status(500).json({ err })
   }

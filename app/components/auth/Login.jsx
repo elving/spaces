@@ -49,9 +49,10 @@ export default class Login extends Component {
         axios({
           url: '/ajax/login/',
           data: formData,
-          method: 'post'
-        }).then((resp) => {
-          window.location.href = resp.data.returnTo
+          method: 'post',
+          withCredentials: true
+        }).then(() => {
+          window.location.href = '/spaces/'
         }).catch((resp) => {
           this.setState({
             errors: resp.data.err,

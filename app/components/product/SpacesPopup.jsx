@@ -14,16 +14,21 @@ import Popup from '../common/Popup'
 import PopupTitle from '../common/PopupTitle'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
+import updateSpaces from '../../utils/space/updateSpaces'
 import productInSpace from '../../utils/product/productInSpace'
 import searchCollection from '../../utils/searchCollection'
+import createProductsMap from '../../utils/space/createProductsMap'
 
 export default class SpacesPopup extends Component {
   constructor(props, context) {
     super(props, context)
 
+    const spaces = get(context, 'user.spaces', [])
+
     this.state = {
       popupTitle: 'Add to space',
-      filteredSpaces: get(context, 'userData.spaces', []),
+      productsMap: createProductsMap(spaces),
+      filteredSpaces: spaces,
 
       type: '',
       name: '',
@@ -39,11 +44,9 @@ export default class SpacesPopup extends Component {
   }
 
   static contextTypes = {
+    user: Type.object,
     csrf: Type.string,
-    userData: Type.object,
-    spaceTypes: Type.array,
-    addUserSpace: Type.func,
-    onSpaceUpdated: Type.func
+    spaceTypes: Type.array
   };
 
   static propTypes = {
@@ -86,8 +89,9 @@ export default class SpacesPopup extends Component {
   }
 
   toggleProduct(space, add = true) {
+    const { csrf } = this.context
     const { productId } = this.props
-    const { csrf, onSpaceUpdated } = this.context
+    const { productsMap } = this.state
 
     const id = get(space, 'id', '')
     const products = get(space, 'products', [])
@@ -105,8 +109,10 @@ export default class SpacesPopup extends Component {
         },
         method: 'PUT'
       }).then((res) => {
-        onSpaceUpdated(get(res, 'data', {}))
-        this.setState({ isUpdatingSpace: false })
+        this.setState({
+          productsMap: updateSpaces(productsMap, get(res, 'data', {})),
+          isUpdatingSpace: false
+        })
       }).catch(() => {
         this.setState({ isUpdatingSpace: false })
       })
@@ -115,12 +121,14 @@ export default class SpacesPopup extends Component {
 
   onSubmit(event) {
     const { productId } = this.props
-    const { addUserSpace } = this.context
-    const formData = serialize(this.form, { hash: true })
+    const { productsMap, filteredSpaces } = this.state
 
-    event.preventDefault()
+    const formData = serialize(this.form, { hash: true })
+    const allSpaces = get(this.context, 'user.spaces', [])
 
     formData.products = [productId]
+
+    event.preventDefault()
 
     this.setState({ errors: {}, isSaving: true }, () => {
       axios({
@@ -128,17 +136,19 @@ export default class SpacesPopup extends Component {
         data: formData,
         method: 'POST'
       }).then((res) => {
-        addUserSpace(get(res, 'data', {}))
+        const space = get(res, 'data', {})
 
-        console.log(':D')
-
+        allSpaces.push(space)
         this.setState({
           type: '',
           name: '',
           errors: {},
           isSaving: false,
+          popupTitle: 'Add to space',
           description: '',
-          formIsVisible: false
+          productsMap: updateSpaces(productsMap, space),
+          formIsVisible: false,
+          filteredSpaces: allSpaces
         })
       }).catch((res) => {
         this.setState({
@@ -151,7 +161,7 @@ export default class SpacesPopup extends Component {
 
   onSearch(event) {
     const term = event.currentTarget.value
-    const allSpaces = get(this.context, 'userData.spaces', [])
+    const allSpaces = get(this.context, 'user.spaces', [])
 
     this.setState({
       filteredSpaces: isEmpty(term)
@@ -285,11 +295,11 @@ export default class SpacesPopup extends Component {
   }
 
   renderContent() {
-    const { userData } = this.context
+    const { user } = this.context
     const { productId } = this.props
-    const { filteredSpaces, isUpdatingSpace } = this.state
+    const { productsMap, filteredSpaces, isUpdatingSpace } = this.state
 
-    const allSpaces = get(userData, 'spaces', [])
+    const allSpaces = get(user, 'spaces', [])
 
     return (
       <div className="spaces-popup-content">
@@ -311,7 +321,7 @@ export default class SpacesPopup extends Component {
         {!isEmpty(allSpaces) ? (
           <div className="popup-list spaces-popup-spaces">
             {map(filteredSpaces, (space) => {
-              const hasProduct = productInSpace(productId, space)
+              const hasProduct = productInSpace(productsMap, space, productId)
 
               return (
                 <button

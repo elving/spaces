@@ -4,7 +4,7 @@ import React, { Component, PropTypes as Type } from 'react'
 
 import MiniProfile from '../user/MiniProfile'
 
-import canModify from '../../utils/user/canMondify'
+import canModify from '../../utils/user/canModify'
 import formatDate from '../../utils/formatDate'
 
 export default class Comment extends Component {

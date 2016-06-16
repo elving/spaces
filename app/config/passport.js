@@ -1,18 +1,23 @@
-import isEmpty from 'lodash/isEmpty'
+import get from 'lodash/get'
 import passport from 'passport'
-import isFunction from 'lodash/isFunction'
 
 import local from './passport/local'
 import twitter from './passport/twitter'
 import facebook from './passport/facebook'
 
+import findById from '../api/user/findById'
+
 const configPassport = () => {
   passport.serializeUser((user, done) => {
-    done(null, !isEmpty(user) && isFunction(user.toJSON) ? user.toJSON() : user)
+    done(null, get(user, 'id'))
   })
 
-  passport.deserializeUser((user, done) => {
-    done(null, user)
+  passport.deserializeUser(async (id, done) => {
+    try {
+      done(null, await findById(id))
+    } catch (err) {
+      done(err)
+    }
   })
 
   passport.use(local)

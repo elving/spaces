@@ -15,6 +15,7 @@ import PopupTitle from '../common/PopupTitle'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import updateSpaces from '../../utils/space/updateSpaces'
+import withoutAnyType from '../../utils/spaceType/withoutAnyType'
 import productInSpace from '../../utils/product/productInSpace'
 import searchCollection from '../../utils/searchCollection'
 import createProductsMap from '../../utils/space/createProductsMap'
@@ -121,7 +122,7 @@ export default class SpacesPopup extends Component {
 
   onSubmit(event) {
     const { productId } = this.props
-    const { productsMap, filteredSpaces } = this.state
+    const { productsMap } = this.state
 
     const formData = serialize(this.form, { hash: true })
     const allSpaces = get(this.context, 'user.spaces', [])
@@ -200,7 +201,7 @@ export default class SpacesPopup extends Component {
           <Select
             name="spaceType"
             value={get(this.state, 'type', '')}
-            options={map(spaceTypes, (type) => ({
+            options={map(withoutAnyType(spaceTypes), (type) => ({
               value: get(type, 'id'),
               label: get(type, 'name')
             }))}

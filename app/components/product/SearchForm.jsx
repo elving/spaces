@@ -12,6 +12,8 @@ import React, { Component, PropTypes as Type } from 'react'
 
 import Icon from '../common/Icon'
 
+import withoutAnyType from '../../utils/spaceType/withoutAnyType'
+
 export default class ProductSearchForm extends Component {
   constructor(props) {
     super(props)
@@ -161,7 +163,10 @@ export default class ProductSearchForm extends Component {
     } = this.state
 
     const showTogglers = (
-      !showBrands || !showColors || !showCategories || !showSpaceTypes
+      !showBrands ||
+      !showColors ||
+      !showCategories ||
+      !showSpaceTypes
     )
 
     return (
@@ -286,7 +291,7 @@ export default class ProductSearchForm extends Component {
                 name="spaceTypes"
                 multi={true}
                 value={get(this.state, 'spaceTypes', '')}
-                options={map(this.props.spaceTypes, (type) => ({
+                options={map(withoutAnyType(this.props.spaceTypes), (type) => ({
                   value: get(type, 'id'),
                   label: get(type, 'name')
                 }))}

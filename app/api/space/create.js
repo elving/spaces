@@ -30,14 +30,18 @@ export default (props) => {
         .populate('createdBy')
         .populate('spaceType')
         .populate('originalSpace', async (err, space) => {
-          generateHeader(
-            compact(map(space.get('products'), (product) => (
-              get(product, 'image')
-            )))
-          ).then((image) => {
-            space.set({ image })
-            space.save(() => invalidateFromCache(toIds(space)))
-          })
+          try {
+            generateHeader(
+              compact(map(space.get('products'), (product) => (
+                get(product, 'image')
+              )))
+            ).then((image) => {
+              space.set({ image })
+              space.save(() => invalidateFromCache(toIds(space)))
+            })
+          } catch (err) {
+
+          }
 
           await removeFromCache('space-all')
           await removeFromCache('space-latest')

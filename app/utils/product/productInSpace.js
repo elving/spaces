@@ -6,7 +6,7 @@ import isEqual from 'lodash/isEqual'
 import toStringId from '../toStringId'
 
 export default (map, space, productId) => (
-  !isEmpty(find(get(map, get(space, 'id', space), []), (product) => (
+  !isEmpty(find(get(map, toStringId(space), []), (product) => (
     isEqual(toStringId(product), toStringId(productId))
   )))
 )

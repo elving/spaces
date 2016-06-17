@@ -1,11 +1,27 @@
 import ga from 'react-ga'
 import get from 'lodash/get'
+import set from 'lodash/set'
+import map from 'lodash/map'
+import clone from 'lodash/clone'
 import isEmpty from 'lodash/isEmpty'
 import React, { Component, PropTypes as Type } from 'react'
 
 import metadata from '../constants/metadata'
+import toStringId from '../utils/toStringId'
+import createProductsMap from '../utils/space/createProductsMap'
 
 export default class App extends Component {
+  constructor(props) {
+    super(props)
+
+    const userSpaces = get(props, 'user.spaces', [])
+
+    this.state = {
+      userSpaces,
+      userSpacesProductsMap: createProductsMap(userSpaces)
+    }
+  }
+
   static childContextTypes = {
     user: Type.object,
     csrf: Type.string,
@@ -13,7 +29,11 @@ export default class App extends Component {
     userLoggedIn: Type.func,
     currentUserIsOwner: Type.func,
     currentUserIsAdmin: Type.func,
-    currentUserIsCurator: Type.func
+    currentUserIsCurator: Type.func,
+
+    userSpaces: Type.array,
+    updateSpace: Type.func,
+    userSpacesProductsMap: Type.object
   };
 
   getChildContext() {
@@ -24,8 +44,18 @@ export default class App extends Component {
       userLoggedIn: (() => !isEmpty(this.props.user)),
       currentUserIsAdmin: (() => get(this.props, 'user.isAdmin')),
       currentUserIsOwner: ((id) => get(this.props, 'user.id') === id),
-      currentUserIsCurator: (() => get(this.props, 'user.isCurator'))
+      currentUserIsCurator: (() => get(this.props, 'user.isCurator')),
+
+      userSpaces: this.state.userSpaces,
+      updateSpace: ::this.updateSpace,
+      userSpacesProductsMap: this.state.userSpacesProductsMap
     }
+  }
+
+  updateSpace(space, products) {
+    const userSpacesProductsMap = clone(this.state.userSpacesProductsMap)
+    set(userSpacesProductsMap, toStringId(space), map(products, toStringId))
+    this.setState({ userSpacesProductsMap })
   }
 
   componentDidMount() {
@@ -33,10 +63,7 @@ export default class App extends Component {
 
     if (!isEmpty(userId)) {
       ga.initialize(metadata.googleAnalyticsUA, {
-        gaOptions: {
-          userId,
-          cookieDomain: 'auto'
-        }
+        gaOptions: { userId, cookieDomain: 'auto' }
       })
     } else {
       ga.initialize(metadata.googleAnalyticsUA)

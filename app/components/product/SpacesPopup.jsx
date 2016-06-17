@@ -2,9 +2,7 @@ import get from 'lodash/get'
 import map from 'lodash/map'
 import axios from 'axios'
 import Select from 'react-select'
-import concat from 'lodash/concat'
-import filter from 'lodash/filter'
-import isEqual from 'lodash/isEqual'
+import without from 'lodash/without'
 import isEmpty from 'lodash/isEmpty'
 import serialize from 'form-serialize'
 import classNames from 'classnames'
@@ -14,22 +12,19 @@ import Popup from '../common/Popup'
 import PopupTitle from '../common/PopupTitle'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
+import toStringId from '../../utils/toStringId'
 import updateSpaces from '../../utils/space/updateSpaces'
 import withoutAnyType from '../../utils/spaceType/withoutAnyType'
 import productInSpace from '../../utils/product/productInSpace'
 import searchCollection from '../../utils/searchCollection'
-import createProductsMap from '../../utils/space/createProductsMap'
 
 export default class SpacesPopup extends Component {
   constructor(props, context) {
     super(props, context)
 
-    const spaces = get(context, 'user.spaces', [])
-
     this.state = {
       popupTitle: 'Add to space',
-      productsMap: createProductsMap(spaces),
-      filteredSpaces: spaces,
+      filteredSpaces: get(context, 'userSpaces', []),
 
       type: '',
       name: '',
@@ -47,7 +42,10 @@ export default class SpacesPopup extends Component {
   static contextTypes = {
     user: Type.object,
     csrf: Type.string,
-    spaceTypes: Type.array
+    spaceTypes: Type.array,
+    userSpaces: Type.array,
+    updateSpace: Type.func,
+    userSpacesProductsMap: Type.object
   };
 
   static propTypes = {
@@ -89,30 +87,31 @@ export default class SpacesPopup extends Component {
     }, next)
   }
 
-  toggleProduct(space, add = true) {
-    const { csrf } = this.context
+  toggleProduct(space, isAdding = true) {
     const { productId } = this.props
-    const { productsMap } = this.state
+    const { csrf, updateSpace, userSpacesProductsMap } = this.context
 
-    const id = get(space, 'id', '')
-    const products = get(space, 'products', [])
+    const spaceId = toStringId(space)
+    const products = userSpacesProductsMap[spaceId]
+    let updatedProducts = products
+
+    if (isAdding) {
+      updatedProducts.push(productId)
+    } else {
+      updatedProducts = without(products, productId)
+    }
 
     this.setState({ isUpdatingSpace: true }, () => {
       axios({
-        url: `/ajax/spaces/${id}/`,
+        url: `/ajax/spaces/${spaceId}/`,
         data: {
           _csrf: csrf,
-          products: add
-            ? concat(products, productId)
-            : filter(products, (product) => (
-              !isEqual(get(product, 'id', product), productId)
-            ))
+          products: updatedProducts
         },
         method: 'PUT'
-      }).then((res) => {
-        this.setState({
-          productsMap: updateSpaces(productsMap, get(res, 'data', {})),
-          isUpdatingSpace: false
+      }).then(() => {
+        this.setState({ isUpdatingSpace: false }, () => {
+          updateSpace(spaceId, updatedProducts)
         })
       }).catch(() => {
         this.setState({ isUpdatingSpace: false })
@@ -147,7 +146,7 @@ export default class SpacesPopup extends Component {
           isSaving: false,
           popupTitle: 'Add to space',
           description: '',
-          productsMap: updateSpaces(productsMap, space),
+          productsMap: updateSpaces(productsMap, space, [productId]),
           formIsVisible: false,
           filteredSpaces: allSpaces
         })
@@ -202,7 +201,7 @@ export default class SpacesPopup extends Component {
             name="spaceType"
             value={get(this.state, 'type', '')}
             options={map(withoutAnyType(spaceTypes), (type) => ({
-              value: get(type, 'id'),
+              value: toStringId(type),
               label: get(type, 'name')
             }))}
             required
@@ -296,15 +295,13 @@ export default class SpacesPopup extends Component {
   }
 
   renderContent() {
-    const { user } = this.context
     const { productId } = this.props
-    const { productsMap, filteredSpaces, isUpdatingSpace } = this.state
-
-    const allSpaces = get(user, 'spaces', [])
+    const { filteredSpaces, isUpdatingSpace } = this.state
+    const { userSpaces, userSpacesProductsMap } = this.context
 
     return (
       <div className="spaces-popup-content">
-        {!isEmpty(allSpaces) ? (
+        {!isEmpty(userSpaces) ? (
           <div className="popup-item spaces-popup-search">
             <div className="textfield-icon">
               <MaterialDesignIcon name="search"/>
@@ -319,10 +316,12 @@ export default class SpacesPopup extends Component {
           </div>
         ) : null}
 
-        {!isEmpty(allSpaces) ? (
+        {!isEmpty(userSpaces) ? (
           <div className="popup-list spaces-popup-spaces">
             {map(filteredSpaces, (space) => {
-              const hasProduct = productInSpace(productsMap, space, productId)
+              const hasProduct = productInSpace(
+                userSpacesProductsMap, space, productId
+              )
 
               return (
                 <button
@@ -367,7 +366,7 @@ export default class SpacesPopup extends Component {
           </div>
         ) : null}
 
-        {isEmpty(allSpaces) ? (
+        {isEmpty(userSpaces) ? (
           <div className="popup-item spaces-popup-empty">
             You haven't created any spaces yet.
           </div>

@@ -71,8 +71,6 @@ export default (schema) => {
         return true
       }
 
-      console.log('username', username)
-
       return !includes(USERNAMES_BLACKLISTED, username)
     }, 'This username is already taken')
 

@@ -44,14 +44,18 @@ export default (_id, props) => {
               }
 
               if (shouldUpdateImage) {
-                generateHeader(
-                  compact(map(space.get('products'), (product) => (
-                    get(product, 'image')
-                  )))
-                ).then((image) => {
-                  space.set({ image })
-                  space.save(() => invalidateFromCache(toIds(space)))
-                })
+                try {
+                  generateHeader(
+                    compact(map(space.get('products'), (product) => (
+                      get(product, 'image')
+                    )))
+                  ).then((image) => {
+                    space.set({ image })
+                    space.save(() => invalidateFromCache(toIds(space)))
+                  })
+                } catch (err) {
+
+                }
               }
 
               resolve(space)

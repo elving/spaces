@@ -3,6 +3,7 @@ import get from 'lodash/get'
 import { toJSON } from '../api/utils'
 import { default as getAllBrands } from '../api/brand/getAll'
 import { default as getAllColors } from '../api/color/getAll'
+import { default as searchAllSpaces } from '../api/space/search'
 import { default as getAllCategories } from '../api/category/getAll'
 import { default as getAllSpaceTypes } from '../api/spaceType/getAll'
 import { default as searchAllProducts } from '../api/product/search'
@@ -31,6 +32,17 @@ export const renderProductsSearch = async (req, res, next) => {
   }
 
   next()
+}
+
+export const searchSpaces = async (req, res) => {
+  const params = get(req, 'query', {})
+
+  try {
+    const results = await searchAllSpaces(params)
+    res.status(200).json(results)
+  } catch (err) {
+    res.status(500).json({ err })
+  }
 }
 
 export const searchProducts = async (req, res) => {

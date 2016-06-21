@@ -4,18 +4,18 @@ import merge from 'lodash/merge'
 import isAdmin from '../utils/user/isAdmin'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
+import search from '../api/space/search'
 import create from '../api/space/create'
 import update from '../api/space/update'
 import findById from '../api/space/findById'
 import findBySid from '../api/space/findBySid'
-import getLatest from '../api/space/getLatest'
 import updateUser from '../api/user/update'
 
 import { toJSON, toObjectId } from '../api/utils'
 
 export const renderIndex = async (req, res, next) => {
   try {
-    const latest = await getLatest()
+    const spaces = await search()
 
     res.locals.metadata = {
       title: 'Discover Spaces | Spaces',
@@ -24,7 +24,7 @@ export const renderIndex = async (req, res, next) => {
     }
 
     res.locals.props = {
-      latest: toJSON(latest)
+      spaces: toJSON(spaces)
     }
 
     next()

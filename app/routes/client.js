@@ -8,6 +8,8 @@ import Login from '../components/auth/Login'
 import SetPassword from '../components/auth/SetPassword'
 import ResetPassword from '../components/auth/ResetPassword'
 
+import Home from '../components/home/Home'
+
 import AddProduct from '../components/product/Add'
 import UpdateProduct from '../components/product/Update'
 import ProductsTable from '../components/product/Table'
@@ -39,6 +41,8 @@ const routes = (
     <Route path="login" component={Login}/>
     <Route path="reset-password" component={ResetPassword}/>
     <Route path="set-password/:code" component={SetPassword}/>
+
+    <Route path="/" component={Home}/>
 
     <Route path="admin/products" component={ProductsTable}/>
     <Route path="products/add" component={AddProduct}/>

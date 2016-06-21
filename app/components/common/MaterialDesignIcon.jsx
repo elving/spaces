@@ -98,9 +98,15 @@ export default class MaterialDesignIcon extends Component {
         )
       }
 
-      case 'follow-user': {
+      case 'follow': {
         return (
           <path fill={fill} className="icon-fill" d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        )
+      }
+
+      case 'unfollow': {
+        return (
+          <path fill={fill} className="icon-fill" d="M15,12 C17.21,12 19,10.21 19,8 C19,5.79 17.21,4 15,4 C12.79,4 11,5.79 11,8 C11,10.21 12.79,12 15,12 L15,12 Z M4,10 L1,10 L1,12 L4,12 L6,12 L9,12 L9,10 L6,10 L4,10 Z M15,14 C12.33,14 7,15.34 7,18 L7,20 L23,20 L23,18 C23,15.34 17.67,14 15,14 L15,14 Z"/>
         )
       }
 

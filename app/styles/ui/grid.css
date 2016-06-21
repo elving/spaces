@@ -1,3 +1,46 @@
+.grids > .grid-container:last-child {
+  border-bottom: 0 none;
+}
+
+.grids > .grid-container:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.grid-container {
+  border-bottom: 1px solid #e5e5e5;
+  margin: 0 auto;
+  padding: 35px 0 0;
+}
+
+.grid-title {
+  font-size: 26px;
+  width: 100%;
+  margin: 0 0 35px;
+  display: flex;
+  padding: 0 15px;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.grid-title-container {
+  margin: 0 0 35px;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.grid-title-container .grid-title {
+  margin: 0;
+  padding: 0;
+}
+
+.grid-title-container .button {
+  flex-shrink: 0;
+  margin-left: 15px;
+}
+
 .grid-items {
   width: 100%;
   display: flex;
@@ -12,6 +55,12 @@
   margin-right: 15px;
   margin-bottom: 15px;
 }
+
+/* .grid-items > .profile-card {
+  width: calc(100% / 3 - 15px);
+  margin-right: 15px;
+  margin-bottom: 15px;
+} */
 
 .grid-pagination {
   width: 100%;

@@ -28,7 +28,7 @@ export default class Avatar extends Component {
     const { width, height, className } = this.props
 
     const fontSize = (height - 46) > 14 ? (height - 46) : 14
-    const lineHeight = fontSize + 2
+    const lineHeight = `${fontSize + 2}px`
 
     return (
       <div className={`user-avatar ${className}`}>

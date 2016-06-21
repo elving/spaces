@@ -45,7 +45,6 @@ export default (props) => {
 
           await removeFromCache('space-all')
           await removeFromCache('space-latest')
-          await removeFromCache(`space-all-${get(props, 'createdBy')}`)
 
           resolve(space)
         })

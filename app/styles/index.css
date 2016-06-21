@@ -8,6 +8,7 @@
 @import './ui/index.css';
 @import './common/index.css';
 
+@import './home/index.css';
 @import './card/index.css';
 @import './auth/index.css';
 @import './user/index.css';

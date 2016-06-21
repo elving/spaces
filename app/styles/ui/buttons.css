@@ -34,19 +34,19 @@
 
 .button--small {
   font-size: 16px;
-  padding: 5px 10px;
+  padding: 5px 12px 6px;
   min-height: 40px;
 }
 
 .button--tiny {
   font-size: 14px;
-  padding: 5px 10px;
+  padding: 5px 10px 6px;
   min-height: 100%;
 }
 
 .button--mini {
   font-size: 12px;
-  padding: 2px 6px;
+  padding: 2px 6px 3px;
   min-height: 100%;
 }
 
@@ -57,6 +57,12 @@
 .button--icon-right .icon {
   margin-left: 10px;
   margin-right: 0;
+}
+
+.button--small .icon,
+.button--tiny .icon {
+  width: 18px;
+  height: 18px;
 }
 
 .button--tiny .icon {
@@ -98,8 +104,8 @@
 }
 
 .button--outline:hover {
-  border-color: #dedede;
-  background-color: transparent;
+  border-color: #ececec;
+  background-color: #ececec;
 }
 
 .button--transparent,

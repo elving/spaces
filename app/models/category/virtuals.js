@@ -15,5 +15,10 @@ export default (schema) => {
       return `c/${this.get('sid')}`
     })
 
+  schema
+    .virtual('products')
+    .get(function() { return this.__products })
+    .set(function(products = []) { this.__products = products })
+
   return schema
 }

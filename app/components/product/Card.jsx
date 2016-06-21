@@ -7,6 +7,7 @@ import Avatar from '../user/Avatar'
 import CardTags from '../card/CardTags'
 import CardTitle from '../card/CardTitle'
 import SharePopup from '../common/SharePopup'
+import LikeButton from '../common/LikeButton'
 import SpacesPopup from './SpacesPopup'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
@@ -113,7 +114,7 @@ export default class ProductCard extends Component {
   }
 
   renderImage() {
-    const { name, image } = this.props
+    const { name, image, detailUrl } = this.props
     const { imageIsLoaded, imageIsLoading } = this.state
 
     return (
@@ -122,6 +123,8 @@ export default class ProductCard extends Component {
           'product-card-image-container': true,
           'product-card-image-container--loading': imageIsLoading
         })}>
+        <a href={`/${detailUrl}/`} className="card-actions-overlay"></a>
+
         {this.renderActions()}
 
         {imageIsLoading ? (
@@ -141,12 +144,8 @@ export default class ProductCard extends Component {
   }
 
   renderActions() {
-    const { detailUrl } = this.props
-
     return (
       <div className="product-card-actions card-actions-container">
-        <a href={`/${detailUrl}/`} className="card-actions-overlay"/>
-
         <div className="card-actions card-actions--left">
           <button
             type="button"

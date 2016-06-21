@@ -1,0 +1,13 @@
+.home-title {
+  border-bottom: 1px solid #e5e5e5;
+  background-color: #fafafa;
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 35px 0;
+}
+
+.page-home .profile-card,
+.page-home .category-card {
+  width: calc(100% / 3 - 15px);
+}

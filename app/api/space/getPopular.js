@@ -13,7 +13,7 @@ import {
 
 export default (limit = 8) => {
   return new Promise(async (resolve, reject) => {
-    const cacheKey = 'space-latest'
+    const cacheKey = `space-popular-${limit}`
 
     getFromCacheOrQuery(cacheKey, () => {
       mongoose
@@ -29,7 +29,7 @@ export default (limit = 8) => {
         .populate('createdBy')
         .populate('spaceType')
         .populate('originalSpace')
-        .sort('-createdAt')
+        .sort('-likesCount -productsCount -updatedAt')
         .exec(async (err, spaces) => {
           if (err) {
             return reject(parseError(err))

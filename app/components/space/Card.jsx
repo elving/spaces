@@ -102,6 +102,7 @@ export default class SpaceCard extends Component {
   }
 
   renderImages() {
+    const { detailUrl } = this.props
     const { images, imagesAreLoaded, imagesAreLoading } = this.state
 
     return (
@@ -111,6 +112,8 @@ export default class SpaceCard extends Component {
           'space-card-images-container--loading': imagesAreLoading
         })}
         data-images={size(images)}>
+        <a href={`/${detailUrl}/`} className="card-actions-overlay"></a>
+
         {this.renderActions()}
         {this.renderRedesignBadge()}
 
@@ -137,14 +140,12 @@ export default class SpaceCard extends Component {
   }
 
   renderActions() {
+    const { id } = this.props
     const { likesCount } = this.state
-    const { id, detailUrl } = this.props
     const { sharePopupIsOpen, redesignPopupIsOpen } = this.state
 
     return (
       <div className="space-card-actions card-actions-container">
-        <a href={`/${detailUrl}/`} className="card-actions-overlay"/>
-
         <div className="card-actions card-actions--left">
           <button
             type="button"

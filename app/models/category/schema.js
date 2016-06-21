@@ -11,7 +11,9 @@ const CategorySchema = new mongoose.Schema({
   slug: { type: String, trim: true, default: '' },
   description: { type: String, trim: true, default: '' },
   createdBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
-  updatedBy: { type: mongoose.Schema.ObjectId, ref: 'User' }
+  updatedBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
+  productsCount: { type: Number, default: 0 },
+  followersCount: { type: Number, default: 0 }
 }, { timestamps: true })
 
 applyHooks(CategorySchema)

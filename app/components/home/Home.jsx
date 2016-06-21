@@ -59,7 +59,7 @@ export default class Home extends Component {
 
     return (
       <div className="grid">
-        <div className="grid-items">
+        <div className="grid-items grid-items--3-cards">
           {map(users, (user) => (
             <ProfileCard key={toStringId(user)} user={user}/>
           ))}
@@ -73,7 +73,7 @@ export default class Home extends Component {
 
     return (
       <div className="grid">
-        <div className="grid-items">
+        <div className="grid-items grid-items--3-cards">
           {map(categories, (category) => (
             <CategoryCard key={toStringId(category)} {...category}/>
           ))}
@@ -85,7 +85,7 @@ export default class Home extends Component {
   render() {
     return (
       <Layout>
-        <h1 className="home-title">Trending on Spaces</h1>
+        <h1 className="page-title">Trending on Spaces</h1>
 
         <div className="grids">
           <div className="grid-container">
@@ -105,9 +105,13 @@ export default class Home extends Component {
           <div className="grid-container">
             <div className="grid-title-container">
               <h3 className="grid-title">Designers</h3>
-              <a href="#" className="button button--small button--outline">
+              <Link
+                to={{pathname: '/designers/'}}
+                onClick={fullReload}
+                className="button button--small button--outline"
+                activeClassName="is-active">
                 All Designers
-              </a>
+              </Link>
             </div>
             {this.renderDesigners()}
           </div>

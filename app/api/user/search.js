@@ -8,24 +8,17 @@ import { parseError } from '../utils'
 export default (params = {}) => {
   return new Promise(async (resolve, reject) => {
     mongoose
-      .model('Space')
+      .model('User')
       .find()
       .skip(parseInt(get(params, 'skip', 0)))
-      .limit(parseInt(get(params, 'limit', 40)))
+      .limit(parseInt(get(params, 'limit', 30)))
       .sort('-createdAt')
-      .populate({
-        path: 'products',
-        options: { populate: 'colors categories' }
-      })
-      .populate('createdBy')
-      .populate('spaceType')
-      .populate('originalSpace')
-      .exec(async (err, spaces) => {
+      .exec(async (err, users) => {
         if (err) {
           return reject(parseError(err))
         }
 
-        resolve(isEmpty(spaces) ? [] : spaces)
+        resolve(isEmpty(users) ? [] : users)
       })
   })
 }

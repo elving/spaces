@@ -1,0 +1,14 @@
+.page-title {
+  border-bottom: 1px solid #e5e5e5;
+  background-color: #fafafa;
+  font-size: 42px;
+  font-weight: 300;
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 35px 0;
+}
+
+.page-title--has-margin {
+  margin-bottom: 35px;
+}

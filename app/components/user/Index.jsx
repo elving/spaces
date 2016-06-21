@@ -5,47 +5,47 @@ import axios from 'axios'
 import concat from 'lodash/concat'
 import React, { Component, PropTypes as Type } from 'react'
 
-import Space from './Card'
 import Layout from '../common/Layout'
+import ProfileCard from '../user/Card'
 
 import toStringId from '../../utils/toStringId'
 
-export default class SpacesIndex extends Component {
+export default class UsersIndex extends Component {
   constructor(props) {
     super(props)
 
-    const spaces = get(props, 'spaces', [])
+    const users = get(props, 'users', [])
 
     this.state = {
-      skip: 40,
-      offset: size(spaces),
-      results: spaces,
+      skip: 30,
+      offset: size(users),
+      results: users,
       isSearhing: false,
-      lastResults: spaces,
+      lastResults: users,
       hasSearched: false
     }
   }
 
   static propTypes = {
-    spaces: Type.array
+    users: Type.array
   };
 
   static defaultProps = {
-    spaces: []
+    users: []
   };
 
   fetch() {
     const { offset, results } = this.state
 
     this.setState({ isSearhing: true }, () => {
-      axios({ url: `/ajax/spaces/search/?skip=${offset}` }).then((res) => {
-        const spaces = get(res, 'data', [])
+      axios({ url: `/ajax/users/search/?skip=${offset}` }).then((res) => {
+        const users = get(res, 'data', [])
 
         this.setState({
-          offset: offset + size(spaces),
-          results: concat(results, spaces),
+          offset: offset + size(users),
+          results: concat(results, users),
           isSearhing: false,
-          lastResults: spaces,
+          lastResults: users,
           hasSearched: true
         })
       }).catch(() => {
@@ -69,14 +69,14 @@ export default class SpacesIndex extends Component {
     ) : null
   }
 
-  renderSpaces() {
+  renderUsers() {
     const { results } = this.state
 
     return (
       <div className="grid">
-        <div className="grid-items">
-          {map(results, (space) => (
-            <Space key={toStringId(space)} {...space}/>
+        <div className="grid-items grid-items--3-cards">
+          {map(results, (user) => (
+            <ProfileCard key={toStringId(user)} user={user}/>
           ))}
         </div>
       </div>
@@ -87,11 +87,11 @@ export default class SpacesIndex extends Component {
     return (
       <Layout>
         <h1 className="page-title page-title--has-margin">
-          Discover Spaces
+          Discover Designers
         </h1>
 
         <div className="grids">
-          {this.renderSpaces()}
+          {this.renderUsers()}
           {this.renderPagination()}
         </div>
       </Layout>

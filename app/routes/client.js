@@ -35,6 +35,8 @@ import SpaceDetail from '../components/space/Detail'
 import SpacesIndex from '../components/space/Index'
 import CreateSpace from '../components/space/Create'
 
+import UsersIndex from '../components/user/Index'
+
 const routes = (
   <Route component={App}>
     <Route path="join" component={Join}/>
@@ -69,6 +71,8 @@ const routes = (
     <Route path="s/:sid" component={SpaceDetail}/>
     <Route path="spaces/:sid/:name" component={SpaceDetail}/>
     <Route path="spaces/create" component={CreateSpace}/>
+
+  <Route path="designers" component={UsersIndex}/>
   </Route>
 )
 

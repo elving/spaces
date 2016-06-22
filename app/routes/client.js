@@ -11,6 +11,7 @@ import ResetPassword from '../components/auth/ResetPassword'
 import Home from '../components/home/Home'
 
 import AddProduct from '../components/product/Add'
+import ProductsIndex from '../components/product/Index'
 import UpdateProduct from '../components/product/Update'
 import ProductsTable from '../components/product/Table'
 import ProductSearch from '../components/product/Search'
@@ -37,6 +38,8 @@ import CreateSpace from '../components/space/Create'
 
 import UsersIndex from '../components/user/Index'
 
+import CategoriesIndex from '../components/category/Index'
+
 const routes = (
   <Route component={App}>
     <Route path="join" component={Join}/>
@@ -46,10 +49,21 @@ const routes = (
 
     <Route path="/" component={Home}/>
 
-    <Route path="admin/products" component={ProductsTable}/>
+    <Route path="products" component={ProductsIndex}/>
     <Route path="products/add" component={AddProduct}/>
     <Route path="products/:id/update" component={UpdateProduct}/>
     <Route path="products/search" component={ProductSearch}/>
+
+    <Route path="spaces" component={SpacesIndex}/>
+    <Route path="s/:sid" component={SpaceDetail}/>
+    <Route path="spaces/:sid/:name" component={SpaceDetail}/>
+    <Route path="spaces/create" component={CreateSpace}/>
+
+    <Route path="designers" component={UsersIndex}/>
+
+    <Route path="categories" component={CategoriesIndex}/>
+
+    <Route path="admin/products" component={ProductsTable}/>
 
     <Route path="admin/categories" component={CategoriesTable}/>
     <Route path="admin/categories/add" component={AddCategory}/>
@@ -66,13 +80,6 @@ const routes = (
     <Route path="admin/space-types" component={SpaceTypesTable}/>
     <Route path="admin/space-types/add" component={AddSpaceType}/>
     <Route path="admin/space-types/:id/update" component={UpdateSpaceType}/>
-
-    <Route path="spaces" component={SpacesIndex}/>
-    <Route path="s/:sid" component={SpaceDetail}/>
-    <Route path="spaces/:sid/:name" component={SpaceDetail}/>
-    <Route path="spaces/create" component={CreateSpace}/>
-
-  <Route path="designers" component={UsersIndex}/>
   </Route>
 )
 

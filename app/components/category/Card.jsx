@@ -1,6 +1,7 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
+import isEmpty from 'lodash/isEmpty'
 import React, { Component, PropTypes as Type } from 'react'
 
 import FollowButton from '../common/FollowButton'
@@ -15,7 +16,7 @@ export default class ProfileCard extends Component {
   renderProducts() {
     const { products } = this.props
 
-    return (
+    return !isEmpty(products) ? (
       <div className="category-card-products" data-products={size(products)}>
         {map(products, (product) => (
           <div
@@ -23,7 +24,7 @@ export default class ProfileCard extends Component {
             className="category-card-product"/>
         ))}
       </div>
-    )
+    ) : null
   }
 
   renderCounters() {

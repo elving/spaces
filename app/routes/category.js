@@ -15,6 +15,8 @@ const {
   renderUpdateCategory
 } = controller
 
+router.get('/categories/', controller.renderIndex)
+
 router.get(`${adminRoot}/`, isAdmin, renderAllCategories)
 router.get(`${adminRoot}/add/`, isAdmin, renderAddCategory)
 router.get(`${adminRoot}/:sid/update/`, isAdmin, renderUpdateCategory)

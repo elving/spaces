@@ -8,6 +8,7 @@ import isOwner from '../utils/user/isOwner'
 import userCanAddProducts from '../utils/userCanAddProducts'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
+import search from '../api/product/search'
 import getAll from '../api/product/getAll'
 import create from '../api/product/create'
 import update from '../api/product/update'
@@ -21,7 +22,27 @@ import { default as getAllColors } from '../api/color/getAll'
 import { default as getAllCategories } from '../api/category/getAll'
 import { default as getAllSpaceTypes } from '../api/spaceType/getAll'
 
-export const renderAllProducts = async (req, res, next) => {
+export const renderIndex = async (req, res, next) => {
+  try {
+    const products = await search()
+
+    res.locals.metadata = {
+      title: 'Discover Products | Spaces',
+      bodyId: 'all-products',
+      bodyClass: 'page page-all-products'
+    }
+
+    res.locals.props = {
+      products: toJSON(products)
+    }
+
+    next()
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const renderAdminProducts = async (req, res, next) => {
   try {
     const products = await getAll()
 

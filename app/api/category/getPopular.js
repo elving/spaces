@@ -9,7 +9,7 @@ const getProducts = (category) => {
     mongoose
       .model('Product')
       .where({ categories: { $in: [category] }})
-      .limit(4)
+      .limit(3)
       .exec((err, product) => {
         if (err) {
           return reject(parseError(err))

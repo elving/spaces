@@ -119,9 +119,13 @@ export default class Home extends Component {
           <div className="grid-container">
             <div className="grid-title-container">
               <h3 className="grid-title">Products</h3>
-              <a href="#" className="button button--small button--outline">
+              <Link
+                to={{pathname: '/products/'}}
+                onClick={fullReload}
+                className="button button--small button--outline"
+                activeClassName="is-active">
                 All Products
-              </a>
+              </Link>
             </div>
             {this.renderProducts()}
           </div>
@@ -129,9 +133,13 @@ export default class Home extends Component {
           <div className="grid-container">
             <div className="grid-title-container">
               <h3 className="grid-title">Categories</h3>
-              <a href="#" className="button button--small button--outline">
+              <Link
+                to={{pathname: '/categories/'}}
+                onClick={fullReload}
+                className="button button--small button--outline"
+                activeClassName="is-active">
                 All Categories
-              </a>
+              </Link>
             </div>
             {this.renderCategories()}
           </div>

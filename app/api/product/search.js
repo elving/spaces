@@ -5,13 +5,13 @@ import mongoose from 'mongoose'
 import { parseError, makeSearchQuery } from '../utils'
 
 export default (params = {}) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     mongoose
       .model('Product')
       .where(makeSearchQuery(params))
       .sort('-createdAt')
       .skip(parseInt(get(params, 'skip', 0)))
-      .limit(30)
+      .limit(parseInt(get(params, 'limit', 40)))
       .populate('brand')
       .populate('colors')
       .populate('createdBy')

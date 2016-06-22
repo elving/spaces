@@ -6,7 +6,7 @@ import mongoose from 'mongoose'
 import { parseError } from '../utils'
 
 export default (params = {}) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     mongoose
       .model('Space')
       .find()
@@ -20,7 +20,7 @@ export default (params = {}) => {
       .populate('createdBy')
       .populate('spaceType')
       .populate('originalSpace')
-      .exec(async (err, spaces) => {
+      .exec((err, spaces) => {
         if (err) {
           return reject(parseError(err))
         }

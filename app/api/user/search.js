@@ -6,14 +6,14 @@ import mongoose from 'mongoose'
 import { parseError } from '../utils'
 
 export default (params = {}) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     mongoose
       .model('User')
       .find()
       .skip(parseInt(get(params, 'skip', 0)))
       .limit(parseInt(get(params, 'limit', 30)))
       .sort('-createdAt')
-      .exec(async (err, users) => {
+      .exec((err, users) => {
         if (err) {
           return reject(parseError(err))
         }

@@ -8,6 +8,7 @@ import { default as searchAllSpaces } from '../api/space/search'
 import { default as getAllCategories } from '../api/category/getAll'
 import { default as getAllSpaceTypes } from '../api/spaceType/getAll'
 import { default as searchAllProducts } from '../api/product/search'
+import { default as searchAllCategories } from '../api/category/search'
 
 export const renderProductsSearch = async (req, res, next) => {
   res.locals.metadata = {
@@ -58,11 +59,21 @@ export const searchSpaces = async (req, res) => {
 }
 
 export const searchProducts = async (req, res) => {
-  try {
-    const results = await searchAllProducts(
-      get(req, 'query', {})
-    )
+  const params = get(req, 'query', {})
 
+  try {
+    const results = await searchAllProducts(params)
+    res.status(200).json(results)
+  } catch (err) {
+    res.status(500).json({ err })
+  }
+}
+
+export const searchCategories = async (req, res) => {
+  const params = get(req, 'query', {})
+
+  try {
+    const results = await searchAllCategories(params)
     res.status(200).json(results)
   } catch (err) {
     res.status(500).json({ err })

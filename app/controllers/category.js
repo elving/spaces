@@ -6,11 +6,32 @@ import isEmpty from 'lodash/isEmpty'
 import { toJSON } from '../api/utils'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
+import search from '../api/category/search'
 import getAll from '../api/category/getAll'
 import create from '../api/category/create'
 import update from '../api/category/update'
 import destroy from '../api/category/destroy'
 import findBySid from '../api/category/findBySid'
+
+export const renderIndex = async (req, res, next) => {
+  try {
+    const categories = await search()
+
+    res.locals.metadata = {
+      title: 'Discover Products | Spaces',
+      bodyId: 'all-categories',
+      bodyClass: 'page page-all-categories'
+    }
+
+    res.locals.props = {
+      categories: toJSON(categories)
+    }
+
+    next()
+  } catch (err) {
+    next(err)
+  }
+}
 
 export const renderAllCategories = async (req, res, next) => {
   try {

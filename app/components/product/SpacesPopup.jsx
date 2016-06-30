@@ -337,7 +337,7 @@ export default class SpacesPopup extends Component {
                     'spaces-popup-space--has-product': hasProduct
                   })}>
                   <MaterialDesignIcon
-                    name="space-generic"
+                    name="space-type"
                     className="spaces-popup-space-icon"/>
 
                   <span className="popup-item-text spaces-popup-space-name">

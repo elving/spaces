@@ -117,6 +117,13 @@ export const makeSearchQuery = (params = {}) => {
     }
   }
 
+  if (has(params, 'username')) {
+    query.username = {
+      $regex: get(params, 'username', ''),
+      $options: 'i'
+    }
+  }
+
   if (has(params, 'brands')) {
     query.brand = {
       $in: split(

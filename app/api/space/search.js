@@ -1,15 +1,32 @@
 import get from 'lodash/get'
-import isEmpty from 'lodash/isEmpty'
+import size from 'lodash/size'
 import parseInt from 'lodash/parseInt'
 import mongoose from 'mongoose'
 
-import { parseError } from '../utils'
+import { parseError, makeSearchQuery } from '../utils'
 
-export default (params = {}) => {
+const getCount = (params) => {
   return new Promise((resolve, reject) => {
     mongoose
       .model('Space')
-      .find()
+      .where(params)
+      .count((err, count) => {
+        if (err) {
+          return reject(err)
+        }
+
+        resolve(count)
+      })
+  })
+}
+
+export default (params = {}) => {
+  return new Promise((resolve, reject) => {
+    const searchParams = makeSearchQuery(params)
+
+    mongoose
+      .model('Space')
+      .where(searchParams)
       .skip(parseInt(get(params, 'skip', 0)))
       .limit(parseInt(get(params, 'limit', 40)))
       .sort('-createdAt')
@@ -20,12 +37,17 @@ export default (params = {}) => {
       .populate('createdBy')
       .populate('spaceType')
       .populate('originalSpace')
-      .exec((err, spaces) => {
+      .exec(async (err, spaces) => {
         if (err) {
           return reject(parseError(err))
         }
 
-        resolve(isEmpty(spaces) ? [] : spaces)
+        const count = await getCount(searchParams)
+
+        resolve({
+          count: count || size(spaces),
+          results: spaces
+        })
       })
   })
 }

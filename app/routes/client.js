@@ -40,6 +40,8 @@ import UsersIndex from '../components/user/Index'
 
 import CategoriesIndex from '../components/category/Index'
 
+import SearchResults from '../components/search/results'
+
 const routes = (
   <Route component={App}>
     <Route path="join" component={Join}/>
@@ -62,6 +64,8 @@ const routes = (
     <Route path="designers" component={UsersIndex}/>
 
     <Route path="categories" component={CategoriesIndex}/>
+
+    <Route path="search" component={SearchResults}/>
 
     <Route path="admin/products" component={ProductsTable}/>
 

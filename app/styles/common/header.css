@@ -3,7 +3,6 @@
   background-color: #ffffff;
   width: 100%;
   margin: 0 auto;
-  height: 65px;
 }
 
 .header-container {
@@ -43,6 +42,7 @@
   align-items: center;
 }
 
-.header-container-right .admin-nav {
+.header-container-right .admin-nav,
+.header-container-right .search {
   margin-right: 15px;
 }

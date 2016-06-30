@@ -41,7 +41,9 @@ export default class CurrentUserNav extends Component {
             <a href="/login/" className="current-user-nav-link">
               Login
             </a>
-            <a href="/join/" className="current-user-nav-link button">
+            <a
+              href="/join/"
+              className="current-user-nav-link button button--small">
               Join
             </a>
           </div>

@@ -15,18 +15,13 @@ import findBySid from '../api/category/findBySid'
 
 export const renderIndex = async (req, res, next) => {
   try {
-    const categories = await search()
-
     res.locals.metadata = {
       title: 'Discover Products | Spaces',
       bodyId: 'all-categories',
       bodyClass: 'page page-all-categories'
     }
 
-    res.locals.props = {
-      categories: toJSON(categories)
-    }
-
+    res.locals.props = await search({ limit: 1000 })
     next()
   } catch (err) {
     next(err)

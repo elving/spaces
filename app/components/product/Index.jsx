@@ -14,70 +14,73 @@ export default class ProductsIndex extends Component {
   constructor(props) {
     super(props)
 
-    const products = get(props, 'products', [])
+    const results = get(props, 'results', [])
 
     this.state = {
       skip: 40,
-      offset: size(products),
-      results: products,
+      offset: size(results),
+      results,
       isSearhing: false,
-      lastResults: products,
-      hasSearched: false
+      lastResults: results
     }
   }
 
   static propTypes = {
-    products: Type.array
+    count: Type.number,
+    results: Type.array
   };
 
   static defaultProps = {
-    products: []
+    count: 0,
+    results: []
   };
 
   fetch() {
-    const { offset, results } = this.state
+    const { state } = this
 
     this.setState({ isSearhing: true }, () => {
-      axios({ url: `/ajax/products/search/?skip=${offset}` }).then((res) => {
-        const products = get(res, 'data', [])
+      axios
+        .get(`/ajax/products/search/?skip=${state.offset}`)
+        .then(({ data }) => {
+          const results = get(data, 'results', [])
 
-        this.setState({
-          offset: offset + size(products),
-          results: concat(results, products),
-          isSearhing: false,
-          lastResults: products,
-          hasSearched: true
+          this.setState({
+            offset: state.offset + size(results),
+            results: concat(state.results, results),
+            isSearhing: false,
+            lastResults: results
+          })
         })
-      }).catch(() => {
-        this.setState({ isSearhing: false })
-      })
+        .catch(() => {
+          this.setState({ isSearhing: false })
+        })
     })
   }
 
   renderPagination() {
-    const { skip, isSearhing, lastResults, hasSearched } = this.state
+    const { props, state } = this
 
-    return size(lastResults) >= skip || !hasSearched ? (
+    return size(state.results) < props.count ? (
       <div className="grid-pagination">
         <button
           onClick={::this.fetch}
-          disabled={isSearhing}
+          disabled={state.isSearhing}
           className="button button--outline">
-          {isSearhing ? 'Loading More...' : 'Load More'}
+          {state.isSearhing ? 'Loading More...' : 'Load More'}
         </button>
       </div>
     ) : null
   }
 
   renderProducts() {
-    const { results } = this.state
+    const { state } = this
 
     return (
       <div className="grid">
         <div className="grid-items">
-          {map(results, (product) => (
+          {map(state.results, product =>
             <ProductCard key={toStringId(product)} {...product}/>
-          ))}
+          )}
         </div>
       </div>
     )

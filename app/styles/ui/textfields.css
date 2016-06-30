@@ -61,11 +61,11 @@ textarea.textfield--small {
   pointer-events: none;
 }
 
-.textfield-icon .icon-fill {
+.textfield-icon > .icon .icon-fill {
   fill: #aaaaaa;
 }
 
-.textfield-icon > .textfield {
+.textfield-icon .textfield {
   width: 100%;
   padding-left: 35px;
 }

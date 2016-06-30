@@ -14,15 +14,14 @@ export default class SpacesIndex extends Component {
   constructor(props) {
     super(props)
 
-    const spaces = get(props, 'spaces', [])
+    const results = get(props, 'results', [])
 
     this.state = {
       skip: 40,
-      offset: size(spaces),
-      results: spaces,
+      offset: size(results),
+      results,
       isSearhing: false,
-      lastResults: spaces,
-      hasSearched: false
+      lastResults: results
     }
   }
 
@@ -35,49 +34,51 @@ export default class SpacesIndex extends Component {
   };
 
   fetch() {
-    const { offset, results } = this.state
+    const { state } = this
 
     this.setState({ isSearhing: true }, () => {
-      axios({ url: `/ajax/spaces/search/?skip=${offset}` }).then((res) => {
-        const spaces = get(res, 'data', [])
+      axios
+        .get(`/ajax/spaces/search/?skip=${state.offset}`)
+        .then(({ data }) => {
+          const results = get(data, 'results', [])
 
-        this.setState({
-          offset: offset + size(spaces),
-          results: concat(results, spaces),
-          isSearhing: false,
-          lastResults: spaces,
-          hasSearched: true
+          this.setState({
+            offset: state.offset + size(results),
+            results: concat(state.results, results),
+            isSearhing: false,
+            lastResults: results
+          })
         })
-      }).catch(() => {
-        this.setState({ isSearhing: false })
-      })
+        .catch(() => {
+          this.setState({ isSearhing: false })
+        })
     })
   }
 
   renderPagination() {
-    const { skip, isSearhing, lastResults, hasSearched } = this.state
+    const { props, state } = this
 
-    return size(lastResults) >= skip || !hasSearched ? (
+    return size(state.results) < props.count ? (
       <div className="grid-pagination">
         <button
           onClick={::this.fetch}
-          disabled={isSearhing}
+          disabled={state.isSearhing}
           className="button button--outline">
-          {isSearhing ? 'Loading More...' : 'Load More'}
+          {state.isSearhing ? 'Loading More...' : 'Load More'}
         </button>
       </div>
     ) : null
   }
 
   renderSpaces() {
-    const { results } = this.state
+    const { state } = this
 
     return (
       <div className="grid">
         <div className="grid-items">
-          {map(results, (space) => (
+          {map(state.results, space =>
             <Space key={toStringId(space)} {...space}/>
-          ))}
+          )}
         </div>
       </div>
     )

@@ -1,24 +1,48 @@
 import get from 'lodash/get'
-import isEmpty from 'lodash/isEmpty'
+import size from 'lodash/size'
 import parseInt from 'lodash/parseInt'
 import mongoose from 'mongoose'
 
-import { parseError } from '../utils'
+import { parseError, makeSearchQuery } from '../utils'
 
-export default (params = {}) => {
+const getCount = (params) => {
   return new Promise((resolve, reject) => {
     mongoose
       .model('User')
-      .find()
+      .where(params)
+      .count((err, count) => {
+        if (err) {
+          return reject(err)
+        }
+
+        resolve(count)
+      })
+  })
+}
+
+export default (params = {}) => {
+  return new Promise((resolve, reject) => {
+    const searchParams = makeSearchQuery(params)
+
+    console.log(searchParams)
+
+    mongoose
+      .model('User')
+      .where(searchParams)
       .skip(parseInt(get(params, 'skip', 0)))
       .limit(parseInt(get(params, 'limit', 30)))
       .sort('-createdAt')
-      .exec((err, users) => {
+      .exec(async (err, users) => {
         if (err) {
           return reject(parseError(err))
         }
 
-        resolve(isEmpty(users) ? [] : users)
+        const count = await getCount(searchParams)
+
+        resolve({
+          count: count || size(users),
+          results: users
+        })
       })
   })
 }

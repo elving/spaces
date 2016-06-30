@@ -1,9 +1,25 @@
 import get from 'lodash/get'
+import size from 'lodash/size'
 import isEmpty from 'lodash/isEmpty'
 import parseInt from 'lodash/parseInt'
 import mongoose from 'mongoose'
 
-import { parseError } from '../utils'
+import { parseError, makeSearchQuery } from '../utils'
+
+const getCount = (params) => {
+  return new Promise((resolve, reject) => {
+    mongoose
+      .model('Category')
+      .where(params)
+      .count((err, count) => {
+        if (err) {
+          return reject(err)
+        }
+
+        resolve(count)
+      })
+  })
+}
 
 const getProducts = (category) => {
   return new Promise(async (resolve, reject) => {
@@ -27,23 +43,30 @@ const getProducts = (category) => {
 
 export default (params = {}) => {
   return new Promise((resolve, reject) => {
+    const searchParams = makeSearchQuery(params)
+
     mongoose
       .model('Category')
-      .find()
+      .where(searchParams)
       .skip(parseInt(get(params, 'skip', 0)))
       .limit(parseInt(get(params, 'limit', 40)))
-      .sort('-createdAt')
+      .sort('name')
       .exec(async (err, categories) => {
         if (err) {
           return reject(parseError(err))
         }
+
+        const count = await getCount(searchParams)
 
         for (let category of categories) {
           const products = await getProducts(category.get('id'))
           category.set('products', products)
         }
 
-        resolve(isEmpty(categories) ? [] : categories)
+        resolve({
+          count: count || size(categories),
+          results: categories
+        })
       })
   })
 }

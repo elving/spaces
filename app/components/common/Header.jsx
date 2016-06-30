@@ -2,6 +2,7 @@ import ga from 'react-ga'
 import React, { Component } from 'react'
 
 import Logo from './Logo'
+import Search from './Search'
 import AdminNav from '../user/AdminNav'
 import CurrentUserNav from '../user/CurrentUserNav'
 
@@ -35,6 +36,7 @@ export default class Header extends Component {
             {this.renderNav()}
           </div>
           <div className="header-container-right">
+            <Search/>
             <AdminNav/>
             <CurrentUserNav/>
           </div>

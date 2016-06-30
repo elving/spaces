@@ -1,43 +1,57 @@
 import get from 'lodash/get'
+import omit from 'lodash/omit'
+import isEqual from 'lodash/isEqual'
 
-import { toJSON } from '../api/utils'
-import { default as getAllBrands } from '../api/brand/getAll'
-import { default as getAllColors } from '../api/color/getAll'
+import getSearchFilters from '../api/common/getSearchFilters'
+
 import { default as searchAllUsers } from '../api/user/search'
 import { default as searchAllSpaces } from '../api/space/search'
-import { default as getAllCategories } from '../api/category/getAll'
-import { default as getAllSpaceTypes } from '../api/spaceType/getAll'
 import { default as searchAllProducts } from '../api/product/search'
 import { default as searchAllCategories } from '../api/category/search'
 
-export const renderProductsSearch = async (req, res, next) => {
+export const renderSearchResults = async (req, res, next) => {
+  let results = []
+  const params = get(req, 'query', {})
+  const searchType = get(params, 'type')
+  const searchParams = omit(params, ['type'])
+
+  console.log(params, searchParams)
+
   res.locals.metadata = {
-    title: 'Product Search | Spaces',
-    bodyId: 'search-products',
-    bodyClass: 'page page-search-products page-search'
+    title: 'Search Results | Spaces',
+    bodyId: 'search-results',
+    bodyClass: 'page page-search-results'
   }
 
   try {
-    const brands = await getAllBrands()
-    const colors = await getAllColors()
-    const categories = await getAllCategories()
-    const spaceTypes = await getAllSpaceTypes()
-
-    res.locals.props = {
-      brands: toJSON(brands),
-      colors: toJSON(colors),
-      categories: toJSON(categories),
-      spaceTypes: toJSON(spaceTypes)
+    if (isEqual(searchType, 'products')) {
+      results = await searchAllProducts(searchParams)
+    } else if (isEqual(searchType, 'spaces')) {
+      results = await searchAllSpaces(searchParams)
+    } else if (isEqual(searchType, 'designers')) {
+      results = await searchAllUsers(searchParams)
     }
+
+    res.locals.props = results
+    next()
   } catch (err) {
     next(err)
   }
+}
 
-  next()
+export const getFilters = async (req, res) => {
+  try {
+    const filters = await getSearchFilters()
+    res.status(200).json(filters)
+  } catch (err) {
+    res.status(500).json({ err })
+  }
 }
 
 export const searchUsers = async (req, res) => {
   const params = get(req, 'query', {})
+
+  console.log(params)
 
   try {
     const results = await searchAllUsers(params)

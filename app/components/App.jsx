@@ -1,13 +1,13 @@
-import ga from 'react-ga'
 import get from 'lodash/get'
 import set from 'lodash/set'
 import map from 'lodash/map'
 import clone from 'lodash/clone'
 import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
 import React, { Component, PropTypes as Type } from 'react'
 
-import metadata from '../constants/metadata'
 import toStringId from '../utils/toStringId'
+import initAnalytics from '../utils/initAnalytics'
 import createProductsMap from '../utils/space/createProductsMap'
 
 export default class App extends Component {
@@ -22,10 +22,29 @@ export default class App extends Component {
     }
   }
 
-  static childContextTypes = {
+  static propTypes = {
     user: Type.object,
     csrf: Type.string,
+    colors: Type.array,
     spaceTypes: Type.array,
+    categories: Type.array
+  };
+
+  static defaultProps = {
+    user: {},
+    colors: [],
+    spaceTypes: [],
+    categories: []
+  };
+
+  static childContextTypes = {
+    csrf: Type.string,
+
+    colors: Type.array,
+    categories: Type.array,
+    spaceTypes: Type.array,
+
+    user: Type.object,
     userLoggedIn: Type.func,
     currentUserIsOwner: Type.func,
     currentUserIsAdmin: Type.func,
@@ -37,18 +56,24 @@ export default class App extends Component {
   };
 
   getChildContext() {
-    return {
-      user: this.props.user,
-      csrf: this.props.csrf,
-      spaceTypes: this.props.spaceTypes,
-      userLoggedIn: (() => !isEmpty(this.props.user)),
-      currentUserIsAdmin: (() => get(this.props, 'user.isAdmin')),
-      currentUserIsOwner: ((id) => get(this.props, 'user.id') === id),
-      currentUserIsCurator: (() => get(this.props, 'user.isCurator')),
+    const { userSpaces, userSpacesProductsMap } = this.state
+    const { csrf, user, colors, categories, spaceTypes } = this.props
 
-      userSpaces: this.state.userSpaces,
+    return {
+      user,
+      csrf,
+      colors,
+      categories,
+      spaceTypes,
+
+      userLoggedIn: (() => !isEmpty(user)),
+      currentUserIsAdmin: (() => get(user, 'isAdmin')),
+      currentUserIsOwner: ((id) => isEqual(get(user, 'id'), id)),
+      currentUserIsCurator: (() => get(user, 'isCurator')),
+
+      userSpaces,
       updateSpace: ::this.updateSpace,
-      userSpacesProductsMap: this.state.userSpacesProductsMap
+      userSpacesProductsMap
     }
   }
 
@@ -59,17 +84,8 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    const userId = get(this.props, 'user.id')
-
-    if (!isEmpty(userId)) {
-      ga.initialize(metadata.googleAnalyticsUA, {
-        gaOptions: { userId, cookieDomain: 'auto' }
-      })
-    } else {
-      ga.initialize(metadata.googleAnalyticsUA)
-    }
-
-    ga.pageview(this.props.location.pathname)
+    const { user, location } = this.props
+    initAnalytics(get(user, 'id'), get(location, 'pathname'))
   }
 
   render() {

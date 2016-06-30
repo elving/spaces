@@ -1,10 +1,27 @@
+.button-unstyled {
+  cursor: pointer;
+  border: 0 none;
+  text-decoration: none;
+  transition: all 0.2s linear;
+  background-color: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-unstyled:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
 .button {
   color: #555555;
   cursor: pointer;
   border: 1px solid #ececec;
   border-radius: 4px;
   background-color: #ececec;
-  transition: opacity 0.2s linear, border-color 0.2s linear, background-color 0.2s linear, color 0.2s linear;
+  transition: all 0.2s linear;
   text-align: center;
   text-decoration: none;
   display: flex;
@@ -59,13 +76,14 @@
   margin-right: 0;
 }
 
-.button--small .icon,
-.button--tiny .icon {
+.button--tiny .icon,
+.button--small .icon {
   width: 18px;
   height: 18px;
 }
 
-.button--tiny .icon {
+.button--tiny .icon,
+.button--small .icon {
   margin-right: 5px;
 }
 

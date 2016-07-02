@@ -24,8 +24,6 @@ export default (params = {}) => {
   return new Promise((resolve, reject) => {
     const searchParams = makeSearchQuery(params)
 
-    console.log(searchParams)
-
     mongoose
       .model('User')
       .where(searchParams)

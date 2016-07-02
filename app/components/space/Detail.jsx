@@ -2,7 +2,7 @@ import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
 import isEmpty from 'lodash/isEmpty'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
 import Product from '../product/Card'
@@ -11,13 +11,15 @@ import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
 import MiniProfile from '../user/MiniProfile'
 import CommentsWidget from '../comment/Widget'
+import AddProductModal from '../modal/AddProduct'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
+import AddProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
 import canModify from '../../utils/user/canModify'
 import { default as $ } from '../../utils/dom/selector'
 
-export default class SpaceDetail extends Component {
+class SpaceDetail extends Component {
   constructor(props) {
     super(props)
 
@@ -33,15 +35,23 @@ export default class SpaceDetail extends Component {
   }
 
   static contextTypes = {
-    user: Type.object
+    user: PropTypes.object
   };
 
   static propTypes = {
-    space: Type.object
+    space: PropTypes.object,
+    openAddProductModal: PropTypes.func,
+    closeAddProductModal: PropTypes.func,
+    addProductModalIsOpen: PropTypes.bool,
+    createaddProductModal: PropTypes.bool
   };
 
   static defaultProps = {
-    space: {}
+    space: {},
+    openAddProductModal: (() => {}),
+    closeAddProductModal: (() => {}),
+    addProductModalIsOpen: false,
+    createaddProductModal: false
   };
 
   openSharePopup() {
@@ -257,16 +267,17 @@ export default class SpaceDetail extends Component {
   }
 
   renderProducts() {
-    const products = get(this.props, 'space.products', [])
+    const { props } = this
 
     return (
       <div className="grid">
         <div id="products" className="grid-items">
-          {map(products, (product) => (
+          {map(get(props, 'space.products', []), product =>
             <Product
+              {...product}
               key={get(product, 'id', '')}
-              {...product}/>
-          ))}
+              onAddButtonClick={() => props.openAddProductModal(product)}/>
+          )}
         </div>
       </div>
     )
@@ -301,8 +312,15 @@ export default class SpaceDetail extends Component {
   }
 
   render() {
+    const { props } = this
+
     return (
       <Layout>
+        <AddProductModal
+          product={props.addProductModalCurrent}
+          onClose={props.closeAddProductModal}
+          isVisible={props.addProductModalIsOpen}/>
+
         <div className="space-detail">
           {this.renderHeader()}
           {this.renderSubHeader()}
@@ -315,3 +333,5 @@ export default class SpaceDetail extends Component {
     )
   }
 }
+
+export default AddProductModalContainer(SpaceDetail)

@@ -46,7 +46,7 @@ export default (limit = 8) => {
 
             resolve(spaces)
           } else {
-            resolve()
+            resolve([])
           }
         })
     }, resolve)

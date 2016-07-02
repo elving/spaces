@@ -23,7 +23,7 @@ export default (limit = 8) => {
             await saveToCache(cacheKey, toJSON(users), toIds(users))
             resolve(users)
           } else {
-            resolve()
+            resolve([])
           }
         })
     }, resolve)

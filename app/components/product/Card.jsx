@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 import classNames from 'classnames'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Loader from '../common/Loader'
 import Avatar from '../user/Avatar'
@@ -8,7 +8,6 @@ import CardTags from '../card/CardTags'
 import CardTitle from '../card/CardTitle'
 import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
-import SpacesPopup from './SpacesPopup'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 export default class ProductCard extends Component {
@@ -19,28 +18,28 @@ export default class ProductCard extends Component {
       imageIsLoaded: false,
       imageIsLoading: false,
       sharePopupIsOpen: false,
-      spacesPopupIsOpen: false,
-      sharePopupIsCreated: false,
-      spacesPopupIsCreated: false
+      sharePopupIsCreated: false
     }
   }
 
   static contextTypes = {
-    csrf: Type.string,
-    userLoggedIn: Type.func
+    csrf: PropTypes.string,
+    userLoggedIn: PropTypes.func
   };
 
   static propTypes = {
-    id: Type.string,
-    url: Type.string,
-    name: Type.string,
-    brand: Type.object,
-    image: Type.string,
-    price: Type.number,
-    colors: Type.array,
-    createdBy: Type.object,
-    categories: Type.array,
-    spaceTypes: Type.array
+    id: PropTypes.string,
+    url: PropTypes.string,
+    name: PropTypes.string,
+    brand: PropTypes.object,
+    image: PropTypes.string,
+    price: PropTypes.number,
+    colors: PropTypes.array,
+    createdBy: PropTypes.object,
+    categories: PropTypes.array,
+    spaceTypes: PropTypes.array,
+    forDisplayOnly: PropTypes.bool,
+    onAddButtonClick: PropTypes.func
   };
 
   static defaultProps = {
@@ -53,11 +52,13 @@ export default class ProductCard extends Component {
     colors: [],
     createdBy: {},
     categories: [],
-    spaceTypes: []
+    spaceTypes: [],
+    forDisplayOnly: false,
+    onAddButtonClick: (() => {})
   };
 
   componentDidMount() {
-    const { image } = this.props
+    const { props } = this
     const imagePreloader = new Image()
 
     const onImageLoad = () => {
@@ -67,11 +68,9 @@ export default class ProductCard extends Component {
       })
     }
 
-    this.setState({
-      imageIsLoading: true
-    }, () => {
+    this.setState({ imageIsLoading: true }, () => {
       imagePreloader.onload = onImageLoad
-      imagePreloader.src = image
+      imagePreloader.src = props.image
 
       if (imagePreloader.complete) {
         onImageLoad()
@@ -92,49 +91,29 @@ export default class ProductCard extends Component {
     })
   }
 
-  openSpacesPopup() {
-    const { spacesPopupIsCreated } = this.state
-
-    if (!spacesPopupIsCreated) {
-      this.setState({
-        spacesPopupIsOpen: true,
-        spacesPopupIsCreated: true
-      })
-    } else {
-      this.setState({
-        spacesPopupIsOpen: true
-      })
-    }
-  }
-
-  closeSpacesPopup() {
-    this.setState({
-      spacesPopupIsOpen: false
-    })
-  }
-
   renderImage() {
-    const { name, image, detailUrl } = this.props
-    const { imageIsLoaded, imageIsLoading } = this.state
+    const { props, state } = this
 
     return (
       <div
         className={classNames({
           'product-card-image-container': true,
-          'product-card-image-container--loading': imageIsLoading
+          'product-card-image-container--loading': state.imageIsLoading
         })}>
-        <a href={`/${detailUrl}/`} className="card-actions-overlay"></a>
+        <a href={`/${props.detailUrl}/`} className="card-actions-overlay"></a>
 
-        {this.renderActions()}
+        {!props.forDisplayOnly ? (
+          this.renderActions()
+        ) : null}
 
-        {imageIsLoading ? (
+        {state.imageIsLoading ? (
           <Loader size={50}/>
         ) : null}
 
-        {imageIsLoaded ? (
+        {state.imageIsLoaded ? (
           <div
-            title={name}
-            style={{ backgroundImage: `url(${image})` }}
+            title={props.name}
+            style={{ backgroundImage: `url(${props.image})` }}
             className="product-card-image"/>
         ) : null}
 
@@ -144,22 +123,23 @@ export default class ProductCard extends Component {
   }
 
   renderActions() {
+    const { props } = this
+
     return (
       <div className="product-card-actions card-actions-container">
         <div className="card-actions card-actions--left">
           <button
             type="button"
-            onClick={::this.openSpacesPopup}
+            onClick={props.onAddButtonClick}
             className="card-action button button--icon"
             data-action="add">
             <MaterialDesignIcon name="add" fill="#2ECC71"/>
           </button>
-          <button
-            type="button"
-            className="card-action button button--icon"
-            data-action="like">
-            <MaterialDesignIcon name="like" fill="#E74C3C"/>
-          </button>
+          <LikeButton
+            parent={props.id}
+            isWhite={true}
+            className="card-action"
+            parentType="product"/>
         </div>
 
         <div className="card-actions card-actions--right">
@@ -176,11 +156,11 @@ export default class ProductCard extends Component {
   }
 
   renderPrice() {
-    const { url, price } = this.props
+    const { props } = this
 
     return (
       <a
-        href={url}
+        href={props.url}
         target="_blank"
         className={classNames({
           'button': true,
@@ -188,89 +168,79 @@ export default class ProductCard extends Component {
           'product-card-price': true
         })}>
         <MaterialDesignIcon name="cart" size={16} color="#2ECC71"/>
-        {`$${price}`}
+        {`$${props.price}`}
       </a>
     )
   }
 
   renderTitle() {
-    const { name, brand, detailUrl } = this.props
+    const { props } = this
 
     return (
       <CardTitle
-        url={`/${detailUrl}/`}
-        title={name}
-        subTitle={get(brand, 'name')}
+        url={props.forDisplayOnly ? '' : `/${props.detailUrl}/`}
+        title={props.name}
+        subTitle={get(props.brand, 'name')}
         className="product-title"/>
     )
   }
 
   renderTags() {
-    const { colors, spaceTypes, categories } = this.props
+    const { props } = this
 
     return (
       <CardTags
-        tags={[spaceTypes, categories, colors]}
+        tags={[props.spaceTypes, props.categories, props.colors]}
         className="product-tags"/>
     )
   }
 
   renderDesigner() {
-    const { createdBy } = this.props
+    const { props } = this
 
     return (
       <div className="product-card-designer">
         <Avatar
           width={26}
           height={26}
-          imageUrl={get(createdBy, 'avatar', '')}
-          initials={get(createdBy, 'initials', '')}
+          imageUrl={get(props.createdBy, 'avatar', '')}
+          initials={get(props.createdBy, 'initials', '')}
           className="product-card-designer-avatar"/>
         <span className="product-card-designer-name">
-          Added by <a
-            href={`/${get(createdBy, 'detailUrl', '#')}/`}
-            className="product-card-designer-link">
-            {get(createdBy, 'name')}
-          </a>
+          Added by {' '}
+          {!props.forDisplayOnly ? (
+            <a
+              href={`/${get(props.createdBy, 'detailUrl', '#')}/`}
+              className="product-card-designer-link">
+              {get(props.createdBy, 'name')}
+            </a>
+          ) : (
+            <span className="product-card-designer-link">
+              {get(props.createdBy, 'name')}
+            </span>
+          )}
         </span>
       </div>
     )
   }
 
   render() {
-    const { id } = this.props
-
-    const {
-      sharePopupIsOpen,
-      spacesPopupIsOpen,
-      sharePopupIsCreated,
-      spacesPopupIsCreated
-    } = this.state
+    const { props, state } = this
 
     return (
       <div
         className={classNames({
           'product': true,
           'product-card card': true,
-          'product-card--popup-open': (
-            sharePopupIsOpen ||
-            spacesPopupIsOpen
-          )
+          'product-card--popup-open': state.sharePopupIsOpen,
+          'product-card--display-only': props.forDisplayOnly
         })}>
         <div className="product-card-overlay"/>
 
-        {spacesPopupIsCreated ? (
-          <SpacesPopup
-            isOpen={spacesPopupIsOpen}
-            className="spaces-popup"
-            productId={id}
-            onClickClose={::this.closeSpacesPopup}/>
-        ) : null}
-
-        {sharePopupIsCreated ? (
+        {state.sharePopupIsCreated ? (
           <SharePopup
             title="Share this product"
-            isOpen={sharePopupIsOpen}
+            isOpen={state.sharePopupIsOpen}
             className="share-popup"
             onClickClose={::this.closeSharePopup}/>
         ) : null}

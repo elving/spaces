@@ -2,8 +2,6 @@ import get from 'lodash/get'
 import omit from 'lodash/omit'
 import isEqual from 'lodash/isEqual'
 
-import getSearchFilters from '../api/common/getSearchFilters'
-
 import { default as searchAllUsers } from '../api/user/search'
 import { default as searchAllSpaces } from '../api/space/search'
 import { default as searchAllProducts } from '../api/product/search'
@@ -14,8 +12,6 @@ export const renderSearchResults = async (req, res, next) => {
   const params = get(req, 'query', {})
   const searchType = get(params, 'type')
   const searchParams = omit(params, ['type'])
-
-  console.log(params, searchParams)
 
   res.locals.metadata = {
     title: 'Search Results | Spaces',
@@ -39,19 +35,8 @@ export const renderSearchResults = async (req, res, next) => {
   }
 }
 
-export const getFilters = async (req, res) => {
-  try {
-    const filters = await getSearchFilters()
-    res.status(200).json(filters)
-  } catch (err) {
-    res.status(500).json({ err })
-  }
-}
-
 export const searchUsers = async (req, res) => {
   const params = get(req, 'query', {})
-
-  console.log(params)
 
   try {
     const results = await searchAllUsers(params)

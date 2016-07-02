@@ -2,6 +2,7 @@ import getVersion from '../utils/getVersion'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import { default as authRouter } from '../routes/auth'
+import { default as ajaxRouter } from '../routes/ajax'
 import { default as homeRouter } from '../routes/home'
 import { default as userRouter } from '../routes/user'
 import { default as likeRouter } from '../routes/like'
@@ -15,6 +16,7 @@ import { default as categoryRouter } from '../routes/category'
 import { default as spaceTypeRouter } from '../routes/spaceType'
 
 const configRoutes = (server) => {
+  server.use(ajaxRouter)
   server.use(authRouter)
   server.use(homeRouter)
   server.use(userRouter)

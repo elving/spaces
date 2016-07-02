@@ -8,7 +8,7 @@ import React, { Component, PropTypes as Type } from 'react'
 
 import toStringId from '../utils/toStringId'
 import initAnalytics from '../utils/initAnalytics'
-import createProductsMap from '../utils/space/createProductsMap'
+import createProductsHash from '../utils/space/createProductsHash'
 
 export default class App extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ export default class App extends Component {
 
     this.state = {
       userSpaces,
-      userSpacesProductsMap: createProductsMap(userSpaces)
+      userSpacesProductsMap: createProductsHash(userSpaces)
     }
   }
 

@@ -1,29 +1,39 @@
 import map from 'lodash/map'
 import { Link } from 'react-router'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
 import SpaceCard from '../space/Card'
 import ProductCard from '../product/Card'
 import ProfileCard from '../user/Card'
 import CategoryCard from '../category/Card'
+import AddProductModal from '../modal/AddProduct'
+import AddProductModalContainer from '../container/AddProductModal'
 
 import fullReload from '../../utils/fullReload'
 import toStringId from '../../utils/toStringId'
 
-export default class Home extends Component {
+class Home extends Component {
   static propTypes = {
-    users: Type.array,
-    spaces: Type.array,
-    products: Type.array,
-    categories: Type.array
+    users: PropTypes.array,
+    spaces: PropTypes.array,
+    products: PropTypes.array,
+    categories: PropTypes.array,
+    openAddProductModal: PropTypes.func,
+    closeAddProductModal: PropTypes.func,
+    addProductModalIsOpen: PropTypes.bool,
+    createaddProductModal: PropTypes.bool
   };
 
   static defaultProps = {
     users: [],
     spaces: [],
     products: [],
-    categories: []
+    categories: [],
+    openAddProductModal: (() => {}),
+    closeAddProductModal: (() => {}),
+    addProductModalIsOpen: false,
+    createaddProductModal: false
   };
 
   renderSpaces() {
@@ -41,14 +51,17 @@ export default class Home extends Component {
   }
 
   renderProducts() {
-    const { products } = this.props
+    const { props } = this
 
     return (
       <div className="grid">
         <div className="grid-items">
-          {map(products, (product) => (
-            <ProductCard key={toStringId(product)} {...product}/>
-          ))}
+          {map(props.products, product =>
+            <ProductCard
+              {...product}
+              key={toStringId(product)}
+              onAddButtonClick={() => props.openAddProductModal(product)}/>
+          )}
         </div>
       </div>
     )
@@ -83,8 +96,15 @@ export default class Home extends Component {
   }
 
   render() {
+    const { props } = this
+
     return (
       <Layout>
+        <AddProductModal
+          product={props.addProductModalCurrent}
+          onClose={props.closeAddProductModal}
+          isVisible={props.addProductModalIsOpen}/>
+
         <h1 className="page-title">Trending on Spaces</h1>
 
         <div className="grids">
@@ -148,3 +168,5 @@ export default class Home extends Component {
     )
   }
 }
+
+export default AddProductModalContainer(Home)

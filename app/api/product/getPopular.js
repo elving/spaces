@@ -42,7 +42,7 @@ export default (limit = 8) => {
 
             resolve(products)
           } else {
-            resolve()
+            resolve([])
           }
         })
     }, resolve)

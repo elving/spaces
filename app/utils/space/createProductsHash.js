@@ -6,12 +6,12 @@ import forEach from 'lodash/forEach'
 import toStringId from '../toStringId'
 
 export default (spaces) => {
-  const hashMap = {}
+  const hashTable = {}
 
-  forEach(spaces, (space) => {
+  forEach(spaces, space => {
     const products = get(space, 'products', [])
-    set(hashMap, toStringId(space), map(products, toStringId))
+    set(hashTable, toStringId(space), map(products, toStringId))
   })
 
-  return hashMap
+  return hashTable
 }

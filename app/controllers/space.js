@@ -12,6 +12,7 @@ import findBySid from '../api/space/findBySid'
 import updateUser from '../api/user/update'
 
 import { toJSON, toObjectId } from '../api/utils'
+import { default as getAllUserSpaces } from '../api/user/getSpaces'
 
 export const renderIndex = async (req, res, next) => {
   try {
@@ -52,6 +53,21 @@ export const renderDetail = async (req, res, next) => {
     next()
   } catch (err) {
     next(err)
+  }
+}
+
+export const getUserSpaces = async (req, res) => {
+  const id = get(req, 'params.id')
+
+  if (!isAuthenticatedUser(req.user)) {
+    res.status(500).json({ err: 'Not authorized' })
+  }
+
+  try {
+    const spaces = await getAllUserSpaces(id)
+    res.status(200).json({ spaces })
+  } catch (err) {
+    res.status(500).json({ err })
   }
 }
 

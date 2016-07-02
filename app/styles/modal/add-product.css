@@ -1,0 +1,168 @@
+.add-product-modal {
+  border-radius: 4px;
+  background-color: #ffffff;
+  width: 100%;
+  margin: 60px auto;
+  display: flex;
+  max-width: 665px;
+  min-height: 250px;
+}
+
+.add-product-modal .ui-loader {
+  margin: 0 auto;
+  display: block;
+  align-self: center;
+}
+
+.add-product-modal-content {
+  width: 100%;
+  display: flex;
+  position: relative;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.add-product-modal-close {
+  top: 0;
+  right: 0;
+  padding: 15px;
+  position: absolute;
+}
+
+.add-product-modal-left,
+.add-product-modal-right {
+  width: 50%;
+  display: flex;
+  min-height: 535px;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-product-modal-left {
+  border-right: 1px solid #dadada;
+  border-radius: 4px 0 0 4px;
+  background-color: #f9f9f9;
+  padding: 15px;
+}
+
+.add-product-modal-product,
+.add-product-modal-product .product-card {
+  width: 100%;
+}
+
+.add-product-modal-right {
+  border-radius: 0 4px 4px 0;
+  align-items: stretch;
+}
+
+.add-product-modal-empty-text {
+  font-size: 32px;
+  font-weight: 300;
+  text-align: center;
+  line-height: 42px;
+  margin: 0 auto 15px;
+}
+
+.add-product-modal-empty {
+  height: 250px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.add-product-modal-title {
+  border-bottom: 1px solid #dadada;
+  font-size: 20px;
+  width: 100%;
+  margin: 0 auto 15px;
+  padding: 15px;
+  flex-shrink: 0;
+}
+
+.add-product-modal-form,
+.add-product-modal-form-container,
+.add-product-modal-spaces,
+.add-product-modal-spaces-list {
+  width: 100%;
+}
+
+.add-product-modal-form {
+  padding: 0 15px;
+}
+
+.add-product-modal-spaces {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.add-product-modal-spaces-search {
+  width: 100%;
+  padding: 0 15px 15px;
+  flex-shrink: 0;
+}
+
+.add-product-modal-spaces-list {
+  border-top: 1px solid #dadada;
+  height: 100%;
+  max-height: 322px;
+  overflow-y: auto;
+}
+
+.add-product-modal-space {
+  cursor: pointer;
+  border: 0 none;
+  border-bottom: 1px solid #dadada;
+  background-color: #ffffff;
+  width: 100%;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-product-modal-space:hover {
+  background-color: #fafafa;
+}
+
+.add-product-modal-space-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-product-modal-space-icon.icon-uncheck,
+.add-product-modal-space--has-product:hover .add-product-modal-space-icon.icon-check {
+  display: none;
+}
+
+.add-product-modal-space--has-product:hover .add-product-modal-space-icon.icon-uncheck {
+  display: block;
+}
+
+.add-product-modal-space:hover .icon-check-empty .icon-fill,
+.add-product-modal-space--has-product .icon-check .icon-fill {
+  fill: #2ECC71;
+}
+
+.add-product-modal-space--has-product .icon-uncheck .icon-fill {
+  fill: #E74C3C;
+}
+
+.add-product-modal-spaces-actions {
+  border-top: 1px solid #dadada;
+  border-radius: 0 0 4px 0;
+  background-color: #fafafa;
+  width: 100%;
+  padding: 15px;
+  z-index: 5;
+  position: relative;
+  margin-top: -1px;
+  flex-shrink: 0;
+}
+
+.add-product-modal-spaces-actions .button {
+  width: 100%;
+}

@@ -60,7 +60,7 @@ export default class Search extends Component {
   };
 
   componentDidMount() {
-    axios.get('/ajax/search/filters/').then(({ data }) => {
+    axios.get('/ajax/filters/').then(({ data }) => {
       this.setState({
         allColors: get(data, 'colors', []),
         allCategories: get(data, 'categories', []),

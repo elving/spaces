@@ -3,14 +3,16 @@ import map from 'lodash/map'
 import size from 'lodash/size'
 import axios from 'axios'
 import concat from 'lodash/concat'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
 import ProductCard from './Card'
+import AddProductModal from '../modal/AddProduct'
+import AddProductModalContainer from '../container/AddProductModal'
 
 import toStringId from '../../utils/toStringId'
 
-export default class ProductsIndex extends Component {
+class ProductsIndex extends Component {
   constructor(props) {
     super(props)
 
@@ -26,13 +28,21 @@ export default class ProductsIndex extends Component {
   }
 
   static propTypes = {
-    count: Type.number,
-    results: Type.array
+    count: PropTypes.number,
+    results: PropTypes.array,
+    openAddProductModal: PropTypes.func,
+    closeAddProductModal: PropTypes.func,
+    addProductModalIsOpen: PropTypes.bool,
+    createaddProductModal: PropTypes.bool
   };
 
   static defaultProps = {
     count: 0,
-    results: []
+    results: [],
+    openAddProductModal: (() => {}),
+    closeAddProductModal: (() => {}),
+    addProductModalIsOpen: false,
+    createaddProductModal: false
   };
 
   fetch() {
@@ -51,9 +61,7 @@ export default class ProductsIndex extends Component {
             lastResults: results
           })
         })
-        .catch(() => {
-          this.setState({ isSearhing: false })
-        })
+        .catch(() => this.setState({ isSearhing: false }))
     })
   }
 
@@ -73,13 +81,16 @@ export default class ProductsIndex extends Component {
   }
 
   renderProducts() {
-    const { state } = this
+    const { props, state } = this
 
     return (
       <div className="grid">
         <div className="grid-items">
           {map(state.results, product =>
-            <ProductCard key={toStringId(product)} {...product}/>
+            <ProductCard
+              {...product}
+              key={toStringId(product)}
+              onAddButtonClick={() => props.openAddProductModal(product)}/>
           )}
         </div>
       </div>
@@ -87,8 +98,15 @@ export default class ProductsIndex extends Component {
   }
 
   render() {
+    const { props } = this
+
     return (
       <Layout>
+        <AddProductModal
+          product={props.addProductModalCurrent}
+          onClose={props.closeAddProductModal}
+          isVisible={props.addProductModalIsOpen}/>
+
         <h1 className="page-title page-title--has-margin">
           Discover Products
         </h1>
@@ -101,3 +119,5 @@ export default class ProductsIndex extends Component {
     )
   }
 }
+
+export default AddProductModalContainer(ProductsIndex)

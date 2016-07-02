@@ -4,17 +4,19 @@ import size from 'lodash/size'
 import axios from 'axios'
 import concat from 'lodash/concat'
 import isEqual from 'lodash/isEqual'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
 import SpaceCard from '../space/Card'
 import ProductCard from '../product/Card'
 import ProfileCard from '../user/Card'
+import AddProductModal from '../modal/AddProduct'
+import AddProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
 import toStringId from '../../utils/toStringId'
 
-export default class SearchResults extends Component {
+class SearchResults extends Component {
   constructor(props) {
     super(props)
 
@@ -31,70 +33,77 @@ export default class SearchResults extends Component {
   }
 
   static propTypes = {
-    count: Type.number,
-    resuts: Type.array
+    count: PropTypes.number,
+    resuts: PropTypes.array,
+    openAddProductModal: PropTypes.func,
+    closeAddProductModal: PropTypes.func,
+    addProductModalIsOpen: PropTypes.bool,
+    createaddProductModal: PropTypes.bool
   };
 
   static defaultProps = {
     count: 0,
-    resuts: []
+    resuts: [],
+    openAddProductModal: (() => {}),
+    closeAddProductModal: (() => {}),
+    addProductModalIsOpen: false,
+    createaddProductModal: false
   };
 
   fetch() {
-    const { offset, results } = this.state
+    const { state } = this
 
     this.setState({ isSearhing: true }, () => {
-      axios({ url: `/ajax/products/search/?skip=${offset}` }).then((res) => {
-        const newResults = get(res, 'data', [])
+      axios
+        .get(`/ajax/products/search/?skip=${state.offset}`)
+        .then((res) => {
+          const newResults = get(res, 'data', [])
 
-        this.setState({
-          offset: offset + size(newResults),
-          results: concat(results, newResults),
-          isSearhing: false,
-          lastResults: newResults,
-          hasSearched: true
-        })
-      }).catch(() => {
-        this.setState({ isSearhing: false })
-      })
+          this.setState({
+            offset: state.offset + size(newResults),
+            results: concat(state.results, newResults),
+            isSearhing: false,
+            lastResults: newResults,
+            hasSearched: true
+          })
+        }).catch(() => this.setState({ isSearhing: false }))
     })
   }
 
   renderPagination() {
-    const { count } = this.props
-    const { results, isSearhing, hasSearched } = this.state
-    const resultsSize = size(results)
+    const { props, state } = this
+    const resultsSize = size(state.results)
 
     return (
-      resultsSize !== count && (
-        resultsSize < count ||
-        !hasSearched
+      resultsSize !== props.count && (
+        resultsSize < props.count || !state.hasSearched
       )
     ) ? (
       <div className="grid-pagination">
         <button
           onClick={::this.fetch}
-          disabled={isSearhing}
+          disabled={state.isSearhing}
           className="button button--outline">
-          {isSearhing ? 'Loading More...' : 'Load More'}
+          {state.isSearhing ? 'Loading More...' : 'Load More'}
         </button>
       </div>
     ) : null
   }
 
   renderResults() {
-    const { results } = this.state
-    const { location } = this.props
-
-    const searchType = get(location, 'query.type', '')
+    const { props, state } = this
+    const searchType = get(props.location, 'query.type', '')
 
     return (
       <div className="grid">
         <div className="grid-items">
-          {map(results, (result) => {
+          {map(state.results, result => {
             if (isEqual(searchType, 'products')) {
               return (
-                <ProductCard key={toStringId(result)} {...result}/>
+                <ProductCard
+                  {...result}
+                  key={toStringId(result)}
+                  onAddButtonClick={() => props.openAddProductModal(result)}/>
               )
             } else if (isEqual(searchType, 'spaces')) {
               return (
@@ -114,15 +123,19 @@ export default class SearchResults extends Component {
   }
 
   render() {
-    const { count, location } = this.props
-
-    const type = get(location, 'query.type', '')
+    const { props } = this
+    const type = get(props.location, 'query.type', '')
     const searchType = type.substring(0, size(type) - 1)
 
     return (
       <Layout>
+        <AddProductModal
+          product={props.addProductModalCurrent}
+          onClose={props.closeAddProductModal}
+          isVisible={props.addProductModalIsOpen}/>
+
         <h1 className="page-title page-title--has-margin">
-          {`${count} ${inflect(count, searchType)} found.`}
+          {`${props.count} ${inflect(props.count, searchType)} found.`}
         </h1>
 
         <div className="grids">
@@ -133,3 +146,5 @@ export default class SearchResults extends Component {
     )
   }
 }
+
+export default AddProductModalContainer(SearchResults)

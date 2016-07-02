@@ -26,88 +26,96 @@ export default (id, props) => {
       const product = await findById(id)
       const sanitizedProps = sanitize(props, false)
 
-      try {
-        brand = await getOrCreateBrand(get(sanitizedProps, 'brand'), true)
-        set(sanitizedProps, 'brand', brand.get('id'))
-      } catch (err) {
-        if (has(err, 'name')) {
-          return reject({ brand: get(err, 'name') })
-        } else {
-          return reject({
-            generic: (
-              'There was an error while trying to create this product. ' +
-              'Please try again.'
-            )
-          })
+      if (has(sanitizedProps, 'brand')) {
+        try {
+          brand = await getOrCreateBrand(get(sanitizedProps, 'brand'), true)
+          set(sanitizedProps, 'brand', brand.get('id'))
+        } catch (err) {
+          if (has(err, 'name')) {
+            return reject({ brand: get(err, 'name') })
+          } else {
+            return reject({
+              generic: (
+                'There was an error while trying to create this product. ' +
+                'Please try again.'
+              )
+            })
+          }
         }
       }
 
-      try {
-        for (let category of get(sanitizedProps, 'categories', [])) {
-          category = await getOrCreateCategory(category, true)
+      if (has(sanitizedProps, 'categories')) {
+        try {
+          for (let category of get(sanitizedProps, 'categories', [])) {
+            category = await getOrCreateCategory(category, true)
 
-          if (!isEmpty(category)) {
-            categories.push(category)
+            if (!isEmpty(category)) {
+              categories.push(category)
+            }
           }
-        }
 
-        set(sanitizedProps, 'categories', toIds(categories))
-      } catch (err) {
-        if (has(err, 'name')) {
-          return reject({ categories: get(err, 'name') })
-        } else {
-          return reject({
-            generic: (
-              'There was an error while trying to create this product. ' +
-              'Please try again.'
-            )
-          })
+          set(sanitizedProps, 'categories', toIds(categories))
+        } catch (err) {
+          if (has(err, 'name')) {
+            return reject({ categories: get(err, 'name') })
+          } else {
+            return reject({
+              generic: (
+                'There was an error while trying to create this product. ' +
+                'Please try again.'
+              )
+            })
+          }
         }
       }
 
-      try {
-        for (let color of get(sanitizedProps, 'colors', [])) {
-          color = await findColorByName(color, true)
+      if (has(sanitizedProps, 'colors')) {
+        try {
+          for (let color of get(sanitizedProps, 'colors', [])) {
+            color = await findColorByName(color, true)
 
-          if (!isEmpty(color)) {
-            colors.push(color)
+            if (!isEmpty(color)) {
+              colors.push(color)
+            }
           }
-        }
 
-        set(sanitizedProps, 'colors', toIds(colors))
-      } catch (err) {
-        if (has(err, 'name')) {
-          return reject({ colors: get(err, 'name') })
-        } else {
-          return reject({
-            generic: (
-              'There was an error while trying to create this product. ' +
-              'Please try again.'
-            )
-          })
+          set(sanitizedProps, 'colors', toIds(colors))
+        } catch (err) {
+          if (has(err, 'name')) {
+            return reject({ colors: get(err, 'name') })
+          } else {
+            return reject({
+              generic: (
+                'There was an error while trying to create this product. ' +
+                'Please try again.'
+              )
+            })
+          }
         }
       }
 
-      try {
-        for (let spaceType of get(sanitizedProps, 'spaceTypes', [])) {
-          spaceType = await findSpaceTypeByName(spaceType, true)
+      if (has(sanitizedProps, 'spaceTypes')) {
+        try {
+          for (let spaceType of get(sanitizedProps, 'spaceTypes', [])) {
+            spaceType = await findSpaceTypeByName(spaceType, true)
 
-          if (!isEmpty(spaceType)) {
-            spaceTypes.push(spaceType)
+            if (!isEmpty(spaceType)) {
+              spaceTypes.push(spaceType)
+            }
           }
-        }
 
-        set(sanitizedProps, 'spaceTypes', toIds(spaceTypes))
-      } catch (err) {
-        if (has(err, 'name')) {
-          return reject({ spaceTypes: get(err, 'name') })
-        } else {
-          return reject({
-            generic: (
-              'There was an error while trying to create this product. ' +
-              'Please try again.'
-            )
-          })
+          set(sanitizedProps, 'spaceTypes', toIds(spaceTypes))
+        } catch (err) {
+          if (has(err, 'name')) {
+            return reject({ spaceTypes: get(err, 'name') })
+          } else {
+            return reject({
+              generic: (
+                'There was an error while trying to create this product. ' +
+                'Please try again.'
+              )
+            })
+          }
         }
       }
 

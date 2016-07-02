@@ -75,6 +75,12 @@
   width: 300px;
 }
 
+.space-detail-action .popup:after,
+.space-detail-action .popup:before {
+  left: auto;
+  right: 25px;
+}
+
 .space-detail-description-container {
   border-bottom: 1px solid #e5e5e5;
   background-color: #fcfcfc;

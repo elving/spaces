@@ -10,6 +10,7 @@ import LikesModal from '../modal/Likes'
 import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
 import MiniProfile from '../user/MiniProfile'
+import RedesignPopup from './RedesignPopup'
 import CommentsWidget from '../comment/Widget'
 import AddProductModal from '../modal/AddProduct'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
@@ -30,7 +31,8 @@ class SpaceDetail extends Component {
       likesModalIsOpen: false,
       createLikesModal: false,
       sharePopupIsOpen: false,
-      sharePopupIsCreated: false
+      sharePopupIsCreated: false,
+      redesignPopupIsOpen: false
     }
   }
 
@@ -53,6 +55,18 @@ class SpaceDetail extends Component {
     addProductModalIsOpen: false,
     createaddProductModal: false
   };
+
+  openRedesignPopup() {
+    this.setState({
+      redesignPopupIsOpen: true
+    })
+  }
+
+  closeRedesignPopup() {
+    this.setState({
+      redesignPopupIsOpen: false
+    })
+  }
 
   openSharePopup() {
     this.setState({
@@ -203,6 +217,19 @@ class SpaceDetail extends Component {
     ) : null
   }
 
+  renderRedesignPopup() {
+    const { space } = this.props
+    const { redesignPopupIsOpen } = this.state
+
+    return (
+      <RedesignPopup
+        isOpen={redesignPopupIsOpen}
+        spaceId={space.id}
+        spaceType={get(space.spaceType, 'id', space.spaceType)}
+        className="redesign-popup"
+        onClickClose={::this.closeRedesignPopup}/>
+    )
+  }
 
   renderActions() {
     const { user } = this.context
@@ -210,11 +237,18 @@ class SpaceDetail extends Component {
 
     return (
       <div className="space-detail-actions">
-        <button
-          type="button"
-          className="button button--primary button--small space-detail-action">
-          <MaterialDesignIcon name="redesign"/> Redesign
-        </button>
+        <div className="space-detail-action">
+          <button
+            type="button"
+            onClick={::this.openRedesignPopup}
+            className={(
+              "button button--primary button--small tooltip"
+            )}
+            data-tooltip="Redesign this space">
+            <MaterialDesignIcon name="redesign"/> Redesign
+          </button>
+          {this.renderRedesignPopup()}
+        </div>
         <LikeButton
           parent={get(this.props, 'space.id', '')}
           onLike={() => this.setState({ likesCount: likesCount + 1 })}

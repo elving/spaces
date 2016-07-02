@@ -3,7 +3,7 @@ import axios from 'axios'
 import isEmpty from 'lodash/isEmpty'
 import serialize from 'form-serialize'
 import classNames from 'classnames'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Popup from '../common/Popup'
 import PopupTitle from '../common/PopupTitle'
@@ -14,25 +14,23 @@ export default class SpacesPopup extends Component {
 
     this.state = {
       name: '',
-      description: '',
       errors: {},
-      isSaving: false
+      isSaving: false,
+      description: ''
     }
 
     this.form = null
   }
 
   static contextTypes = {
-    csrf: Type.string,
-    addUserSpace: Type.func
+    csrf: PropTypes.string
   };
 
-  static propTypes = {
-    isOpen: Type.bool,
-    spaceId: Type.string,
-    spaceType: Type.string,
-    className: Type.string,
-    onClickClose: Type.func
+  static propPropTypess = {
+    isOpen: PropTypes.bool,
+    spaceId: PropTypes.string,
+    className: PropTypes.string,
+    onClickClose: PropTypes.func
   };
 
   static defaultProps = {
@@ -43,7 +41,7 @@ export default class SpacesPopup extends Component {
     onClickClose: (() => {})
   };
 
-  resetForm(next) {
+  reset(next) {
     this.setState({
       name: '',
       errors: {},
@@ -53,44 +51,31 @@ export default class SpacesPopup extends Component {
 
   onSubmit(event) {
     const formData = serialize(this.form, { hash: true })
-
-    const { spaceId } = this.props
-    const { addUserSpace } = this.context
+    const { props } = this
 
     event.preventDefault()
 
     this.setState({ errors: {}, isSaving: true }, () => {
-      axios({
-        url: `/ajax/spaces/${spaceId}/redesign/`,
-        data: formData,
-        method: 'POST'
-      }).then((res) => {
-        addUserSpace(get(res, 'data', {}))
-
-        this.setState({
-          name: '',
-          errors: {},
-          isSaving: false,
-          description: ''
+      axios
+        .post(`/ajax/spaces/${props.spaceId}/redesign/`, formData)
+        .then(({ data: space }) => {
+          window.location.href = `/${get(space, 'detailUrl')}/`
+        }).catch(({ data }) => {
+          this.setState({
+            errors: get(data, 'err', {}),
+            isSaving: false
+          })
         })
-      }).catch((res) => {
-        this.setState({
-          errors: get(res, 'data.err', {}),
-          isSaving: false
-        })
-      })
     })
   }
 
   renderForm() {
-    const { csrf } = this.context
-    const { errors, isSaving } = this.state
-    const { spaceId, spaceType, onClickClose } = this.props
+    const { props, state, context } = this
 
-    const nameError = get(errors, 'name')
+    const nameError = get(state.errors, 'name')
     const hasNameError = !isEmpty(nameError)
 
-    const descriptionError = get(errors, 'description')
+    const descriptionError = get(state.errors, 'description')
     const hasDescriptionError = !isEmpty(descriptionError)
 
     return (
@@ -99,11 +84,11 @@ export default class SpacesPopup extends Component {
         method="POST"
         onSubmit={::this.onSubmit}
         className="form redesign-popup-form">
-        <input type="hidden" name="_csrf" value={csrf}/>
+        <input type="hidden" name="_csrf" value={context.csrf}/>
         <input type="hidden" name="_method" value="POST"/>
 
-        <input type="hidden" name="spaceType" value={spaceType}/>
-        <input type="hidden" name="originalSpace" value={spaceId}/>
+        <input type="hidden" name="spaceType" value={props.spaceType}/>
+        <input type="hidden" name="originalSpace" value={props.spaceId}/>
 
         <div className="form-group form-group--small">
           <label className="form-label">
@@ -114,10 +99,10 @@ export default class SpacesPopup extends Component {
             type="text"
             name="name"
             required
-            value={get(this.state, 'name', '')}
-            disabled={isSaving}
-            onChange={(event) => {
-              this.setState({ name: event.currentTarget.value })
+            value={state.name}
+            disabled={state.isSaving}
+            onChange={({ currentTarget: input }) => {
+              this.setState({ name: input.value })
             }}
             className={classNames({
               'textfield': true,
@@ -138,10 +123,10 @@ export default class SpacesPopup extends Component {
 
           <textarea
             name="description"
-            value={get(this.state, 'description', '')}
-            disabled={isSaving}
-            onChange={(event) => {
-              this.setState({ description: event.currentTarget.value })
+            value={state.description}
+            disabled={state.isSaving}
+            onChange={({ currentTarget: input }) => {
+              this.setState({ description: input.value })
             }}
             className={classNames({
               'textfield': true,
@@ -159,16 +144,16 @@ export default class SpacesPopup extends Component {
           <div className="form-group form-group--inline">
             <button
               type="submit"
-              disabled={isSaving}
+              disabled={state.isSaving}
               className="button button--primary button--small">
               <span className="button-text">
-                {isSaving ? 'Redesigning...' : 'Redesign'}
+                {state.isSaving ? 'Redesigning...' : 'Redesign'}
               </span>
             </button>
             <button
               type="button"
-              disabled={isSaving}
-              onClick={() => this.resetForm(onClickClose)}
+              disabled={state.isSaving}
+              onClick={() => this.reset(props.onClickClose)}
               className="button button--link button--small">
               <span className="button-text">
                 Cancel
@@ -181,12 +166,15 @@ export default class SpacesPopup extends Component {
   }
 
   render() {
-    const { isOpen, className, onClickClose } = this.props
-    const close = () => this.resetForm(onClickClose)
+    const { props } = this
+    const closePopup = () => this.reset(props.onClickClose)
 
     return (
-      <Popup isOpen={isOpen} className={className} onClickClose={close}>
-        <PopupTitle onClickClose={close}>
+      <Popup
+        isOpen={props.isOpen}
+        className={props.className}
+        onClickClose={closePopup}>
+        <PopupTitle onClickClose={closePopup}>
           Redesign this space
         </PopupTitle>
         <div className="popup-content">

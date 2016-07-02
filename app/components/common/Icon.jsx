@@ -12,7 +12,6 @@ export default class Icon extends Component {
   render() {
     return (
       <svg
-        xmlns="http://www.w3.org/2000/svg"
         width={this.props.width}
         height={this.props.height}
         viewBox={this.props.viewBox}

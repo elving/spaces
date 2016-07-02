@@ -39,6 +39,7 @@ export default class Search extends Component {
     }
 
     this.form = null
+    this.searchInput = null
     this.onBodyClick = event => {
       if (!hasParent(event, 'search')) {
         this.setState({
@@ -117,6 +118,7 @@ export default class Search extends Component {
       <div className="textfield-icon search-input-container">
         <MaterialDesignIcon name="search" className="search-input-icon"/>
         <input
+          ref={input => this.searchInput = input}
           type="text"
           name={state.searchType === 'designers' ? 'username' : 'name' }
           onBlur={() => this.setState({ isFocused: false })}
@@ -149,6 +151,7 @@ export default class Search extends Component {
       <button
         type="button"
         onClick={() => {
+          this.searchInput.focus()
           this.setState({
             filtersAreOpen: false,
             searchTypesAreOpen: !state.searchTypesAreOpen
@@ -168,6 +171,7 @@ export default class Search extends Component {
     const types = ['spaces', 'products', 'designers']
     const { state } = this
     const updateSearchType = searchType => {
+      this.searchInput.focus()
       this.setState({
         colors: '',
         searchType,
@@ -218,6 +222,7 @@ export default class Search extends Component {
       <button
         type="button"
         onClick={() => {
+          this.searchInput.focus()
           this.setState({
             filtersAreOpen: !state.filtersAreOpen,
             searchTypesAreOpen: false
@@ -239,10 +244,6 @@ export default class Search extends Component {
 
     return state.filtersAreOpen ? (
       <div className="search-filters">
-        <p className="search-filters-title">
-          {`Filter ${state.searchType} by: `}
-        </p>
-
         {state.searchType === 'spaces' ? (
           <Select
             name="spaceTypes"
@@ -255,7 +256,7 @@ export default class Search extends Component {
             onChange={spaceTypes => this.setState({ spaceTypes })}
             disabled={state.isSearhing}
             className="search-filter-input select"
-            placeholder="Filter by space"/>
+            placeholder="Filter by space type"/>
         ) : null}
 
         {state.searchType === 'products' ? (
@@ -302,6 +303,12 @@ export default class Search extends Component {
             className="search-filter-input select"
             placeholder="Filter by color"/>
         ) : null}
+
+        <button
+          type="submit"
+          className="search-filters-button button button--primary">
+          {`Search ${upperFirst(state.searchType)}`}
+        </button>
       </div>
     ) : null
   }

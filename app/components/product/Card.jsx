@@ -239,6 +239,7 @@ export default class ProductCard extends Component {
 
         {state.sharePopupIsCreated ? (
           <SharePopup
+            url={() => `${window.location.origin}/${props.shortUrl}/`}
             title="Share this product"
             isOpen={state.sharePopupIsOpen}
             className="share-popup"

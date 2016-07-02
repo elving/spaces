@@ -12,7 +12,6 @@ export default class Icon extends Component {
 
     return (
       <svg
-        xmlns="http://www.w3.org/2000/svg"
         width={size}
         height={size}
         viewBox="0 0 291 256"

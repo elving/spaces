@@ -1,5 +1,5 @@
 import result from 'lodash/result'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Popup from '../common/Popup'
 import PopupTitle from '../common/PopupTitle'
@@ -20,14 +20,14 @@ export default class SharePopup extends Component {
   }
 
   static propTypes = {
-    url: Type.oneOfType([Type.string, Type.func]),
-    title: Type.string,
-    isOpen: Type.bool,
-    shareUrl: Type.oneOfType([Type.string, Type.func]),
-    className: Type.string,
-    shareText: Type.string,
-    shareImage: Type.string,
-    onClickClose: Type.func
+    url: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+    title: PropTypes.string,
+    isOpen: PropTypes.bool,
+    shareUrl: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+    className: PropTypes.string,
+    shareText: PropTypes.string,
+    shareImage: PropTypes.string,
+    onClickClose: PropTypes.func
   };
 
   static defaultProps = {
@@ -36,13 +36,15 @@ export default class SharePopup extends Component {
   };
 
   renderUrl() {
+    const { props } = this
+
     return (
       <div className="popup-item card-share-link">
         <MaterialDesignIcon name="link" className="popup-item-icon"/>
         <input
           ref={(input) => this.urlInput = input}
           type="url"
-          value={result(this.props, 'url', '')}
+          value={result(props, 'url', '')}
           onClick={() => this.urlInput.select()}
           readOnly
           className="textfield card-share-link-input"/>
@@ -51,9 +53,11 @@ export default class SharePopup extends Component {
   }
 
   renderFacebook() {
+    const { props } = this
+
     return (
       <a
-        href={getFacebookUrl(result(this.props, 'shareUrl', '#'))}
+        href={getFacebookUrl(result(props, 'shareUrl', '#'))}
         target="_blank"
         className="popup-item popup-item--clickable">
         <SocialIcon
@@ -67,12 +71,12 @@ export default class SharePopup extends Component {
   }
 
   renderTwitter() {
-    const url = result(this.props, 'shareUrl', '#')
-    const { shareText } = this.props
+    const { props } = this
+    const url = result(props, 'shareUrl', '#')
 
     return (
       <a
-        href={getTwitterUrl(url, shareText)}
+        href={getTwitterUrl(url, props.shareText)}
         target="_blank"
         className="popup-item popup-item--clickable">
         <SocialIcon
@@ -86,12 +90,12 @@ export default class SharePopup extends Component {
   }
 
   renderPinterest() {
-    const url = result(this.props, 'shareUrl', '#')
-    const { shareText, shareImage } = this.props
+    const { props } = this
+    const url = result(props, 'shareUrl', '#')
 
     return (
       <a
-        href={getPinterestUrl(url, shareImage, shareText)}
+        href={getPinterestUrl(url, props.shareImage, props.shareText)}
         target="_blank"
         className="popup-item popup-item--clickable">
         <SocialIcon
@@ -105,12 +109,12 @@ export default class SharePopup extends Component {
   }
 
   renderEmail() {
-    const url = result(this.props, 'url', '#')
-    const { shareText } = this.props
+    const { props } = this
+    const url = result(props, 'url', '#')
 
     return (
       <a
-        href={getEmailUrl(url, shareText)}
+        href={getEmailUrl(url, props.shareText)}
         className="popup-item popup-item--clickable">
         <MaterialDesignIcon
           name="email"
@@ -121,12 +125,15 @@ export default class SharePopup extends Component {
   }
 
   render() {
-    const { title, isOpen, className, onClickClose } = this.props
+    const { props } = this
 
     return (
-      <Popup isOpen={isOpen} className={className} onClickClose={onClickClose}>
-        <PopupTitle onClickClose={onClickClose}>
-          {title}
+      <Popup
+        isOpen={props.isOpen}
+        className={props.className}
+        onClickClose={props.onClickClose}>
+        <PopupTitle onClickClose={props.onClickClose}>
+          {props.title}
         </PopupTitle>
         <div className="popup-content">
           <div className="popup-list popup-list--is-last">

@@ -143,13 +143,7 @@
   z-index: 1;
   padding: 15px;
   position: absolute;
-  max-width: 500px;
-}
-
-.search-filters-title {
-  border-bottom: 1px solid #dadada;
-  margin: 0 -15px 15px;
-  padding: 0 15px 15px;
+  max-width: 350px;
 }
 
 .search-filter-input {
@@ -159,4 +153,8 @@
 
 .search-filters > .search-filter-input:last-child {
   margin-bottom: 0;
+}
+
+.search-filters-button {
+  width: 100%;
 }

@@ -1,4 +1,5 @@
 import map from 'lodash/map'
+import isEmpty from 'lodash/isEmpty'
 import { Link } from 'react-router'
 import React, { Component, PropTypes } from 'react'
 
@@ -37,14 +38,14 @@ class Home extends Component {
   };
 
   renderSpaces() {
-    const { spaces } = this.props
+    const { props } = this
 
     return (
       <div className="grid">
         <div className="grid-items">
-          {map(spaces, (space) => (
+          {map(props.spaces, space =>
             <SpaceCard key={toStringId(space)} {...space}/>
-          ))}
+          )}
         </div>
       </div>
     )
@@ -68,28 +69,28 @@ class Home extends Component {
   }
 
   renderDesigners() {
-    const { users } = this.props
+    const { props } = this
 
     return (
       <div className="grid">
         <div className="grid-items grid-items--3-cards">
-          {map(users, (user) => (
+          {map(props.users, user =>
             <ProfileCard key={toStringId(user)} user={user}/>
-          ))}
+          )}
         </div>
       </div>
     )
   }
 
   renderCategories() {
-    const { categories } = this.props
+    const { props } = this
 
     return (
       <div className="grid">
         <div className="grid-items grid-items--3-cards">
-          {map(categories, (category) => (
+          {map(props.categories, category =>
             <CategoryCard key={toStringId(category)} {...category}/>
-          ))}
+          )}
         </div>
       </div>
     )
@@ -108,61 +109,69 @@ class Home extends Component {
         <h1 className="page-title">Trending on Spaces</h1>
 
         <div className="grids">
-          <div className="grid-container">
-            <div className="grid-title-container">
-              <h3 className="grid-title">Spaces</h3>
-              <Link
-                to={{pathname: '/spaces/'}}
-                onClick={fullReload}
-                className="button button--small button--outline"
-                activeClassName="is-active">
-                All Spaces
-              </Link>
+          {!isEmpty(props.spaces) ? (
+            <div className="grid-container">
+              <div className="grid-title-container">
+                <h3 className="grid-title">Spaces</h3>
+                <Link
+                  to={{pathname: '/spaces/'}}
+                  onClick={fullReload}
+                  className="button button--small button--outline"
+                  activeClassName="is-active">
+                  All Spaces
+                </Link>
+              </div>
+              {this.renderSpaces()}
             </div>
-            {this.renderSpaces()}
-          </div>
+          ) : null}
 
-          <div className="grid-container">
-            <div className="grid-title-container">
-              <h3 className="grid-title">Designers</h3>
-              <Link
-                to={{pathname: '/designers/'}}
-                onClick={fullReload}
-                className="button button--small button--outline"
-                activeClassName="is-active">
-                All Designers
-              </Link>
+          {!isEmpty(props.users) ? (
+            <div className="grid-container">
+              <div className="grid-title-container">
+                <h3 className="grid-title">Designers</h3>
+                <Link
+                  to={{pathname: '/designers/'}}
+                  onClick={fullReload}
+                  className="button button--small button--outline"
+                  activeClassName="is-active">
+                  All Designers
+                </Link>
+              </div>
+              {this.renderDesigners()}
             </div>
-            {this.renderDesigners()}
-          </div>
+          ) : null}
 
-          <div className="grid-container">
-            <div className="grid-title-container">
-              <h3 className="grid-title">Products</h3>
-              <Link
-                to={{pathname: '/products/'}}
-                onClick={fullReload}
-                className="button button--small button--outline"
-                activeClassName="is-active">
-                All Products
-              </Link>
+          {!isEmpty(props.products) ? (
+            <div className="grid-container">
+              <div className="grid-title-container">
+                <h3 className="grid-title">Products</h3>
+                <Link
+                  to={{pathname: '/products/'}}
+                  onClick={fullReload}
+                  className="button button--small button--outline"
+                  activeClassName="is-active">
+                  All Products
+                </Link>
+              </div>
+              {this.renderProducts()}
             </div>
-            {this.renderProducts()}
-          </div>
+          ) : null}
 
-          <div className="grid-container">
-            <div className="grid-title-container">
-              <h3 className="grid-title">Categories</h3>
-              <Link
-                to={{pathname: '/categories/'}}
-                onClick={fullReload}
-                className="button button--small button--outline"
-                activeClassName="is-active">
-                All Categories
-              </Link>
+          {!isEmpty(props.categories) ? (
+            <div className="grid-container">
+              <div className="grid-title-container">
+                <h3 className="grid-title">Categories</h3>
+                <Link
+                  to={{pathname: '/categories/'}}
+                  onClick={fullReload}
+                  className="button button--small button--outline"
+                  activeClassName="is-active">
+                  All Categories
+                </Link>
+              </div>
+              {this.renderCategories()}
             </div>
-            {this.renderCategories()}
-          </div>
+          ) : null}
         </div>
       </Layout>
     )

@@ -1,13 +1,10 @@
-import get from 'lodash/get'
-import map from 'lodash/map'
-import compact from 'lodash/compact'
 import isEmpty from 'lodash/isEmpty'
 import mongoose from 'mongoose'
 
 import sanitize from './sanitize'
-import generateHeader from '../../utils/space/generateHeader'
+import generateImage from '../../utils/image/generateImage'
 
-import { toIds, parseError } from '../utils'
+import { toIds, parseError, getProductImages } from '../utils'
 import { removeFromCache, invalidateFromCache } from '../cache'
 
 export default (props) => {
@@ -31,14 +28,11 @@ export default (props) => {
         .populate('spaceType')
         .populate('originalSpace', async (err, space) => {
           try {
-            generateHeader(
-              compact(map(space.get('products'), (product) => (
-                get(product, 'image')
-              )))
-            ).then((image) => {
-              space.set({ image })
-              space.save(() => invalidateFromCache(toIds(space)))
-            })
+            generateImage(getProductImages(space.get('products')))
+              .then((image) => {
+                space.set({ image })
+                space.save(() => invalidateFromCache(toIds(space)))
+              })
           } catch (err) {
 
           }

@@ -16,13 +16,14 @@ const {
 } = controller
 
 router.get('/categories/', controller.renderIndex)
+router.get('/categories/:slug/', controller.renderDetail)
 
 router.get(`${adminRoot}/`, isAdmin, renderAllCategories)
 router.get(`${adminRoot}/add/`, isAdmin, renderAddCategory)
 router.get(`${adminRoot}/:sid/update/`, isAdmin, renderUpdateCategory)
 
 router.post(`${ajaxRoot}/`, isAdmin, addCategory)
-router.put(`${ajaxRoot}/:sid/`, isAdmin, updateCategory)
-router.delete(`${ajaxRoot}/:sid/`, isAdmin, destroyCategory)
+router.put(`${ajaxRoot}/:id/`, isAdmin, updateCategory)
+router.delete(`${ajaxRoot}/:id/`, isAdmin, destroyCategory)
 
 export default router

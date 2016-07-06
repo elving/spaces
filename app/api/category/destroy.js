@@ -1,24 +1,21 @@
-import findBySid from './findBySid'
+import mongoose from 'mongoose'
 
 import { parseError } from '../utils'
 import { invalidateFromCache } from '../cache'
 
-export default (sid) => {
+export default (_id) => {
   return new Promise(async (resolve, reject) => {
-    try {
-      const category = await findBySid(sid, true)
-      const id = category.get('id')
+    mongoose
+      .model('Category')
+      .findOneAndRemove({ _id }, async (err) => {
+        console.log(err, { _id })
 
-      category.remove(async (err) => {
         if (err) {
           return reject(parseError(err))
         }
 
-        await invalidateFromCache(id)
+        await invalidateFromCache(_id)
         resolve()
       })
-    } catch (err) {
-      reject(err)
-    }
   })
 }

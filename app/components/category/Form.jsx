@@ -10,6 +10,8 @@ import React, { Component, PropTypes as Type } from 'react'
 import Icon from '../common/Icon'
 import Notification from '../common/Notification'
 
+import toStringId from '../../utils/toStringId'
+
 export default class CategoryForm extends Component {
   constructor(props) {
     super(props)
@@ -86,7 +88,7 @@ export default class CategoryForm extends Component {
     const isAdding = isEqual(formMethod, 'POST')
     const ajaxEndpoint = isAdding
       ? '/ajax/categories/'
-      : `/ajax/categories/${get(category, 'id', '')}/`
+      : `/ajax/categories/${toStringId(category)}/`
 
     event.preventDefault()
 
@@ -129,7 +131,7 @@ export default class CategoryForm extends Component {
     if (isEqual(window.prompt(deleteMessage), 'DELETE')) {
       this.setState({ errors: {}, isDeleting: true }, () => {
         axios({
-          url: `/ajax/categories/${get(category, 'id', '')}/`,
+          url: `/ajax/categories/${toStringId(category)}/`,
           data: { _csrf: csrf, _method: 'delete' },
           method: 'POST'
         }).then(() => {

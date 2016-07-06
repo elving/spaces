@@ -4,6 +4,7 @@ import map from 'lodash/map'
 import keys from 'lodash/keys'
 import split from 'lodash/split'
 import result from 'lodash/result'
+import compact from 'lodash/compact'
 import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import forEach from 'lodash/forEach'
@@ -158,3 +159,7 @@ export const makeSearchQuery = (params = {}) => {
 
   return query
 }
+
+export const getProductImages = (products = []) => (
+  compact(map(products, product => get(product, 'image')))
+)

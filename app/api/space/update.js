@@ -1,14 +1,11 @@
 import has from 'lodash/has'
-import get from 'lodash/get'
-import map from 'lodash/map'
-import compact from 'lodash/compact'
 import mongoose from 'mongoose'
 
 import sanitize from './sanitize'
-import generateHeader from '../../utils/space/generateHeader'
+import generateImage from '../../utils/image/generateImage'
 
 import { invalidateFromCache } from '../cache'
-import { toIds, parseError, toIdsFromPath } from '../utils'
+import { toIds, parseError, toIdsFromPath, getProductImages } from '../utils'
 
 export default (_id, props) => {
   return new Promise(async (resolve, reject) => {
@@ -45,14 +42,11 @@ export default (_id, props) => {
 
               if (shouldUpdateImage) {
                 try {
-                  generateHeader(
-                    compact(map(space.get('products'), (product) => (
-                      get(product, 'image')
-                    )))
-                  ).then((image) => {
-                    space.set({ image })
-                    space.save(() => invalidateFromCache(toIds(space)))
-                  })
+                  generateImage(getProductImages(space.get('products')))
+                    .then((image) => {
+                      space.set({ image })
+                      space.save(() => invalidateFromCache(toIds(space)))
+                    })
                 } catch (err) {
 
                 }

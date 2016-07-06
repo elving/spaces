@@ -10,7 +10,7 @@ import request from 'request'
 import { resize } from 'aspectratio'
 import { default as Canvas } from 'canvas'
 
-import uploadBuffer from '../image/uploadBuffer'
+import uploadBuffer from './uploadBuffer'
 
 const loadImage = (url) => {
   return new Promise((resolve, reject) => {

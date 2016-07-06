@@ -1,9 +1,9 @@
 import has from 'lodash/has'
 import get from 'lodash/get'
-import set from 'lodash/set'
 import map from 'lodash/map'
 import keys from 'lodash/keys'
 import uniq from 'lodash/uniq'
+import assign from 'lodash/assign'
 import compact from 'lodash/compact'
 import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
@@ -21,6 +21,8 @@ const getIds = (ids = []) => (
   ))), (id) => id.toString())
 )
 
+const cacheStarted = () => !isEmpty(cache)
+
 export const startCache = (name, options) => {
   cache = new Cache(name, options)
 }
@@ -33,7 +35,13 @@ export const saveToCache = (
   key, value, invalidatesWith = [], time = CACHE_TIME
 ) => {
   return new Promise((resolve, reject) => {
-    set(mappings, key, getIds(invalidatesWith))
+    if (!cacheStarted()) {
+      return resolve()
+    }
+
+    mappings = assign({}, mappings, {
+      [key]: getIds(invalidatesWith)
+    })
 
     cache.set(key, value, time, (err) => {
       if (err) {
@@ -47,6 +55,10 @@ export const saveToCache = (
 
 export const getFromCache = (key) => {
   return new Promise((resolve, reject) => {
+    if (!cacheStarted()) {
+      return resolve()
+    }
+
     if (!inCache(key)) {
       return resolve()
     }
@@ -63,6 +75,10 @@ export const getFromCache = (key) => {
 
 export const removeFromCache = (key) => {
   return new Promise((resolve, reject) => {
+    if (!cacheStarted()) {
+      return resolve()
+    }
+
     Reflect.deleteProperty(mappings, key)
 
     cache.del(key, (err) => {
@@ -95,6 +111,10 @@ export const invalidateFromCache = (ids) => {
 
 export const clearCache = () => {
   return new Promise((resolve, reject) => {
+    if (!cacheStarted()) {
+      return resolve()
+    }
+
     cache.clear((err) => {
       if (err) {
         return reject(err)

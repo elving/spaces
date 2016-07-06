@@ -17,8 +17,10 @@ import ProductsTable from '../components/product/Table'
 import ProductSearch from '../components/product/Search'
 
 import AddCategory from '../components/category/Add'
+import CategoryDetail from '../components/category/Detail'
 import UpdateCategory from '../components/category/Update'
 import CategoriesTable from '../components/category/Table'
+import CategoriesIndex from '../components/category/Index'
 
 import AddColor from '../components/color/Add'
 import UpdateColor from '../components/color/Update'
@@ -37,8 +39,6 @@ import SpacesIndex from '../components/space/Index'
 import CreateSpace from '../components/space/Create'
 
 import UsersIndex from '../components/user/Index'
-
-import CategoriesIndex from '../components/category/Index'
 
 import SearchResults from '../components/search/results'
 
@@ -64,6 +64,7 @@ const routes = (
     <Route path="designers" component={UsersIndex}/>
 
     <Route path="categories" component={CategoriesIndex}/>
+    <Route path="categories/:slug" component={CategoryDetail}/>
 
     <Route path="search" component={SearchResults}/>
 

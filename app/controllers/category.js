@@ -4,6 +4,7 @@ import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 
 import { toJSON } from '../api/utils'
+import toStringId from '../utils/toStringId'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import search from '../api/category/search'
@@ -12,16 +13,44 @@ import create from '../api/category/create'
 import update from '../api/category/update'
 import destroy from '../api/category/destroy'
 import findBySid from '../api/category/findBySid'
+import findByName from '../api/category/findByName'
+import { default as searchProducts } from '../api/product/search'
 
 export const renderIndex = async (req, res, next) => {
   try {
     res.locals.metadata = {
-      title: 'Discover Products | Spaces',
+      title: 'Discover Categories | Spaces',
       bodyId: 'all-categories',
       bodyClass: 'page page-all-categories'
     }
 
     res.locals.props = await search({ limit: 1000 })
+    next()
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const renderDetail = async (req, res, next) => {
+  const slug = get(req, 'params.slug')
+
+  try {
+    const category = await findByName(slug)
+    const products = await searchProducts({
+      categories: toStringId(category)
+    })
+
+    res.locals.metadata = {
+      title: `${get(category, 'name')} | Spaces`,
+      bodyId: 'page-category-detail',
+      bodyClass: 'page page-category-detail'
+    }
+
+    res.locals.props = {
+      category: toJSON(category),
+      products: toJSON(products)
+    }
+
     next()
   } catch (err) {
     next(err)
@@ -116,14 +145,14 @@ export const renderUpdateCategory = async (req, res, next) => {
 }
 
 export const updateCategory = async (req, res) => {
-  const sid = get(req, 'params.sid')
+  const id = get(req, 'params.id')
 
   if (!isAuthenticatedUser(req.user)) {
     res.status(500).json({ err: 'Not authorized' })
   }
 
   try {
-    const category = await update(sid, req.body)
+    const category = await update(id, req.body)
     res.status(200).json(category)
   } catch (err) {
     res.status(500).json({ err })
@@ -131,14 +160,14 @@ export const updateCategory = async (req, res) => {
 }
 
 export const destroyCategory = async (req, res) => {
-  const sid = get(req, 'params.sid')
+  const id = get(req, 'params.id')
 
   if (!isAuthenticatedUser(req.user)) {
     res.status(500).json({ err: 'Not authorized' })
   }
 
   try {
-    await destroy(sid)
+    await destroy(id)
     res.status(200).json({ success: true })
   } catch (err) {
     res.status(500).json({ err })

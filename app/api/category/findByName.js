@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import kebabCase from 'lodash/kebabCase'
 
 import { saveToCache } from '../cache'
+import reverseKebabCase from '../../utils/reverseKebabCase'
 import { toIds, toJSON, parseError, getFromCacheOrQuery } from '../utils'
 
 export default (name, returnDocument = false) => {
@@ -12,7 +13,7 @@ export default (name, returnDocument = false) => {
     const query = () => {
       mongoose
         .model('Category')
-        .findOne({ name })
+        .findOne({ name: reverseKebabCase(name) })
         .exec(async (err, category) => {
           if (err) {
             return reject(parseError(err))

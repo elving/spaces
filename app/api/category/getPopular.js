@@ -1,28 +1,10 @@
 import isEmpty from 'lodash/isEmpty'
 import mongoose from 'mongoose'
 
+import toStringId from '../../utils/toStringId'
+import getProducts from './getProducts'
 import { saveToCache } from '../cache'
 import { toIds, toJSON, parseError, getFromCacheOrQuery } from '../utils'
-
-const getProducts = (category) => {
-  return new Promise(async (resolve, reject) => {
-    mongoose
-      .model('Product')
-      .where({ categories: { $in: [category] }})
-      .limit(3)
-      .exec((err, product) => {
-        if (err) {
-          return reject(parseError(err))
-        }
-
-        if (!isEmpty(product)) {
-          resolve(product)
-        } else {
-          resolve()
-        }
-      })
-  })
-}
 
 export default (limit = 8) => {
   return new Promise(async (resolve, reject) => {
@@ -41,7 +23,7 @@ export default (limit = 8) => {
 
           if (!isEmpty(categories)) {
             for (let category of categories) {
-              const products = await getProducts(category.get('id'))
+              const products = await getProducts(toStringId(category))
               category.set('products', products)
             }
 

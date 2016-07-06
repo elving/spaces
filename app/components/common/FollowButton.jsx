@@ -40,7 +40,6 @@ export default class FollowButton extends Component {
   };
 
   static defaultProps = {
-    isWhite: false,
     showText: false,
     onFollow: (() => {}),
     onUnfollow: (() => {}),

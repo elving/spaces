@@ -1,22 +1,28 @@
-import sanitize from './sanitize'
-import findById from './findById'
+import mongoose from 'mongoose'
 
+import sanitize from './sanitize'
+import setImage from './setImage'
+import toStringId from '../../utils/toStringId'
 import { parseError } from '../utils'
 import { invalidateFromCache } from '../cache'
 
-export default (id, props) => {
+export default (_id, props) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const category = await findById(id)
+      const updates = sanitize(props, false)
+      const options = { new: true }
 
-      category.update(sanitize(props, false), async (err) => {
-        if (err) {
-          return reject(parseError(err))
-        }
+      mongoose
+        .model('Category')
+        .findOneAndUpdate({ _id }, updates, options, async (err, category) => {
+          if (err) {
+            return reject(parseError(err))
+          }
 
-        await invalidateFromCache(category.get('id'))
-        resolve(category)
-      })
+          await invalidateFromCache(toStringId(category))
+          setImage(category)
+          resolve(category)
+        })
     } catch (err) {
       reject(err)
     }

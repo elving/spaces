@@ -22,7 +22,11 @@
   justify-content: center;
 }
 
-.card-tag:hover {
+a.card-tag:hover {
   background-color: #e5e5e5;
   text-decoration: none;
+}
+
+span.card-tag {
+  cursor: default;
 }

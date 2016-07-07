@@ -191,6 +191,7 @@ export default class ProductCard extends Component {
     return (
       <CardTags
         tags={[props.spaceTypes, props.categories, props.colors]}
+        forDisplayOnly={props.forDisplayOnly}
         className="product-tags"/>
     )
   }

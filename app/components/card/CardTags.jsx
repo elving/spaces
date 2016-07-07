@@ -1,33 +1,43 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import flattenDeep from 'lodash/flattenDeep'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import toStringId from '../../api/utils/toStringId'
 
 export default class CardTags extends Component {
   static propTypes = {
-    tags: Type.array,
-    className: Type.string
+    tags: PropTypes.array,
+    className: PropTypes.string,
+    forDisplayOnly: PropTypes.bool
   };
 
   static defaultProps = {
     tags: [],
-    className: ''
+    className: '',
+    forDisplayOnly: false
   };
 
   render() {
-    const { tags, className } = this.props
+    const { props } = this
 
     return (
-      <div className={`${className} card-tags`}>
-        {map(flattenDeep(tags), tag =>
-          <a
-            key={`tag-${toStringId(tag)}`}
-            href={`/${get(tag, 'detailUrl')}/`}
-            className="card-tag">
-            {get(tag, 'name')}
-          </a>
+      <div className={`${props.className} card-tags`}>
+        {map(flattenDeep(props.tags), tag =>
+          props.forDisplayOnly ? (
+            <span
+              key={`tag-${toStringId(tag)}`}
+              className="card-tag">
+              {get(tag, 'name')}
+            </span>
+          ) : (
+            <a
+              key={`tag-${toStringId(tag)}`}
+              href={`/${get(tag, 'detailUrl')}/`}
+              className="card-tag">
+              {get(tag, 'name')}
+            </a>
+          )
         )}
       </div>
     )

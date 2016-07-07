@@ -6,9 +6,15 @@ export default (schema) => {
     .get(() => 'space')
 
   schema
+    .virtual('slug')
+    .get(function() {
+      return kebabCase(this.get('name'))
+    })
+
+  schema
     .virtual('detailUrl')
     .get(function() {
-      return `spaces/${this.get('sid')}/${kebabCase(this.get('name'))}`
+      return `spaces/${this.get('sid')}/${this.get('slug')}`
     })
 
   schema

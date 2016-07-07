@@ -3,7 +3,7 @@ import merge from 'lodash/merge'
 import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 
-import { toJSON } from '../api/utils'
+import toJSON from '../api/utils/toJSON'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import getAll from '../api/brand/getAll'

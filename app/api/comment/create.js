@@ -2,7 +2,7 @@ import get from 'lodash/get'
 import mongoose from 'mongoose'
 
 import sanitize from './sanitize'
-import { parseError } from '../utils'
+import parseError from '../utils/parseError'
 import { removeFromCache } from '../cache'
 
 export default (props) => {

@@ -7,6 +7,7 @@ import React, { Component, PropTypes as Type } from 'react'
 import MaterialDesignIcon from './MaterialDesignIcon'
 
 import hasLiked from '../../utils/user/hasLiked'
+import toStringId from '../../api/utils/toStringId'
 
 export default class LikeButton extends Component {
   constructor(props, context) {
@@ -48,7 +49,7 @@ export default class LikeButton extends Component {
     const { onLike, parent, onUnlike, parentType } = this.props
 
     const _csrf = csrf
-    const createdBy = get(user, 'id', '')
+    const createdBy = toStringId(user)
 
     if (liked) {
       options = {

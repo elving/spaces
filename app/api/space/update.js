@@ -1,17 +1,20 @@
 import has from 'lodash/has'
 import mongoose from 'mongoose'
 
+import toIds from '../../api/utils/toIds'
 import sanitize from './sanitize'
+import toIdsFromPath from '../../api/utils/toIdsFromPath'
 import generateImage from '../../utils/image/generateImage'
 
+import parseError from '../utils/parseError'
+import getProductImages from '../utils/getProductImages'
 import { invalidateFromCache } from '../cache'
-import { toIds, parseError, toIdsFromPath, getProductImages } from '../utils'
 
 export default (_id, props) => {
   return new Promise(async (resolve, reject) => {
     try {
       const shouldUpdateImage = has(props, 'products')
-      const updates = sanitize(props, false)
+      const updates = sanitize(props)
       const options = { new: true }
 
       mongoose
@@ -42,7 +45,9 @@ export default (_id, props) => {
 
               if (shouldUpdateImage) {
                 try {
-                  generateImage(getProductImages(space.get('products')))
+                  const images = getProductImages(space.get('products'))
+
+                  generateImage('spaces', images)
                     .then((image) => {
                       space.set({ image })
                       space.save(() => invalidateFromCache(toIds(space)))

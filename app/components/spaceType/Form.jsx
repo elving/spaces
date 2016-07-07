@@ -10,6 +10,8 @@ import React, { Component, PropTypes as Type } from 'react'
 import Icon from '../common/Icon'
 import Notification from '../common/Notification'
 
+import toStringId from '../../api/utils/toStringId'
+
 export default class SpaceTypeForm extends Component {
   constructor(props) {
     super(props)
@@ -88,7 +90,7 @@ export default class SpaceTypeForm extends Component {
     const isAdding = isEqual(formMethod, 'POST')
     const ajaxEndpoint = isAdding
       ? '/ajax/space-types/'
-      : `/ajax/space-types/${get(spaceType, 'id', '')}/`
+      : `/ajax/space-types/${toStringId(spaceType)}/`
 
     event.preventDefault()
 
@@ -135,7 +137,7 @@ export default class SpaceTypeForm extends Component {
     if (isEqual(window.prompt(deleteMessage), 'DELETE')) {
       this.setState({ errors: {}, isDeleting: true }, () => {
         axios({
-          url: `/ajax/space-types/${get(spaceType, 'id', '')}/`,
+          url: `/ajax/space-types/${toStringId(spaceType)}/`,
           data: { _csrf: csrf, _method: 'delete' },
           method: 'POST'
         }).then(() => {

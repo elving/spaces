@@ -1,32 +1,28 @@
-import findBySid from './findBySid'
+import get from 'lodash/get'
+import mongoose from 'mongoose'
 
-import { toIds, parseError } from '../utils'
+import toIds from '../utils/toIds'
+import parseError from '../utils/parseError'
 import { invalidateFromCache } from '../cache'
 
-export default (sid) => {
+export default (_id) => {
   return new Promise(async (resolve, reject) => {
-    try {
-      const product = await findBySid(sid, true)
-      const id = product.get('id')
-      const brand = product.get('brand')
-      const colors = product.get('colors')
-      const categories = product.get('categories')
-      const spaceTypes = product.get('spaceTypes')
-
-      product.remove(async (err) => {
+    mongoose
+      .model('Product')
+      .findOneAndRemove({ _id }, async (err, product) => {
         if (err) {
           return reject(parseError(err))
         }
 
         await invalidateFromCache([
-          id, toIds(brand), toIds(colors),
-          toIds(categories), toIds(spaceTypes)
+          _id,
+          toIds(get(product, 'brand')),
+          toIds(get(product, 'colors')),
+          toIds(get(product, 'categories')),
+          toIds(get(product, 'spaceTypes'))
         ])
 
         resolve()
       })
-    } catch (err) {
-      reject(err)
-    }
   })
 }

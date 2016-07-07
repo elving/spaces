@@ -4,7 +4,9 @@ import isEmpty from 'lodash/isEmpty'
 import parseInt from 'lodash/parseInt'
 import mongoose from 'mongoose'
 
-import { parseError, makeSearchQuery } from '../utils'
+import toStringId from '../utils/toStringId'
+import parseError from '../utils/parseError'
+import makeSearchQuery from '../utils/makeSearchQuery'
 
 const getCount = (params) => {
   return new Promise((resolve, reject) => {
@@ -59,7 +61,7 @@ export default (params = {}) => {
         const count = await getCount(searchParams)
 
         for (let category of categories) {
-          const products = await getProducts(category.get('id'))
+          const products = await getProducts(toStringId(category))
           category.set('products', products)
         }
 

@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import sanitize from './sanitize'
 import setImage from './setImage'
 
-import { parseError } from '../utils'
+import parseError from '../utils/parseError'
 import { removeFromCache } from '../cache'
 
 export default (props) => {

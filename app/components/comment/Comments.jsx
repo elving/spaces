@@ -12,6 +12,7 @@ import Loader from '../common/Loader'
 import Comment from './Comment'
 
 import inflect from '../../utils/inflect'
+import toStringId from '../../api/utils/toStringId'
 
 export default class Comments extends Component {
   constructor(props) {
@@ -60,9 +61,7 @@ export default class Comments extends Component {
     const { onCommentRemoved } = this.props
 
     this.setState({
-      comments: filter(comments, (comment) => (
-        !isEqual(get(comment, 'id'), id)
-      ))
+      comments: filter(comments, comment => !isEqual(toStringId(comment), id))
     }, () => onCommentRemoved(id))
   }
 
@@ -88,7 +87,7 @@ export default class Comments extends Component {
 
           {map(allComments, (comment) => (
             <Comment
-              key={`comment-${get(comment, 'id')}`}
+              key={`comment-${toStringId(comment)}`}
               onDelete={::this.removeComment}
               {...comment}/>
           ))}

@@ -8,7 +8,6 @@ import { default as applyValidations } from './validations'
 const SpaceTypeSchema = new mongoose.Schema({
   sid: { type: String, default: shortid.generate },
   name: { type: String, trim: true, default: '' },
-  slug: { type: String, trim: true, default: '', unique: true },
   description: { type: String, trim: true, default: '' },
   createdBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
   updatedBy: { type: mongoose.Schema.ObjectId, ref: 'User' }

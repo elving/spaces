@@ -1,10 +1,11 @@
-import get from 'lodash/get'
 import filter from 'lodash/filter'
 import isEqual from 'lodash/isEqual'
 import React, { Component, PropTypes as Type } from 'react'
 
 import Comments from './Comments'
 import CommentForm from './Form'
+
+import toStringId from '../../api/utils/toStringId'
 
 export default class CommentsWidget extends Component {
   constructor(props) {
@@ -40,9 +41,9 @@ export default class CommentsWidget extends Component {
     const { onCommentRemoved } = this.props
 
     this.setState({
-      newComments: filter(newComments, (comment) => (
-        !isEqual(get(comment, 'id'), id)
-      ))
+      newComments: filter(newComments, comment =>
+        !isEqual(toStringId(comment), id)
+      )
     }, onCommentRemoved)
   }
 

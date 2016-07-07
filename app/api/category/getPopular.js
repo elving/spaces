@@ -1,10 +1,13 @@
 import isEmpty from 'lodash/isEmpty'
 import mongoose from 'mongoose'
 
-import toStringId from '../../utils/toStringId'
+import toIds from '../utils/toIds'
+import toJSON from '../utils/toJSON'
+import toStringId from '../utils/toStringId'
+import parseError from '../utils/parseError'
 import getProducts from './getProducts'
 import { saveToCache } from '../cache'
-import { toIds, toJSON, parseError, getFromCacheOrQuery } from '../utils'
+import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
 export default (limit = 8) => {
   return new Promise(async (resolve, reject) => {

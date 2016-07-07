@@ -12,7 +12,7 @@ import AddProductModal from '../modal/AddProduct'
 import AddProductModalContainer from '../container/AddProductModal'
 
 import fullReload from '../../utils/fullReload'
-import toStringId from '../../utils/toStringId'
+import toStringId from '../../api/utils/toStringId'
 
 class Home extends Component {
   static propTypes = {

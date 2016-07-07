@@ -2,9 +2,12 @@ import isEmpty from 'lodash/isEmpty'
 import mongoose from 'mongoose'
 import kebabCase from 'lodash/kebabCase'
 
+import toIds from '../utils/toIds'
+import toJSON from '../utils/toJSON'
+import parseError from '../utils/parseError'
 import { saveToCache } from '../cache'
 import reverseKebabCase from '../../utils/reverseKebabCase'
-import { toIds, toJSON, parseError, getFromCacheOrQuery } from '../utils'
+import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
 export default (name, returnDocument = false) => {
   return new Promise((resolve, reject) => {

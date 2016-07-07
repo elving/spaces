@@ -11,7 +11,8 @@ import findById from '../api/space/findById'
 import findBySid from '../api/space/findBySid'
 import updateUser from '../api/user/update'
 
-import { toJSON, toObjectId } from '../api/utils'
+import toJSON from '../api/utils/toJSON'
+import toObjectId from '../api/utils/toObjectId'
 import { default as getAllUserSpaces } from '../api/user/getSpaces'
 
 export const renderIndex = async (req, res, next) => {

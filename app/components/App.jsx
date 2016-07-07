@@ -6,7 +6,7 @@ import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 import React, { Component, PropTypes as Type } from 'react'
 
-import toStringId from '../utils/toStringId'
+import toStringId from '../api/utils/toStringId'
 import initAnalytics from '../utils/initAnalytics'
 import createProductsHash from '../utils/space/createProductsHash'
 

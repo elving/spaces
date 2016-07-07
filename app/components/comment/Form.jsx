@@ -7,6 +7,8 @@ import serialize from 'form-serialize'
 import classNames from 'classnames'
 import React, { Component, PropTypes as Type } from 'react'
 
+import toStringId from '../../api/utils/toStringId'
+
 export default class CommentForm extends Component {
   constructor(props) {
     super(props)
@@ -92,7 +94,7 @@ export default class CommentForm extends Component {
         onSubmit={::this.onSubmit}>
         <input type="hidden" name="_csrf" value={csrf}/>
         <input type="hidden" name="parent" value={parent}/>
-        <input type="hidden" name="createdBy" value={get(user, 'id', '')}/>
+        <input type="hidden" name="createdBy" value={toStringId(user)}/>
         <input type="hidden" name="parentType" value={parentType}/>
 
         <div className="form-group form-group--small">

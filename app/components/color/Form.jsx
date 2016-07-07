@@ -11,6 +11,8 @@ import React, { Component, PropTypes as Type } from 'react'
 import Icon from '../common/Icon'
 import Notification from '../common/Notification'
 
+import toStringId from '../../api/utils/toStringId'
+
 export default class ColorForm extends Component {
   constructor(props) {
     super(props)
@@ -89,7 +91,7 @@ export default class ColorForm extends Component {
     const isAdding = isEqual(formMethod, 'POST')
     const ajaxEndpoint = isAdding
       ? '/ajax/colors/'
-      : `/ajax/colors/${get(color, 'id', '')}/`
+      : `/ajax/colors/${toStringId(color)}/`
 
     event.preventDefault()
 
@@ -145,7 +147,7 @@ export default class ColorForm extends Component {
     if (isEqual(window.prompt(deleteMessage), 'DELETE')) {
       this.setState({ errors: {}, isDeleting: true }, () => {
         axios({
-          url: `/ajax/colors/${get(color, 'id', '')}/`,
+          url: `/ajax/colors/${toStringId(color)}/`,
           data: { _csrf: csrf, _method: 'delete' },
           method: 'POST'
         }).then(() => {

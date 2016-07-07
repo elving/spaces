@@ -3,7 +3,7 @@ import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 import mongoose from 'mongoose'
 
-import { parseError } from '../utils'
+import parseError from '../utils/parseError'
 
 export default (props) => {
   return new Promise((resolve, reject) => {

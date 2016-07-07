@@ -1,26 +1,25 @@
 import mongoose from 'mongoose'
 
 import sanitize from './sanitize'
-
+import parseError from '../utils/parseError'
+import toIdsFromPath from '../utils/toIdsFromPath'
 import { invalidateFromCache } from '../cache'
-import { toIds, parseError, toIdsFromPath } from '../utils'
 
-export default (id, props) => {
+export default (_id, props) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const query = { _id: id }
-      const updates = sanitize(props, false)
+      const updates = sanitize(props)
       const options = { new: true }
 
       mongoose
         .model('User')
-        .findOneAndUpdate(query, updates, options, async (err, user) => {
+        .findOneAndUpdate({ _id }, updates, options, async (err, user) => {
           if (err) {
             return reject(parseError(err))
           }
 
           await invalidateFromCache([
-            toIds(user),
+            _id,
             toIdsFromPath(user, 'likes'),
             toIdsFromPath(user, 'spaces'),
             toIdsFromPath(user, 'products'),

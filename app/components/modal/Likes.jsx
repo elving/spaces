@@ -11,6 +11,8 @@ import Loader from '../common/Loader'
 import MiniProfile from '../user/MiniProfile'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
+import toStringId from '../../api/utils/toStringId'
+
 const overrideDefaultStyles = {
  overlay: { backgroundColor: null },
  content: {
@@ -140,7 +142,7 @@ export default class LikesModal extends Component {
 
    return (
      <li
-       key={`likes-user-${get(createdBy, 'id')}`}
+       key={`likes-user-${toStringId(createdBy)}`}
        className="likes-modal-user">
        <MiniProfile user={createdBy}/>
      </li>

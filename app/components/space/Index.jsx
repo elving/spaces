@@ -8,7 +8,7 @@ import React, { Component, PropTypes as Type } from 'react'
 import Space from './Card'
 import Layout from '../common/Layout'
 
-import toStringId from '../../utils/toStringId'
+import toStringId from '../../api/utils/toStringId'
 
 export default class SpacesIndex extends Component {
   constructor(props) {

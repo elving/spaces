@@ -1,7 +1,7 @@
 import uuid from 'node-uuid'
 import mongoose from 'mongoose'
 
-import { parseError } from '../utils'
+import parseError from '../utils/parseError'
 
 export default (email) => {
   return new Promise((resolve, reject) => {

@@ -3,8 +3,8 @@ import merge from 'lodash/merge'
 import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 
-import { toJSON } from '../api/utils'
-import toStringId from '../utils/toStringId'
+import toJSON from '../api/utils/toJSON'
+import toStringId from '../api/utils/toStringId'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import search from '../api/category/search'

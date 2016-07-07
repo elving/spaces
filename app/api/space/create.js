@@ -4,7 +4,9 @@ import mongoose from 'mongoose'
 import sanitize from './sanitize'
 import generateImage from '../../utils/image/generateImage'
 
-import { toIds, parseError, getProductImages } from '../utils'
+import toIds from '../utils/toIds'
+import parseError from '../utils/parseError'
+import getProductImages from '../utils/getProductImages'
 import { removeFromCache, invalidateFromCache } from '../cache'
 
 export default (props) => {
@@ -28,7 +30,7 @@ export default (props) => {
         .populate('spaceType')
         .populate('originalSpace', async (err, space) => {
           try {
-            generateImage(getProductImages(space.get('products')))
+            generateImage('spaces', getProductImages(space.get('products')))
               .then((image) => {
                 space.set({ image })
                 space.save(() => invalidateFromCache(toIds(space)))

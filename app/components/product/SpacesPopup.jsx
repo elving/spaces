@@ -12,7 +12,7 @@ import Popup from '../common/Popup'
 import PopupTitle from '../common/PopupTitle'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
-import toStringId from '../../utils/toStringId'
+import toStringId from '../../api/utils/toStringId'
 import updateSpaces from '../../utils/space/updateSpaces'
 import withoutAnyType from '../../utils/spaceType/withoutAnyType'
 import productInSpace from '../../utils/product/productInSpace'

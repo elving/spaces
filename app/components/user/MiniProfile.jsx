@@ -8,6 +8,7 @@ import Avatar from './Avatar'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import inflect from '../../utils/inflect'
+import toStringId from '../../api/utils/toStringId'
 
 export default class MiniProfile extends Component {
   static contextTypes = {
@@ -29,7 +30,7 @@ export default class MiniProfile extends Component {
   render() {
     const { user } = this.props
 
-    const userId = get(user, 'id', '')
+    const userId = toStringId(user)
     const username = get(user, 'username', '')
     const spacesCount = size(get(user, 'spaces', []))
     const currentUserId = get(this.context, 'user.id', '')

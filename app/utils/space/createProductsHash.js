@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import map from 'lodash/map'
 import forEach from 'lodash/forEach'
 
-import toStringId from '../toStringId'
+import toStringId from '../../api/utils/toStringId'
 
 export default (spaces) => {
   const hashTable = {}

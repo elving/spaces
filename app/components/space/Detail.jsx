@@ -18,6 +18,7 @@ import AddProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
 import canModify from '../../utils/user/canModify'
+import toStringId from '../../api/utils/toStringId'
 import { default as $ } from '../../utils/dom/selector'
 
 class SpaceDetail extends Component {
@@ -225,7 +226,7 @@ class SpaceDetail extends Component {
       <RedesignPopup
         isOpen={redesignPopupIsOpen}
         spaceId={space.id}
-        spaceType={get(space.spaceType, 'id', space.spaceType)}
+        spaceType={toStringId(space.spaceType)}
         className="redesign-popup"
         onClickClose={::this.closeRedesignPopup}/>
     )
@@ -309,7 +310,7 @@ class SpaceDetail extends Component {
           {map(get(props, 'space.products', []), product =>
             <Product
               {...product}
-              key={get(product, 'id', '')}
+              key={toStringId(product)}
               onAddButtonClick={() => props.openAddProductModal(product)}/>
           )}
         </div>

@@ -10,7 +10,7 @@ import ProductCard from './Card'
 import AddProductModal from '../modal/AddProduct'
 import AddProductModalContainer from '../container/AddProductModal'
 
-import toStringId from '../../utils/toStringId'
+import toStringId from '../../api/utils/toStringId'
 
 class ProductsIndex extends Component {
   constructor(props) {

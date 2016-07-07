@@ -8,7 +8,7 @@ import React, { Component, PropTypes as Type } from 'react'
 import Layout from '../common/Layout'
 import ProfileCard from './Card'
 
-import toStringId from '../../utils/toStringId'
+import toStringId from '../../api/utils/toStringId'
 
 export default class UsersIndex extends Component {
   constructor(props) {

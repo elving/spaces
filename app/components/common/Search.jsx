@@ -12,6 +12,7 @@ import MaterialDesignIcon from './MaterialDesignIcon'
 
 import inflect from '../../utils/inflect'
 import hasParent from '../../utils/dom/hasParent'
+import toStringId from '../../api/utils/toStringId'
 import toSingular from '../../utils/toSingular'
 import csvToArray from '../../utils/csvToArray'
 import withoutAnyType from '../../utils/spaceType/withoutAnyType'
@@ -250,7 +251,7 @@ export default class Search extends Component {
             multi={true}
             value={state.spaceTypes}
             options={map(withoutAnyType(state.allSpaceTypes), type => ({
-              value: get(type, 'id'),
+              value: toStringId(type),
               label: get(type, 'name')
             }))}
             onChange={spaceTypes => this.setState({ spaceTypes })}
@@ -265,7 +266,7 @@ export default class Search extends Component {
             multi={true}
             value={state.spaceTypes}
             options={map(state.allSpaceTypes, type => ({
-              value: get(type, 'id'),
+              value: toStringId(type),
               label: get(type, 'name')
             }))}
             onChange={spaceTypes => this.setState({ spaceTypes })}
@@ -280,7 +281,7 @@ export default class Search extends Component {
             multi={true}
             value={state.categories}
             options={map(state.allCategories, category => ({
-              value: get(category, 'id'),
+              value: toStringId(category),
               label: get(category, 'name')
             }))}
             onChange={categories => this.setState({ categories })}
@@ -295,7 +296,7 @@ export default class Search extends Component {
             multi={true}
             value={state.colors}
             options={map(state.allColors, color => ({
-              value: get(color, 'id'),
+              value: toStringId(color),
               label: get(color, 'name')
             }))}
             onChange={colors => this.setState({ colors })}

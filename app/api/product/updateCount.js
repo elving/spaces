@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
-import { parseError } from '../utils'
+
+import parseError from '../utils/parseError'
 
 export default (_id, changes = {}) => {
   return new Promise(async (resolve, reject) => {

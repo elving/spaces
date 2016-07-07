@@ -1,8 +1,8 @@
 import get from 'lodash/get'
 import result from 'lodash/result'
 import isEqual from 'lodash/isEqual'
-import constant from 'lodash/constant'
 import isString from 'lodash/isString'
+import constant from 'lodash/constant'
 
 export default (model, path = 'id') => {
   if (isString(model)) {

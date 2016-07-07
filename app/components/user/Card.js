@@ -9,6 +9,7 @@ import Avatar from './Avatar'
 import FollowButton from '../common/FollowButton'
 
 import inflect from '../../utils/inflect'
+import toStringId from '../../api/utils/toStringId'
 
 export default class ProfileCard extends Component {
   static contextTypes = {
@@ -76,7 +77,7 @@ export default class ProfileCard extends Component {
       'length': 140,
       'separator': '...'
     })
-    const userId = get(user, 'id', '')
+    const userId = toStringId(user)
     const username = get(user, 'username', '')
     const userHandler = `@${username}`
 

@@ -1,24 +1,19 @@
-import findBySid from './findBySid'
+import mongoose from 'mongoose'
 
-import { parseError } from '../utils'
+import parseError from '../utils/parseError'
 import { invalidateFromCache } from '../cache'
 
-export default (sid) => {
+export default (_id) => {
   return new Promise(async (resolve, reject) => {
-    try {
-      const color = await findBySid(sid, true)
-      const id = color.get('id')
-
-      color.remove(async (err) => {
+    mongoose
+      .model('Color')
+      .findOneAndRemove({ _id }, async (err) => {
         if (err) {
           return reject(parseError(err))
         }
 
-        await invalidateFromCache(id)
+        await invalidateFromCache(_id)
         resolve()
       })
-    } catch (err) {
-      reject(err)
-    }
   })
 }

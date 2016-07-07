@@ -27,7 +27,7 @@ const loadImage = (url) => {
   })
 }
 
-export default (urls = []) => {
+export default (folder, urls = []) => {
   return new Promise(async (resolve, reject) => {
     urls = slice(reverse(urls), 0, isEqual(size(urls), 3) ? 2 : 4)
     const images = []
@@ -91,7 +91,7 @@ export default (urls = []) => {
 
     try {
       const buffer = canvas.toBuffer()
-      const imageUrl = await uploadBuffer('spaces', buffer, false)
+      const imageUrl = await uploadBuffer(folder, buffer, false)
       resolve(imageUrl)
     } catch (err) {
       reject(err)

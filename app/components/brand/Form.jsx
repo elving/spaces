@@ -5,10 +5,12 @@ import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 import serialize from 'form-serialize'
 import classNames from 'classnames'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Icon from '../common/Icon'
 import Notification from '../common/Notification'
+
+import toStringId from '../../api/utils/toStringId'
 
 export default class BrandForm extends Component {
   constructor(props) {
@@ -35,12 +37,12 @@ export default class BrandForm extends Component {
   }
 
   static contextTypes = {
-    csrf: Type.string
+    csrf: PropTypes.string
   };
 
   static propTypes = {
-    brand: Type.object,
-    formMethod: Type.string.isRequired
+    brand: PropTypes.object,
+    formMethod: PropTypes.string.isRequired
   };
 
   static defaultProps = {
@@ -92,7 +94,7 @@ export default class BrandForm extends Component {
     const isAdding = isEqual(formMethod, 'POST')
     const ajaxEndpoint = isAdding
       ? '/ajax/brands/'
-      : `/ajax/brands/${get(brand, 'id', '')}/`
+      : `/ajax/brands/${toStringId(brand)}/`
 
     event.preventDefault()
 
@@ -140,7 +142,7 @@ export default class BrandForm extends Component {
     if (isEqual(window.prompt(deleteMessage), 'DELETE')) {
       this.setState({ errors: {}, isDeleting: true }, () => {
         axios({
-          url: `/ajax/brands/${get(brand, 'id', '')}/`,
+          url: `/ajax/brands/${toStringId(brand)}/`,
           data: { _csrf: csrf, _method: 'delete' },
           method: 'POST'
         }).then(() => {

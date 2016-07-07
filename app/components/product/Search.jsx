@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
 import isEmpty from 'lodash/isEmpty'
@@ -7,6 +6,8 @@ import React, { Component, PropTypes as Type } from 'react'
 import Layout from '../common/Layout'
 import Product from './Card'
 import ProductSearchForm from './SearchForm'
+
+import toStringId from '../../api/utils/toStringId'
 
 export default class ProductSearch extends Component {
   constructor(props) {
@@ -29,11 +30,9 @@ export default class ProductSearch extends Component {
   renderResults() {
     const { allResults } = this.state
 
-    return map(allResults, (product) => (
-      <Product
-        key={get(product, 'id', '')}
-        {...product}/>
-    ))
+    return map(allResults, product =>
+      <Product key={toStringId(product)} {...product}/>
+    )
   }
 
   renderPagination() {

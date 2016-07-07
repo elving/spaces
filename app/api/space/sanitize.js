@@ -4,7 +4,7 @@ import omit from 'lodash/omit'
 import isEmpty from 'lodash/isEmpty'
 import kebabCase from 'lodash/kebabCase'
 
-import { toObjectId } from '../utils'
+import toObjectId from '../utils/toObjectId'
 
 export default (props, isNew = true) => {
   const slug = get(props, 'slug', '')

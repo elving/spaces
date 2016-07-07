@@ -2,7 +2,7 @@ import isEmpty from 'lodash/isEmpty'
 import mongoose from 'mongoose'
 
 import sanitize from './sanitize'
-import { parseError } from '../utils'
+import parseError from '../utils/parseError'
 
 export default (props) => {
   return new Promise((resolve, reject) => {

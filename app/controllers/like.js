@@ -8,10 +8,9 @@ import create from '../api/like/create'
 import destroy from '../api/like/destroy'
 import hasLiked from '../api/like/hasLiked'
 import updateUser from '../api/user/update'
+import toObjectId from '../api/utils/toObjectId'
 import updateSpace from '../api/space/update'
 import updateProduct from '../api/product/update'
-
-import { toObjectId } from '../api/utils'
 
 export const like = async (req, res) => {
   const userId = get(req, 'user.id')

@@ -1,24 +1,23 @@
-import sanitize from './sanitize'
-import findById from './findById'
+import mongoose from 'mongoose'
 
-import { parseError } from '../utils'
+import sanitize from './sanitize'
+import parseError from '../utils/parseError'
 import { invalidateFromCache } from '../cache'
 
-export default (id, props) => {
+export default (_id, props) => {
   return new Promise(async (resolve, reject) => {
-    try {
-      const color = await findById(id)
+    const updates = sanitize(props, false)
+    const options = { new: true }
 
-      color.update(sanitize(props, false), async (err) => {
+    mongoose
+      .model('Color')
+      .findOneAndUpdate({ _id }, updates, options, async (err, color) => {
         if (err) {
           return reject(parseError(err))
         }
 
-        await invalidateFromCache(color.get('id'))
+        await invalidateFromCache(_id)
         resolve(color)
       })
-    } catch (err) {
-      reject(err)
-    }
   })
 }

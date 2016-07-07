@@ -1,4 +1,4 @@
-import { toJSON } from '../utils'
+import toJSON from '../utils/toJSON'
 import { default as getAllColors } from '../color/getAll'
 import { default as getAllCategories } from '../category/getAll'
 import { default as getAllSpaceTypes } from '../spaceType/getAll'

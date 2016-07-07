@@ -9,7 +9,6 @@ import { default as applyValidations } from './validations'
 const SpaceSchema = new mongoose.Schema({
   sid: { type: String, default: shortid.generate },
   name: { type: String, trim: true, default: '' },
-  slug: { type: String, trim: true, default: '' },
   image: { type: String, trim: true, default: '' },
   products: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }],
   redesigns: [{ type: mongoose.Schema.ObjectId, ref: 'Space' }],

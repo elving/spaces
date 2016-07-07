@@ -15,7 +15,7 @@ import SharePopupContainer from '../container/SharePopup'
 import AddProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
-import toStringId from '../../utils/toStringId'
+import toStringId from '../../api/utils/toStringId'
 
 class CategoryDetail extends Component {
   constructor(props) {

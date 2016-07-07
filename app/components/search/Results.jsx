@@ -14,7 +14,7 @@ import AddProductModal from '../modal/AddProduct'
 import AddProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
-import toStringId from '../../utils/toStringId'
+import toStringId from '../../api/utils/toStringId'
 
 class SearchResults extends Component {
   constructor(props) {

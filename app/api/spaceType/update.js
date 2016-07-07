@@ -1,26 +1,23 @@
-import sanitize from './sanitize'
-import findBySid from './findBySid'
+import mongoose from 'mongoose'
 
-import { parseError } from '../utils'
+import sanitize from './sanitize'
+import parseError from '../utils/parseError'
 import { invalidateFromCache } from '../cache'
 
-export default (sid, props) => {
+export default (_id, props) => {
   return new Promise(async (resolve, reject) => {
-    try {
-      const spaceType = await findBySid(sid, true)
+    const updates = sanitize(props)
+    const options = { new: true }
 
-      spaceType.set(sanitize(props, false))
-
-      spaceType.save(async (err) => {
+    mongoose
+      .model('SpaceType')
+      .findOneAndUpdate({ _id }, updates, options, async (err, spaceType) => {
         if (err) {
           return reject(parseError(err))
         }
 
-        await invalidateFromCache(spaceType.get('id'))
+        await invalidateFromCache(_id)
         resolve(spaceType)
       })
-    } catch (err) {
-      reject(err)
-    }
   })
 }

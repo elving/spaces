@@ -1,7 +1,7 @@
 import isEmpty from 'lodash/isEmpty'
 import mongoose from 'mongoose'
 
-import { parseError } from '../utils'
+import parseError from '../utils/parseError'
 
 export default (code) => {
   return new Promise((resolve, reject) => {

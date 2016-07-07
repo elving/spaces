@@ -1,8 +1,8 @@
-import get from 'lodash/get'
 import mongoose from 'mongoose'
 
 import getAll from '../../app/api/category/getAll'
 import update from '../../app/api/category/update'
+import toStringId from '../../app/api/utils/toStringId'
 
 const getCount = (category) => (
   new Promise((resolve, reject) => {
@@ -27,7 +27,7 @@ export default () => {
       const categories = await getAll()
 
       for (let category of categories) {
-        const id = get(category, 'id')
+        const id = toStringId(category)
         const productsCount = await getCount(id)
         await update(id, { productsCount })
       }

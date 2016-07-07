@@ -1,4 +1,4 @@
-import { toJSON } from '../api/utils'
+import toJSON from '../api/utils/toJSON'
 import { default as getUsers } from '../api/user/getPopular'
 import { default as getSpaces } from '../api/space/getPopular'
 import { default as getProducts } from '../api/product/getPopular'

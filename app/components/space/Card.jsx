@@ -17,6 +17,7 @@ import RedesignPopup from './RedesignPopup'
 import RedesignBadge from './RedesignBadge'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
+import toStringId from '../../api/utils/toStringId'
 import isRedesign from '../../utils/space/isRedesign'
 import preloadImages from '../../utils/preloadImages'
 import getTagsFromProducts from '../../utils/getTagsFromProducts'
@@ -278,7 +279,7 @@ export default class SpaceCard extends Component {
       <RedesignPopup
         isOpen={redesignPopupIsOpen}
         spaceId={id}
-        spaceType={get(spaceType, 'id', spaceType)}
+        spaceType={toStringId(spaceType)}
         className="redesign-popup"
         onClickClose={::this.closeRedesignPopup}/>
     )

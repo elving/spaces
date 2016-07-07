@@ -7,6 +7,7 @@ import React, { Component, PropTypes as Type } from 'react'
 
 import MaterialDesignIcon from './MaterialDesignIcon'
 
+import toStringId from '../../api/utils/toStringId'
 import hasFollowed from '../../utils/user/hasFollowed'
 
 export default class FollowButton extends Component {
@@ -53,7 +54,7 @@ export default class FollowButton extends Component {
     const { onFollow, parent, onUnfollow, parentType } = this.props
 
     const _csrf = csrf
-    const createdBy = get(user, 'id', '')
+    const createdBy = toStringId(user)
 
     if (currentUserIsParent) {
       return false

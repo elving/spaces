@@ -9,6 +9,12 @@ export default (schema) => {
     .get(() => 'product')
 
   schema
+    .virtual('slug')
+    .get(function() {
+      return kebabCase(this.get('name'))
+    })
+
+  schema
     .virtual('imageUrl')
     .get(function() {
       return !isEmpty(this.get('image'))
@@ -19,7 +25,7 @@ export default (schema) => {
   schema
     .virtual('detailUrl')
     .get(function() {
-      return `products/${this.get('sid')}/${kebabCase(this.get('name'))}`
+      return `products/${this.get('sid')}/${this.get('slug')}`
     })
 
   schema

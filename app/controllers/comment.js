@@ -6,11 +6,10 @@ import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 import getAll from '../api/comment/getAll'
 import create from '../api/comment/create'
 import destroy from '../api/comment/destroy'
+import toObjectId from '../api/utils/toObjectId'
 import updateUser from '../api/user/update'
 import updateSpace from '../api/space/update'
 import updateProduct from '../api/product/update'
-
-import { toObjectId } from '../api/utils'
 
 export const comment = async (req, res) => {
   const userId = get(req, 'user.id')

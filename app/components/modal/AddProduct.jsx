@@ -15,7 +15,7 @@ import Loader from '../common/Loader'
 import ProductCard from '../product/Card'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
-import toStringId from '../../utils/toStringId'
+import toStringId from '../../api/utils/toStringId'
 import productInSpace from '../../utils/product/productInSpace'
 import withoutAnyType from '../../utils/spaceType/withoutAnyType'
 import searchCollection from '../../utils/searchCollection'
@@ -90,7 +90,7 @@ export default class AddProductModal extends Component {
 
     this.setState({ isFetchingSpaces: true }, () => {
       axios
-        .get(`/ajax/spaces/designer/${get(context.user, 'id')}`)
+        .get(`/ajax/spaces/designer/${toStringId(context.user)}`)
         .then(({ data }) => {
           const spaces = get(data, 'spaces', [])
 
@@ -300,7 +300,7 @@ export default class AddProductModal extends Component {
 
   renderSpace(space) {
     const { props, state } = this
-    const spaceId = get(space, 'id')
+    const spaceId = toStringId(space)
     const hasProduct = productInSpace(
       state.spacesHashTable, space, get(props, 'product.id')
     )

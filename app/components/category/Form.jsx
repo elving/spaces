@@ -10,7 +10,7 @@ import React, { Component, PropTypes as Type } from 'react'
 import Icon from '../common/Icon'
 import Notification from '../common/Notification'
 
-import toStringId from '../../utils/toStringId'
+import toStringId from '../../api/utils/toStringId'
 
 export default class CategoryForm extends Component {
   constructor(props) {

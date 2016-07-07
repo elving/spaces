@@ -8,8 +8,10 @@ import validate from './validate'
 import sanitize from './sanitize'
 import uploadImageFromUrl from '../../utils/image/uploadImageFromUrl'
 
+import toIds from '../utils/toIds'
+import toStringId from '../utils/toStringId'
+import parseError from '../utils/parseError'
 import { removeFromCache } from '../cache'
-import { toIds, parseError } from '../utils'
 
 import { default as findColorByName } from '../color/findByName'
 import { default as getOrCreateBrand } from '../brand/getOrCreate'
@@ -33,7 +35,7 @@ export default (props) => {
 
     try {
       brand = await getOrCreateBrand(get(sanitizedProps, 'brand'), true)
-      set(sanitizedProps, 'brand', brand.get('id'))
+      set(sanitizedProps, 'brand', toStringId(brand))
     } catch (err) {
       if (has(err, 'name')) {
         return reject({ brand: get(err, 'name') })

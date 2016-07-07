@@ -2,14 +2,13 @@ import mongoose from 'mongoose'
 
 import sanitize from './sanitize'
 import setImage from './setImage'
-import toStringId from '../../utils/toStringId'
-import { parseError } from '../utils'
+import parseError from '../utils/parseError'
 import { invalidateFromCache } from '../cache'
 
 export default (_id, props) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const updates = sanitize(props, false)
+      const updates = sanitize(props)
       const options = { new: true }
 
       mongoose
@@ -19,7 +18,7 @@ export default (_id, props) => {
             return reject(parseError(err))
           }
 
-          await invalidateFromCache(toStringId(category))
+          await invalidateFromCache(_id)
           setImage(category)
           resolve(category)
         })

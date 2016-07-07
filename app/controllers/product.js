@@ -16,7 +16,7 @@ import destroy from '../api/product/destroy'
 import findBySid from '../api/product/findBySid'
 import fetchProductData from '../api/product/fetchProductData'
 
-import { toJSON } from '../api/utils'
+import toJSON from '../api/utils/toJSON'
 import { default as getAllBrands } from '../api/brand/getAll'
 import { default as getAllColors } from '../api/color/getAll'
 import { default as getAllCategories } from '../api/category/getAll'
@@ -215,14 +215,14 @@ export const updateProduct = async (req, res) => {
 }
 
 export const destroyProduct = async (req, res) => {
-  const sid = get(req, 'params.sid')
+  const id = get(req, 'params.id')
 
   if (!isAuthenticatedUser(req.user)) {
     res.status(500).json({ err: 'Not authorized' })
   }
 
   try {
-    await destroy(sid)
+    await destroy(id)
     res.status(200).json({ success: true })
   } catch (err) {
     res.status(500).json({ err })

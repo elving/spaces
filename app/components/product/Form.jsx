@@ -14,6 +14,8 @@ import React, { Component, PropTypes as Type } from 'react'
 import Icon from '../common/Icon'
 import Loader from '../common/Loader'
 import Notification from '../common/Notification'
+
+import toStringId from '../../api/utils/toStringId'
 import getValidProductImages from '../../utils/getValidProductImages'
 
 export default class ProductForm extends Component {
@@ -300,7 +302,7 @@ export default class ProductForm extends Component {
     const formData = serialize(form, { hash: true })
     const ajaxEndpoint = isAdding
       ? '/ajax/products/add/'
-      : `/ajax/products/${get(product, 'id', '')}/`
+      : `/ajax/products/${toStringId(product)}/`
 
     this.setState({ errors: {}, isSaving: true }, () => {
       axios({
@@ -340,24 +342,23 @@ export default class ProductForm extends Component {
 
     if (isEqual(window.prompt(deleteMessage), 'DELETE')) {
       this.setState({ errors: {}, isDeleting: true }, () => {
-        axios({
-          url: `/ajax/products/${get(product, 'id', '')}/`,
-          data: { _csrf: csrf, _method: 'delete' },
-          method: 'POST'
-        }).then(() => {
-          this.setState({
-            product: {},
-            isDeleting: false,
-            deletingSuccessful: true
+        axios
+          .delete(`/ajax/products/${toStringId(product)}/`, { _csrf: csrf })
+          .then(() => {
+            this.setState({
+              product: {},
+              isDeleting: false,
+              deletingSuccessful: true
+            })
           })
-        }).catch((res) => {
-          this.setState({
-            errors: get(res, 'data.err', {}),
-            product: {},
-            isDeleting: false,
-            deletingSuccessful: false
+          .catch(({ data }) => {
+            this.setState({
+              errors: get(data, 'err', {}),
+              product: {},
+              isDeleting: false,
+              deletingSuccessful: false
+            })
           })
-        })
       })
     }
   }

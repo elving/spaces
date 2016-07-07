@@ -7,8 +7,11 @@ import sanitize from './sanitize'
 import findById from './findById'
 import uploadImageFromUrl from '../../utils/image/uploadImageFromUrl'
 
+import toIds from '../utils/toIds'
+import toStringId from '../utils/toStringId'
+import parseError from '../utils/parseError'
+import toIdsFromPath from '../utils/toIdsFromPath'
 import { invalidateFromCache } from '../cache'
-import { toIds, parseError, toIdsFromPath } from '../utils'
 
 import { default as findColorByName } from '../color/findByName'
 import { default as getOrCreateBrand } from '../brand/getOrCreate'
@@ -24,12 +27,12 @@ export default (id, props) => {
       let spaceTypes = []
 
       const product = await findById(id)
-      const sanitizedProps = sanitize(props, false)
+      const sanitizedProps = sanitize(props)
 
       if (has(sanitizedProps, 'brand')) {
         try {
           brand = await getOrCreateBrand(get(sanitizedProps, 'brand'), true)
-          set(sanitizedProps, 'brand', brand.get('id'))
+          set(sanitizedProps, 'brand', toStringId(brand))
         } catch (err) {
           if (has(err, 'name')) {
             return reject({ brand: get(err, 'name') })

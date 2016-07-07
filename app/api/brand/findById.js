@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-import { parseError } from '../utils'
+import parseError from '../utils/parseError'
 
 export default (_id) => {
   return new Promise((resolve, reject) => {

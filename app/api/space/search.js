@@ -3,7 +3,8 @@ import size from 'lodash/size'
 import parseInt from 'lodash/parseInt'
 import mongoose from 'mongoose'
 
-import { parseError, makeSearchQuery } from '../utils'
+import parseError from '../utils/parseError'
+import makeSearchQuery from '../utils/makeSearchQuery'
 
 const getCount = (params) => {
   return new Promise((resolve, reject) => {

@@ -12,6 +12,7 @@ import React, { Component, PropTypes as Type } from 'react'
 
 import Icon from '../common/Icon'
 
+import toStringId from '../../api/utils/toStringId'
 import withoutAnyType from '../../utils/spaceType/withoutAnyType'
 
 export default class ProductSearchForm extends Component {
@@ -241,7 +242,7 @@ export default class ProductSearchForm extends Component {
                 multi={true}
                 value={get(this.state, 'categories', '')}
                 options={map(this.props.categories, (category) => ({
-                  value: get(category, 'id'),
+                  value: toStringId(category),
                   label: get(category, 'name')
                 }))}
                 onChange={(categories) => this.setState({ categories })}
@@ -258,7 +259,7 @@ export default class ProductSearchForm extends Component {
                 multi={true}
                 value={get(this.state, 'colors', '')}
                 options={map(this.props.colors, (color) => ({
-                  value: get(color, 'id'),
+                  value: toStringId(color),
                   label: get(color, 'name')
                 }))}
                 onChange={(colors) => this.setState({ colors })}
@@ -275,7 +276,7 @@ export default class ProductSearchForm extends Component {
                 multi={true}
                 value={get(this.state, 'brands', '')}
                 options={map(this.props.brands, (brand) => ({
-                  value: get(brand, 'id'),
+                  value: toStringId(brand),
                   label: get(brand, 'name')
                 }))}
                 onChange={(brands) => this.setState({ brands })}
@@ -292,7 +293,7 @@ export default class ProductSearchForm extends Component {
                 multi={true}
                 value={get(this.state, 'spaceTypes', '')}
                 options={map(withoutAnyType(this.props.spaceTypes), (type) => ({
-                  value: get(type, 'id'),
+                  value: toStringId(type),
                   label: get(type, 'name')
                 }))}
                 onChange={(spaceTypes) => this.setState({ spaceTypes })}

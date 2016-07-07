@@ -8,9 +8,9 @@
   min-height: 250px;
 }
 
-.add-product-modal .ui-loader {
+.add-product-modal .loader {
   margin: 0 auto;
-  display: block;
+  display: flex;
   align-self: center;
 }
 
@@ -64,8 +64,8 @@
 }
 
 .add-product-modal-empty {
-  height: 250px;
   display: flex;
+  padding: 15px;
   align-items: center;
   flex-direction: column;
   justify-content: center;

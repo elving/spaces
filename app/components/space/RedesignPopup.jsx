@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from 'react'
 import Popup from '../common/Popup'
 import PopupTitle from '../common/PopupTitle'
 
-export default class SpacesPopup extends Component {
+export default class RedesignPopup extends Component {
   constructor(props, context) {
     super(props, context)
 

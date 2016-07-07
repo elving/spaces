@@ -65,8 +65,7 @@ export default class AddProductModal extends Component {
 
   static contextTypes = {
     user: PropTypes.object,
-    csrf: PropTypes.string,
-    userSpaces: PropTypes.array,
+    csrf: PropTypes.string
   };
 
   static propTypes = {
@@ -81,53 +80,57 @@ export default class AddProductModal extends Component {
     isVisible: false
   };
 
-  componentDidMount() {
-    this.fetchSpaces(this.fetchSpaceTypes())
+  componentWillReceiveProps(nextProps) {
+    const { state } = this
+    const resetFetchingStatus = {
+      hasFetchedSpaces: true,
+      isFetchingSpaces: false,
+      hasFetchedSpaceTypes: true,
+      isFetchingSpaceTypes: false
+    }
+
+    if (
+      nextProps.isVisible &&
+      !state.hasFetchedSpaces &&
+      !state.hasFetchedSpaceTypes
+    ) {
+      this.setState({
+        isFetchingSpaces: true,
+        isFetchingSpaceTypes: true
+      }, () => {
+        Promise
+          .all([this.fetchSpaces(), this.fetchSpaceTypes()])
+          .then(([spaces, spaceTypes]) => {
+            this.setState({
+              spaces,
+              spaceTypes,
+              filteredSpaces: spaces,
+              spacesHashTable: createProductsHash(spaces),
+              ...resetFetchingStatus
+            })
+          })
+          .catch(() => this.setState({ ...resetFetchingStatus }))
+      })
+    }
   }
 
-  fetchSpaces(next = (() => {})) {
-    const { context } = this
+  fetchSpaces() {
+    return new Promise(async (resolve, reject) => {
+      const { context } = this
 
-    this.setState({ isFetchingSpaces: true }, () => {
       axios
         .get(`/ajax/spaces/designer/${toStringId(context.user)}`)
-        .then(({ data }) => {
-          const spaces = get(data, 'spaces', [])
-
-          this.setState({
-            spaces,
-            filteredSpaces: spaces,
-            spacesHashTable: createProductsHash(spaces),
-            hasFetchedSpaces: true,
-            isFetchingSpaces: false
-          }, next)
-        })
-        .catch(() => {
-          this.setState({
-            hasFetchedSpaces: true,
-            isFetchingSpaces: false
-          }, next)
-        })
+        .then(({ data }) => resolve(get(data, 'spaces', [])))
+        .catch(reject)
     })
   }
 
-  fetchSpaceTypes(next = (() => {})) {
-    this.setState({ isFetchingSpaceTypes: true }, () => {
+  fetchSpaceTypes() {
+    return new Promise(async (resolve, reject) => {
       axios
         .get('/ajax/space-types/')
-        .then(({ data }) => {
-          this.setState({
-            spaceTypes: get(data, 'spaceTypes', []),
-            hasFetchedSpaceTypes: true,
-            isFetchingSpaceTypes: false
-          }, next)
-        })
-        .catch(() => {
-          this.setState({
-            hasFetchedSpaceTypes: true,
-            isFetchingSpaceTypes: false
-          }, next)
-        })
+        .then(({ data }) => resolve(get(data, 'spaceTypes', [])))
+        .catch(reject)
     })
   }
 
@@ -206,7 +209,7 @@ export default class AddProductModal extends Component {
   renderContent() {
     const { state } = this
 
-    if (state.isFetchingSpaces) {
+    if (state.isFetchingSpaces || state.isFetchingSpaceTypes) {
       return this.renderLoadingState()
     } else if (state.formIsVisible) {
       return this.renderCreateForm()
@@ -470,6 +473,7 @@ export default class AddProductModal extends Component {
 
   render() {
     const { props, context } = this
+    const spaces = get(context.user, 'spaces', [])
 
     return (
       <Modal
@@ -478,7 +482,7 @@ export default class AddProductModal extends Component {
         className={classNames({
           'ui-modal': true,
           'add-product-modal': true,
-          'add-product-modal--has-spaces': !isEmpty(context.userSpaces)
+          'add-product-modal--has-spaces': !isEmpty(spaces)
         })}
         onRequestClose={props.onClose}>
         <section className="add-product-modal-content">

@@ -1,91 +1,47 @@
 import get from 'lodash/get'
-import set from 'lodash/set'
-import map from 'lodash/map'
-import clone from 'lodash/clone'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import toStringId from '../api/utils/toStringId'
 import initAnalytics from '../utils/initAnalytics'
-import createProductsHash from '../utils/space/createProductsHash'
 
 export default class App extends Component {
-  constructor(props) {
-    super(props)
-
-    const userSpaces = get(props, 'user.spaces', [])
-
-    this.state = {
-      userSpaces,
-      userSpacesProductsMap: createProductsHash(userSpaces)
-    }
-  }
-
   static propTypes = {
-    user: Type.object,
-    csrf: Type.string,
-    colors: Type.array,
-    spaceTypes: Type.array,
-    categories: Type.array
+    csrf: PropTypes.string,
+    user: PropTypes.object
   };
 
   static defaultProps = {
     user: {},
-    colors: [],
-    spaceTypes: [],
-    categories: []
+    csrf: ''
   };
 
   static childContextTypes = {
-    csrf: Type.string,
-
-    colors: Type.array,
-    categories: Type.array,
-    spaceTypes: Type.array,
-
-    user: Type.object,
-    userLoggedIn: Type.func,
-    currentUserIsOwner: Type.func,
-    currentUserIsAdmin: Type.func,
-    currentUserIsCurator: Type.func,
-
-    userSpaces: Type.array,
-    updateSpace: Type.func,
-    userSpacesProductsMap: Type.object
+    csrf: PropTypes.string,
+    user: PropTypes.object,
+    userLoggedIn: PropTypes.func,
+    currentUserIsOwner: PropTypes.func,
+    currentUserIsAdmin: PropTypes.func,
+    currentUserIsCurator: PropTypes.func
   };
 
   getChildContext() {
-    const { userSpaces, userSpacesProductsMap } = this.state
-    const { csrf, user, colors, categories, spaceTypes } = this.props
+    const { props } = this
 
     return {
-      user,
-      csrf,
-      colors,
-      categories,
-      spaceTypes,
-
-      userLoggedIn: (() => !isEmpty(user)),
-      currentUserIsAdmin: (() => get(user, 'isAdmin')),
-      currentUserIsOwner: ((id) => isEqual(get(user, 'id'), id)),
-      currentUserIsCurator: (() => get(user, 'isCurator')),
-
-      userSpaces,
-      updateSpace: ::this.updateSpace,
-      userSpacesProductsMap
+      csrf: props.csrf,
+      user: props.user,
+      userLoggedIn: () => !isEmpty(props.user),
+      currentUserIsAdmin: () => get(props.user, 'isAdmin'),
+      currentUserIsOwner: id => isEqual(toStringId(props.user), id),
+      currentUserIsCurator: () => get(props.user, 'isCurator')
     }
   }
 
-  updateSpace(space, products) {
-    const userSpacesProductsMap = clone(this.state.userSpacesProductsMap)
-    set(userSpacesProductsMap, toStringId(space), map(products, toStringId))
-    this.setState({ userSpacesProductsMap })
-  }
-
   componentDidMount() {
-    const { user, location } = this.props
-    initAnalytics(get(user, 'id'), get(location, 'pathname'))
+    const { props } = this
+    initAnalytics(toStringId(props.user), get(props.location, 'pathname'))
   }
 
   render() {

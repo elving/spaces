@@ -2,7 +2,14 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 
 import configModels from '../app/config/models'
-import productsCount from './category/productsCount'
+
+import {
+  default as setCategoriesImage
+} from './category/setImage'
+
+import {
+  default as setCategoriesProductsCount
+} from './category/setProductsCount'
 
 dotenv.load()
 
@@ -16,14 +23,15 @@ mongoose.connection.on('error', (err) => {
   console.error(err)
 })
 
-mongoose.connection.on('open', () => {
+mongoose.connection.on('open', async () => {
   console.log('Mongoose connection open.')
 
   // Bootstrap models
   configModels()
 
   // Run Migrations
-  productsCount()
+  await setCategoriesImage()
+  await setCategoriesProductsCount()
 
   process.exit(0)
 })
@@ -35,3 +43,5 @@ process.on('SIGINT', () => {
     process.exit(0)
   })
 })
+
+// NODE_ENV=development ./node_modules/.bin/babel-node ./migrations/runAll.js

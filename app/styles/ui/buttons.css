@@ -2,7 +2,7 @@
   cursor: pointer;
   border: 0 none;
   text-decoration: none;
-  transition: all 0.2s linear;
+  transition: background-color 0.2s linear, border-color 0.2s linear, color 0.2s linear, opacity 0.2s linear;
   background-color: transparent;
   padding: 0;
   display: flex;
@@ -21,7 +21,7 @@
   border: 1px solid #ececec;
   border-radius: 4px;
   background-color: #ececec;
-  transition: all 0.2s linear;
+  transition: background-color 0.2s linear, border-color 0.2s linear, color 0.2s linear, opacity 0.2s linear;
   text-align: center;
   text-decoration: none;
   display: flex;

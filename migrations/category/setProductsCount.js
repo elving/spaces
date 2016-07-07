@@ -4,7 +4,7 @@ import getAll from '../../app/api/category/getAll'
 import update from '../../app/api/category/update'
 import toStringId from '../../app/api/utils/toStringId'
 
-const getCount = (category) => (
+const getProductCount = (category) => (
   new Promise((resolve, reject) => {
     mongoose
       .model('Product')
@@ -20,19 +20,19 @@ const getCount = (category) => (
 )
 
 export default () => {
-  console.log('category/productsCount => Start')
-
   return new Promise(async (resolve, reject) => {
+    console.log('category/setProductsCount => Start')
     try {
       const categories = await getAll()
 
       for (let category of categories) {
         const id = toStringId(category)
-        const productsCount = await getCount(id)
+        const productsCount = await getProductCount(id)
         await update(id, { productsCount })
       }
 
-      console.log('category/productsCount => Done')
+      console.log('category/setProductsCount => Done')
+      resolve()
     } catch (err) {
       reject(err)
     }

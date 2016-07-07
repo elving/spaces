@@ -52,11 +52,13 @@ class CategoryDetail extends Component {
   };
 
   fetch() {
-    const { state } = this
+    const { props, state } = this
 
     this.setState({ isSearhing: true }, () => {
       axios
-        .get(`/ajax/products/search/?skip=${state.offset}`)
+        .get(`/ajax/products/search/?skip=${state.offset}`, {
+          params: { categories: toStringId(props.category) }
+        })
         .then(({ data }) => {
           const results = get(data, 'results', [])
 
@@ -105,17 +107,14 @@ class CategoryDetail extends Component {
     return (
       <div className="category-detail-counters">
         {productsCount ? (
-          <a
-            href="#products"
-            className="category-detail-counter"
-            data-action="products">
+          <span className="category-detail-counter">
             <div className="category-detail-counter-number">
               {productsCount}
             </div>
             <div className="category-detail-counter-text">
               {inflect(productsCount, 'Product')}
             </div>
-          </a>
+          </span>
         ) : null}
         {state.followersCount ? (
           <div
@@ -135,12 +134,16 @@ class CategoryDetail extends Component {
 
   renderActions() {
     const { props } = this
-    const { category } = props
+    const categoryName = get(props.category, 'name')
+    const categoryImage = get(props.category, 'image')
+    const categoryShortUrl = get(props.category, 'shortUrl')
+    const categoryDetailUrl = get(props.category, 'detailUrl')
+    const categoryProductsCount = get(props.category, 'productsCount')
 
     return (
       <div className="category-detail-actions">
         <FollowButton
-          parent={toStringId(category)}
+          parent={toStringId(props.category)}
           showText={true}
           className="category-detail-follow-button"
           parentType="category"/>
@@ -156,21 +159,17 @@ class CategoryDetail extends Component {
           </button>
           {props.sharePopupIsCreated ? (
             <SharePopup
-              url={() => (
-                `${window.location.origin}/${get(category, 'shortUrl')}/`
-              )}
+              url={() => `${window.location.origin}/${categoryShortUrl}/`}
               title="Share this category"
               isOpen={props.sharePopupIsOpen}
-              shareUrl={() => (
-                `${window.location.origin}/${get(category, 'detailUrl')}/`
-              )}
+              shareUrl={() => `${window.location.origin}/${categoryDetailUrl}/`}
               className="share-popup"
               shareText={(
-                `${get(category, 'name')} — Designed by ` +
-                `${get(category, 'createdBy.username', '')}, ` +
-                `featuring ${size(get(category, 'products'))} products.`
+                `${categoryName} — ` +
+                `Featuring ${categoryProductsCount} ` +
+                `${inflect(categoryProductsCount, 'product')}.`
               )}
-              shareImage={get(category, 'image')}
+              shareImage={categoryImage}
               onClickClose={props.closeSharePopup}/>
             ) : null}
         </div>

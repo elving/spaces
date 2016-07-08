@@ -1,0 +1,95 @@
+.space-type-card {
+  border: 1px solid #dadada;
+  border-radius: 4px;
+  background-color: #ffffff;
+  text-decoration: none;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.space-type-card:hover,
+.space-type-card:active {
+  text-decoration: none;
+}
+
+.space-type-card-name-container {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.space-type-card-name {
+  font-size: 18px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: calc(100% - 50px);
+  overflow: hidden;
+}
+
+.space-type-card-products {
+  border-top: 1px solid #dadada;
+  width: 100%;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.space-type-card-products[data-products="1"] >.space-type-card-product {
+  width: 100%;
+}
+
+.space-type-card-products[data-products="2"] > .space-type-card-product{
+  width: calc(100% / 2);
+}
+
+.space-type-card-products[data-products="3"] > .space-type-card-product{
+  width: calc(100% / 3);
+}
+
+.space-type-card-products[data-products="4"] > .space-type-card-product{
+  width: calc(100% / 4);
+}
+
+.space-type-card-product {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: 100px;
+  margin: 0 10px;
+}
+
+.space-type-card-stats {
+  border-top: 1px solid #dadada;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.space-type-card-stat {
+  border-right: 1px solid #dadada;
+  width: calc(100% / 3);
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.space-type-card-stats > .space-type-card-stat:last-child {
+  border-right: 0 none;
+}
+
+.space-type-card-stat-number {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.space-type-card-stat-text {
+  font-size: 14px;
+}

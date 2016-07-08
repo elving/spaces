@@ -31,8 +31,10 @@ import UpdateBrand from '../components/brand/Update'
 import BrandsTable from '../components/brand/Table'
 
 import AddSpaceType from '../components/spaceType/Add'
+import SpaceTypeDetail from '../components/spaceType/Detail'
 import UpdateSpaceType from '../components/spaceType/Update'
 import SpaceTypesTable from '../components/spaceType/Table'
+import SpaceTypesIndex from '../components/spaceType/Index'
 
 import SpaceDetail from '../components/space/Detail'
 import SpacesIndex from '../components/space/Index'
@@ -40,7 +42,7 @@ import CreateSpace from '../components/space/Create'
 
 import UsersIndex from '../components/user/Index'
 
-import SearchResults from '../components/search/results'
+import SearchResults from '../components/search/Results'
 
 const routes = (
   <Route component={App}>
@@ -65,6 +67,9 @@ const routes = (
 
     <Route path="categories" component={CategoriesIndex}/>
     <Route path="categories/:slug" component={CategoryDetail}/>
+
+    <Route path="rooms" component={SpaceTypesIndex}/>
+    <Route path="rooms/:slug" component={SpaceTypeDetail}/>
 
     <Route path="search" component={SearchResults}/>
 

@@ -7,22 +7,26 @@ import React, { Component, PropTypes as Type } from 'react'
 import FollowButton from '../common/FollowButton'
 
 import inflect from '../../utils/inflect'
+import toStringId from '../../api/utils/toStringId'
 
-export default class ProfileCard extends Component {
+export default class CategoryCard extends Component {
   static propTypes = {
     user: Type.object
   };
 
   renderProducts() {
-    const { products } = this.props
+    const { props } = this
 
-    return !isEmpty(products) ? (
-      <div className="category-card-products" data-products={size(products)}>
-        {map(products, (product) => (
+    return !isEmpty(props.products) ? (
+      <div
+        className="category-card-products"
+        data-products={size(props.products)}>
+        {map(props.products, product =>
           <div
+            key={`${toStringId(props)}-${toStringId(product)}`}
             style={{ backgroundImage: `url(${get(product, 'image')})` }}
             className="category-card-product"/>
-        ))}
+        )}
       </div>
     ) : null
   }

@@ -6,6 +6,7 @@ import { default as searchAllUsers } from '../api/user/search'
 import { default as searchAllSpaces } from '../api/space/search'
 import { default as searchAllProducts } from '../api/product/search'
 import { default as searchAllCategories } from '../api/category/search'
+import { default as searchAllSpaceTypes } from '../api/spaceType/search'
 
 export const renderSearchResults = async (req, res, next) => {
   let results = []
@@ -32,6 +33,17 @@ export const renderSearchResults = async (req, res, next) => {
     next()
   } catch (err) {
     next(err)
+  }
+}
+
+export const searchSpaceTypes = async (req, res) => {
+  const params = get(req, 'query', {})
+
+  try {
+    const results = await searchAllSpaceTypes(params)
+    res.status(200).json(results)
+  } catch (err) {
+    res.status(500).json({ err })
   }
 }
 

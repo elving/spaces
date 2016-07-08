@@ -8,6 +8,7 @@ import SpaceCard from '../space/Card'
 import ProductCard from '../product/Card'
 import ProfileCard from '../user/Card'
 import CategoryCard from '../category/Card'
+import SpaceTypeCard from '../spaceType/Card'
 import AddProductModal from '../modal/AddProduct'
 import AddProductModalContainer from '../container/AddProductModal'
 
@@ -17,6 +18,7 @@ import toStringId from '../../api/utils/toStringId'
 class Home extends Component {
   static propTypes = {
     users: PropTypes.array,
+    rooms: PropTypes.array,
     spaces: PropTypes.array,
     products: PropTypes.array,
     categories: PropTypes.array,
@@ -28,6 +30,7 @@ class Home extends Component {
 
   static defaultProps = {
     users: [],
+    rooms: [],
     spaces: [],
     products: [],
     categories: [],
@@ -44,7 +47,7 @@ class Home extends Component {
       <div className="grid">
         <div className="grid-items">
           {map(props.spaces, space =>
-            <SpaceCard key={toStringId(space)} {...space}/>
+            <SpaceCard key={toStringId(space)} {...space} />
           )}
         </div>
       </div>
@@ -61,7 +64,8 @@ class Home extends Component {
             <ProductCard
               {...product}
               key={toStringId(product)}
-              onAddButtonClick={() => props.openAddProductModal(product)}/>
+              onAddButtonClick={() => props.openAddProductModal(product)}
+            />
           )}
         </div>
       </div>
@@ -75,7 +79,7 @@ class Home extends Component {
       <div className="grid">
         <div className="grid-items grid-items--3-cards">
           {map(props.users, user =>
-            <ProfileCard key={toStringId(user)} user={user}/>
+            <ProfileCard key={toStringId(user)} user={user} />
           )}
         </div>
       </div>
@@ -89,7 +93,21 @@ class Home extends Component {
       <div className="grid">
         <div className="grid-items grid-items--3-cards">
           {map(props.categories, category =>
-            <CategoryCard key={toStringId(category)} {...category}/>
+            <CategoryCard key={toStringId(category)} {...category} />
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  renderRooms() {
+    const { props } = this
+
+    return (
+      <div className="grid">
+        <div className="grid-items grid-items--3-cards">
+          {map(props.rooms, room =>
+            <SpaceTypeCard key={toStringId(room)} {...room} />
           )}
         </div>
       </div>
@@ -104,7 +122,8 @@ class Home extends Component {
         <AddProductModal
           product={props.addProductModalCurrent}
           onClose={props.closeAddProductModal}
-          isVisible={props.addProductModalIsOpen}/>
+          isVisible={props.addProductModalIsOpen}
+        />
 
         <h1 className="page-title">Trending on Spaces</h1>
 
@@ -114,14 +133,32 @@ class Home extends Component {
               <div className="grid-title-container">
                 <h3 className="grid-title">Spaces</h3>
                 <Link
-                  to={{pathname: '/spaces/'}}
+                  to={{ pathname: '/spaces/' }}
                   onClick={fullReload}
                   className="button button--small button--outline"
-                  activeClassName="is-active">
+                  activeClassName="is-active"
+                >
                   All Spaces
                 </Link>
               </div>
               {this.renderSpaces()}
+            </div>
+          ) : null}
+
+          {!isEmpty(props.rooms) ? (
+            <div className="grid-container">
+              <div className="grid-title-container">
+                <h3 className="grid-title">Rooms</h3>
+                <Link
+                  to={{ pathname: '/rooms/' }}
+                  onClick={fullReload}
+                  className="button button--small button--outline"
+                  activeClassName="is-active"
+                >
+                  All Rooms
+                </Link>
+              </div>
+              {this.renderRooms()}
             </div>
           ) : null}
 
@@ -130,10 +167,11 @@ class Home extends Component {
               <div className="grid-title-container">
                 <h3 className="grid-title">Designers</h3>
                 <Link
-                  to={{pathname: '/designers/'}}
+                  to={{ pathname: '/designers/' }}
                   onClick={fullReload}
                   className="button button--small button--outline"
-                  activeClassName="is-active">
+                  activeClassName="is-active"
+                >
                   All Designers
                 </Link>
               </div>
@@ -146,10 +184,11 @@ class Home extends Component {
               <div className="grid-title-container">
                 <h3 className="grid-title">Products</h3>
                 <Link
-                  to={{pathname: '/products/'}}
+                  to={{ pathname: '/products/' }}
                   onClick={fullReload}
                   className="button button--small button--outline"
-                  activeClassName="is-active">
+                  activeClassName="is-active"
+                >
                   All Products
                 </Link>
               </div>
@@ -162,10 +201,11 @@ class Home extends Component {
               <div className="grid-title-container">
                 <h3 className="grid-title">Categories</h3>
                 <Link
-                  to={{pathname: '/categories/'}}
+                  to={{ pathname: '/categories/' }}
                   onClick={fullReload}
                   className="button button--small button--outline"
-                  activeClassName="is-active">
+                  activeClassName="is-active"
+                >
                   All Categories
                 </Link>
               </div>

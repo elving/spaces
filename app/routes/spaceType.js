@@ -15,6 +15,9 @@ const {
   renderUpdateSpaceType
 } = controller
 
+router.get('/rooms/', controller.renderIndex)
+router.get('/rooms/:slug/', controller.renderDetail)
+
 router.get(`${adminRoot}/`, isAdmin, renderAllSpaceTypes)
 router.get(`${adminRoot}/add/`, isAdmin, renderAddSpaceType)
 router.get(`${adminRoot}/:sid/update/`, isAdmin, renderUpdateSpaceType)

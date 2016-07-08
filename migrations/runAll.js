@@ -11,6 +11,14 @@ import {
   default as setCategoriesProductsCount
 } from './category/setProductsCount'
 
+import {
+  default as setSpaceTypesProductsCount
+} from './spaceType/setProductsCount'
+
+import {
+  default as setSpaceTypesSpacesCount
+} from './spaceType/setSpacesCount'
+
 dotenv.load()
 
 mongoose.connect(process.env.MONGO_URL, {
@@ -32,6 +40,8 @@ mongoose.connection.on('open', async () => {
   // Run Migrations
   await setCategoriesImage()
   await setCategoriesProductsCount()
+  await setSpaceTypesProductsCount()
+  await setSpaceTypesSpacesCount()
 
   process.exit(0)
 })

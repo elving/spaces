@@ -4,13 +4,66 @@ import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 
 import toJSON from '../api/utils/toJSON'
+import toStringId from '../api/utils/toStringId'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
+import search from '../api/spaceType/search'
 import getAll from '../api/spaceType/getAll'
 import create from '../api/spaceType/create'
 import update from '../api/spaceType/update'
 import destroy from '../api/spaceType/destroy'
 import findBySid from '../api/spaceType/findBySid'
+import findByName from '../api/spaceType/findByName'
+import { default as searchSpaces } from '../api/space/search'
+import { default as searchProducts } from '../api/product/search'
+
+export const renderIndex = async (req, res, next) => {
+  try {
+    res.locals.metadata = {
+      title: 'Discover Rooms | Spaces',
+      bodyId: 'all-rooms',
+      bodyClass: 'page page-all-rooms'
+    }
+
+    res.locals.props = await search({ limit: 1000 })
+
+    next()
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const renderDetail = async (req, res, next) => {
+  const slug = get(req, 'params.slug')
+
+  try {
+    const spaceType = await findByName(slug)
+
+    const spaces = await searchSpaces({
+      spaceType: toStringId(spaceType)
+    })
+
+    const products = await searchProducts({
+      spaceTypes: toStringId(spaceType)
+    })
+
+    res.locals.metadata = {
+      title: `${get(spaceType, 'name')} | Spaces`,
+      bodyId: 'page-spaceType-detail',
+      bodyClass: 'page page-spaceType-detail'
+    }
+
+    res.locals.props = {
+      spaces: toJSON(spaces),
+      products: toJSON(products),
+      spaceType: toJSON(spaceType)
+    }
+
+    next()
+  } catch (err) {
+    next(err)
+  }
+}
 
 export const renderAllSpaceTypes = async (req, res, next) => {
   try {

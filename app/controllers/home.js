@@ -1,5 +1,6 @@
 import toJSON from '../api/utils/toJSON'
 import { default as getUsers } from '../api/user/getPopular'
+import { default as getRooms } from '../api/spaceType/getPopular'
 import { default as getSpaces } from '../api/space/getPopular'
 import { default as getProducts } from '../api/product/getPopular'
 import { default as getCategories } from '../api/category/getPopular'
@@ -7,6 +8,7 @@ import { default as getCategories } from '../api/category/getPopular'
 export const renderHome = async (req, res, next) => {
   try {
     const users = await getUsers(6)
+    const rooms = await getRooms(6)
     const spaces = await getSpaces(8)
     const products = await getProducts(8)
     const categories = await getCategories(6)
@@ -19,6 +21,7 @@ export const renderHome = async (req, res, next) => {
 
     res.locals.props = {
       users: toJSON(users),
+      rooms: toJSON(rooms),
       spaces: toJSON(spaces),
       products: toJSON(products),
       categories: toJSON(categories)

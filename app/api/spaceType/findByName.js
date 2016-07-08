@@ -6,6 +6,7 @@ import toIds from '../utils/toIds'
 import toJSON from '../utils/toJSON'
 import parseError from '../utils/parseError'
 import { saveToCache } from '../cache'
+import reverseKebabCase from '../../utils/reverseKebabCase'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
 export default (name, returnDocument = false) => {
@@ -15,7 +16,7 @@ export default (name, returnDocument = false) => {
     const query = () => {
       mongoose
         .model('SpaceType')
-        .findOne({ name })
+        .findOne({ name: reverseKebabCase(name) })
         .exec(async (err, spaceType) => {
           if (err) {
             return reject(parseError(err))

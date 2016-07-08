@@ -25,6 +25,7 @@ export const renderIndex = async (req, res, next) => {
     }
 
     res.locals.props = await search({ limit: 1000 })
+
     next()
   } catch (err) {
     next(err)

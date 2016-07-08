@@ -10,7 +10,10 @@ const SpaceTypeSchema = new mongoose.Schema({
   name: { type: String, trim: true, default: '' },
   description: { type: String, trim: true, default: '' },
   createdBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
-  updatedBy: { type: mongoose.Schema.ObjectId, ref: 'User' }
+  updatedBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
+  spacesCount: { type: Number, default: 0 },
+  productsCount: { type: Number, default: 0 },
+  followersCount: { type: Number, default: 0 }
 }, { timestamps: true })
 
 applyHooks(SpaceTypeSchema)

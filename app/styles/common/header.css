@@ -27,8 +27,14 @@
 }
 
 .header-link {
+  text-decoration: none;
   display: flex;
   margin-right: 15px;
+}
+
+.header-link:hover {
+  color: #333333;
+  text-decoration: none;
 }
 
 .header-nav > .header-link:last-child {
@@ -42,7 +48,8 @@
   align-items: center;
 }
 
+.header-container-right .search,
 .header-container-right .admin-nav,
-.header-container-right .search {
+.header-container-right .add-product-button {
   margin-right: 15px;
 }

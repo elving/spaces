@@ -35,7 +35,9 @@ export default class App extends Component {
       userLoggedIn: () => !isEmpty(props.user),
       currentUserIsAdmin: () => get(props.user, 'isAdmin'),
       currentUserIsOwner: id => isEqual(toStringId(props.user), id),
-      currentUserIsCurator: () => get(props.user, 'isCurator')
+      currentUserIsCurator: () => (
+        get(props.user, 'isCurator') || get(props.user, 'isAdmin')
+      )
     }
   }
 

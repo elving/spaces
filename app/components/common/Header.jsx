@@ -5,6 +5,7 @@ import Logo from './Logo'
 import Search from './Search'
 import AdminNav from '../user/AdminNav'
 import CurrentUserNav from '../user/CurrentUserNav'
+import AddProductButton from './AddProductButton'
 
 export default class Header extends Component {
   renderNav() {
@@ -38,6 +39,7 @@ export default class Header extends Component {
           <div className="header-container-right">
             <Search/>
             <AdminNav/>
+            <AddProductButton/>
             <CurrentUserNav/>
           </div>
         </div>

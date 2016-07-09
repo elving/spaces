@@ -5,8 +5,8 @@ import parseError from '../utils/parseError'
 import toIdsFromPath from '../utils/toIdsFromPath'
 import { invalidateFromCache } from '../cache'
 
-export default (_id, props) => {
-  return new Promise(async (resolve, reject) => {
+export default (_id, props) => (
+  new Promise(async (resolve, reject) => {
     try {
       const updates = sanitize(props)
       const options = { new: true }
@@ -23,14 +23,16 @@ export default (_id, props) => {
             toIdsFromPath(user, 'likes'),
             toIdsFromPath(user, 'spaces'),
             toIdsFromPath(user, 'products'),
-            toIdsFromPath(user, 'comments')
+            toIdsFromPath(user, 'comments'),
+            toIdsFromPath(user, 'following')
           ])
 
           user
             .populate('likes')
             .populate('spaces')
             .populate('products')
-            .populate('comments', (err, user) => {
+            .populate('comments')
+            .populate('following', (err, user) => {
               if (err) {
                 return reject(parseError(err))
               }
@@ -42,4 +44,4 @@ export default (_id, props) => {
       reject(err)
     }
   })
-}
+)

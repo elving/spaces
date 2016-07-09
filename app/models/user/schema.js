@@ -27,7 +27,7 @@ const UserSchema = new mongoose.Schema({
   spaces: [{ type: mongoose.Schema.ObjectId, ref: 'Space' }],
   products: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }],
   comments: [{ type: mongoose.Schema.ObjectId, ref: 'Comment' }],
-  // following: [{ type: mongoose.Schema.ObjectId, ref: 'Follow' }]
+  following: [{ type: mongoose.Schema.ObjectId, ref: 'Follow' }],
   followersCount: { type: Number, default: 0 }
 }, { timestamps: true })
 

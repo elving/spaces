@@ -17,7 +17,9 @@ const ProductSchema = new mongoose.Schema({
   updatedBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
   categories: [{ type: mongoose.Schema.ObjectId, ref: 'Category' }],
   spaceTypes: [{ type: mongoose.Schema.ObjectId, ref: 'SpaceType' }],
-  description: { type: String, trim: true, default: '' }
+  description: { type: String, trim: true, default: '' },
+  likesCount: { type: Number, default: 0 },
+  followersCount: { type: Number, default: 0 }
 }, { timestamps: true })
 
 applyHooks(ProductSchema)

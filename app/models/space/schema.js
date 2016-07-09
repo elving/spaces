@@ -19,7 +19,8 @@ const SpaceSchema = new mongoose.Schema({
   originalSpace: { type: mongoose.Schema.ObjectId, ref: 'Space' },
   likesCount: { type: Number, default: 0 },
   commentsCount: { type: Number, default: 0 },
-  redesignsCount: { type: Number, default: 0 }
+  redesignsCount: { type: Number, default: 0 },
+  followersCount: { type: Number, default: 0 }
 }, { timestamps: true })
 
 applyHooks(SpaceSchema)

@@ -1,7 +1,6 @@
 import get from 'lodash/get'
 import axios from 'axios'
 import isEmpty from 'lodash/isEmpty'
-import isEqual from 'lodash/isEqual'
 import classNames from 'classnames'
 import React, { Component, PropTypes as Type } from 'react'
 
@@ -11,19 +10,6 @@ import toStringId from '../../api/utils/toStringId'
 import hasFollowed from '../../utils/user/hasFollowed'
 
 export default class FollowButton extends Component {
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      followed: hasFollowed(get(context, 'user'), get(props, 'parent')),
-      isSaving: false,
-      currentUserIsParent: (
-        isEqual(get(props, 'parentType'), 'user') &&
-        isEqual(get(props, 'parent'), get(context, 'user.id'))
-      )
-    }
-  }
-
   static contextTypes = {
     csrf: Type.string,
     user: Type.object,
@@ -47,29 +33,39 @@ export default class FollowButton extends Component {
     hideWhenLoggedOut: false
   };
 
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      isSaving: false,
+      following: hasFollowed(context.user, props.parent),
+      currentUserIsParent: (
+        props.parentType === 'user' &&
+        props.parent === get(context, 'user.id')
+      )
+    }
+  }
+
   onClick() {
     let options = {}
-    const { csrf, user } = this.context
-    const { followed, currentUserIsParent } = this.state
-    const { onFollow, parent, onUnfollow, parentType } = this.props
+    const { props, state, context } = this
+    const createdBy = toStringId(context.user)
+    const { parent, parentType } = props
 
-    const _csrf = csrf
-    const createdBy = toStringId(user)
-
-    if (currentUserIsParent) {
+    if (state.currentUserIsParent) {
       return false
     }
 
-    if (followed) {
+    if (state.following) {
       options = {
         url: `/ajax/follows/${parentType}/${parent}/${createdBy}/`,
-        data: { _csrf },
+        data: { _csrf: context.csrf },
         method: 'DELETE'
       }
     } else {
       options = {
         url: '/ajax/follows/',
-        data: { _csrf, parent, createdBy, parentType },
+        data: { _csrf: context.csrf, parent, createdBy, parentType },
         method: 'POST'
       }
     }
@@ -77,59 +73,51 @@ export default class FollowButton extends Component {
     this.setState({ isSaving: true }, () => {
       axios(options)
         .then(() => {
-          this.setState({ followed: !followed, isSaving: false }, () => {
-            if (followed) {
-              onUnfollow()
+          this.setState({
+            isSaving: false,
+            following: !state.following
+          }, () => {
+            if (state.following) {
+              props.onUnfollow()
             } else {
-              onFollow()
+              props.onFollow()
             }
           })
-        }).catch(() => {
-          this.setState({ isSaving: false })
-        })
+        }).catch(() => this.setState({ isSaving: false }))
     })
   }
 
   render() {
-    const { userLoggedIn } = this.context
-    const { followed, isSaving, currentUserIsParent } = this.state
-    const { showText, className, parentType, hideWhenLoggedOut } = this.props
-
-    const tooltipText = (
-      `${followed ? 'Unfollow' : 'Follow'} this ${parentType}`
-    )
+    const { props, state, context } = this
 
     const btnClassName = classNames({
-      'button': true,
-      'tooltip': true,
-      [className]: !isEmpty(className),
-      'button--icon': !showText,
+      button: true,
+      [props.className]: !isEmpty(props.className),
+      'button--icon': !props.showText,
       'button--small': true,
       'follow-button': true,
       'button--primary': true,
-      'follow-button--followed': followed
+      'follow-button--show-text': props.showText,
+      'follow-button--following': state.following
     })
 
-    return userLoggedIn() ? (
-      <button
-        type="button"
-        onClick={::this.onClick}
-        disabled={isSaving || currentUserIsParent}
-        className={btnClassName}
-        data-tooltip={tooltipText}>
-        <MaterialDesignIcon name={followed ? 'unfollow' : 'follow'}/>
-        {showText ? (followed ? 'Followed' : 'Follow') : null}
-      </button>
-    ) : (
-      !hideWhenLoggedOut ? (
-        <a
-          href="/login/"
+    if (context.userLoggedIn()) {
+      return (
+        <button
+          type="button"
+          onClick={::this.onClick}
+          disabled={state.isSaving || state.currentUserIsParent}
           className={btnClassName}
-          data-tooltip={tooltipText}>
-          <MaterialDesignIcon name={followed ? 'unfollow' : 'follow'}/>
-          {showText ? (followed ? 'Followed' : 'Follow') : null}
-        </a>
-      ) : null
-    )
+        >
+          <MaterialDesignIcon name="follow" />
+        </button>
+      )
+    }
+
+    return !props.hideWhenLoggedOut ? (
+      <a href="/login/" className={btnClassName}>
+        <MaterialDesignIcon name="follow" />
+      </a>
+    ) : null
   }
 }

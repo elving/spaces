@@ -12,6 +12,7 @@ export default (emailOrUsername) => {
       .populate('spaces')
       .populate('products')
       .populate('comments')
+      .populate('following')
       .exec((err, user) => {
         if (err) {
           return reject(parseError(err))

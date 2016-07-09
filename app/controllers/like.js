@@ -30,7 +30,7 @@ export const like = async (req, res) => {
     if (userHasLiked) {
       res.status(200).json({ success: true })
     } else {
-      const like = await create(req.body)
+      const newLike = await create(req.body)
 
       if (isEqual(parentType, 'space')) {
         await updateSpace(parent, {
@@ -43,10 +43,10 @@ export const like = async (req, res) => {
       }
 
       const user = await updateUser(userId, {
-        $addToSet: { likes: toObjectId(like) }
+        $addToSet: { likes: toObjectId(newLike) }
       })
 
-      req.logIn(user, () => res.status(200).json(like))
+      req.logIn(user, () => res.status(200).json(newLike))
     }
   } catch (err) {
     res.status(500).json({
@@ -70,7 +70,7 @@ export const unlike = async (req, res) => {
   }
 
   try {
-    const like = await destroy(parentType, parent, createdBy)
+    const deletedLike = await destroy(parentType, parent, createdBy)
 
     if (isEqual(parentType, 'space')) {
       await updateSpace(parent, {
@@ -83,7 +83,7 @@ export const unlike = async (req, res) => {
     }
 
     const user = await updateUser(userId, {
-      $pull: { likes: toObjectId(like) }
+      $pull: { likes: toObjectId(deletedLike) }
     })
 
     req.logIn(user, () => res.status(200).json({ success: true }))

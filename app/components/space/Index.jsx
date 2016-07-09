@@ -3,7 +3,7 @@ import map from 'lodash/map'
 import size from 'lodash/size'
 import axios from 'axios'
 import concat from 'lodash/concat'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Space from './Card'
 import Layout from '../common/Layout'
@@ -11,10 +11,18 @@ import Layout from '../common/Layout'
 import toStringId from '../../api/utils/toStringId'
 
 export default class SpacesIndex extends Component {
+  static propTypes = {
+    spaces: PropTypes.object
+  };
+
+  static defaultProps = {
+    spaces: []
+  };
+
   constructor(props) {
     super(props)
 
-    const results = get(props, 'results', [])
+    const results = get(props, 'spaces.results', [])
 
     this.state = {
       skip: 40,
@@ -24,14 +32,6 @@ export default class SpacesIndex extends Component {
       lastResults: results
     }
   }
-
-  static propTypes = {
-    spaces: Type.array
-  };
-
-  static defaultProps = {
-    spaces: []
-  };
 
   fetch() {
     const { state } = this

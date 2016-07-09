@@ -29,7 +29,8 @@ export default (limit = 8) => {
               toIdsFromPath(users, 'likes'),
               toIdsFromPath(users, 'spaces'),
               toIdsFromPath(users, 'products'),
-              toIdsFromPath(users, 'comments')
+              toIdsFromPath(users, 'comments'),
+              toIdsFromPath(users, 'following')
             ])
 
             resolve(users)

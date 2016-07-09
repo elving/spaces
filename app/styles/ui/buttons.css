@@ -267,3 +267,21 @@
 .like-button--white:active .icon-fill {
   fill: #ffffff;
 }
+
+.follow-button.follow-button--following:hover {
+  color: #ffffff;
+  border-color: #fb5465;
+  background-color: #fb5465;
+}
+
+.follow-button--show-text::after {
+  content: "Follow"
+}
+
+.follow-button--following.follow-button--show-text::after {
+  content: "Following"
+}
+
+.follow-button--following.follow-button--show-text:hover::after {
+  content: "Unfollow"
+}

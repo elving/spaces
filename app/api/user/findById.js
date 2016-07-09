@@ -20,6 +20,7 @@ export default (_id) => {
         .populate('spaces')
         .populate('products')
         .populate('comments')
+        .populate('following')
         .exec(async (err, user) => {
           if (err) {
             return reject(parseError(err))
@@ -31,7 +32,8 @@ export default (_id) => {
               toIdsFromPath(user, 'likes'),
               toIdsFromPath(user, 'spaces'),
               toIdsFromPath(user, 'products'),
-              toIdsFromPath(user, 'comments')
+              toIdsFromPath(user, 'comments'),
+              toIdsFromPath(user, 'following')
             ])
 
             resolve(user)

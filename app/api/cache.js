@@ -91,23 +91,27 @@ export const removeFromCache = (key) => {
   })
 }
 
-export const invalidateFromCache = (ids) => {
-  return new Promise(async (resolve, reject) => {
-    for (let id of getIds(ids)) {
-      for (let key of keys(mappings)) {
-        if (includes(get(mappings, key), id)) {
-          try {
+export const invalidateFromCache = (ids) => (
+  new Promise(async (resolve, reject) => {
+    if (isEmpty(mappings)) {
+      return resolve()
+    }
+
+    try {
+      for (let id of getIds(ids)) {
+        for (let key of keys(mappings)) {
+          if (includes(get(mappings, key), id)) {
             await removeFromCache(key)
-          } catch (err) {
-            return reject(err)
           }
         }
       }
-    }
 
-    resolve()
+      resolve()
+    } catch (err) {
+      reject(err)
+    }
   })
-}
+)
 
 export const clearCache = () => {
   return new Promise((resolve, reject) => {

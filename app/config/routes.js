@@ -9,6 +9,7 @@ import { default as likeRouter } from '../routes/like'
 import { default as colorRouter } from '../routes/color'
 import { default as brandRouter } from '../routes/brand'
 import { default as spaceRouter } from '../routes/space'
+import { default as followRouter } from '../routes/follow'
 import { default as searchRouter } from '../routes/search'
 import { default as commentRouter } from '../routes/comment'
 import { default as productRouter } from '../routes/product'
@@ -24,6 +25,7 @@ const configRoutes = (server) => {
   server.use(colorRouter)
   server.use(brandRouter)
   server.use(spaceRouter)
+  server.use(followRouter)
   server.use(searchRouter)
   server.use(commentRouter)
   server.use(productRouter)

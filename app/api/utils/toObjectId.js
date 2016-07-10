@@ -5,16 +5,16 @@ import isArray from 'lodash/isArray'
 import isString from 'lodash/isString'
 import isObject from 'lodash/isObject'
 
-export default (value) => {
-  const getObjectId = (value) => {
-    if (isString(value)) {
-      return mongoose.Types.ObjectId(value)
-    } else if (value instanceof mongoose.Schema.Types.ObjectId) {
-      return value
-    } else if (isObject(value)) {
-      return mongoose.Types.ObjectId(get(value, 'id'))
-    }
+const getObjectId = doc => {
+  if (isString(doc)) {
+    return mongoose.Types.ObjectId(doc)
+  } else if (doc instanceof mongoose.Schema.Types.ObjectId) {
+    return doc
+  } else if (isObject(doc)) {
+    return mongoose.Types.ObjectId(get(doc, 'id'))
   }
+}
 
-  return isArray(value) ? map(value, getObjectId) : getObjectId(value)
+export default doc => {
+  return isArray(doc) ? map(doc, getObjectId) : getObjectId(doc)
 }

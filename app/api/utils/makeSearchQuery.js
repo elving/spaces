@@ -26,6 +26,14 @@ export default (params = {}) => {
     }
   }
 
+  if (has(params, 'brands')) {
+    query.brands = {
+      $in: split(
+        get(params, 'brands', []), ','
+      )
+    }
+  }
+
   if (has(params, 'colors')) {
     query.colors = {
       $in: split(

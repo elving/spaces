@@ -59,7 +59,7 @@ export default (schema) => {
 
   schema
     .path('spaceTypes')
-    .required(true, 'At least one space type is required to add a product')
+    .required(true, 'At least one room is required to add a product')
 
   schema
     .path('description')

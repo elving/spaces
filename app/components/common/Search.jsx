@@ -19,6 +19,16 @@ import withoutAnyType from '../../utils/spaceType/withoutAnyType'
 import { default as $ } from '../../utils/dom/selector'
 
 export default class Search extends Component {
+  static propTypes = {
+    onSearch: PropTypes.func,
+    redirectOnSearch: PropTypes.bool
+  };
+
+  static defaultProps = {
+    onSearch: (() => {}),
+    redirectOnSearch: true
+  };
+
   constructor(props) {
     super(props)
 
@@ -51,16 +61,6 @@ export default class Search extends Component {
     }
   }
 
-  static propTypes = {
-    onSearch: PropTypes.func,
-    redirectOnSearch: PropTypes.bool
-  };
-
-  static defaultProps = {
-    onSearch: (() => {}),
-    redirectOnSearch: true
-  };
-
   componentDidMount() {
     axios.get('/ajax/filters/').then(({ data }) => {
       this.setState({
@@ -80,6 +80,16 @@ export default class Search extends Component {
     } else {
       $body.removeEventListener('click', this.onBodyClick)
     }
+  }
+
+  getFiltersCount() {
+    const { state } = this
+
+    return (
+      size(csvToArray(state.colors)) +
+      size(csvToArray(state.spaceTypes)) +
+      size(csvToArray(state.categories))
+    )
   }
 
   search() {
@@ -102,31 +112,22 @@ export default class Search extends Component {
     }
   }
 
-  getFiltersCount() {
-    const { state } = this
-
-    return (
-      size(csvToArray(state.colors)) +
-      size(csvToArray(state.spaceTypes)) +
-      size(csvToArray(state.categories))
-    )
-  }
-
   renderInput() {
     const { state } = this
 
     return (
       <div className="textfield-icon search-input-container">
-        <MaterialDesignIcon name="search" className="search-input-icon"/>
+        <MaterialDesignIcon name="search" className="search-input-icon" />
         <input
-          ref={input => this.searchInput = input}
+          ref={input => { this.searchInput = input }}
           type="text"
-          name={state.searchType === 'designers' ? 'username' : 'name' }
+          name={state.searchType === 'designers' ? 'username' : 'name'}
           onBlur={() => this.setState({ isFocused: false })}
           onFocus={() => this.setState({ isFocused: true })}
           disabled={state.isSearching}
           className="search-input textfield"
-          placeholder="Search"/>
+          placeholder="Search"
+        />
         {this.renderFiltersCount()}
         {this.renderSearchTypesToggle()}
         {this.renderFiltersToggle()}
@@ -162,8 +163,9 @@ export default class Search extends Component {
           'button-unstyled': true,
           'search-type-current': true,
           'search-type-current--is-active': state.searchTypesAreOpen
-        })}>
-        <MaterialDesignIcon name={icon} className="search-type-current-icon"/>
+        })}
+      >
+        <MaterialDesignIcon name={icon} className="search-type-current-icon" />
       </button>
     )
   }
@@ -193,10 +195,12 @@ export default class Search extends Component {
               'button-unstyled': true,
               'search-type-item': true,
               'search-type-item--is-selected': state.searchType === type
-            })}>
+            })}
+          >
             <MaterialDesignIcon
               name={toSingular(type)}
-              className="search-type-item-icon"/>
+              className="search-type-item-icon"
+            />
             <span className="search-type-item-text">
               {`Search ${upperFirst(type)}`}
             </span>
@@ -234,8 +238,9 @@ export default class Search extends Component {
           'button-unstyled': true,
           'search-filters-toggle': true,
           'search-filters-toggle--is-active': state.filtersAreOpen
-        })}>
-        <MaterialDesignIcon name="tune"/>
+        })}
+      >
+        <MaterialDesignIcon name="tune" />
       </button>
     )
   }
@@ -245,25 +250,10 @@ export default class Search extends Component {
 
     return state.filtersAreOpen ? (
       <div className="search-filters">
-        {state.searchType === 'spaces' ? (
+        {state.searchType === 'spaces' || state.searchType === 'products' ? (
           <Select
             name="spaceTypes"
-            multi={true}
-            value={state.spaceTypes}
-            options={map(withoutAnyType(state.allSpaceTypes), type => ({
-              value: toStringId(type),
-              label: get(type, 'name')
-            }))}
-            onChange={spaceTypes => this.setState({ spaceTypes })}
-            disabled={state.isSearhing}
-            className="search-filter-input select"
-            placeholder="Filter by space type"/>
-        ) : null}
-
-        {state.searchType === 'products' ? (
-          <Select
-            name="spaceTypes"
-            multi={true}
+            multi
             value={state.spaceTypes}
             options={map(state.allSpaceTypes, type => ({
               value: toStringId(type),
@@ -272,13 +262,14 @@ export default class Search extends Component {
             onChange={spaceTypes => this.setState({ spaceTypes })}
             disabled={state.isSearhing}
             className="search-filter-input select"
-            placeholder="Filter by space"/>
+            placeholder="Filter by room"
+          />
         ) : null}
 
-        {state.searchType === 'products' ? (
+        {state.searchType === 'spaces' || state.searchType === 'products' ? (
           <Select
             name="categories"
-            multi={true}
+            multi
             value={state.categories}
             options={map(state.allCategories, category => ({
               value: toStringId(category),
@@ -287,13 +278,14 @@ export default class Search extends Component {
             onChange={categories => this.setState({ categories })}
             disabled={state.isSearhing}
             className="search-filter-input select"
-            placeholder="Filter by category"/>
+            placeholder="Filter by category"
+          />
         ) : null}
 
-        {state.searchType === 'products' ? (
+        {state.searchType === 'spaces' || state.searchType === 'products' ? (
           <Select
             name="colors"
-            multi={true}
+            multi
             value={state.colors}
             options={map(state.allColors, color => ({
               value: toStringId(color),
@@ -302,12 +294,14 @@ export default class Search extends Component {
             onChange={colors => this.setState({ colors })}
             disabled={state.isSearhing}
             className="search-filter-input select"
-            placeholder="Filter by color"/>
+            placeholder="Filter by color"
+          />
         ) : null}
 
         <button
           type="submit"
-          className="search-filters-button button button--primary">
+          className="search-filters-button button button--primary"
+        >
           {`Search ${upperFirst(state.searchType)}`}
         </button>
       </div>
@@ -324,18 +318,19 @@ export default class Search extends Component {
 
     return (
       <form
-        ref={form => this.form = form}
+        ref={form => { this.form = form }}
         onSubmit={onSubmit}
         className={classNames({
-          'search': true,
+          search: true,
           'search--is-focused': (
             state.isFocused ||
             state.filtersAreOpen ||
             state.searchTypesAreOpen
           ),
           'search--has-filters': this.getFiltersCount()
-        })}>
-        <input type="hidden" name="type" value={state.searchType}/>
+        })}
+      >
+        <input type="hidden" name="type" value={state.searchType} />
 
         {this.renderInput()}
         {this.renderSearchTypes()}

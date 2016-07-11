@@ -40,7 +40,7 @@ export default class CurrentUserNav extends Component {
             <a
               href="/admin/space-types/"
               className="dropdown-link">
-              Manage Space Types
+              Manage Rooms
             </a>
             <a
               href="/admin/products/"

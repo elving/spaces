@@ -873,7 +873,7 @@ export default class ProductForm extends Component {
             })}
             placeholder="E.g. Kitchen, Patio"
             allowCreate={currentUserIsAdmin() ? true : false}
-            addLabelText={'Add "{label}" as a new space type'}/>
+            addLabelText={'Add "{label}" as a new room'}/>
 
           {hasSpaceTypesError ? (
             <small className="form-error">{spaceTypesError}</small>

@@ -82,7 +82,7 @@ export default class ProductsTable extends Component {
           }, {
             label: 'Categories'
           }, {
-            label: 'Space Types'
+            label: 'Rooms'
           }, {
             label: 'Actions'
           }]}

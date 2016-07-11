@@ -37,7 +37,7 @@ export default (props) => {
 
   if (!has(props, 'spaceTypes') || isEmpty(get(props, 'spaceTypes'))) {
     set(errors, 'spaceTypes', (
-      'At least one space type is required to add a product'
+      'At least one room is required to add a product'
     ))
   }
 

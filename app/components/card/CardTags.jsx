@@ -1,19 +1,20 @@
-import get from 'lodash/get'
 import map from 'lodash/map'
-import flattenDeep from 'lodash/flattenDeep'
 import React, { Component, PropTypes } from 'react'
 
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
+
+import getTags from '../../utils/getTags'
 import toStringId from '../../api/utils/toStringId'
 
 export default class CardTags extends Component {
   static propTypes = {
-    tags: PropTypes.array,
+    model: PropTypes.object,
     className: PropTypes.string,
     forDisplayOnly: PropTypes.bool
   };
 
   static defaultProps = {
-    tags: [],
+    model: {},
     className: '',
     forDisplayOnly: false
   };
@@ -23,22 +24,26 @@ export default class CardTags extends Component {
 
     return (
       <div className={`${props.className} card-tags`}>
-        {map(flattenDeep(props.tags), tag =>
+        {map(getTags(props.model), tag => (
           props.forDisplayOnly ? (
             <span
-              key={`tag-${toStringId(tag)}`}
-              className="card-tag">
-              {get(tag, 'name')}
+              key={`${toStringId(props.model)}-${tag.id}`}
+              className="card-tag"
+            >
+              <MaterialDesignIcon name={tag.type} size={12} />
+              {tag.name}
             </span>
           ) : (
             <a
-              key={`tag-${toStringId(tag)}`}
-              href={`/${get(tag, 'detailUrl')}/`}
-              className="card-tag">
-              {get(tag, 'name')}
+              key={`${toStringId(props.model)}-${tag.id}`}
+              href={tag.detailUrl}
+              className="card-tag"
+            >
+              <MaterialDesignIcon name={tag.type} size={12} />
+              {tag.name}
             </a>
           )
-        )}
+        ))}
       </div>
     )
   }

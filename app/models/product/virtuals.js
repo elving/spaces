@@ -34,5 +34,15 @@ export default (schema) => {
       return `p/${this.get('sid')}`
     })
 
+  schema
+    .virtual('lastLikes')
+    .get(function() { return this.__lastLikes })
+    .set(function(lastLikes = []) { this.__lastLikes = lastLikes })
+
+  schema
+    .virtual('lastComments')
+    .get(function() { return this.__lastComments })
+    .set(function(lastComments = []) { this.__lastComments = lastComments })
+
   return schema
 }

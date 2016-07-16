@@ -1,7 +1,7 @@
 import isArray from 'lodash/isArray'
 
-const loadImage = (image) => {
-  return new Promise((resolve, reject) => {
+const loadImage = (image) => (
+  new Promise((resolve, reject) => {
     const loader = new Image()
     loader.src = image
 
@@ -12,13 +12,11 @@ const loadImage = (image) => {
       loader.onerror = reject
     }
   })
-}
+)
 
-export default (images) => {
-  return new Promise(async (resolve, reject) => {
-    images = isArray(images) ? images : [images]
-
-    for (let src of images) {
+export default (images = []) => (
+  new Promise(async (resolve, reject) => {
+    for (const src of isArray(images) ? images : [images]) {
       try {
         await loadImage(src)
       } catch (err) {
@@ -28,4 +26,4 @@ export default (images) => {
 
     resolve()
   })
-}
+)

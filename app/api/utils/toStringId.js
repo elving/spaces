@@ -1,6 +1,5 @@
 import get from 'lodash/get'
 import result from 'lodash/result'
-import isEqual from 'lodash/isEqual'
 import isString from 'lodash/isString'
 import constant from 'lodash/constant'
 
@@ -9,7 +8,7 @@ export default (model, path = 'id') => {
     return model
   }
 
-  const id = isEqual(path, 'id')
+  const id = path === 'id'
     ? get(model, path, model)
     : get(model, `${path}.id`, model)
 

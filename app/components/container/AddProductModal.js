@@ -31,7 +31,8 @@ const AddProductModalContainer = Composed => class extends Component {
         {...this.props}
         {...this.state}
         openAddProductModal={::this.openAddProductModal}
-        closeAddProductModal={::this.closeAddProductModal}/>
+        closeAddProductModal={::this.closeAddProductModal}
+      />
     )
   }
 }

@@ -2,7 +2,7 @@
   cursor: pointer;
   border: 0 none;
   text-decoration: none;
-  transition: background-color 0.2s linear, border-color 0.2s linear, color 0.2s linear, opacity 0.2s linear;
+  transition: background-color 0.15s linear, border-color 0.15s linear, color 0.15s linear, opacity 0.15s linear;
   background-color: transparent;
   padding: 0;
   display: flex;
@@ -21,7 +21,7 @@
   border: 1px solid #ececec;
   border-radius: 4px;
   background-color: #ececec;
-  transition: background-color 0.2s linear, border-color 0.2s linear, color 0.2s linear, opacity 0.2s linear;
+  transition: background-color 0.15s linear, border-color 0.15s linear, color 0.15s linear, opacity 0.15s linear;
   text-align: center;
   text-decoration: none;
   display: flex;
@@ -68,6 +68,7 @@
 }
 
 .button .icon {
+  flex-shrink: 0;
   margin-right: 10px;
 }
 
@@ -100,7 +101,7 @@
 }
 
 .button .icon-fill {
-  transition: fill 0.2s linear;
+  transition: fill 0.15s linear;
 }
 
 .button-text {
@@ -117,7 +118,7 @@
 
 .button--outline,
 .button--outline:active {
-  border-color: #d5d5d5;
+  border-color: #dadada;
   background-color: transparent;
 }
 
@@ -237,14 +238,26 @@
   fill: #fff;
 }
 
+.collect-button,
 .like-button--white {
   border-color: #dadada;
   background-color: #ffffff;
 }
 
+.collect-button .icon-fill {
+  fill: #2ECC71;
+}
+
 .like-button .icon-fill,
 .like-button--white .icon-fill {
   fill: #e74c3c;
+}
+
+.collect-button:hover,
+.collect-button:active {
+  color: #ffffff;
+  border-color: #2ECC71;
+  background-color: #2ECC71;
 }
 
 .like-button:hover,
@@ -254,10 +267,13 @@
 .like-button--liked:active,
 .like-button--white:hover,
 .like-button--white:active {
+  color: #ffffff;
   border-color: #e74c3c;
   background-color: #e74c3c;
 }
 
+.collect-button:hover .icon-fill,
+.collect-button:active .icon-fill,
 .like-button:hover .icon-fill,
 .like-button:active .icon-fill,
 .like-button--liked .icon-fill,
@@ -266,6 +282,18 @@
 .like-button--white:hover .icon-fill,
 .like-button--white:active .icon-fill {
   fill: #ffffff;
+}
+
+.like-button--show-text::after {
+  content: "Like"
+}
+
+.like-button--liked.like-button--show-text::after {
+  content: "Liked"
+}
+
+.like-button--liked.like-button--show-text:hover::after {
+  content: "Unlike"
 }
 
 .follow-button.follow-button--following:hover {

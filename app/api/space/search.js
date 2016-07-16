@@ -31,11 +31,10 @@ export default (params = {}) => {
       .skip(parseInt(get(params, 'skip', 0)))
       .limit(parseInt(get(params, 'limit', 40)))
       .sort('-createdAt')
-      .populate({
-        path: 'products',
-        options: { populate: 'colors categories' }
-      })
+      .populate('colors')
+      .populate('products')
       .populate('createdBy')
+      .populate('categories')
       .populate('spaceType')
       .populate('originalSpace')
       .exec(async (err, spaces) => {

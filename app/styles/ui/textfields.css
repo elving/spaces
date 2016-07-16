@@ -9,7 +9,7 @@ input:-webkit-autofill {
   border: 1px solid #dadada;
   border-radius: 4px;
   background-color: #ffffff;
-  transition: opacity 0.2s linear, border-color 0.2s linear, background-color 0.2s linear;
+  transition: opacity 0.15s linear, border-color 0.15s linear, background-color 0.15s linear;
   padding: 10px;
   min-height: 47px;
 }

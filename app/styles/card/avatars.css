@@ -1,0 +1,49 @@
+.card-avatars {
+  display: flex;
+  align-items: center;
+}
+
+.card-avatars-icon {
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  display: flex;
+  z-index: 2;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-avatars-icon[data-action="liked"] {
+  background-color: #e74c3c;
+}
+
+.card-avatars-icon[data-action="commented"] {
+  background-color: #439fe0;
+}
+
+.card-avatars-icon .icon-fill {
+  fill: #ffffff;
+}
+
+.card-avatars-users {
+  display: flex;
+  z-index: 1;
+  position: relative;
+  align-items: center;
+}
+
+.card-avatars-user {
+  border: 1px solid #ffffff;
+  margin-left: -1px;
+}
+
+.card-avatars-users > .card-avatars-user:first-child {
+  margin-left: 0;
+}
+
+.card-avatars-count {
+  color: #999999;
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 5px;
+}

@@ -1,5 +1,5 @@
 .select {
-  transition: opacity 0.2s linear, border-color 0.2s linear, background-color 0.2s linear;
+  transition: opacity 0.15s linear, border-color 0.15s linear, background-color 0.15s linear;
 }
 
 .select .Select-control {
@@ -8,7 +8,7 @@
   border: 1px solid #dadada;
   border-radius: 4px;
   background-color: #ffffff;
-  transition: opacity 0.2s linear, border-color 0.2s linear, background-color 0.2s linear;
+  transition: opacity 0.15s linear, border-color 0.15s linear, background-color 0.15s linear;
   height: auto;
   padding: 0 50px 10px 10px;
   display: flex;
@@ -100,7 +100,7 @@
   border-radius: 3px 0 0 3px;
   font-size: 18px;
   border-color: #c0c0c0;
-  transition: color 0.2s linear;
+  transition: color 0.15s linear;
   padding: 0 8px;
 }
 
@@ -130,7 +130,7 @@
 }
 
 .select .Select-clear-zone {
-  transition: color 0.2s linear;
+  transition: color 0.15s linear;
   right: 30px;
 }
 
@@ -141,7 +141,7 @@
 .select .Select-arrow {
   border-color: #c0c0c0 transparent transparent;
   border-width: 7px 6px 3px;
-  transition: opacity 0.2s linear, border-color 0.2s linear, background-color 0.2s linear;
+  transition: opacity 0.15s linear, border-color 0.15s linear, background-color 0.15s linear;
 }
 
 .select.is-open .Select-arrow,
@@ -159,7 +159,7 @@
 .Select-option {
   color: #555555;
   font-size: 16px;
-  transition: opacity 0.2s linear, border-color 0.2s linear, background-color 0.2s linear;
+  transition: opacity 0.15s linear, border-color 0.15s linear, background-color 0.15s linear;
   padding: 8px 10px;
 }
 

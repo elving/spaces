@@ -8,8 +8,8 @@ import toStringId from '../utils/toStringId'
 import parseError from '../utils/parseError'
 import makeSearchQuery from '../utils/makeSearchQuery'
 
-const getCount = (params) => {
-  return new Promise((resolve, reject) => {
+const getCount = params => (
+  new Promise((resolve, reject) => {
     mongoose
       .model('Category')
       .where(params)
@@ -21,10 +21,10 @@ const getCount = (params) => {
         resolve(count)
       })
   })
-}
+)
 
-const getProducts = (category) => {
-  return new Promise(async (resolve, reject) => {
+const getProducts = category => (
+  new Promise(async (resolve, reject) => {
     mongoose
       .model('Product')
       .where({ categories: { $in: [category] }})
@@ -41,10 +41,10 @@ const getProducts = (category) => {
         }
       })
   })
-}
+)
 
-export default (params = {}) => {
-  return new Promise((resolve, reject) => {
+export default (params = {}) => (
+  new Promise((resolve, reject) => {
     const searchParams = makeSearchQuery(params)
 
     mongoose
@@ -71,4 +71,4 @@ export default (params = {}) => {
         })
       })
   })
-}
+)

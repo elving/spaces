@@ -2,11 +2,10 @@ import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
 import axios from 'axios'
-import filter from 'lodash/filter'
+import reject from 'lodash/reject'
 import concat from 'lodash/concat'
 import isEmpty from 'lodash/isEmpty'
-import isEqual from 'lodash/isEqual'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Loader from '../common/Loader'
 import Comment from './Comment'
@@ -15,6 +14,18 @@ import inflect from '../../utils/inflect'
 import toStringId from '../../api/utils/toStringId'
 
 export default class Comments extends Component {
+  static propTypes = {
+    parent: PropTypes.string.isRequired,
+    parentType: PropTypes.string.isRequired,
+    newComments: PropTypes.array,
+    onCommentRemoved: PropTypes.func
+  };
+
+  static defaultProps = {
+    newComments: [],
+    onCommentRemoved: (() => {})
+  };
+
   constructor(props) {
     super(props)
 
@@ -24,77 +35,72 @@ export default class Comments extends Component {
     }
   }
 
-  static propTypes = {
-    parent: Type.string.isRequired,
-    parentType: Type.string.isRequired,
-    newComments: Type.array,
-    onCommentRemoved: Type.func
-  };
-
-  static defaultProps = {
-    newComments: [],
-    onCommentRemoved: (() => {})
-  };
-
   componentDidMount() {
-    const { parent, parentType } = this.props
+    this.fetchComments()
+  }
+
+  fetchComments() {
+    const { props } = this
 
     this.setState({ isFetching: true }, () => {
-      axios({
-        url: `/ajax/comments/${parentType}/${parent}/`,
-        method: 'GET'
-      }).then((res) => {
-        this.setState({
-          comments: get(res, 'data.comments', []),
-          isFetching: false
+      axios
+        .get(`/ajax/comments/${props.parentType}/${props.parent}/`)
+        .then(({ data }) => {
+          this.setState({
+            comments: get(data, 'comments', []),
+            isFetching: false
+          })
         })
-      }).catch(() => {
-        this.setState({
-          isFetching: false
+        .catch(() => {
+          this.setState({
+            isFetching: false
+          })
         })
-      })
     })
   }
 
   removeComment(id) {
-    const { comments } = this.state
-    const { onCommentRemoved } = this.props
+    const { props, state } = this
 
     this.setState({
-      comments: filter(comments, comment => !isEqual(toStringId(comment), id))
-    }, () => onCommentRemoved(id))
+      comments: reject(state.comments, comment => toStringId(comment) === id)
+    }, () => props.onCommentRemoved(id))
   }
 
   render() {
-    const { newComments } = this.props
-    const { comments, isFetching } = this.state
+    const { props, state } = this
+    const allComments = concat([], state.comments, props.newComments)
+    const count = size(allComments)
 
-    const allComments = concat([], comments, newComments)
-
-    if (isFetching) {
+    if (state.isFetching) {
       return (
         <div className="comments-list">
           <h4 className="comments-title">Comments</h4>
-          <Loader size={55}/>
+          <Loader size={55} />
         </div>
       )
     } else if (!isEmpty(allComments)) {
       return (
         <div className="comments-list">
           <h4 className="comments-title">
-            {`${size(allComments)} ${inflect(allComments, 'Comment')}`}
+            {`${count} ${inflect(count, 'person', 'people')} commented`}
           </h4>
 
           {map(allComments, (comment) => (
             <Comment
+              {...comment}
               key={`comment-${toStringId(comment)}`}
               onDelete={::this.removeComment}
-              {...comment}/>
+            />
           ))}
         </div>
       )
-    } else {
-      return null
     }
+
+    return (
+      <h4 className="comments-title">
+        Be the first to comment!
+      </h4>
+    )
   }
 }

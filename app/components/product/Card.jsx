@@ -11,17 +11,6 @@ import LikeButton from '../common/LikeButton'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 export default class ProductCard extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      imageIsLoaded: false,
-      imageIsLoading: false,
-      sharePopupIsOpen: false,
-      sharePopupIsCreated: false
-    }
-  }
-
   static contextTypes = {
     csrf: PropTypes.string,
     userLoggedIn: PropTypes.func
@@ -56,6 +45,17 @@ export default class ProductCard extends Component {
     forDisplayOnly: false,
     onAddButtonClick: (() => {})
   };
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      imageIsLoaded: false,
+      imageIsLoading: false,
+      sharePopupIsOpen: false,
+      sharePopupIsCreated: false
+    }
+  }
 
   componentDidMount() {
     const { props } = this
@@ -99,7 +99,8 @@ export default class ProductCard extends Component {
         className={classNames({
           'product-card-image-container': true,
           'product-card-image-container--loading': state.imageIsLoading
-        })}>
+        })}
+      >
         <a href={`/${props.detailUrl}/`} className="card-actions-overlay"></a>
 
         {!props.forDisplayOnly ? (
@@ -107,14 +108,15 @@ export default class ProductCard extends Component {
         ) : null}
 
         {state.imageIsLoading ? (
-          <Loader size={50}/>
+          <Loader size={50} />
         ) : null}
 
         {state.imageIsLoaded ? (
           <div
             title={props.name}
             style={{ backgroundImage: `url(${props.image})` }}
-            className="product-card-image"/>
+            className="product-card-image"
+          />
         ) : null}
 
         {this.renderPrice()}
@@ -132,14 +134,16 @@ export default class ProductCard extends Component {
             type="button"
             onClick={props.onAddButtonClick}
             className="card-action button button--icon"
-            data-action="add">
-            <MaterialDesignIcon name="add" fill="#2ECC71"/>
+            data-action="add"
+          >
+            <MaterialDesignIcon name="add" fill="#2ECC71" />
           </button>
           <LikeButton
             parent={props.id}
-            isWhite={true}
+            isWhite
             className="card-action"
-            parentType="product"/>
+            parentType="product"
+          />
         </div>
 
         <div className="card-actions card-actions--right">
@@ -147,8 +151,9 @@ export default class ProductCard extends Component {
             type="button"
             onClick={::this.openSharePopup}
             className="card-action button button--icon"
-            data-action="send">
-            <MaterialDesignIcon name="send"/>
+            data-action="send"
+          >
+            <MaterialDesignIcon name="send" />
           </button>
         </div>
       </div>
@@ -163,11 +168,12 @@ export default class ProductCard extends Component {
         href={props.url}
         target="_blank"
         className={classNames({
-          'button': true,
-          'button--primary-outline': true,
-          'product-card-price': true
-        })}>
-        <MaterialDesignIcon name="cart" size={16} color="#2ECC71"/>
+          button: true,
+          'product-card-price': true,
+          'button--primary-outline': true
+        })}
+      >
+        <MaterialDesignIcon name="cart" size={16} color="#2ECC71" />
         {`$${props.price}`}
       </a>
     )
@@ -181,7 +187,8 @@ export default class ProductCard extends Component {
         url={props.forDisplayOnly ? '' : `/${props.detailUrl}/`}
         title={props.name}
         subTitle={get(props.brand, 'name')}
-        className="product-title"/>
+        className="product-title"
+      />
     )
   }
 
@@ -190,9 +197,10 @@ export default class ProductCard extends Component {
 
     return (
       <CardTags
-        tags={[props.spaceTypes, props.categories, props.colors]}
+        model={props}
         forDisplayOnly={props.forDisplayOnly}
-        className="product-tags"/>
+        className="product-tags"
+      />
     )
   }
 
@@ -206,13 +214,15 @@ export default class ProductCard extends Component {
           height={26}
           imageUrl={get(props.createdBy, 'avatar', '')}
           initials={get(props.createdBy, 'initials', '')}
-          className="product-card-designer-avatar"/>
+          className="product-card-designer-avatar"
+        />
         <span className="product-card-designer-name">
           Added by {' '}
           {!props.forDisplayOnly ? (
             <a
               href={`/${get(props.createdBy, 'detailUrl', '#')}/`}
-              className="product-card-designer-link">
+              className="product-card-designer-link"
+            >
               {get(props.createdBy, 'name')}
             </a>
           ) : (
@@ -231,12 +241,13 @@ export default class ProductCard extends Component {
     return (
       <div
         className={classNames({
-          'product': true,
+          product: true,
           'product-card card': true,
           'product-card--popup-open': state.sharePopupIsOpen,
           'product-card--display-only': props.forDisplayOnly
-        })}>
-        <div className="product-card-overlay"/>
+        })}
+      >
+        <div className="product-card-overlay" />
 
         {state.sharePopupIsCreated ? (
           <SharePopup
@@ -244,7 +255,8 @@ export default class ProductCard extends Component {
             title="Share this product"
             isOpen={state.sharePopupIsOpen}
             className="share-popup"
-            onClickClose={::this.closeSharePopup}/>
+            onClickClose={::this.closeSharePopup}
+          />
         ) : null}
 
         {this.renderImage()}

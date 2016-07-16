@@ -17,14 +17,11 @@ export default (limit = 8) => {
         .model('Space')
         .find()
         .limit(limit)
-        .populate({
-          path: 'products',
-          options: {
-            populate: 'colors categories'
-          }
-        })
+        .populate('colors')
+        .populate('products')
         .populate('createdBy')
         .populate('spaceType')
+        .populate('categories')
         .populate('originalSpace')
         .sort('-likesCount -productsCount -updatedAt')
         .exec(async (err, spaces) => {

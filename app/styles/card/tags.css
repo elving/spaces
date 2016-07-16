@@ -7,13 +7,19 @@
   justify-content: flex-start;
 }
 
+.card-tags::after {
+  content: "\00a0";
+}
+
 .card-tag {
+  border: 1px solid #e0e0e0;
   border-radius: 3px;
-  background-color: #ececec;
+  background-color: #eaeaea;
   font-size: 12px;
   font-weight: 500;
+  line-height: 12px;
   text-decoration: none;
-  transition: background-color 0.2s ease-in-out;
+  transition: color 0.15s linear, background-color 0.15s linear;
   display: flex;
   padding: 4px 8px;
   flex-shrink: 0;
@@ -22,11 +28,17 @@
   justify-content: center;
 }
 
-a.card-tag:hover {
-  background-color: #e5e5e5;
+a.card-tag:hover,
+a.card-tag:active {
+  color: #333333;
+  background-color: #e0e0e0;
   text-decoration: none;
 }
 
 span.card-tag {
   cursor: default;
+}
+
+.card-tag .icon {
+  margin-right: 2px;
 }

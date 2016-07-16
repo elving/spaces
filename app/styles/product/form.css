@@ -52,7 +52,7 @@
   border: 1px solid #e5e5e5;
   border-radius: 4px;
   background-color: #ffffff;
-  transition: height 0.2s linear;
+  transition: height 0.15s linear;
   flex: 1;
   width: 100%;
   display: flex;

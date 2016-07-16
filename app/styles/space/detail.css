@@ -121,7 +121,7 @@
 .page-space-detail #comments {
   border-top: 1px solid #e5e5e5;
   width: 100%;
-  margin: 35px auto 0;
+  margin: 0 auto;
   padding: 35px 0;
   display: flex;
   align-items: center;

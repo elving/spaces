@@ -3,13 +3,17 @@ import mongoose from 'mongoose'
 
 import toIds from '../utils/toIds'
 import toJSON from '../utils/toJSON'
+import toStringId from '../utils/toStringId'
 import parseError from '../utils/parseError'
 import toIdsFromPath from '../utils/toIdsFromPath'
 import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default (sid, returnDocument = false) => {
-  return new Promise((resolve, reject) => {
+import getLastLikes from './getLastLikes'
+import getLastComments from './getLastComments'
+
+export default (sid, returnDocument = false) => (
+  new Promise((resolve, reject) => {
     const key = `product-${sid}`
 
     const query = () => {
@@ -20,23 +24,32 @@ export default (sid, returnDocument = false) => {
         .populate('colors')
         .populate('categories')
         .populate('spaceTypes')
-        .exec(async (err, product) => {
+        .exec(async (err, product = {}) => {
           if (err) {
             return reject(parseError(err))
           }
 
-          if (!isEmpty(product)) {
-            await saveToCache(key, toJSON(product), [
-              toIds(product),
-              toIdsFromPath(product, 'brand'),
-              toIdsFromPath(product, 'colors'),
-              toIdsFromPath(product, 'categories'),
-              toIdsFromPath(product, 'spaceTypes')
-            ])
+          try {
+            const lastLikes = await getLastLikes(toStringId(product))
+            const lastComments = await getLastComments(toStringId(product))
+
+            product.set({ lastLikes, lastComments })
+
+            if (!isEmpty(product)) {
+              await saveToCache(key, toJSON(product), [
+                toIds(product),
+                toIds(lastLikes),
+                toIds(lastComments),
+                toIdsFromPath(product, 'brand'),
+                toIdsFromPath(product, 'colors'),
+                toIdsFromPath(product, 'categories'),
+                toIdsFromPath(product, 'spaceTypes')
+              ])
+            }
 
             resolve(product)
-          } else {
-            resolve()
+          } catch (metadataErr) {
+            return reject(metadataErr)
           }
         })
     }
@@ -47,4 +60,4 @@ export default (sid, returnDocument = false) => {
       getFromCacheOrQuery(key, query, resolve)
     }
   })
-}
+)

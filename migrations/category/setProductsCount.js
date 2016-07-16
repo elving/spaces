@@ -8,7 +8,7 @@ const getProductCount = (category) => (
   new Promise((resolve, reject) => {
     mongoose
       .model('Product')
-      .where({ categories: { $in: [category] }})
+      .where({ categories: { $in: [category] } })
       .count((err, count) => {
         if (err) {
           return reject(err)

@@ -1,21 +1,22 @@
-import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 export default class Avatar extends Component {
   static contextTypes = {
-    user: Type.object
+    user: PropTypes.object
   };
 
   static propTypes = {
-    width: Type.number,
-    height: Type.number,
-    imageUrl: Type.string,
-    initials: Type.string,
-    className: Type.string
+    style: PropTypes.object,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    imageUrl: PropTypes.string,
+    initials: PropTypes.string,
+    className: PropTypes.string
   };
 
   static defaultProps = {
+    style: {},
     width: 32,
     height: 32,
     initials: '?',
@@ -23,26 +24,31 @@ export default class Avatar extends Component {
   };
 
   render() {
-    const avatar = get(this.props, 'imageUrl', '')
-    const initials = get(this.props, 'initials', '')
-    const { width, height, className } = this.props
-
-    const fontSize = (height - 46) > 14 ? (height - 46) : 14
+    const { props } = this
+    const fontSize = (props.height - 46) > 14 ? (props.height - 46) : 14
     const lineHeight = `${fontSize + 2}px`
 
     return (
-      <div className={`user-avatar ${className}`}>
-        {!isEmpty(avatar) ? (
+      <div style={props.style} className={`user-avatar ${props.className}`}>
+        {!isEmpty(props.imageUrl) ? (
           <img
-            src={avatar}
-            width={width}
-            height={height}
-            className="user-avatar-image"/>
-          ) : (
+            src={props.imageUrl}
+            role="presentation"
+            width={props.width}
+            height={props.height}
+            className="user-avatar-image"
+          />
+        ) : (
           <span
-            style={{ width, height, fontSize, lineHeight }}
-            className="user-avatar-initials">
-            {initials}
+            style={{
+              width: props.width,
+              height: props.height,
+              fontSize: props.fontSize,
+              lineHeight
+            }}
+            className="user-avatar-initials"
+          >
+            {props.initials}
           </span>
         )}
       </div>

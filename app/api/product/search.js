@@ -6,8 +6,8 @@ import mongoose from 'mongoose'
 import parseError from '../utils/parseError'
 import makeSearchQuery from '../utils/makeSearchQuery'
 
-const getCount = (params) => {
-  return new Promise((resolve, reject) => {
+const getCount = (params) => (
+  new Promise((resolve, reject) => {
     mongoose
       .model('Product')
       .where(params)
@@ -19,15 +19,20 @@ const getCount = (params) => {
         resolve(count)
       })
   })
-}
+)
 
-export default (params = {}) => {
-  return new Promise((resolve, reject) => {
+export default (params = {}, operation = 'where') => (
+  new Promise((resolve, reject) => {
+    let query
     const searchParams = makeSearchQuery(params)
 
-    mongoose
-      .model('Product')
-      .where(searchParams)
+    if (operation === 'and') {
+      query = mongoose.model('Product').find({ $and: [searchParams] })
+    } else {
+      query = mongoose.model('Product').where(searchParams)
+    }
+
+    query
       .skip(parseInt(get(params, 'skip', 0)))
       .limit(parseInt(get(params, 'limit', 40)))
       .populate('brand')
@@ -49,4 +54,4 @@ export default (params = {}) => {
         })
       })
   })
-}
+)

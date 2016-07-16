@@ -102,3 +102,24 @@ export const getSpaceComments = async (req, res) => {
     })
   }
 }
+
+export const getProductComments = async (req, res) => {
+  const product = get(req.params, 'product', '')
+
+  if (isEmpty(product)) {
+    return res.status(200).json({ comments: [] })
+  }
+
+  try {
+    const comments = await getAll(product)
+    res.status(200).json({ comments })
+  } catch (err) {
+    res.status(500).json({
+      err: {
+        genereic: (
+          'There was an error while trying to fetch comments from this product.'
+        )
+      }
+    })
+  }
+}

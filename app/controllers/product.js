@@ -5,6 +5,8 @@ import isEmpty from 'lodash/isEmpty'
 
 import isAdmin from '../utils/user/isAdmin'
 import isOwner from '../utils/user/isOwner'
+import setProps from '../utils/middlewares/setProps'
+import setMetadata from '../utils/middlewares/setMetadata'
 import userCanAddProducts from '../utils/userCanAddProducts'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
@@ -14,9 +16,12 @@ import create from '../api/product/create'
 import update from '../api/product/update'
 import destroy from '../api/product/destroy'
 import findBySid from '../api/product/findBySid'
+import getRelated from '../api/product/getRelated'
+import getRelatedSpaces from '../api/product/getRelatedSpaces'
 import fetchProductData from '../api/product/fetchProductData'
 
 import toJSON from '../api/utils/toJSON'
+import toStringId from '../api/utils/toStringId'
 import { default as getAllBrands } from '../api/brand/getAll'
 import { default as getAllColors } from '../api/color/getAll'
 import { default as getAllCategories } from '../api/category/getAll'
@@ -31,6 +36,32 @@ export const renderIndex = async (req, res, next) => {
     }
 
     res.locals.props = await search()
+    next()
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const renderDetail = async (req, res, next) => {
+  const sid = get(req, 'params.sid')
+
+  try {
+    const product = await findBySid(sid)
+    const relatedSpaces = await getRelatedSpaces(toStringId(product))
+    const relatedProducts = await getRelated(product)
+
+    setMetadata(res, {
+      title: `${get(product, 'name', '')} | Spaces`,
+      bodyId: 'page-product-detail',
+      bodyClass: 'page'
+    })
+
+    setProps(res, {
+      product: toJSON(product),
+      relatedSpaces: toJSON(relatedSpaces),
+      relatedProducts: toJSON(relatedProducts)
+    })
+
     next()
   } catch (err) {
     next(err)

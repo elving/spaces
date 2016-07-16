@@ -50,7 +50,6 @@ export default (_id, props) => (
           products = await getProducts(get(updates, 'products'))
           shouldUpdateImage = true
 
-
           forEach(products, (product = {}) => {
             brands = concat(brands, toObjectId(product.brand))
             colors = concat(colors, toObjectId(product.colors))

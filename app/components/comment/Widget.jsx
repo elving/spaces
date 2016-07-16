@@ -1,6 +1,6 @@
-import filter from 'lodash/filter'
-import isEqual from 'lodash/isEqual'
-import React, { Component, PropTypes as Type } from 'react'
+import reject from 'lodash/reject'
+import concat from 'lodash/concat'
+import React, { Component, PropTypes } from 'react'
 
 import Comments from './Comments'
 import CommentForm from './Form'
@@ -8,6 +8,18 @@ import CommentForm from './Form'
 import toStringId from '../../api/utils/toStringId'
 
 export default class CommentsWidget extends Component {
+  static propTypes = {
+    parent: PropTypes.string,
+    parentType: PropTypes.string,
+    onCommentAdded: PropTypes.func,
+    onCommentRemoved: PropTypes.func
+  };
+
+  static defaultProps = {
+    onCommentAdded: (() => {}),
+    onCommentRemoved: (() => {})
+  };
+
   constructor(props) {
     super(props)
 
@@ -16,52 +28,40 @@ export default class CommentsWidget extends Component {
     }
   }
 
-  static propTypes = {
-    parent: Type.string,
-    parentType: Type.string,
-    onCommentAdded: Type.func,
-    onCommentRemoved: Type.func
-  };
-
-  static defaultProps = {
-    onCommentAdded: (() => {}),
-    onCommentRemoved: (() => {})
-  };
-
   addNewComment(comment) {
-    const { newComments } = this.state
-    const { onCommentAdded } = this.props
+    const { props, state } = this
 
-    newComments.push(comment)
-    this.setState({ newComments }, onCommentAdded)
+    this.setState({
+      newComments: concat(state.newComments, comment)
+    }, props.onCommentAdded)
   }
 
   removeComment(id) {
-    const { newComments } = this.state
-    const { onCommentRemoved } = this.props
+    const { props, state } = this
 
     this.setState({
-      newComments: filter(newComments, comment =>
-        !isEqual(toStringId(comment), id)
+      newComments: reject(state.newComments, comment =>
+        toStringId(comment) === id
       )
-    }, onCommentRemoved)
+    }, props.onCommentRemoved)
   }
 
   render() {
-    const { newComments } = this.state
-    const { parent, parentType } = this.props
+    const { props, state } = this
 
     return (
       <div className="comments-widget">
         <Comments
-          parent={parent}
-          parentType={parentType}
-          newComments={newComments}
-          onCommentRemoved={::this.removeComment}/>
+          parent={props.parent}
+          parentType={props.parentType}
+          newComments={state.newComments}
+          onCommentRemoved={::this.removeComment}
+        />
         <CommentForm
-          parent={parent}
+          parent={props.parent}
           onCreate={::this.addNewComment}
-          parentType={parentType}/>
+          parentType={props.parentType}
+        />
       </div>
     )
   }

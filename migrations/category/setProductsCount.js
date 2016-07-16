@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 
+import log from '../../app/utils/log'
 import getAll from '../../app/api/category/getAll'
 import update from '../../app/api/category/update'
 import toStringId from '../../app/api/utils/toStringId'
@@ -19,22 +20,23 @@ const getProductCount = (category) => (
   })
 )
 
-export default () => {
-  return new Promise(async (resolve, reject) => {
-    console.log('category/setProductsCount => Start')
+export default () => (
+  new Promise(async (resolve, reject) => {
+    log('category/setProductsCount => Start')
+
     try {
       const categories = await getAll()
 
-      for (let category of categories) {
+      for (const category of categories) {
         const id = toStringId(category)
         const productsCount = await getProductCount(id)
         await update(id, { productsCount })
       }
 
-      console.log('category/setProductsCount => Done')
+      log('category/setProductsCount => Done')
       resolve()
     } catch (err) {
       reject(err)
     }
   })
-}
+)

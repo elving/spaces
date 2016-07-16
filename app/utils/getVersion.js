@@ -2,15 +2,14 @@ import isEmpty from 'lodash/isEmpty'
 import { join } from 'path'
 import { readFileSync } from 'fs'
 
+import logError from '../utils/logError'
+
 export default () => {
-  let version
-  const app = readFileSync(join(__dirname, '../../package.json'), 'utf8')
-
   try {
-    version = JSON.parse(app).version
+    const app = readFileSync(join(__dirname, '../../package.json'), 'utf8')
+    const version = JSON.parse(app).version
+    return `version_${isEmpty(version) ? 'latest' : version}`
   } catch (err) {
-    console.error(err)
+    logError(err)
   }
-
-  return `version_${isEmpty(version) ? 'latest' : version}`
 }

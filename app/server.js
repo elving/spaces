@@ -2,6 +2,8 @@ import dotenv from 'dotenv'
 import express from 'express'
 import mongoose from 'mongoose'
 
+import log from './utils/log'
+import logError from './utils/logError'
 import configModels from './config/models'
 import configExpress from './config/express'
 import configPassport from './config/passport'
@@ -17,16 +19,16 @@ const redisConfig = getRedisConfig()
 
 mongoose.connect(process.env.MONGO_URL, {
   server: { socketOptions: { keepAlive: 1 } }
-}, (err) => {
-  if (err) console.error(err)
+}, err => {
+  if (err) {
+    logError(err)
+  }
 })
 
-mongoose.connection.on('error', (err) => {
-  console.error(err)
-})
+mongoose.connection.on('error', err => logError(err))
 
 mongoose.connection.on('open', () => {
-  console.log('Mongoose connection open.')
+  log('Mongoose connection open.')
 
   // Setup redis cache
   startCache('spaces-next-cache', {
@@ -49,9 +51,9 @@ mongoose.connection.on('open', () => {
 
   server.listen(port, host, (error) => {
     if (error) {
-      console.error(error)
+      logError(error)
     } else {
-      console.log(`Express app started on port ${port}`)
+      log(`Express app started on port ${port}`)
     }
   })
 })
@@ -59,7 +61,7 @@ mongoose.connection.on('open', () => {
 // If the Node process ends, close the Mongoose connection
 process.on('SIGINT', () => {
   mongoose.connection.close(() => {
-    console.log('Mongoose connection disconnected.')
+    log('Mongoose connection disconnected.')
     process.exit(0)
   })
 })

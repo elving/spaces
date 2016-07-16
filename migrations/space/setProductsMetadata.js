@@ -4,6 +4,7 @@ import compact from 'lodash/compact'
 import forEach from 'lodash/forEach'
 import mongoose from 'mongoose'
 
+import log from '../../app/utils/log'
 import getAll from '../../app/api/space/getAll'
 import update from '../../app/api/space/update'
 import toStringId from '../../app/api/utils/toStringId'
@@ -42,7 +43,8 @@ const getProductsMetadata = (ids) => (
 
 export default () => (
   new Promise(async (resolve, reject) => {
-    console.log('space/setProductsMetadata => Start')
+    log('space/setProductsMetadata => Start')
+
     try {
       const spaces = await getAll()
 
@@ -52,7 +54,7 @@ export default () => (
         await update(toStringId(space), metadata)
       }
 
-      console.log('space/setProductsMetadata => Done')
+      log('space/setProductsMetadata => Done')
       resolve()
     } catch (err) {
       reject(err)

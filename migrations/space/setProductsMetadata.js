@@ -1,10 +1,8 @@
 import get from 'lodash/get'
-import concat from 'lodash/concat'
-import compact from 'lodash/compact'
-import forEach from 'lodash/forEach'
 import mongoose from 'mongoose'
 
 import log from '../../app/utils/log'
+import geTags from '../../app/utils/product/getTags'
 import getAll from '../../app/api/space/getAll'
 import update from '../../app/api/space/update'
 import toStringId from '../../app/api/utils/toStringId'
@@ -20,23 +18,7 @@ const getProductsMetadata = (ids) => (
           return reject(err)
         }
 
-        const metadata = {}
-
-        forEach(products, product => {
-          metadata.brands = compact(
-            concat(metadata.brands, get(product, 'brand', ''))
-          )
-
-          metadata.colors = compact(
-            concat(metadata.colors, get(product, 'colors', []))
-          )
-
-          metadata.categories = compact(
-            concat(metadata.categories, get(product, 'categories', []))
-          )
-        })
-
-        resolve(metadata)
+        resolve(geTags(products))
       })
   })
 )

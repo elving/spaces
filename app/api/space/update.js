@@ -1,66 +1,31 @@
-import get from 'lodash/get'
 import has from 'lodash/has'
 import assign from 'lodash/assign'
-import concat from 'lodash/concat'
-import compact from 'lodash/compact'
-import forEach from 'lodash/forEach'
 import mongoose from 'mongoose'
 
 import toIds from '../../api/utils/toIds'
+import getTags from '../../utils/product/getTags'
 import sanitize from './sanitize'
 import logError from '../../utils/logError'
-import toObjectId from '../utils/toObjectId'
+import parseError from '../utils/parseError'
+import getProducts from './getProducts'
 import toIdsFromPath from '../../api/utils/toIdsFromPath'
 import generateImage from '../../utils/image/generateImage'
-
-import parseError from '../utils/parseError'
 import getProductImages from '../utils/getProductImages'
 import { invalidateFromCache } from '../cache'
-
-const getProducts = productIds => (
-  new Promise(async (resolve, reject) => {
-    mongoose
-      .model('Product')
-      .where({
-        _id: { $in: productIds }
-      })
-      .exec((err, products = []) => {
-        if (err) {
-          return reject(parseError(err))
-        }
-
-        resolve(products)
-      })
-  })
-)
 
 export default (_id, props) => (
   new Promise(async (resolve, reject) => {
     try {
-      let brands = []
-      let colors = []
       let updates = sanitize(props)
       let products = []
-      let categories = []
       let shouldUpdateImage = false
       const options = { new: true }
 
       if (has(updates, 'products')) {
         try {
-          products = await getProducts(get(updates, 'products'))
+          products = await getProducts(updates.products)
+          updates = assign({}, updates, getTags(products))
           shouldUpdateImage = true
-
-          forEach(products, (product = {}) => {
-            brands = concat(brands, toObjectId(product.brand))
-            colors = concat(colors, toObjectId(product.colors))
-            categories = concat(categories, toObjectId(product.categories))
-          })
-
-          updates = assign({}, updates, {
-            brands: compact(brands),
-            colors: compact(colors),
-            categories: compact(categories)
-          })
         } catch (getProductsErr) {
           return reject(getProductsErr)
         }

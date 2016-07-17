@@ -36,7 +36,7 @@ export default class CardTags extends Component {
           ) : (
             <a
               key={`${toStringId(props.model)}-${tag.id}`}
-              href={tag.detailUrl}
+              href={tag.url}
               className="card-tag"
             >
               <MaterialDesignIcon name={tag.type} size={12} />

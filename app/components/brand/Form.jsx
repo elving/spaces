@@ -1,41 +1,16 @@
 import get from 'lodash/get'
 import axios from 'axios'
-import merge from 'lodash/merge'
-import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 import serialize from 'form-serialize'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
-import Icon from '../common/Icon'
 import Notification from '../common/Notification'
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
 
 export default class BrandForm extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      brand: {},
-      errors: {},
-
-      url: get(props, 'brand.url', ''),
-      name: get(props, 'brand.name', ''),
-      logo: get(props, 'brand.logo', ''),
-      description: get(props, 'brand.description', ''),
-
-      isSaving: false,
-      hasSaved: false,
-      savingSuccessful: false,
-
-      isDeleting: false,
-      deletingSuccessful: false
-    }
-
-    this.form = null
-  }
-
   static contextTypes = {
     csrf: PropTypes.string
   };
@@ -50,14 +25,35 @@ export default class BrandForm extends Component {
     formMethod: 'POST'
   };
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      url: get(props.brand, 'url', ''),
+      name: get(props.brand, 'name', ''),
+      logo: get(props.brand, 'logo', ''),
+      brand: {},
+      errors: {},
+      isSaving: false,
+      hasSaved: false,
+      isDeleting: false,
+      description: get(props.brand, 'description', ''),
+      savingSuccessful: false,
+      deletingSuccessful: false
+    }
+
+    this.form = null
+  }
+
   componentDidMount() {
-    const { isSaving } = this.state
-    const { formMethod } = this.props
+    const { props, state } = this.state
 
     window.onbeforeunload = () => {
-      const action = isEqual(formMethod, 'POST') ? 'adding' : 'updating'
+      const action = props.formMethod === 'POST'
+        ? 'adding'
+        : 'updating'
 
-      if (isSaving) {
+      if (state.isSaving) {
         return (
           `You are in the process of ${action} a brand. ` +
           'Are you sure you want to navigate away from this page and ' +
@@ -67,61 +63,45 @@ export default class BrandForm extends Component {
     }
   }
 
-  reset(next = (() => {})) {
-    this.setState({
-      brand: {},
-      errors: {},
-
-      url: '',
-      name: '',
-      logo: '',
-      description: '',
-
-      isSaving: false,
-      hasSaved: false,
-      savingSuccessful: false,
-
-      isDeleting: false,
-      deletingSuccessful: false
-    }, next)
-  }
-
   onSubmit(event) {
-    const { brand, formMethod } = this.props
+    const { props } = this
 
     const form = this.form
+    const isPOST = props.formMethod === 'POST'
     const formData = serialize(form, { hash: true })
-    const isAdding = isEqual(formMethod, 'POST')
-    const ajaxEndpoint = isAdding
+    const endpoint = isPOST
       ? '/ajax/brands/'
-      : `/ajax/brands/${toStringId(brand)}/`
+      : `/ajax/brands/${toStringId(props.brand)}/`
 
     event.preventDefault()
 
     this.setState({ errors: {}, isSaving: true }, () => {
       axios({
-        url: ajaxEndpoint,
+        url: endpoint,
         data: formData,
-        method: formMethod
-      }).then((res) => {
-        const resetData = isAdding ? {
+        method: props.formMethod
+      })
+      .then(({ data: brand }) => {
+        const resetData = isPOST ? {
           url: '',
           name: '',
           logo: '',
           description: ''
         } : {}
 
-        this.setState(merge({
-          brand: get(res, 'data', {}),
+        this.setState({
+          brand,
           errors: {},
           isSaving: false,
           hasSaved: true,
-          savingSuccessful: true
-        }, resetData))
-      }).catch((res) => {
+          savingSuccessful: true,
+          ...resetData
+        })
+      })
+      .catch(({ data }) => {
         this.setState({
           brand: {},
-          errors: get(res, 'data.err', {}),
+          errors: get(data, 'err', {}),
           isSaving: false,
           hasSaved: false,
           savingSuccessful: false
@@ -131,68 +111,81 @@ export default class BrandForm extends Component {
   }
 
   onClickDelete() {
-    const { csrf } = this.context
-    const { brand } = this.props
+    const { props, context } = this
+
     const deleteMessage = (
       'Are you sure you want to delete this brand? \n' +
       'This action cannot be undone. ' +
       'Type the word "DELETE" to confirm.'
     )
 
-    if (isEqual(window.prompt(deleteMessage), 'DELETE')) {
+    if (window.prompt(deleteMessage) === 'DELETE') {
       this.setState({ errors: {}, isDeleting: true }, () => {
-        axios({
-          url: `/ajax/brands/${toStringId(brand)}/`,
-          data: { _csrf: csrf, _method: 'delete' },
-          method: 'POST'
-        }).then(() => {
-          this.setState({
-            brand: {},
-            isDeleting: false,
-            deletingSuccessful: true
+        axios
+          .post(`/ajax/brands/${toStringId(props.brand)}/`, {
+            _csrf: context.csrf,
+            _method: 'delete'
           })
-        }).catch((res) => {
-          this.setState({
-            brand: {},
-            errors: get(res, 'data.err', {}),
-            isDeleting: false,
-            deletingSuccessful: false
+          .then(() => {
+            this.setState({
+              brand: {},
+              isDeleting: false,
+              deletingSuccessful: true
+            })
           })
-        })
+          .catch((res) => {
+            this.setState({
+              brand: {},
+              errors: get(res, 'data.err', {}),
+              isDeleting: false,
+              deletingSuccessful: false
+            })
+          })
       })
     }
   }
 
   renderForm() {
-    const { csrf } = this.context
-    const { formMethod } = this.props
-    const { errors, isSaving, isDeleting, deletingSuccessful } = this.state
+    const { props, state, context } = this
 
-    const isAdding = isEqual(formMethod, 'POST')
-    const shouldDisable = isSaving || isDeleting || deletingSuccessful
+    const isPOST = props.formMethod === 'POST'
+    const shouldDisable = (
+      state.isSaving ||
+      state.isDeleting ||
+      state.deletingSuccessful
+    )
 
-    const urlError = get(errors, 'url')
+    const urlError = get(state.errors, 'url')
     const hasUrlError = !isEmpty(urlError)
 
-    const nameError = get(errors, 'name')
+    const nameError = get(state.errors, 'name')
     const hasNameError = !isEmpty(nameError)
 
-    const descriptionError = get(errors, 'description')
+    const descriptionError = get(state.errors, 'description')
     const hasDescriptionError = !isEmpty(descriptionError)
+
+    let btnText
+
+    if (state.isSaving) {
+      btnText = isPOST ? 'Adding...' : 'Add'
+    } else if (state.isSaving) {
+      btnText = isPOST ? 'Updating...' : 'Update'
+    }
 
     return (
       <form
-        ref={(form) => this.form = form}
+        ref={(form) => { this.form = form }}
         method="POST"
         onSubmit={::this.onSubmit}
-        className="form brand-form">
-        <input type="hidden" name="_csrf" value={csrf}/>
-        <input type="hidden" name="_method" value={formMethod}/>
+        className="form brand-form"
+      >
+        <input type="hidden" name="_csrf" value={context.csrf} />
+        <input type="hidden" name="_method" value={props.formMethod} />
 
         <h1 className="form-title">
-          {isAdding ? 'Add Brand' : 'Update Brand'}
+          {isPOST ? 'Add Brand' : 'Update Brand'}
           <a href="/admin/brands/" className="form-title-link">
-            <Icon name="list" width={18} height={18}/>
+            <MaterialDesignIcon name="list" size={18} />
             All Brands
           </a>
         </h1>
@@ -206,17 +199,18 @@ export default class BrandForm extends Component {
             type="text"
             name="name"
             required
-            value={get(this.state, 'name', '')}
+            value={state.name}
             disabled={shouldDisable}
-            onChange={(event) => {
-              this.setState({ name: event.currentTarget.value })
+            onChange={({ currentTarget: input }) => {
+              this.setState({ name: input.value })
             }}
             autoFocus
             className={classNames({
-              'textfield': true,
+              textfield: true,
               'textfield--error': hasNameError
             })}
-            placeholder="E.g. Ikea"/>
+            placeholder="E.g. Ikea"
+          />
 
           {hasNameError ? (
             <small className="form-error">{nameError}</small>
@@ -231,17 +225,18 @@ export default class BrandForm extends Component {
           <input
             type="url"
             name="url"
-            value={get(this.state, 'url', '')}
+            value={state.url}
             disabled={shouldDisable}
-            onChange={(event) => {
-              this.setState({ url: event.currentTarget.value })
+            onChange={({ currentTarget: input }) => {
+              this.setState({ url: input.value })
             }}
             autoFocus
             className={classNames({
-              'textfield': true,
+              textfield: true,
               'textfield--error': hasUrlError
             })}
-            placeholder="E.g. http://www.ikea.com/"/>
+            placeholder="E.g. http://www.ikea.com/"
+          />
 
           {hasUrlError ? (
             <small className="form-error">{urlError}</small>
@@ -255,16 +250,17 @@ export default class BrandForm extends Component {
 
           <textarea
             name="description"
-            value={get(this.state, 'description', '')}
+            value={state.description}
             disabled={shouldDisable}
-            onChange={(event) => {
-              this.setState({ description: event.currentTarget.value })
+            onChange={({ currentTarget: input }) => {
+              this.setState({ description: input.value })
             }}
             className={classNames({
-              'textfield': true,
+              textfield: true,
               'textfield--error': hasDescriptionError
             })}
-            placeholder="E.g. The IKEA Concept starts with the idea of..."/>
+            placeholder="E.g. The IKEA Concept starts with the idea of..."
+          />
 
           {hasDescriptionError ? (
             <small className="form-error">{descriptionError}</small>
@@ -276,17 +272,14 @@ export default class BrandForm extends Component {
             <button
               type="submit"
               disabled={shouldDisable}
-              className="button button--primary">
+              className="button button--primary"
+            >
               <span className="button-text">
-                <Icon name={isAdding ? 'add' : 'info'}/>
-                {isSaving ? (
-                  isAdding ? 'Adding...' : 'Updating...'
-                ) : (
-                  isAdding ? 'Add' : 'Update'
-                )}
+                <MaterialDesignIcon name={isPOST ? 'add' : 'edit'} />
+                {btnText}
               </span>
             </button>
-            {isAdding ? (
+            {isPOST ? (
               <a href="/admin/brands/" className="button">
                 <span className="button-text">Cancel</span>
               </a>
@@ -295,10 +288,11 @@ export default class BrandForm extends Component {
                 type="button"
                 onClick={::this.onClickDelete}
                 disabled={shouldDisable}
-                className="button button--danger">
+                className="button button--danger"
+              >
                 <span className="button-text">
-                  <Icon name="delete"/>
-                  {isDeleting ? 'Deleting...' : 'Delete'}
+                  <MaterialDesignIcon name="delete" />
+                  {state.isDeleting ? 'Deleting...' : 'Delete'}
                 </span>
               </button>
             )}
@@ -309,18 +303,17 @@ export default class BrandForm extends Component {
   }
 
   renderNotification() {
-    const { formMethod } = this.props
-    const { brand, errors, savingSuccessful, deletingSuccessful } = this.state
+    const { props, state } = this
 
-    const sid = get(brand, 'sid', '')
+    const sid = get(state.brand, 'sid', '')
     const url = !isEmpty(sid) ? `/admin/brands/${sid}/update/` : '#'
-    const name = get(brand, 'name', 'Brand')
+    const name = get(state.brand, 'name', 'Brand')
 
-    const genericError = get(errors, 'generic')
+    const genericError = get(state.errors, 'generic')
     const hasGenericError = !isEmpty(genericError)
 
     const onClose = () => {
-      if (deletingSuccessful) {
+      if (state.deletingSuccessful) {
         window.location.href = '/admin/brands/'
       } else {
         this.setState({
@@ -331,39 +324,56 @@ export default class BrandForm extends Component {
       }
     }
 
-    if (savingSuccessful) {
-      return isEqual(formMethod, 'POST') ? (
-        <Notification type="success" onClose={onClose}>
-          {`"${name}"`} was added successfully.
-          Click <a href={url}>here</a> to edit.
-        </Notification>
-      ) : (
-        <Notification type="success" onClose={onClose}>
-          {`"${name}"`} was updated successfully.
+    if (state.savingSuccessful) {
+      return (
+        <Notification
+          type="success"
+          onClose={onClose}
+          timeout={3500}
+          isVisible
+        >
+          {props.formMethod === 'POST' ? (
+            <span>
+              "{name}" was added successfully.
+              Click <a href={url}>here</a> to edit.
+            </span>
+          ) : (
+            <span>
+              "{name}" was updated successfully.
+            </span>
+          )}
         </Notification>
       )
-    } else if (deletingSuccessful) {
+    } else if (state.deletingSuccessful) {
       return (
-        <Notification type="success" delay={2500} onClose={onClose}>
-          {`"${name}"`} was deleted successfully. Redirecting...
+        <Notification
+          type="success"
+          timeout={3500}
+          onClose={onClose}
+          isVisible
+        >
+          "{name}" was deleted successfully. Redirecting...
         </Notification>
       )
     } else if (hasGenericError) {
       return (
         <Notification
           type="error"
+          timeout={3500}
           onClose={() => {
             this.setState({
               errors: {},
               savingSuccessful: false
             })
-          }}>
+          }}
+          isVisible
+        >
           {genericError}
         </Notification>
       )
-    } else {
-      return null
     }
+
+    return null
   }
 
   render() {

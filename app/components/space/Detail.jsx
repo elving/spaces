@@ -1,8 +1,15 @@
+/* eslint-disable no-alert */
 import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
+import axios from 'axios'
 import isEmpty from 'lodash/isEmpty'
 import React, { Component, PropTypes } from 'react'
+
+import Dropdown, {
+  DropdownTrigger,
+  DropdownContent
+} from 'react-simple-dropdown'
 
 import Layout from '../common/Layout'
 import Product from '../product/Card'
@@ -10,11 +17,13 @@ import LikesModal from '../modal/Likes'
 import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
 import MiniProfile from '../user/MiniProfile'
+import Notification from '../common/Notification'
 import RedesignPopup from './RedesignPopup'
 import CommentsWidget from '../comment/Widget'
+import SpaceFormModal from '../modal/SpaceForm'
 import AddProductModal from '../modal/AddProduct'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
-import AddProductModalContainer from '../container/AddProductModal'
+import addProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
 import canModify from '../../utils/user/canModify'
@@ -22,23 +31,9 @@ import toStringId from '../../api/utils/toStringId'
 import { default as $ } from '../../utils/dom/selector'
 
 class SpaceDetail extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      likesCount: get(props, 'space.likesCount', 0),
-      commentsCount: get(props, 'space.commentsCount', 0),
-      redesignsCount: get(props, 'space.redesignsCount', 0),
-      likesModalIsOpen: false,
-      createLikesModal: false,
-      sharePopupIsOpen: false,
-      sharePopupIsCreated: false,
-      redesignPopupIsOpen: false
-    }
-  }
-
   static contextTypes = {
-    user: PropTypes.object
+    user: PropTypes.object,
+    csrf: PropTypes.string
   };
 
   static propTypes = {
@@ -56,6 +51,56 @@ class SpaceDetail extends Component {
     addProductModalIsOpen: false,
     createaddProductModal: false
   };
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      name: get(props.space, 'name', ''),
+      isDeleting: false,
+      likesCount: get(props.space, 'likesCount', 0),
+      description: get(props.space, 'description', ''),
+      commentsCount: get(props.space, 'commentsCount', 0),
+      redesignsCount: get(props.space, 'redesignsCount', 0),
+      editSuccessful: false,
+      editModalIsOpen: false,
+      createEditModal: false,
+      likesModalIsOpen: false,
+      createLikesModal: false,
+      sharePopupIsOpen: false,
+      sharePopupIsCreated: false,
+      redesignPopupIsOpen: false
+    }
+  }
+
+  delete() {
+    const { props, context } = this
+
+    const deleteMessage = (
+      'Are you sure you want to delete this space? \n' +
+      'This action cannot be undone. ' +
+      'Type the word "DELETE" to confirm.'
+    )
+
+    if (window.prompt(deleteMessage) === 'DELETE') {
+      this.setState({ isDeleting: true }, () => {
+        axios
+          .post(`/ajax/spaces/${toStringId(props.space)}/`, {
+            _csrf: context.csrf,
+            _method: 'delete'
+          })
+          .then(() => {
+            window.location.href = '/spaces/'
+          })
+          .catch(({ data }) => {
+            this.setState({
+              errors: get(data, 'err', {}),
+              isDeleting: false
+            })
+          })
+      })
+    }
+  }
 
   openRedesignPopup() {
     this.setState({
@@ -95,49 +140,66 @@ class SpaceDetail extends Component {
     })
   }
 
+  openEditFormModal() {
+    this.setState({
+      editModalIsOpen: true,
+      createEditModal: true
+    })
+  }
+
+  closeEditFormModal() {
+    this.setState({
+      editModalIsOpen: false
+    })
+  }
+
   renderHeader() {
-    const name = get(this.props, 'space.name', '')
+    const { state } = this
 
     return (
       <div className="space-detail-header">
-        <h1 className="space-detail-header-title">{name}</h1>
+        <h1 className="space-detail-header-title">
+          {state.name}
+        </h1>
         {this.renderCounters()}
       </div>
     )
   }
 
   renderCounters() {
-    const products = size(get(this.props, 'space.products', []))
-    const { likesCount, commentsCount, redesignsCount } = this.state
+    const { props, state } = this
+    const productsCount = size(get(props.space, 'products', []))
 
     return (
       <div className="space-detail-counters">
-        {products ? (
+        {productsCount ? (
           <a
             href="#products"
             className="space-detail-counter"
-            data-action="products">
+            data-action="products"
+          >
             <div className="space-detail-counter-number">
-              {products}
+              {productsCount}
             </div>
             <div className="space-detail-counter-text">
-              {inflect(products, 'Product')}
+              {inflect(productsCount, 'Product')}
             </div>
           </a>
         ) : null}
-        {redesignsCount ? (
+        {state.redesignsCount ? (
           <div
             className="space-detail-counter"
-            data-action="redesigns">
+            data-action="redesigns"
+          >
             <div className="space-detail-counter-number">
-              {redesignsCount}
+              {state.redesignsCount}
             </div>
             <div className="space-detail-counter-text">
-              {inflect(redesignsCount, 'Redesign')}
+              {inflect(state.redesignsCount, 'Redesign')}
             </div>
           </div>
         ) : null}
-        {likesCount ? (
+        {state.likesCount ? (
           <a
             href="#"
             onClick={(event) => {
@@ -145,25 +207,27 @@ class SpaceDetail extends Component {
               this.openLikesModal()
             }}
             className="space-detail-counter"
-            data-action="likes">
+            data-action="likes"
+          >
             <div className="space-detail-counter-number">
-              {likesCount}
+              {state.likesCount}
             </div>
             <div className="space-detail-counter-text">
-              {inflect(likesCount, 'Like')}
+              {inflect(state.likesCount, 'Like')}
             </div>
           </a>
         ) : null}
-        {commentsCount ? (
+        {state.commentsCount ? (
           <a
             href="#comments"
             className="space-detail-counter"
-            data-action="comments">
+            data-action="comments"
+          >
             <div className="space-detail-counter-number">
-              {commentsCount}
+              {state.commentsCount}
             </div>
             <div className="space-detail-counter-text">
-              {inflect(commentsCount, 'Comment')}
+              {inflect(state.commentsCount, 'Comment')}
             </div>
           </a>
         ) : null}
@@ -183,58 +247,54 @@ class SpaceDetail extends Component {
   }
 
   renderDesigner() {
-    const createdBy = get(this.props, 'space.createdBy', '')
+    const { props } = this
 
     return (
-      <MiniProfile user={createdBy}/>
+      <MiniProfile user={get(props.space, 'createdBy', {})} />
     )
   }
 
   renderSharePopup() {
-    const { sharePopupIsOpen, sharePopupIsCreated } = this.state
+    const { props, state } = this
 
-    const {
-      name,
-      image,
-      products,
-      shortUrl,
-      detailUrl,
-      createdBy
-    } = this.props.space
-
-    return sharePopupIsCreated ? (
+    return state.sharePopupIsCreated ? (
       <SharePopup
-        url={() => `${window.location.origin}/${shortUrl}/`}
+        url={() => (
+          `${window.location.origin}/${get(props.space, 'shortUrl')}/`
+        )}
         title="Share this space"
-        isOpen={sharePopupIsOpen}
-        shareUrl={() => `${window.location.origin}/${detailUrl}/`}
+        isOpen={state.sharePopupIsOpen}
+        shareUrl={() => (
+          `${window.location.origin}/${get(props.space, 'detailUrl')}/`
+        )}
         className="share-popup"
         shareText={(
-          `${name} — Designed by ${get(createdBy, 'username', '')}, ` +
-          `featuring ${size(products)} products.`
+          `${get(props.space, 'name')} — Designed by ` +
+          `${get(props.space, 'createdBy.username')}, ` +
+          `featuring ${size(get(props.space, 'products', []))} products.`
         )}
-        shareImage={image}
-        onClickClose={::this.closeSharePopup}/>
+        shareImage={get(props.space, 'image')}
+        onClickClose={::this.closeSharePopup}
+      />
     ) : null
   }
 
   renderRedesignPopup() {
-    const { space } = this.props
-    const { redesignPopupIsOpen } = this.state
+    const { props, state } = this
 
     return (
       <RedesignPopup
-        isOpen={redesignPopupIsOpen}
-        spaceId={space.id}
-        spaceType={toStringId(space.spaceType)}
+        isOpen={state.redesignPopupIsOpen}
+        spaceId={toStringId(props.space)}
+        spaceType={toStringId(get(props.space, 'spaceType'))}
         className="redesign-popup"
-        onClickClose={::this.closeRedesignPopup}/>
+        onClickClose={::this.closeRedesignPopup}
+      />
     )
   }
 
   renderActions() {
-    const { user } = this.context
-    const { likesCount } = this.state
+    const { props, state, context } = this
 
     return (
       <div className="space-detail-actions">
@@ -242,29 +302,27 @@ class SpaceDetail extends Component {
           <button
             type="button"
             onClick={::this.openRedesignPopup}
-            className={(
-              "button button--primary button--small tooltip"
-            )}
-            data-tooltip="Redesign this space">
-            <MaterialDesignIcon name="redesign"/> Redesign
+            className="button button--primary button--small"
+          >
+            <MaterialDesignIcon name="redesign" />
+            Redesign
           </button>
           {this.renderRedesignPopup()}
         </div>
         <LikeButton
-          parent={get(this.props, 'space.id', '')}
-          onLike={() => this.setState({ likesCount: likesCount + 1 })}
-          onUnlike={() => this.setState({ likesCount: likesCount - 1 })}
+          parent={toStringId(props.space)}
+          onLike={() => this.setState({ likesCount: state.likesCount + 1 })}
+          onUnlike={() => this.setState({ likesCount: state.likesCount - 1 })}
           className="space-detail-action"
-          parentType="space"/>
+          parentType="space"
+        />
         <div className="space-detail-action">
           <button
             type="button"
             onClick={::this.openSharePopup}
-            className={(
-              "button button--icon button--small tooltip"
-            )}
-            data-tooltip="Share this space">
-            <MaterialDesignIcon name="send"/>
+            className="button button--icon button--small"
+          >
+            <MaterialDesignIcon name="send" />
           </button>
           {this.renderSharePopup()}
         </div>
@@ -275,28 +333,56 @@ class SpaceDetail extends Component {
             $('#comments textarea[name="content"]').focus()
           }}
           className={(
-            "space-detail-action button button--icon button--small tooltip"
+            "space-detail-action button button--icon button--small"
           )}
-          data-tooltip="Comment on this space">
-          <MaterialDesignIcon name="comment"/>
+        >
+          <MaterialDesignIcon name="comment" />
         </a>
-        {canModify(user, get(this.props, 'space')) ? (
-          <button
-            type="button"
-            className="button button--icon button--small space-detail-action">
-            <MaterialDesignIcon name="settings"/>
-          </button>
+        {canModify(context.user, toStringId(props.space)) ? (
+          <Dropdown className="dropdown space-detail-action">
+            <DropdownTrigger
+              className="dropdown-trigger dropdown-trigger--no-caret"
+            >
+              <button
+                type="button"
+                className="button button--icon button--small"
+              >
+                <MaterialDesignIcon name="settings" />
+              </button>
+            </DropdownTrigger>
+            <DropdownContent className="dropdown-content">
+              <button
+                type="button"
+                onClick={::this.openEditFormModal}
+                disabled={state.isDeleting}
+                className="dropdown-link"
+              >
+                Edit <MaterialDesignIcon name="edit" />
+              </button>
+              <button
+                type="button"
+                onClick={::this.delete}
+                disabled={state.isDeleting}
+                className="dropdown-link"
+              >
+                {state.isDeleting ? 'Deleting...' : 'Delete'}
+                <MaterialDesignIcon name="delete" />
+              </button>
+            </DropdownContent>
+          </Dropdown>
         ) : null}
       </div>
     )
   }
 
   renderDescription() {
-    const description = get(this.props, 'space.description', [])
+    const { state } = this
 
-    return !isEmpty(description) ? (
+    return !isEmpty(state.description) ? (
       <div className="space-detail-description-container">
-        <p className="space-detail-description">{description}</p>
+        <p className="space-detail-description">
+          {state.description}
+        </p>
       </div>
     ) : null
   }
@@ -307,11 +393,12 @@ class SpaceDetail extends Component {
     return (
       <div className="grid">
         <div id="products" className="grid-items">
-          {map(get(props, 'space.products', []), product =>
+          {map(get(props.space, 'products', []), product =>
             <Product
               {...product}
               key={toStringId(product)}
-              onAddButtonClick={() => props.openAddProductModal(product)}/>
+              onAddButtonClick={() => props.openAddProductModal(product)}
+            />
           )}
         </div>
       </div>
@@ -319,42 +406,71 @@ class SpaceDetail extends Component {
   }
 
   renderLikesModal() {
-    const parent = get(this.props, 'space.id')
-    const { createLikesModal, likesModalIsOpen } = this.state
+    const { props, state } = this
 
-    return createLikesModal ? (
+    return state.createLikesModal ? (
       <LikesModal
-        parent={parent}
+        parent={toStringId(props.space)}
         onClose={::this.closeLikesModal}
-        isVisible={likesModalIsOpen}
-        parentType="space"/>
+        isVisible={state.likesModalIsOpen}
+        parentType="space"
+      />
     ) : null
   }
 
   renderComments() {
-    const count = get(this.state, 'commentsCount', 0)
-    const parent = get(this.props, 'space.id')
+    const { props, state } = this
 
     return (
       <div id="comments">
         <CommentsWidget
-          parent={parent}
+          parent={toStringId(props.space)}
           parentType="space"
-          onCommentAdded={() => this.setState({ commentsCount: count + 1 })}
-          onCommentRemoved={() => this.setState({ commentsCount: count - 1 })}/>
+          onCommentAdded={() => {
+            this.setState({ commentsCount: state.commentsCount + 1 })
+          }}
+          onCommentRemoved={() => {
+            this.setState({ commentsCount: state.commentsCount - 1 })
+          }}
+        />
       </div>
     )
   }
 
   render() {
-    const { props } = this
+    const { props, state } = this
 
     return (
       <Layout>
+        <Notification
+          type="success"
+          timeout={3500}
+          onClose={() => this.setState({ editSuccessful: false })}
+          isVisible={state.editSuccessful}
+        >
+          Space updated successfully
+        </Notification>
+
         <AddProductModal
           product={props.addProductModalCurrent}
           onClose={props.closeAddProductModal}
-          isVisible={props.addProductModalIsOpen}/>
+          isVisible={props.addProductModalIsOpen}
+        />
+
+        <SpaceFormModal
+          space={props.space}
+          onClose={::this.closeEditFormModal}
+          onSuccess={space => {
+            this.setState({
+              name: get(space, 'name'),
+              description: get(space, 'description'),
+              editSuccessful: true,
+              editModalIsOpen: false
+            })
+          }}
+          isVisible={state.editModalIsOpen}
+          formMethod="PUT"
+        />
 
         <div className="space-detail">
           {this.renderHeader()}
@@ -369,4 +485,4 @@ class SpaceDetail extends Component {
   }
 }
 
-export default AddProductModalContainer(SpaceDetail)
+export default addProductModalContainer(SpaceDetail)

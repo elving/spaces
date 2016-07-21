@@ -167,8 +167,9 @@ export default class LikesModal extends Component {
      <Modal
        style={overrideDefaultStyles}
        isOpen={isVisible}
-       className="ui-modal likes-modal"
-       onRequestClose={onClose}>
+       className="modal likes-modal"
+       onRequestClose={onClose}
+      >
        {this.renderContent()}
      </Modal>
    )

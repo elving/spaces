@@ -23,7 +23,7 @@
 }
 
 .add-product-modal-close {
-  top: 0;
+  top: 3px;
   right: 0;
   padding: 15px;
   position: absolute;
@@ -80,15 +80,9 @@
   flex-shrink: 0;
 }
 
-.add-product-modal-form,
-.add-product-modal-form-container,
 .add-product-modal-spaces,
 .add-product-modal-spaces-list {
   width: 100%;
-}
-
-.add-product-modal-form {
-  padding: 0 15px;
 }
 
 .add-product-modal-spaces {
@@ -127,10 +121,19 @@
   background-color: #fafafa;
 }
 
+.add-product-modal-space-action,
 .add-product-modal-space-actions {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.add-product-modal-space-action {
+  margin-left: 5px;
+}
+
+.add-product-modal-space-action:hover .icon-fill {
+  fill: #439fe0;
 }
 
 .add-product-modal-space-icon.icon-uncheck,

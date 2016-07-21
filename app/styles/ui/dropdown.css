@@ -26,6 +26,10 @@
   margin-left: 10px;
 }
 
+.dropdown-trigger--no-caret:after {
+  display: none;
+}
+
 .avatar {
   cursor: pointer;
 }
@@ -51,12 +55,15 @@
 }
 
 .dropdown-link {
+  cursor: pointer;
+  border: 0 none;
   border-bottom: 1px solid #e0e0e0;
   background-color: #ffffff;
   font-size: 16px;
   text-align: center;
   text-decoration: none;
   transition: background-color 0.15s linear;
+  width: 100%;
   padding: 15px;
   display: flex;
   align-items: center;

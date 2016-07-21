@@ -9,53 +9,69 @@ import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 import serialize from 'form-serialize'
 import classNames from 'classnames'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
-import Icon from '../common/Icon'
 import Loader from '../common/Loader'
 import Notification from '../common/Notification'
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
 import getValidProductImages from '../../utils/getValidProductImages'
 
 export default class ProductForm extends Component {
+  static contextTypes = {
+    csrf: PropTypes.string,
+    currentUserIsAdmin: PropTypes.func
+  };
+
+  static propTypes = {
+    brands: PropTypes.array,
+    colors: PropTypes.array,
+    product: PropTypes.object,
+    onAdded: PropTypes.func,
+    categories: PropTypes.array,
+    spaceTypes: PropTypes.array,
+    formMethod: PropTypes.string,
+    isPOSTForSpace: PropTypes.bool
+  };
+
+  static defaultProps = {
+    product: {},
+    onAdded: (() => {}),
+    formMethod: 'POST',
+    isPOSTForSpace: false
+  };
+
   constructor(props) {
     super(props)
 
     this.state = {
+      url: get(props.product, 'url', ''),
+      name: get(props.product, 'name', ''),
+      image: get(props.product, 'image', ''),
+      price: get(props.product, 'price', ''),
+      brand: get(props.product, 'brand.name', ''),
+      colors: map(get(props.product, 'colors', []), 'name'),
       errors: {},
+      images: [],
       product: {},
-
-      url: get(props, 'product.url', ''),
-      name: get(props, 'product.name', ''),
-      image: get(props, 'product.image', ''),
-      price: get(props, 'product.price', ''),
-      brand: get(props, 'product.brand.name', ''),
-      colors: map(get(props, 'product.colors', []), 'name'),
-      categories: map(get(props, 'product.categories', []), 'name'),
-      spaceTypes: map(get(props, 'product.spaceTypes', []), 'name'),
-      description: get(props, 'product.description', ''),
-
       isSaving: false,
       hasSaved: false,
-      savingSuccessful: false,
-
-      isScraping: false,
-      hasScrapped: false,
-      scrappedSuccessful: false,
-
-      images: [],
       imageIndex: 0,
-      isLoadingImage: false,
-
-      imageFromUrl: null,
-      imageUrlFormIsVisible: isEqual(get(props, 'formMethod'), 'PUT'),
-      isLoadingImageFromUrl: false,
-
+      categories: map(get(props.product, 'categories', []), 'name'),
+      spaceTypes: map(get(props.product, 'spaceTypes', []), 'name'),
+      isScraping: false,
       isDeleting: false,
+      hasScrapped: false,
+      description: get(props.product, 'description', ''),
+      imageFromUrl: null,
+      isLoadingImage: false,
+      savingSuccessful: false,
       deletingSuccessful: false,
-
-      productAlreadyExists: false
+      scrappedSuccessful: false,
+      productAlreadyExists: false,
+      imageUrlFormIsVisible: isEqual(get(props, 'formMethod'), 'PUT'),
+      isLoadingImageFromUrl: false
     }
 
     this.form = null
@@ -63,34 +79,11 @@ export default class ProductForm extends Component {
     this.imageUrlInput = null
   }
 
-  static contextTypes = {
-    csrf: Type.string,
-    currentUserIsAdmin: Type.func
-  };
-
-  static propTypes = {
-    brands: Type.array,
-    colors: Type.array,
-    product: Type.object,
-    onAdded: Type.func,
-    categories: Type.array,
-    spaceTypes: Type.array,
-    formMethod: Type.string,
-    isAddingForSpace: Type.bool
-  };
-
-  static defaultProps = {
-    product: {},
-    onAdded: (() => {}),
-    formMethod: 'POST',
-    isAddingForSpace: false
-  };
-
   componentDidMount() {
-    const { hasSaved, isSaving, savingSuccessful } = this.state
+    const { state } = this
 
     window.onbeforeunload = () => {
-      if (hasSaved) {
+      if (state.hasSaved) {
         return
       }
 
@@ -98,7 +91,7 @@ export default class ProductForm extends Component {
         serialize(this.form, { hash: true }), ['_csrf', '_method']
       )
 
-      if (isSaving || (!isEmpty(formData) && !savingSuccessful)) {
+      if (state.isSaving || (!isEmpty(formData) && !state.savingSuccessful)) {
         return (
           'You are in the process of adding a product. ' +
           'Are you sure you want to navigate away from this page and ' +
@@ -108,43 +101,6 @@ export default class ProductForm extends Component {
     }
   }
 
-  reset(next = (() => {})) {
-    this.setState({
-      errors: {},
-
-      url: '',
-      name: '',
-      image: '',
-      price: '',
-      brand: '',
-      colors: [],
-      categories: [],
-      spaceTypes: [],
-      description: '',
-
-      isSaving: false,
-      hasSaved: false,
-      savingSuccessful: false,
-
-      isScraping: false,
-      hasScrapped: false,
-      scrappedSuccessful: false,
-
-      images: [],
-      imageIndex: 0,
-      isLoadingImage: false,
-
-      imageFromUrl: null,
-      imageUrlFormIsVisible: false,
-      isLoadingImageFromUrl: false,
-
-      isDeleting: false,
-      deletingSuccessful: false,
-
-      productAlreadyExists: false
-    }, next)
-  }
-
   onScrapeFormSubmit(event) {
     const form = this.scraperForm
     const formData = serialize(form, { hash: true })
@@ -152,176 +108,122 @@ export default class ProductForm extends Component {
     event.preventDefault()
 
     this.setState({ errors: {}, isScraping: true }, () => {
-      axios({
-        url: `/ajax/products/fetch/?url=${get(formData, 'url')}`,
-        method: 'get'
-      }).then((res) => {
-        if (!isEmpty(get(res, 'data.id'))) {
+      axios
+        .get(`/ajax/products/fetch/?url=${formData.url}`)
+        .then(({ data: product }) => {
+          const productImages = get(product, 'images', [])
+
+          if (!isEmpty(get(product, 'id'))) {
+            this.setState({
+              url: '',
+              product,
+              isScraping: false,
+              hasScrapped: false,
+              productAlreadyExists: true
+            })
+          } else {
+            this.setState({
+              name: get(product, 'title', ''),
+              price: get(product, 'price', ''),
+              brand: get(product, 'brand', ''),
+              errors: {},
+              product: {},
+              isScraping: false,
+              hasScrapped: true,
+              description: get(product, 'description', ''),
+              isLoadingImage: true,
+              savingSuccessful: false,
+              productAlreadyExists: false
+            }, () => {
+              getValidProductImages(productImages, 200)
+                .then(validImages => {
+                  const images = !isEmpty(validImages)
+                    ? validImages
+                    : productImages
+
+                  this.setState({
+                    image: head(images),
+                    images,
+                    errors: {},
+                    product: {},
+                    imageIndex: 0,
+                    isScraping: false,
+                    hasScrapped: true,
+                    isLoadingImage: !isEmpty(images),
+                    savingSuccessful: false,
+                    productAlreadyExists: false
+                  })
+                })
+                .catch(() => {
+                  this.setState({
+                    image: head(productImages),
+                    images: productImages,
+                    errors: {},
+                    product: {},
+                    imageIndex: 0,
+                    isScraping: false,
+                    hasScrapped: true,
+                    isLoadingImage: !isEmpty(productImages),
+                    savingSuccessful: false,
+                    productAlreadyExists: false
+                  })
+                })
+            })
+          }
+        })
+        .catch(({ data }) => {
           this.setState({
-            url: '',
-            product: get(res, 'data'),
-            isScraping: false,
-            hasScrapped: false,
-            productAlreadyExists: true
-          })
-        } else {
-          this.setState({
-            name: get(res, 'data.title', ''),
-            price: get(res, 'data.price', ''),
-            brand: get(res, 'data.brand', ''),
-            errors: {},
+            errors: get(data, 'err', {}),
             product: {},
             isScraping: false,
             hasScrapped: true,
-            description: get(res, 'data.description', ''),
-            isLoadingImage: true,
+            isLoadingImage: false,
             savingSuccessful: false,
             productAlreadyExists: false
-          }, () => {
-            getValidProductImages(
-              get(res, 'data.images', []), 200
-            ).then((images) => {
-              images = !isEmpty(images) ? images : get(res, 'data.images', [])
-
-              this.setState({
-                image: head(images),
-                images,
-                errors: {},
-                product: {},
-                imageIndex: 0,
-                isScraping: false,
-                hasScrapped: true,
-                isLoadingImage: !isEmpty(images),
-                savingSuccessful: false,
-                productAlreadyExists: false
-              })
-            }).catch(() => {
-              this.setState({
-                image: head(get(res, 'data.images', [])),
-                images: get(res, 'data.images', []),
-                errors: {},
-                product: {},
-                imageIndex: 0,
-                isScraping: false,
-                hasScrapped: true,
-                isLoadingImage: !isEmpty(get(res, 'data.images', [])),
-                savingSuccessful: false,
-                productAlreadyExists: false
-              })
-            })
           })
-        }
-      }).catch((res) => {
-        this.setState({
-          errors: get(res, 'data.err', {}),
-          product: {},
-          isScraping: false,
-          hasScrapped: true,
-          isLoadingImage: false,
-          savingSuccessful: false,
-          productAlreadyExists: false
         })
-      })
     })
   }
 
-  renderScrapeForm() {
-    const { csrf } = this.context
-    const { formMethod } = this.props
-    const { isScraping } = this.state
-
-    return (
-      <form
-        ref={(form) => this.scraperForm = form}
-        action="/ajax/products/fetch/"
-        method="POST"
-        onSubmit={::this.onScrapeFormSubmit}
-        className="form product-form-scrape">
-        <input type="hidden" name="_csrf" value={csrf}/>
-        <input type="hidden" name="_method" value={formMethod}/>
-
-        <h1 className="form-title">
-          {isEqual(formMethod, 'POST') ? 'Add Product' : 'Update Product'}
-        </h1>
-
-        <div className="form-group">
-          <label className="form-label">
-            Product's Url <small>required</small>
-          </label>
-
-          <div className="textfield-icon">
-            <Icon name="search"/>
-            <input
-              type="url"
-              name="url"
-              value={get(this.state, 'url', '')}
-              required
-              onChange={(event) => {
-                this.setState({ url: event.currentTarget.value })
-              }}
-              disabled={isScraping}
-              autoFocus
-              className="textfield"
-              placeholder="E.g. https://example.com/abc-123"/>
-          </div>
-        </div>
-
-        <div className="form-group">
-          <div className="form-group form-group--inline">
-            <button
-              type="submit"
-              disabled={isScraping}
-              className="button button--primary">
-              <span className="button-text">
-                <Icon name="info"/>
-                {isScraping ? 'Getting Product Info...' : 'Get Product Info'}
-              </span>
-            </button>
-            <button onClick={::this.reset} className="button">
-              <span className="button-text">Cancel</span>
-            </button>
-          </div>
-        </div>
-      </form>
-    )
-  }
-
   onSubmit(event) {
-    const { product, onAdded, formMethod } = this.props
-    const { hasSaved, isDeleting, isLoadingImage } = this.state
+    const { props, state } = this
 
-    const isAdding = isEqual(formMethod, 'POST')
+    const isPOST = props.formMethod === 'POST'
 
     event.preventDefault()
 
-    if ((hasSaved && isAdding) || isLoadingImage || isDeleting) {
-      return
+    if (
+      state.isDeleting ||
+      state.isLoadingImage ||
+      (state.hasSaved && isPOST)
+    ) {
+      return false
     }
 
     const form = this.form
     const formData = serialize(form, { hash: true })
-    const ajaxEndpoint = isAdding
+    const endpoint = isPOST
       ? '/ajax/products/add/'
-      : `/ajax/products/${toStringId(product)}/`
+      : `/ajax/products/${toStringId(props.product)}/`
 
     this.setState({ errors: {}, isSaving: true }, () => {
       axios({
-        url: ajaxEndpoint,
+        url: endpoint,
         data: formData,
-        method: formMethod
-      }).then((res) => {
-        const product = get(res, 'data', {})
-
+        method: props.formMethod
+      })
+      .then(({ data: product }) => {
         this.setState({
           errors: {},
           product,
-          isSaving: false,
           hasSaved: true,
+          isSaving: false,
           savingSuccessful: true
-        }, () => onAdded(product))
-      }).catch((res) => {
+        }, () => props.onAdded(product))
+      })
+      .catch(({ data }) => {
         this.setState({
-          errors: get(res, 'data.err', {}),
+          errors: get(data, 'err', {}),
           product: {},
           isSaving: false,
           hasSaved: false,
@@ -332,18 +234,20 @@ export default class ProductForm extends Component {
   }
 
   onClickDelete() {
-    const { csrf } = this.context
-    const { product } = this.props
+    const { props, context } = this.context
+
     const deleteMessage = (
       'Are you sure you want to delete this product? \n' +
       'This action cannot be undone. ' +
       'Type the word "DELETE" to confirm.'
     )
 
-    if (isEqual(window.prompt(deleteMessage), 'DELETE')) {
+    if (window.prompt(deleteMessage === 'DELETE')) {
       this.setState({ errors: {}, isDeleting: true }, () => {
         axios
-          .delete(`/ajax/products/${toStringId(product)}/`, { _csrf: csrf })
+          .delete(`/ajax/products/${toStringId(props.product)}/`, {
+            _csrf: context.csrf
+          })
           .then(() => {
             this.setState({
               product: {},
@@ -363,35 +267,128 @@ export default class ProductForm extends Component {
     }
   }
 
+  reset(next = (() => {})) {
+    this.setState({
+      url: '',
+      name: '',
+      image: '',
+      price: '',
+      brand: '',
+      colors: [],
+      errors: {},
+      images: [],
+      isSaving: false,
+      hasSaved: false,
+      imageIndex: 0,
+      isScraping: false,
+      isDeleting: false,
+      categories: [],
+      spaceTypes: [],
+      hasScrapped: false,
+      description: '',
+      imageFromUrl: null,
+      isLoadingImage: false,
+      savingSuccessful: false,
+      scrappedSuccessful: false,
+      deletingSuccessful: false,
+      productAlreadyExists: false,
+      imageUrlFormIsVisible: false,
+      isLoadingImageFromUrl: false
+    }, next)
+  }
+
+  renderScrapeForm() {
+    const { props, state, context } = this.context
+
+    return (
+      <form
+        ref={form => { this.scraperForm = form }}
+        action="/ajax/products/fetch/"
+        method="POST"
+        onSubmit={::this.onScrapeFormSubmit}
+        className="form product-form-scrape"
+      >
+        <input type="hidden" name="_csrf" value={context.csrf} />
+        <input type="hidden" name="_method" value={props.formMethod} />
+
+        <h1 className="form-title">
+          {props.formMethod === 'POST' ? 'Add Product' : 'Update Product'}
+        </h1>
+
+        <div className="form-group">
+          <label className="form-label">
+            Product's Url <small>required</small>
+          </label>
+
+          <div className="textfield-icon">
+            <MaterialDesignIcon name="search" />
+            <input
+              type="url"
+              name="url"
+              value={state.url}
+              required
+              onChange={({ currentTarget: input }) => {
+                this.setState({ url: input.value })
+              }}
+              disabled={state.isScraping}
+              autoFocus
+              className="textfield"
+              placeholder="E.g. https://example.com/abc-123"
+            />
+          </div>
+        </div>
+
+        <div className="form-group">
+          <div className="form-group form-group--inline">
+            <button
+              type="submit"
+              disabled={state.isScraping}
+              className="button button--primary"
+            >
+              <span className="button-text">
+                <MaterialDesignIcon name="edit" />
+                {state.isScraping
+                  ? 'Getting Product Info...'
+                  : 'Get Product Info'
+                }
+              </span>
+            </button>
+            <button onClick={::this.reset} className="button">
+              <span className="button-text">Cancel</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    )
+  }
+
   renderProductImagePicker() {
-    const { formMethod } = this.props
+    const { props, state } = this
 
-    const {
-      image,
-      images,
-      isSaving,
-      isDeleting,
-      imageIndex,
-      hasScrapped,
-      isLoadingImage,
-      deletingSuccessful,
-      imageUrlFormIsVisible,
-      isLoadingImageFromUrl
-    } = this.state
+    const isPOST = props.formMethod === 'POST'
+    const hasImages = !isEmpty(state.images)
 
-    const isAdding = isEqual(formMethod, 'POST')
-    const hasImages = !isEmpty(images)
     const shouldDisable = (
-      isSaving || isDeleting || isLoadingImage ||
-      deletingSuccessful || isLoadingImageFromUrl
+      state.isSaving ||
+      state.isDeleting ||
+      state.isLoadingImage ||
+      state.deletingSuccessful ||
+      state.isLoadingImageFromUrl
+    )
+
+    const noImageAvailable = (
+      isPOST &&
+      !hasImages &&
+      state.hasScrapped &&
+      !state.isLoadingImage
     )
 
     const selectPrevImage = () => {
-      const nextImage = imageIndex - 1
+      const nextImage = state.imageIndex - 1
 
       if (nextImage >= 0) {
         this.setState({
-          image: images[nextImage],
+          image: state.images[nextImage],
           imageIndex: nextImage,
           isLoadingImage: true
         })
@@ -399,11 +396,11 @@ export default class ProductForm extends Component {
     }
 
     const selectNextImage = () => {
-      const nextImage = imageIndex + 1
+      const nextImage = state.imageIndex + 1
 
-      if (nextImage <= size(images) - 1) {
+      if (nextImage <= size(state.images) - 1) {
         this.setState({
-          image: images[nextImage],
+          image: state.images[nextImage],
           imageIndex: nextImage,
           isLoadingImage: true
         })
@@ -418,50 +415,45 @@ export default class ProductForm extends Component {
 
     return (
       <div className="image-picker">
-        <input type="hidden" name="image" value={image}/>
+        <input type="hidden" name="image" value={state.image} />
 
         <div
           className={classNames({
             'image-picker-current': true,
-            'image-picker-current--loading': (
-              isLoadingImage
-            )
-          })}>
-          {isLoadingImage ? (
-            <Loader size={60}/>
+            'image-picker-current--loading': state.isLoadingImage
+          })}
+        >
+          {state.isLoadingImage ? (
+            <Loader size={60} />
           ) : null}
 
-          {hasScrapped && isAdding ? (
-            !hasImages && !isLoadingImage ? (
-              <Icon
-                name="image"
-                width={120}
-                height={120}
-                className="image-picker-no-images-icon"/>
-            ) : (
-              <img
-                src={image}
-                onLoad={onImageLoad}
-                className="image-picker-current-image"/>
-            )
+          {noImageAvailable ? (
+            <MaterialDesignIcon
+              name="image"
+              width={120}
+              height={120}
+              className="image-picker-no-images-icon"
+            />
           ) : (
             <img
-              src={image}
+              src={state.image}
+              role="presentation"
               onLoad={onImageLoad}
-              className="image-picker-current-image"/>
+              className="image-picker-current-image"
+            />
           )}
         </div>
 
-        {imageUrlFormIsVisible || !hasImages ? (
+        {state.imageUrlFormIsVisible || !hasImages ? (
           <div className="image-picker-url-form">
             <input
-              ref={(input) => this.imageUrlInput = input}
+              ref={input => { this.imageUrlInput = input }}
               type="url"
-              value={get(this.state, 'image', '')}
-              onChange={(event) => {
-                const newImage = event.currentTarget.value
+              value={state.image}
+              onChange={({ currentTarget: input }) => {
+                const newImage = input.value
 
-                if (!isEqual(newImage, image)) {
+                if (state.newImage !== state.image) {
                   this.setState({
                     image: newImage,
                     isLoadingImage: true
@@ -471,13 +463,14 @@ export default class ProductForm extends Component {
               disabled={shouldDisable}
               autoFocus
               className="textfield image-picker-url-form-input"
-              placeholder="E.g. https://amzn.com/ABC123"/>
+              placeholder="E.g. https://amzn.com/ABC123"
+            />
             <button
               type="button"
               onClick={() => {
                 const newImage = this.imageUrlInput.value
 
-                if (!isEqual(newImage, image)) {
+                if (state.newImage !== state.image) {
                   this.setState({
                     image: newImage,
                     isLoadingImage: true
@@ -485,25 +478,29 @@ export default class ProductForm extends Component {
                 }
               }}
               disabled={shouldDisable}
-              className="button">
+              className="button"
+            >
               <span className="button-text">
-                <Icon name="image"/> Load Image
+                <MaterialDesignIcon name="image" />
+                Load Image
               </span>
             </button>
-            {isAdding ? (
+            {isPOST ? (
               <button
                 type="button"
                 onClick={() => {
                   this.setState({
-                    image: images[imageIndex],
+                    image: state.images[state.imageIndex],
                     isLoadingImage: true,
                     imageUrlFormIsVisible: false
                   })
                 }}
                 disabled={shouldDisable}
-                className="button">
+                className="button"
+              >
                 <span className="button-text">
-                  <Icon name="close"/> Cancel
+                  <MaterialDesignIcon name="close" />
+                  Cancel
                 </span>
               </button>
             ) : null}
@@ -515,9 +512,11 @@ export default class ProductForm extends Component {
                 type="button"
                 onClick={() => this.setState({ imageUrlFormIsVisible: true })}
                 disabled={shouldDisable}
-                className="button">
+                className="button"
+              >
                 <span className="button-text">
-                  <Icon name="link"/> Upload From Url
+                  <MaterialDesignIcon name="link" />
+                  Upload From Url
                 </span>
               </button>
             </div>
@@ -526,13 +525,11 @@ export default class ProductForm extends Component {
                 <button
                   type="button"
                   onClick={selectPrevImage}
-                  disabled={(
-                    shouldDisable ||
-                    isEqual(imageIndex, 0)
-                  )}
-                  className="button button--icon image-picker-nav-prev">
+                  disabled={shouldDisable || state.imageIndex === 0}
+                  className="button button--icon image-picker-nav-prev"
+                >
                   <span className="button-text">
-                    <Icon name="prev"/>
+                    <MaterialDesignIcon name="caret-left" />
                   </span>
                 </button>
               ) : null}
@@ -542,11 +539,12 @@ export default class ProductForm extends Component {
                   onClick={selectNextImage}
                   disabled={(
                     shouldDisable ||
-                    imageIndex >= size(images) - 1
+                    state.imageIndex >= size(state.images) - 1
                   )}
-                  className="button button--icon image-picker-nav-next">
+                  className="button button--icon image-picker-nav-next"
+                >
                   <span className="button-text">
-                    <Icon name="next"/>
+                    <MaterialDesignIcon name="caret-next" />
                   </span>
                 </button>
               ) : null}
@@ -558,74 +556,69 @@ export default class ProductForm extends Component {
   }
 
   renderProductForm() {
-    const { csrf, currentUserIsAdmin } = this.context
+    const { props, state, context } = this
 
-    const {
-      errors,
-      isSaving,
-      isDeleting,
-      isLoadingImage,
-      deletingSuccessful
-    } = this.state
-
-    const {
-      brands,
-      colors,
-      product,
-      categories,
-      spaceTypes,
-      formMethod
-    } = this.props
-
-    const isAdding = isEqual(formMethod, 'POST')
+    const isPOST = props.formMethod === 'POST'
 
     const shouldDisable = (
-      isSaving || isDeleting || isLoadingImage || deletingSuccessful
+      state.isSaving ||
+      state.isDeleting ||
+      state.isLoadingImage ||
+      state.deletingSuccessful
     )
 
-    const formAction = isAdding
+    const formAction = isPOST
       ? '/products/new/'
-      : `/products/${get(product, 'customId')}/update/`
+      : `/products/${toStringId(props.product)}/update/`
 
-    const urlError = get(errors, 'url')
+    const urlError = get(state.errors, 'url')
     const hasUrlError = !isEmpty(urlError)
 
-    const nameError = get(errors, 'name')
+    const nameError = get(state.errors, 'name')
     const hasNameError = !isEmpty(nameError)
 
-    const descriptionError = get(errors, 'description')
+    const descriptionError = get(state.errors, 'description')
     const hasDescriptionError = !isEmpty(descriptionError)
 
-    const brandError = get(errors, 'brand')
+    const brandError = get(state.errors, 'brand')
     const hasBrandError = !isEmpty(brandError)
 
-    const priceError = get(errors, 'price')
+    const priceError = get(state.errors, 'price')
     const hasPriceError = !isEmpty(priceError)
 
-    const categoriesError = get(errors, 'categories')
+    const categoriesError = get(state.errors, 'categories')
     const hasCategoriesError = !isEmpty(categoriesError)
 
-    const spaceTypesError = get(errors, 'spaceTypes')
+    const spaceTypesError = get(state.errors, 'spaceTypes')
     const hasSpaceTypesError = !isEmpty(spaceTypesError)
 
-    const colorsError = get(errors, 'colors')
+    const colorsError = get(state.errors, 'colors')
     const hasColorsError = !isEmpty(colorsError)
+
+    let btnText
+
+    if (state.isSaving) {
+      btnText = isPOST ? 'Adding...' : 'Add'
+    } else if (state.isSaving) {
+      btnText = isPOST ? 'Updating...' : 'Update'
+    }
 
     return (
       <form
-        ref={(form) => this.form = form}
+        ref={form => { this.form = form }}
         action={formAction}
         method="POST"
         onSubmit={::this.onSubmit}
-        className="form product-form">
-        <input type="hidden" name="_csrf" value={csrf}/>
-        <input type="hidden" name="_method" value={formMethod}/>
+        className="form product-form"
+      >
+        <input type="hidden" name="_csrf" value={context.csrf} />
+        <input type="hidden" name="_method" value={props.formMethod} />
 
         <h1 className="form-title">
-          {isEqual(formMethod, 'POST') ? 'Add Product' : 'Update Product'}
+          {isPOST ? 'Add Product' : 'Update Product'}
         </h1>
 
-        {!isAdding ? (
+        {!isPOST ? (
           <div className="form-group">
             <label className="form-label">
               Url <small>required</small>
@@ -634,24 +627,25 @@ export default class ProductForm extends Component {
             <input
               type="text"
               name="url"
-              value={get(this.state, 'url', '')}
+              value={state.url}
               required
-              onChange={(event) => {
-                this.setState({ url: event.currentTarget.value })
+              onChange={({ currentTarget: input }) => {
+                this.setState({ url: input.value })
               }}
-              disabled={isSaving}
+              disabled={state.isSaving}
               className={classNames({
-                'textfield': true,
+                textfield: true,
                 'textfield--error': hasUrlError
               })}
-              placeholder="Name"/>
+              placeholder="Name"
+            />
 
             {hasUrlError ? (
               <small className="form-error">{urlError}</small>
             ) : null}
           </div>
         ) : (
-          <input type="hidden" name="url" value={get(this.state, 'url', '')}/>
+          <input type="hidden" name="url" value={state.url} />
         )}
 
         <div className="form-group">
@@ -669,17 +663,18 @@ export default class ProductForm extends Component {
           <input
             type="text"
             name="name"
-            value={get(this.state, 'name', '')}
+            value={state.name}
             required
-            onChange={(event) => {
-              this.setState({ name: event.currentTarget.value })
+            onChange={({ currentTarget: input }) => {
+              this.setState({ name: input.value })
             }}
-            disabled={isSaving}
+            disabled={state.isSaving}
             className={classNames({
-              'textfield': true,
+              textfield: true,
               'textfield--error': hasNameError
             })}
-            placeholder="Name"/>
+            placeholder="Name"
+          />
 
           {hasNameError ? (
             <small className="form-error">{nameError}</small>
@@ -693,16 +688,17 @@ export default class ProductForm extends Component {
 
           <textarea
             name="description"
-            value={get(this.state, 'description', '')}
-            disabled={isSaving}
-            onChange={(event) => {
-              this.setState({ description: event.currentTarget.value })
+            value={state.description}
+            disabled={state.isSaving}
+            onChange={({ currentTarget: input }) => {
+              this.setState({ description: input.value })
             }}
             className={classNames({
-              'textfield': true,
+              textfield: true,
               'textfield--error': hasDescriptionError
             })}
-            placeholder="Description"/>
+            placeholder="Description"
+          />
 
           {hasDescriptionError ? (
             <small className="form-error">{descriptionError}</small>
@@ -718,23 +714,22 @@ export default class ProductForm extends Component {
 
               <Select
                 name="brand"
-                value={get(this.state, 'brand', '')}
-                options={map(brands, (brand) => ({
+                value={state.brand}
+                options={map(props.brands, brand => ({
                   value: get(brand, 'name'),
                   label: get(brand, 'name')
                 }))}
                 required
-                onChange={(brand) => {
-                  this.setState({ brand })
-                }}
-                disabled={isSaving}
+                onChange={brand => this.setState({ brand })}
+                disabled={state.isSaving}
                 className={classNames({
-                  'select': true,
+                  select: true,
                   'select--error': hasBrandError
                 })}
+                allowCreate
                 placeholder="E.g. Apple"
-                allowCreate={true}
-                addLabelText={'Add "{label}" as a new brand'}/>
+                addLabelText={'Add "{label}" as a new brand'}
+              />
 
               {hasBrandError ? (
                 <small className="form-error">{brandError}</small>
@@ -749,17 +744,18 @@ export default class ProductForm extends Component {
               <input
                 type="text"
                 name="price"
-                value={get(this.state, 'price', '')}
+                value={state.price}
                 required
-                onChange={(event) => {
-                  this.setState({ price: event.currentTarget.value })
+                onChange={({ currentTarget: input }) => {
+                  this.setState({ price: input.value })
                 }}
-                disabled={isSaving}
+                disabled={state.isSaving}
                 className={classNames({
-                  'textfield': true,
+                  textfield: true,
                   'textfield--error': hasPriceError
                 })}
-                placeholder="E.g. $99"/>
+                placeholder="E.g. $99"
+              />
 
               {hasPriceError ? (
                 <small className="form-error">{priceError}</small>
@@ -775,24 +771,23 @@ export default class ProductForm extends Component {
 
           <Select
             name="categories"
-            multi={true}
-            value={get(this.state, 'categories', '')}
-            options={map(categories, (category) => ({
+            multi
+            value={state.categories}
+            options={map(props.categories, category => ({
               value: get(category, 'name'),
               label: get(category, 'name')
             }))}
             required
-            onChange={(categories) => {
-              this.setState({ categories })
-            }}
-            disabled={isSaving}
+            onChange={categories => this.setState({ categories })}
+            disabled={state.isSaving}
             className={classNames({
-              'select': true,
+              select: true,
               'select--error': hasCategoriesError
             })}
+            allowCreate
             placeholder="E.g. Pattern, Minimal"
-            allowCreate={true}
-            addLabelText={'Add "{label}" as a new category'}/>
+            addLabelText={'Add "{label}" as a new category'}
+          />
 
           {hasCategoriesError ? (
             <small className="form-error">{categoriesError}</small>
@@ -806,43 +801,46 @@ export default class ProductForm extends Component {
 
           <Select
             name="colors"
-            multi={true}
-            value={get(this.state, 'colors', '')}
-            options={map(colors, (color) => ({
+            multi
+            value={state.colors}
+            options={map(props.colors, color => ({
               value: get(color, 'name'),
               label: get(color, 'name'),
               color: get(color, 'hex')
             }))}
             required
-            onChange={(colors) => {
-              this.setState({ colors })
-            }}
-            disabled={isSaving}
+            onChange={colors => this.setState({ colors })}
+            disabled={state.isSaving}
             className={classNames({
-              'select': true,
+              select: true,
               'select--error': hasColorsError
             })}
             placeholder="E.g. White, Charcoal Gray"
-            valueRenderer={(option) => (
+            valueRenderer={option =>
               <span
                 id={`select-value-${get(option, 'value')}`}
-                className="select-value-color-container">
+                className="select-value-color-container"
+              >
                 <span
                   style={{ backgroundColor: get(option, 'color') }}
-                  className="select-value-color"/>
+                  className="select-value-color"
+                />
                 {get(option, 'label')}
               </span>
-            )}
-            optionRenderer={(option) => (
-            	<span
+            }
+            optionRenderer={option =>
+              <span
                 id={`select-option-${get(option, 'value')}`}
-                className="select-option-color-container">
+                className="select-option-color-container"
+              >
                 <span
                   style={{ backgroundColor: get(option, 'color') }}
-                  className="select-option-color"/>
+                  className="select-option-color"
+                />
                 {get(option, 'label')}
               </span>
-            )}/>
+            }
+          />
 
           {hasColorsError ? (
             <small className="form-error">{colorsError}</small>
@@ -856,24 +854,23 @@ export default class ProductForm extends Component {
 
           <Select
             name="spaceTypes"
-            multi={true}
-            value={get(this.state, 'spaceTypes', '')}
-            options={map(spaceTypes, (spaceTpye) => ({
+            multi
+            value={state.spaceTypes}
+            options={map(props.spaceTypes, spaceTpye => ({
               value: get(spaceTpye, 'name'),
               label: get(spaceTpye, 'name')
             }))}
             required
-            onChange={(spaceTypes) => {
-              this.setState({ spaceTypes })
-            }}
-            disabled={isSaving}
+            onChange={spaceTypes => this.setState({ spaceTypes })}
+            disabled={state.isSaving}
             className={classNames({
-              'select': true,
+              select: true,
               'select--error': hasSpaceTypesError
             })}
             placeholder="E.g. Kitchen, Patio"
-            allowCreate={currentUserIsAdmin() ? true : false}
-            addLabelText={'Add "{label}" as a new room'}/>
+            allowCreate={context.currentUserIsAdmin()}
+            addLabelText={'Add "{label}" as a new room'}
+          />
 
           {hasSpaceTypesError ? (
             <small className="form-error">{spaceTypesError}</small>
@@ -885,17 +882,14 @@ export default class ProductForm extends Component {
             <button
               type="submit"
               disabled={shouldDisable}
-              className="button button--primary">
+              className="button button--primary"
+            >
               <span className="button-text">
-                <Icon name={isAdding ? 'add' : 'info'}/>
-                {isSaving ? (
-                  isAdding ? 'Adding...' : 'Updating...'
-                ) : (
-                  isAdding ? 'Add' : 'Update'
-                )}
+                <MaterialDesignIcon name={isPOST ? 'add' : 'edit'} />
+                {btnText}
               </span>
             </button>
-            {isAdding ? (
+            {isPOST ? (
               <a href="/admin/brands/" className="button">
                 <span className="button-text">Cancel</span>
               </a>
@@ -904,10 +898,11 @@ export default class ProductForm extends Component {
                 type="button"
                 onClick={::this.onClickDelete}
                 disabled={shouldDisable}
-                className="button button--danger">
+                className="button button--danger"
+              >
                 <span className="button-text">
-                  <Icon name="delete"/>
-                  {isDeleting ? 'Deleting...' : 'Delete'}
+                  <MaterialDesignIcon name="delete" />
+                  {state.isDeleting ? 'Deleting...' : 'Delete'}
                 </span>
               </button>
             )}
@@ -918,40 +913,27 @@ export default class ProductForm extends Component {
   }
 
   renderForm() {
-    const { formMethod } = this.props
-    const { hasScrapped } = this.state
+    const { props, state } = this
 
-    if (!hasScrapped && isEqual(formMethod, 'POST')) {
+    if (!state.hasScrapped && props.formMethod === 'POST') {
       return this.renderScrapeForm()
-    } else if (hasScrapped || isEqual(formMethod, 'PUT')) {
+    } else if (state.hasScrapped || props.formMethod === 'PUT') {
       return this.renderProductForm()
     }
   }
 
   renderNotification() {
-    const {
-      formMethod,
-      isAddingForSpace
-    } = this.props
+    const { props, state } = this
 
-    const {
-      errors,
-      product,
-      savingSuccessful,
-      deletingSuccessful,
-      productAlreadyExists
-    } = this.state
+    const sid = get(state.product, 'sid', '')
+    const name = get(state.product, 'name', 'Color')
+    const isPUT = props.formMethod === 'PUT'
 
-    const isUpdating = isEqual(formMethod, 'PUT')
-
-    const sid = get(product, 'sid', '')
-    const name = get(product, 'name', 'Color')
-
-    const genericError = get(errors, 'generic')
+    const genericError = get(state.errors, 'generic')
     const hasGenericError = !isEmpty(genericError)
 
     const onClose = () => {
-      if (deletingSuccessful || !isAddingForSpace && !isUpdating) {
+      if (state.deletingSuccessful || !props.isPOSTForSpace && !isPUT) {
         window.onbeforeunload = null
         window.location.href = '/products/add/'
       } else {
@@ -964,28 +946,27 @@ export default class ProductForm extends Component {
       }
     }
 
-
-    if (productAlreadyExists) {
+    if (state.productAlreadyExists) {
       return (
-        <Notification onClose={onClose}>
+        <Notification onClose={onClose} timeout={3500} isVisible>
           This product aleary exists. <a href={`/products/${sid}/`}>{name}</a>.
         </Notification>
       )
-    } else if (savingSuccessful) {
-      return isEqual(formMethod, 'POST') ? (
-        <Notification type="success" delay={2500} onClose={onClose}>
-          {`"${name}"`} was added successfully.
+    } else if (state.savingSuccessful) {
+      return props.formMethod === 'POST' ? (
+        <Notification type="success" timeout={3500} onClose={onClose} isVisible>
+          "{name}" was added successfully.
           Click <a href={`/products/${sid}/update/`}>here</a> to edit.
         </Notification>
       ) : (
-        <Notification type="success" onClose={onClose}>
-          {`"${name}"`} was updated successfully.
+        <Notification type="success" timeout={3500} onClose={onClose} isVisible>
+          "{name}" was updated successfully.
         </Notification>
       )
-    } else if (deletingSuccessful) {
+    } else if (state.deletingSuccessful) {
       return (
-        <Notification type="success" delay={2500} onClose={onClose}>
-          {`"${name}"`} was deleted successfully. Redirecting...
+        <Notification type="success" timeout={3500} onClose={onClose} isVisible>
+          "{name}" was deleted successfully. Redirecting...
         </Notification>
       )
     } else if (hasGenericError) {
@@ -997,13 +978,16 @@ export default class ProductForm extends Component {
               errors: {},
               savingSuccessful: false
             })
-          }}>
+          }}
+          timeout={3500}
+          isVisible
+        >
           {genericError}
         </Notification>
       )
-    } else {
-      return null
     }
+
+    return null
   }
 
   render() {

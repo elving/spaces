@@ -1,46 +1,23 @@
 import get from 'lodash/get'
 import axios from 'axios'
-import merge from 'lodash/merge'
-import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 import serialize from 'form-serialize'
 import classNames from 'classnames'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
-import Icon from '../common/Icon'
 import Notification from '../common/Notification'
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
 
 export default class SpaceTypeForm extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      errors: {},
-      spaceType: {},
-
-      name: get(props, 'spaceType.name', ''),
-      description: get(props, 'spaceType.description', ''),
-
-      isSaving: false,
-      hasSaved: false,
-      savingSuccessful: false,
-
-      isDeleting: false,
-      deletingSuccessful: false
-    }
-
-    this.form = null
-  }
-
   static contextTypes = {
-    csrf: Type.string
+    csrf: PropTypes.string
   };
 
   static propTypes = {
-    spaceType: Type.object,
-    formMethod: Type.string.isRequired
+    spaceType: PropTypes.object,
+    formMethod: PropTypes.string
   };
 
   static defaultProps = {
@@ -48,14 +25,31 @@ export default class SpaceTypeForm extends Component {
     formMethod: 'POST'
   };
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      name: get(props.spaceType, 'name', ''),
+      errors: {},
+      isSaving: false,
+      hasSaved: false,
+      spaceType: {},
+      isDeleting: false,
+      description: get(props.spaceType, 'description', ''),
+      savingSuccessful: false,
+      deletingSuccessful: false
+    }
+
+    this.form = null
+  }
+
   componentDidMount() {
-    const { isSaving } = this.state
-    const { formMethod } = this.props
+    const { props, state } = this
 
     window.onbeforeunload = () => {
-      const action = isEqual(formMethod, 'POST') ? 'adding' : 'updating'
+      const action = props.formMethod === 'POST' ? 'adding' : 'updating'
 
-      if (isSaving) {
+      if (state.isSaving) {
         return (
           `You are in the process of ${action} a spaceType. ` +
           'Are you sure you want to navigate away from this page and ' +
@@ -65,57 +59,43 @@ export default class SpaceTypeForm extends Component {
     }
   }
 
-  reset(next = (() => {})) {
-    this.setState({
-      errors: {},
-      spaceType: {},
-
-      name: '',
-      description: '',
-
-      isSaving: false,
-      hasSaved: false,
-      savingSuccessful: false,
-
-      isDeleting: false,
-      deletingSuccessful: false
-    }, next)
-  }
-
   onSubmit(event) {
-    const { spaceType, formMethod } = this.props
+    const { props } = this
 
     const form = this.form
+    const isPOST = props.formMethod === 'POST'
     const formData = serialize(form, { hash: true })
-    const isAdding = isEqual(formMethod, 'POST')
-    const ajaxEndpoint = isAdding
+    const endpoint = isPOST
       ? '/ajax/space-types/'
-      : `/ajax/space-types/${toStringId(spaceType)}/`
+      : `/ajax/space-types/${toStringId(props.spaceType)}/`
 
     event.preventDefault()
 
     this.setState({ errors: {}, isSaving: true }, () => {
       axios({
-        url: ajaxEndpoint,
+        url: endpoint,
         data: formData,
-        method: formMethod
-      }).then((res) => {
-        const resetData = isAdding ? {
+        method: props.formMethod
+      })
+      .then(({ spaceType }) => {
+        const resetData = isPOST ? {
           name: '',
           description: ''
         } : {}
 
-        this.setState(merge({
+        this.setState({
           name: '',
           errors: {},
           isSaving: false,
           hasSaved: true,
-          spaceType: get(res, 'data', {}),
-          savingSuccessful: true
-        }, resetData))
-      }).catch((res) => {
+          spaceType,
+          savingSuccessful: true,
+          ...resetData
+        })
+      })
+      .catch(({ data }) => {
         this.setState({
-          errors: get(res, 'data.err', {}),
+          errors: get(data, 'err', {}),
           isSaving: false,
           hasSaved: false,
           spaceType: {},
@@ -126,65 +106,79 @@ export default class SpaceTypeForm extends Component {
   }
 
   onClickDelete() {
-    const { csrf } = this.context
-    const { spaceType } = this.props
+    const { props, context } = this.context
+
     const deleteMessage = (
       'Are you sure you want to delete this spaceType? \n' +
       'This action cannot be undone. ' +
       'Type the word "DELETE" to confirm.'
     )
 
-    if (isEqual(window.prompt(deleteMessage), 'DELETE')) {
+    if (window.prompt(deleteMessage) === 'DELETE') {
       this.setState({ errors: {}, isDeleting: true }, () => {
-        axios({
-          url: `/ajax/space-types/${toStringId(spaceType)}/`,
-          data: { _csrf: csrf, _method: 'delete' },
-          method: 'POST'
-        }).then(() => {
-          this.setState({
-            spaceType: {},
-            isDeleting: false,
-            deletingSuccessful: true
+        axios
+          .post(`/ajax/space-types/${toStringId(props.spaceType)}/`, {
+            _csrf: context.csrf,
+            _method: 'delete'
           })
-        }).catch((res) => {
-          this.setState({
-            errors: get(res, 'data.err', {}),
-            spaceType: {},
-            isDeleting: false,
-            deletingSuccessful: false
+          .then(() => {
+            this.setState({
+              spaceType: {},
+              isDeleting: false,
+              deletingSuccessful: true
+            })
           })
-        })
+          .catch(({ data }) => {
+            this.setState({
+              errors: get(data, 'err', {}),
+              spaceType: {},
+              isDeleting: false,
+              deletingSuccessful: false
+            })
+          })
       })
     }
   }
 
   renderForm() {
-    const { csrf } = this.context
-    const { formMethod } = this.props
-    const { errors, isSaving, isDeleting, deletingSuccessful } = this.state
+    const { props, state, context } = this
 
-    const isAdding = isEqual(formMethod, 'POST')
-    const shouldDisable = isSaving || isDeleting || deletingSuccessful
+    const isPOST = props.formMethod === 'POST'
 
-    const nameError = get(errors, 'name')
+    const shouldDisable = (
+      state.isSaving ||
+      state.isDeleting ||
+      state.deletingSuccessful
+    )
+
+    const nameError = get(state.errors, 'name')
     const hasNameError = !isEmpty(nameError)
 
-    const descriptionError = get(errors, 'description')
+    const descriptionError = get(state.errors, 'description')
     const hasDescriptionError = !isEmpty(descriptionError)
+
+    let btnText
+
+    if (state.isSaving) {
+      btnText = isPOST ? 'Adding...' : 'Add'
+    } else if (state.isSaving) {
+      btnText = isPOST ? 'Updating...' : 'Update'
+    }
 
     return (
       <form
-        ref={(form) => this.form = form}
+        ref={(form) => { this.form = form }}
         method="POST"
         onSubmit={::this.onSubmit}
-        className="form spaceType-form">
-        <input type="hidden" name="_csrf" value={csrf}/>
-        <input type="hidden" name="_method" value={formMethod}/>
+        className="form spaceType-form"
+      >
+        <input type="hidden" name="_csrf" value={context.csrf} />
+        <input type="hidden" name="_method" value={props.formMethod} />
 
         <h1 className="form-title">
-          {isAdding ? 'Add SpaceType' : 'Update SpaceType'}
+          {isPOST ? 'Add SpaceType' : 'Update SpaceType'}
           <a href="/admin/space-types/" className="form-title-link">
-            <Icon name="list" width={18} height={18}/>
+            <MaterialDesignIcon name="list" size={18} />
             All SpaceTypes
           </a>
         </h1>
@@ -197,18 +191,19 @@ export default class SpaceTypeForm extends Component {
           <input
             type="text"
             name="name"
+            value={state.name}
             required
-            value={get(this.state, 'name', '')}
             disabled={shouldDisable}
-            onChange={(event) => {
-              this.setState({ name: event.currentTarget.value })
+            onChange={({ currentTarget: input }) => {
+              this.setState({ name: input.value })
             }}
             autoFocus
             className={classNames({
-              'textfield': true,
+              textfield: true,
               'textfield--error': hasNameError
             })}
-            placeholder="E.g. Kitchen"/>
+            placeholder="E.g. Kitchen"
+          />
 
           {hasNameError ? (
             <small className="form-error">{nameError}</small>
@@ -222,17 +217,18 @@ export default class SpaceTypeForm extends Component {
 
           <textarea
             name="description"
-            value={get(this.state, 'description', '')}
+            value={state.description}
             disabled={shouldDisable}
-            onChange={(event) => {
-              this.setState({ description: event.currentTarget.value })
+            onChange={({ currentTarget: input }) => {
+              this.setState({ description: input.value })
             }}
             autoFocus
             className={classNames({
-              'textfield': true,
+              textfield: true,
               'textfield--error': hasDescriptionError
             })}
-            placeholder="E.g. A modern residential kitchen is typically..."/>
+            placeholder="E.g. A modern residential kitchen is typically..."
+          />
 
           {hasDescriptionError ? (
             <small className="form-error">{descriptionError}</small>
@@ -244,17 +240,14 @@ export default class SpaceTypeForm extends Component {
             <button
               type="submit"
               disabled={shouldDisable}
-              className="button button--primary">
+              className="button button--primary"
+            >
               <span className="button-text">
-                <Icon name={isAdding ? 'add' : 'info'}/>
-                {isSaving ? (
-                  isAdding ? 'Adding...' : 'Updating...'
-                ) : (
-                  isAdding ? 'Add' : 'Update'
-                )}
+                <MaterialDesignIcon name={isPOST ? 'add' : 'edit'} />
+                {btnText}
               </span>
             </button>
-            {isAdding ? (
+            {isPOST ? (
               <a href="/admin/space-types/" className="button">
                 <span className="button-text">Cancel</span>
               </a>
@@ -263,10 +256,11 @@ export default class SpaceTypeForm extends Component {
                 type="button"
                 onClick={::this.onClickDelete}
                 disabled={shouldDisable}
-                className="button button--danger">
+                className="button button--danger"
+              >
                 <span className="button-text">
-                  <Icon name="delete"/>
-                  {isDeleting ? 'Deleting...' : 'Delete'}
+                  <MaterialDesignIcon name="delete" />
+                  {state.isDeleting ? 'Deleting...' : 'Delete'}
                 </span>
               </button>
             )}
@@ -277,24 +271,17 @@ export default class SpaceTypeForm extends Component {
   }
 
   renderNotification() {
-    const { formMethod } = this.props
+    const { props, state } = this
 
-    const {
-      errors,
-      spaceType,
-      savingSuccessful,
-      deletingSuccessful
-    } = this.state
-
-    const sid = get(spaceType, 'sid', '')
+    const sid = get(state.spaceType, 'sid', '')
     const url = !isEmpty(sid) ? `/admin/space-types/${sid}/update/` : '#'
-    const name = get(spaceType, 'name', 'SpaceType')
+    const name = get(state.spaceType, 'name', 'SpaceType')
 
-    const genericError = get(errors, 'generic')
+    const genericError = get(state.errors, 'generic')
     const hasGenericError = !isEmpty(genericError)
 
     const onClose = () => {
-      if (deletingSuccessful) {
+      if (state.deletingSuccessful) {
         window.location.href = '/admin/space-types/'
       } else {
         this.setState({
@@ -305,39 +292,56 @@ export default class SpaceTypeForm extends Component {
       }
     }
 
-    if (savingSuccessful) {
-      return isEqual(formMethod, 'POST') ? (
-        <Notification type="success" onClose={onClose}>
-          {`"${name}"`} was added successfully.
-          Click <a href={url}>here</a> to edit.
-        </Notification>
-      ) : (
-        <Notification type="success" onClose={onClose}>
-          {`"${name}"`} was updated successfully.
+    if (state.savingSuccessful) {
+      return (
+        <Notification
+          type="success"
+          timeout={3500}
+          onClose={onClose}
+          isVisible
+        >
+          {props.formMethod === 'POST' ? (
+            <span>
+              "{name}" was added successfully.
+              Click <a href={url}>here</a> to edit.
+            </span>
+          ) : (
+            <span>
+              "{name}" was updated successfully.
+            </span>
+          )}
         </Notification>
       )
-    } else if (deletingSuccessful) {
+    } else if (state.deletingSuccessful) {
       return (
-        <Notification type="success" delay={2500} onClose={onClose}>
-          {`"${name}"`} was deleted successfully. Redirecting...
+        <Notification
+          type="success"
+          timeout={3500}
+          onClose={onClose}
+          isVisible
+        >
+          "{name}" was deleted successfully. Redirecting...
         </Notification>
       )
     } else if (hasGenericError) {
       return (
         <Notification
           type="error"
+          timeout={3500}
           onClose={() => {
             this.setState({
               errors: {},
               savingSuccessful: false
             })
-          }}>
+          }}
+          isVisible
+        >
           {genericError}
         </Notification>
       )
-    } else {
-      return null
     }
+
+    return null
   }
 
   render() {

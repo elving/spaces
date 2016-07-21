@@ -9,7 +9,7 @@ input:-webkit-autofill {
   border: 1px solid #dadada;
   border-radius: 4px;
   background-color: #ffffff;
-  transition: opacity 0.15s linear, border-color 0.15s linear, background-color 0.15s linear;
+  transition: opacity 0.15s linear, border-color 0.15s linear, background-color 0.15s linear, box-shadow 0.15s linear;
   padding: 10px;
   min-height: 47px;
 }
@@ -32,8 +32,8 @@ textarea.textfield--small {
 
 .textfield:focus,
 .textfield:active {
+  box-shadow: 0 0 2px 1px rgba(192, 192, 192, 0.25);
   border-color: #c0c0c0;
-  background-color: #fcfcfc;
 }
 
 .textfield:disabled {

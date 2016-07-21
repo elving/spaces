@@ -12,7 +12,7 @@ import FollowButton from '../common/FollowButton'
 import AddProductModal from '../modal/AddProduct'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import SharePopupContainer from '../container/SharePopup'
-import AddProductModalContainer from '../container/AddProductModal'
+import addProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
 import toStringId from '../../api/utils/toStringId'
@@ -226,6 +226,6 @@ class CategoryDetail extends Component {
   }
 }
 
-export default AddProductModalContainer(
+export default addProductModalContainer(
   SharePopupContainer(CategoryDetail)
 )

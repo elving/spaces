@@ -7,6 +7,7 @@ import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 import search from '../api/space/search'
 import create from '../api/space/create'
 import update from '../api/space/update'
+import destroy from '../api/space/destroy'
 import findById from '../api/space/findById'
 import findBySid from '../api/space/findBySid'
 import updateUser from '../api/user/update'
@@ -167,6 +168,21 @@ export const redesignSpace = async (req, res) => {
     })
 
     req.logIn(user, () => res.status(200).json(space))
+  } catch (err) {
+    res.status(500).json({ err })
+  }
+}
+
+export const destroySpace = async (req, res) => {
+  const id = get(req, 'params.id')
+
+  if (!isAuthenticatedUser(req.user)) {
+    res.status(500).json({ err: 'Not authorized' })
+  }
+
+  try {
+    await destroy(id)
+    res.status(200).json({ success: true })
   } catch (err) {
     res.status(500).json({ err })
   }

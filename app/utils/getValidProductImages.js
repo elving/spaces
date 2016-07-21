@@ -1,5 +1,5 @@
-const getWidth = (url) => {
-  return new Promise((resolve, reject) => {
+const getWidth = url => (
+  new Promise((resolve, reject) => {
     const image = new Image()
     const onLoad = () => resolve(image.width)
 
@@ -11,15 +11,15 @@ const getWidth = (url) => {
       onLoad()
     }
   })
-}
+)
 
 export default (imageUrls, minWidth) => {
   const images = []
 
   return new Promise(async (resolve, reject) => {
     try {
-      for (let url of imageUrls) {
-        let imageWidth = await getWidth(url)
+      for (const url of imageUrls) {
+        const imageWidth = await getWidth(url)
 
         if (imageWidth >= minWidth) {
           images.push(url)

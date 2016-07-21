@@ -14,10 +14,11 @@ import cheerio from 'cheerio'
 import parseInt from 'lodash/parseInt'
 import { parse as parseUrl } from 'url'
 
+import logError from '../../utils/logError'
 import findByUrl from './findByUrl'
 
-export default (url) => {
-  return new Promise(async (resolve, reject) => {
+export default url => (
+  new Promise(async (resolve, reject) => {
     try {
       const product = await findByUrl(url)
 
@@ -45,8 +46,8 @@ export default (url) => {
       useQuerystring: true,
       followAllRedirects: true,
       headers: {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Connection': 'keep-alive',
+        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        Connection: 'keep-alive',
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36',
         'Cache-Control': 'no-cache',
         'Accept-Encoding': 'gzip, deflate, sdch',
@@ -109,8 +110,8 @@ export default (url) => {
               amazonDynamicImage = head(keys(
                 JSON.parse($amazonImage.attr('data-a-dynamic-image'))
               ))
-            } catch (err) {
-
+            } catch (amazonImageErr) {
+              logError(amazonImageErr)
             }
 
             images.push(
@@ -121,7 +122,8 @@ export default (url) => {
           }
         } else {
           forEach($images, (img) => {
-            let src, width
+            let src
+            let width
             const $img = $(img)
 
             if ($img && $img.length) {
@@ -150,7 +152,7 @@ export default (url) => {
         }
 
         images = filter(slice(compact(uniq(images)), 0, 15), (src) => (
-          !(/data\:image/).test(src)
+          !(/data:image/).test(src)
         ))
 
         // Get Metadata
@@ -199,4 +201,4 @@ export default (url) => {
       }
     })
   })
-}
+)

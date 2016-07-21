@@ -1,60 +1,61 @@
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
-import Icon from './Icon'
+import MaterialDesignIcon from './MaterialDesignIcon'
 
 export default class Notification extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isOpen: true
-    }
-
-    this.timeout = setTimeout(() => {
-      this.timeout = null
-      this.setState({ isOpen: false }, props.onClose)
-    }, props.delay)
-  }
-
   static propTypes = {
-    type: Type.string,
-    delay: Type.number,
-    onClose: Type.func
+    type: PropTypes.string,
+    timeout: PropTypes.number,
+    onClose: PropTypes.func,
+    children: PropTypes.node,
+    isVisible: PropTypes.bool
   };
 
   static defaultProps = {
     type: 'default',
-    delay: 5000,
-    onClose: (() => {})
+    timeout: 0,
+    onClose: (() => {}),
+    isVisible: false
   };
 
-  componentWillUpdate(nextProps, nextState) {
-    if (nextState.isOpen) {
-      this.timeout = setTimeout(() => {
-        this.timeout = null
-        this.setState({ isOpen: false }, nextProps.onClose)
-      }, nextProps.delay)
+  constructor(props) {
+    super(props)
+    this.setTimeout(props)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setTimeout(nextProps)
+  }
+
+  setTimeout(props) {
+    if (props.isVisible) {
+      this.timeoutId = props.timeout > 0
+        ? setTimeout(() => {
+          this.timeoutId = null
+          props.onClose()
+        }, props.timeout)
+        : null
     }
   }
 
   render() {
-    const { isOpen } = this.state
-    const { type, onClose } = this.props
+    const { props } = this
 
-    return isOpen ? (
-      <div className={`notification notification--${type}`}>
+    return props.isVisible ? (
+      <div className={`notification notification--${props.type}`}>
         <span className="notification-content">
-          {this.props.children}
+          {props.children}
         </span>
         <button
           onClick={() => {
-            clearTimeout(this.timeout)
-            this.setState({ isOpen: false }, onClose)
+            clearTimeout(this.timeoutId)
+            props.onClose()
           }}
           className={(
             'notification-close button button--transparent button--icon'
-          )}>
-          <Icon name="close"/>
+          )}
+        >
+          <MaterialDesignIcon name="close" />
         </button>
       </div>
     ) : null

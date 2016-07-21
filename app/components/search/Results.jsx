@@ -3,7 +3,6 @@ import map from 'lodash/map'
 import size from 'lodash/size'
 import axios from 'axios'
 import concat from 'lodash/concat'
-import isEqual from 'lodash/isEqual'
 import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
@@ -11,27 +10,12 @@ import SpaceCard from '../space/Card'
 import ProductCard from '../product/Card'
 import ProfileCard from '../user/Card'
 import AddProductModal from '../modal/AddProduct'
-import AddProductModalContainer from '../container/AddProductModal'
+import addProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
 import toStringId from '../../api/utils/toStringId'
 
 class SearchResults extends Component {
-  constructor(props) {
-    super(props)
-
-    const initialResults = get(props, 'results', [])
-
-    this.state = {
-      skip: 40,
-      offset: size(initialResults),
-      results: initialResults,
-      isSearhing: false,
-      lastResults: initialResults,
-      hasSearched: false
-    }
-  }
-
   static propTypes = {
     count: PropTypes.number,
     resuts: PropTypes.array,
@@ -50,23 +34,39 @@ class SearchResults extends Component {
     createaddProductModal: false
   };
 
+  constructor(props) {
+    super(props)
+
+    const initialResults = get(props, 'results', [])
+
+    this.state = {
+      skip: 40,
+      offset: size(initialResults),
+      results: initialResults,
+      isSearhing: false,
+      lastResults: initialResults,
+      hasSearched: false
+    }
+  }
+
   fetch() {
     const { state } = this
 
     this.setState({ isSearhing: true }, () => {
       axios
         .get(`/ajax/products/search/?skip=${state.offset}`)
-        .then((res) => {
-          const newResults = get(res, 'data', [])
+        .then(({ data }) => {
+          const results = get(data, 'results', [])
 
           this.setState({
-            offset: state.offset + size(newResults),
-            results: concat(state.results, newResults),
+            offset: state.offset + size(results),
+            results: concat(state.results, results),
             isSearhing: false,
-            lastResults: newResults,
+            lastResults: results,
             hasSearched: true
           })
-        }).catch(() => this.setState({ isSearhing: false }))
+        })
+        .catch(() => this.setState({ isSearhing: false }))
     })
   }
 
@@ -83,7 +83,8 @@ class SearchResults extends Component {
         <button
           onClick={::this.fetch}
           disabled={state.isSearhing}
-          className="button button--outline">
+          className="button button--outline"
+        >
           {state.isSearhing ? 'Loading More...' : 'Load More'}
         </button>
       </div>
@@ -98,24 +99,21 @@ class SearchResults extends Component {
       <div className="grid">
         <div className="grid-items">
           {map(state.results, result => {
-            if (isEqual(searchType, 'products')) {
+            if (searchType === 'products') {
               return (
                 <ProductCard
                   {...result}
                   key={toStringId(result)}
-                  onAddButtonClick={() => props.openAddProductModal(result)}/>
+                  onAddButtonClick={() => props.openAddProductModal(result)}
+                />
               )
-            } else if (isEqual(searchType, 'spaces')) {
-              return (
-                <SpaceCard key={toStringId(result)} {...result}/>
-              )
-            } else if (isEqual(searchType, 'designers')) {
-              return (
-                <ProfileCard key={toStringId(result)} user={result}/>
-              )
-            } else {
-              return null
+            } else if (searchType === 'spaces') {
+              return <SpaceCard key={toStringId(result)} {...result} />
+            } else if (searchType === 'designers') {
+              return <ProfileCard key={toStringId(result)} user={result} />
             }
+
+            return null
           })}
         </div>
       </div>
@@ -132,7 +130,8 @@ class SearchResults extends Component {
         <AddProductModal
           product={props.addProductModalCurrent}
           onClose={props.closeAddProductModal}
-          isVisible={props.addProductModalIsOpen}/>
+          isVisible={props.addProductModalIsOpen}
+        />
 
         <h1 className="page-title page-title--has-margin">
           {`${props.count} ${inflect(props.count, searchType)} found.`}
@@ -147,4 +146,4 @@ class SearchResults extends Component {
   }
 }
 
-export default AddProductModalContainer(SearchResults)
+export default addProductModalContainer(SearchResults)

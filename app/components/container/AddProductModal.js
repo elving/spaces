@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-const AddProductModalContainer = Composed => class extends Component {
+const addProductModalContainer = Composed => class extends Component {
   constructor(props) {
     super(props)
 
@@ -37,4 +37,4 @@ const AddProductModalContainer = Composed => class extends Component {
   }
 }
 
-export default AddProductModalContainer
+export default addProductModalContainer

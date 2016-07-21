@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from 'react'
 import Layout from '../common/Layout'
 import ProductCard from './Card'
 import AddProductModal from '../modal/AddProduct'
-import AddProductModalContainer from '../container/AddProductModal'
+import addProductModalContainer from '../container/AddProductModal'
 
 import toStringId from '../../api/utils/toStringId'
 
@@ -120,4 +120,4 @@ class ProductsIndex extends Component {
   }
 }
 
-export default AddProductModalContainer(ProductsIndex)
+export default addProductModalContainer(ProductsIndex)

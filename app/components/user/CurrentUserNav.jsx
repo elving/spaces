@@ -6,8 +6,8 @@ import Dropdown, {
   DropdownContent
 } from 'react-simple-dropdown'
 
-import Icon from '../common/Icon'
 import CurrentUserAvatar from './CurrentUserAvatar'
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 export default class CurrentUserNav extends Component {
   static contextTypes = {
@@ -23,16 +23,15 @@ export default class CurrentUserNav extends Component {
       <div className="current-user-nav">
         {userLoggedIn() ? (
           <Dropdown className="dropdown">
-            <DropdownTrigger
-              className="dropdown-trigger">
-              <CurrentUserAvatar/>
+            <DropdownTrigger className="dropdown-trigger">
+              <CurrentUserAvatar />
             </DropdownTrigger>
             <DropdownContent className="dropdown-content">
               <a href={`/users/${username}/`} className="dropdown-link">
-                Profile <Icon name="user"/>
+                Profile <MaterialDesignIcon name="profile" />
               </a>
               <a href="/logout/" className="dropdown-link">
-                Logout <Icon name="toggle"/>
+                Logout <MaterialDesignIcon name="logout" />
               </a>
             </DropdownContent>
           </Dropdown>
@@ -43,7 +42,8 @@ export default class CurrentUserNav extends Component {
             </a>
             <a
               href="/join/"
-              className="current-user-nav-link button button--small">
+              className="current-user-nav-link button button--small"
+            >
               Join
             </a>
           </div>

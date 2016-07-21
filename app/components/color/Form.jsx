@@ -1,47 +1,24 @@
 import get from 'lodash/get'
 import axios from 'axios'
-import merge from 'lodash/merge'
-import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 import serialize from 'form-serialize'
 import classNames from 'classnames'
 import { Panel as ColorPickerPanel } from 'react-colors-picker'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
-import Icon from '../common/Icon'
 import Notification from '../common/Notification'
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
 
 export default class ColorForm extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      color: {},
-      errors: {},
-
-      hex: get(props, 'color.hex', ''),
-      name: get(props, 'color.name', ''),
-
-      isSaving: false,
-      hasSaved: false,
-      savingSuccessful: false,
-
-      isDeleting: false,
-      deletingSuccessful: false
-    }
-
-    this.form = null
-  }
-
   static contextTypes = {
-    csrf: Type.string
+    csrf: PropTypes.string
   };
 
   static propTypes = {
-    color: Type.object,
-    formMethod: Type.string.isRequired
+    color: PropTypes.object,
+    formMethod: PropTypes.string
   };
 
   static defaultProps = {
@@ -49,14 +26,31 @@ export default class ColorForm extends Component {
     formMethod: 'POST'
   };
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      hex: get(props.color, 'hex', ''),
+      name: get(props.color, 'name', ''),
+      color: {},
+      errors: {},
+      isSaving: false,
+      hasSaved: false,
+      isDeleting: false,
+      savingSuccessful: false,
+      deletingSuccessful: false
+    }
+
+    this.form = null
+  }
+
   componentDidMount() {
-    const { isSaving } = this.state
-    const { formMethod } = this.props
+    const { props, state } = this.state
 
     window.onbeforeunload = () => {
-      const action = isEqual(formMethod, 'POST') ? 'adding' : 'updating'
+      const action = props.formMethod === 'POST' ? 'adding' : 'updating'
 
-      if (isSaving) {
+      if (state.isSaving) {
         return (
           `You are in the process of ${action} a color. ` +
           'Are you sure you want to navigate away from this page and ' +
@@ -66,36 +60,19 @@ export default class ColorForm extends Component {
     }
   }
 
-  reset(next = (() => {})) {
-    this.setState({
-      color: {},
-      errors: {},
-
-      hex: '',
-      name: '',
-
-      isSaving: false,
-      hasSaved: false,
-      savingSuccessful: false,
-
-      isDeleting: false,
-      deletingSuccessful: false
-    }, next)
-  }
-
   onSubmit(event) {
-    const { color, formMethod } = this.props
+    const { props } = this
 
     const form = this.form
+    const isPOST = props.formMethod === 'POST'
     const formData = serialize(form, { hash: true })
-    const isAdding = isEqual(formMethod, 'POST')
-    const ajaxEndpoint = isAdding
+    const endpoint = isPOST
       ? '/ajax/colors/'
-      : `/ajax/colors/${toStringId(color)}/`
+      : `/ajax/colors/${toStringId(props.color)}/`
 
     event.preventDefault()
 
-    if (isEmpty(get(formData, 'hex'))) {
+    if (isEmpty(formData.hex)) {
       this.setState({
         errors: {
           hex: 'A hex code is required to add a color'
@@ -107,26 +84,29 @@ export default class ColorForm extends Component {
 
     this.setState({ errors: {}, isSaving: true }, () => {
       axios({
-        url: ajaxEndpoint,
+        url: endpoint,
         data: formData,
-        method: formMethod
-      }).then((res) => {
-        const resetData = isAdding ? {
+        method: props.formMethod
+      })
+      .then(({ data: color }) => {
+        const resetData = isPOST ? {
           hex: '',
           name: ''
         } : {}
 
-        this.setState(merge({
-          color: get(res, 'data', {}),
+        this.setState({
+          color,
           errors: {},
           isSaving: false,
           hasSaved: true,
-          savingSuccessful: true
-        }, resetData))
-      }).catch((res) => {
+          savingSuccessful: true,
+          ...resetData
+        })
+      })
+      .catch(({ data }) => {
         this.setState({
           color: {},
-          errors: get(res, 'data.err', {}),
+          errors: get(data, 'err', {}),
           isSaving: false,
           hasSaved: false,
           savingSuccessful: false
@@ -136,66 +116,80 @@ export default class ColorForm extends Component {
   }
 
   onClickDelete() {
-    const { csrf } = this.context
-    const { color } = this.props
+    const { props, context } = this
+
     const deleteMessage = (
       'Are you sure you want to delete this color? \n' +
       'This action cannot be undone. ' +
       'Type the word "DELETE" to confirm.'
     )
 
-    if (isEqual(window.prompt(deleteMessage), 'DELETE')) {
+    if (window.prompt(deleteMessage) === 'DELETE') {
       this.setState({ errors: {}, isDeleting: true }, () => {
-        axios({
-          url: `/ajax/colors/${toStringId(color)}/`,
-          data: { _csrf: csrf, _method: 'delete' },
-          method: 'POST'
-        }).then(() => {
-          this.setState({
-            color: {},
-            isDeleting: false,
-            deletingSuccessful: true
+        axios
+          .post(`/ajax/colors/${toStringId(props.color)}/`, {
+            _csrf: context.csrf,
+            _method: 'delete'
           })
-        }).catch((res) => {
-          this.setState({
-            color: {},
-            errors: get(res, 'data.err', {}),
-            isDeleting: false,
-            deletingSuccessful: false
+          .then(() => {
+            this.setState({
+              color: {},
+              isDeleting: false,
+              deletingSuccessful: true
+            })
           })
-        })
+          .catch(({ data }) => {
+            this.setState({
+              color: {},
+              errors: get(data, 'err', {}),
+              isDeleting: false,
+              deletingSuccessful: false
+            })
+          })
       })
     }
   }
 
   renderForm() {
-    const { csrf } = this.context
-    const { formMethod } = this.props
-    const { errors, isSaving, isDeleting, deletingSuccessful } = this.state
+    const { props, state, context } = this
 
-    const isAdding = isEqual(formMethod, 'POST')
-    const shouldDisable = isSaving || isDeleting || deletingSuccessful
+    const isPOST = props.formMethod === 'POST'
 
-    const hexError = get(errors, 'hex')
+    const shouldDisable = (
+      state.isSaving ||
+      state.isDeleting ||
+      state.deletingSuccessful
+    )
+
+    const hexError = get(state.errors, 'hex')
     const hasHexError = !isEmpty(hexError)
 
-    const nameError = get(errors, 'name')
+    const nameError = get(state.errors, 'name')
     const hasNameError = !isEmpty(nameError)
+
+    let btnText
+
+    if (state.isSaving) {
+      btnText = isPOST ? 'Adding...' : 'Add'
+    } else if (state.isSaving) {
+      btnText = isPOST ? 'Updating...' : 'Update'
+    }
 
     return (
       <form
-        ref={(form) => this.form = form}
+        ref={(form) => { this.form = form }}
         method="POST"
         onSubmit={::this.onSubmit}
-        className="form color-form">
-        <input type="hidden" name="hex" value={get(this.state, 'hex', '')}/>
-        <input type="hidden" name="_csrf" value={csrf}/>
-        <input type="hidden" name="_method" value={formMethod}/>
+        className="form color-form"
+      >
+        <input type="hidden" name="hex" value={state.hex} />
+        <input type="hidden" name="_csrf" value={context.csrf} />
+        <input type="hidden" name="_method" value={props.formMethod} />
 
         <h1 className="form-title">
-          {isAdding ? 'Add Color' : 'Update Color'}
+          {isPOST ? 'Add Color' : 'Update Color'}
           <a href="/admin/colors/" className="form-title-link">
-            <Icon name="list" width={18} height={18}/>
+            <MaterialDesignIcon name="list" size={18} />
             All Colors
           </a>
         </h1>
@@ -208,18 +202,19 @@ export default class ColorForm extends Component {
           <input
             type="text"
             name="name"
+            value={state.name}
             required
-            value={get(this.state, 'name', '')}
             disabled={shouldDisable}
-            onChange={(event) => {
-              this.setState({ name: event.currentTarget.value })
+            onChange={({ currentTarget: input }) => {
+              this.setState({ name: input.value })
             }}
             autoFocus
             className={classNames({
-              'textfield': true,
+              textfield: true,
               'textfield--error': hasNameError
             })}
-            placeholder="E.g. Charcoal Gray"/>
+            placeholder="E.g. Charcoal Gray"
+          />
 
           {hasNameError ? (
             <small className="form-error">{nameError}</small>
@@ -232,10 +227,11 @@ export default class ColorForm extends Component {
           </label>
 
           <ColorPickerPanel
-            color={get(this.state, 'hex', '#666666')}
-            onChange={(value) => {
-              this.setState({ hex: get(value, 'color') })
-            }}/>
+            color={get(state, 'hex', '#666666')}
+            onChange={value => {
+              this.setState({ hex: value || 'color' })
+            }}
+          />
 
           {hasHexError ? (
             <small className="form-error">{hexError}</small>
@@ -247,17 +243,14 @@ export default class ColorForm extends Component {
             <button
               type="submit"
               disabled={shouldDisable}
-              className="button button--primary">
+              className="button button--primary"
+            >
               <span className="button-text">
-                <Icon name={isAdding ? 'add' : 'info'}/>
-                {isSaving ? (
-                  isAdding ? 'Adding...' : 'Updating...'
-                ) : (
-                  isAdding ? 'Add' : 'Update'
-                )}
+                <MaterialDesignIcon name={isPOST ? 'add' : 'edit'} />
+                {btnText}
               </span>
             </button>
-            {isAdding ? (
+            {isPOST ? (
               <a href="/admin/colors/" className="button">
                 <span className="button-text">Cancel</span>
               </a>
@@ -266,10 +259,11 @@ export default class ColorForm extends Component {
                 type="button"
                 onClick={::this.onClickDelete}
                 disabled={shouldDisable}
-                className="button button--danger">
+                className="button button--danger"
+              >
                 <span className="button-text">
-                  <Icon name="delete"/>
-                  {isDeleting ? 'Deleting...' : 'Delete'}
+                  <MaterialDesignIcon name="delete" />
+                  {state.isDeleting ? 'Deleting...' : 'Delete'}
                 </span>
               </button>
             )}
@@ -280,18 +274,17 @@ export default class ColorForm extends Component {
   }
 
   renderNotification() {
-    const { formMethod } = this.props
-    const { color, errors, savingSuccessful, deletingSuccessful } = this.state
+    const { props, state } = this
 
-    const sid = get(color, 'sid', '')
+    const sid = get(state.color, 'sid', '')
     const url = !isEmpty(sid) ? `/admin/colors/${sid}/update/` : '#'
-    const name = get(color, 'name', 'Color')
+    const name = get(state.color, 'name', 'Color')
 
-    const genericError = get(errors, 'generic')
+    const genericError = get(state.errors, 'generic')
     const hasGenericError = !isEmpty(genericError)
 
     const onClose = () => {
-      if (deletingSuccessful) {
+      if (state.deletingSuccessful) {
         window.location.href = '/admin/colors/'
       } else {
         this.setState({
@@ -302,39 +295,56 @@ export default class ColorForm extends Component {
       }
     }
 
-    if (savingSuccessful) {
-      return isEqual(formMethod, 'POST') ? (
-        <Notification type="success" onClose={onClose}>
-          {`"${name}"`} was added successfully.
-          Click <a href={url}>here</a> to edit.
-        </Notification>
-      ) : (
-        <Notification type="success" onClose={onClose}>
-          {`"${name}"`} was updated successfully.
+    if (state.savingSuccessful) {
+      return (
+        <Notification
+          type="success"
+          timeout={3500}
+          onClose={onClose}
+          isVisible
+        >
+          {props.formMethod === 'POST' ? (
+            <span>
+              "{name}" was added successfully.
+              Click <a href={url}>here</a> to edit.
+            </span>
+          ) : (
+            <span>
+              "{name}" was updated successfully.
+            </span>
+          )}
         </Notification>
       )
-    } else if (deletingSuccessful) {
+    } else if (state.deletingSuccessful) {
       return (
-        <Notification type="success" delay={2500} onClose={onClose}>
-          {`"${name}"`} was deleted successfully. Redirecting...
+        <Notification
+          type="success"
+          timeout={3500}
+          onClose={onClose}
+          isVisible
+        >
+          "{name}" was deleted successfully. Redirecting...
         </Notification>
       )
     } else if (hasGenericError) {
       return (
         <Notification
           type="error"
+          timeout={3500}
           onClose={() => {
             this.setState({
               errors: {},
               savingSuccessful: false
             })
-          }}>
+          }}
+          isVisible
+        >
           {genericError}
         </Notification>
       )
-    } else {
-      return null
     }
+
+    return null
   }
 
   render() {

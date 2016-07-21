@@ -1,45 +1,23 @@
 import get from 'lodash/get'
 import axios from 'axios'
-import merge from 'lodash/merge'
-import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 import serialize from 'form-serialize'
 import classNames from 'classnames'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
-import Icon from '../common/Icon'
 import Notification from '../common/Notification'
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
 
 export default class CategoryForm extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      errors: {},
-      category: {},
-
-      name: get(props, 'category.name', ''),
-
-      isSaving: false,
-      hasSaved: false,
-      savingSuccessful: false,
-
-      isDeleting: false,
-      deletingSuccessful: false
-    }
-
-    this.form = null
-  }
-
   static contextTypes = {
-    csrf: Type.string
+    csrf: PropTypes.string
   };
 
   static propTypes = {
-    category: Type.object,
-    formMethod: Type.string.isRequired
+    category: PropTypes.object,
+    formMethod: PropTypes.string
   };
 
   static defaultProps = {
@@ -47,14 +25,32 @@ export default class CategoryForm extends Component {
     formMethod: 'POST'
   };
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      name: get(props.category, 'name', ''),
+      errors: {},
+      category: {},
+      isSaving: false,
+      hasSaved: false,
+      isDeleting: false,
+      savingSuccessful: false,
+      deletingSuccessful: false
+    }
+
+    this.form = null
+  }
+
   componentDidMount() {
-    const { isSaving } = this.state
-    const { formMethod } = this.props
+    const { props, state } = this.state
 
     window.onbeforeunload = () => {
-      const action = isEqual(formMethod, 'POST') ? 'adding' : 'updating'
+      const action = props.formMethod === 'POST'
+        ? 'adding'
+        : 'updating'
 
-      if (isSaving) {
+      if (state.isSaving) {
         return (
           `You are in the process of ${action} a category. ` +
           'Are you sure you want to navigate away from this page and ' +
@@ -64,52 +60,39 @@ export default class CategoryForm extends Component {
     }
   }
 
-  reset(next = (() => {})) {
-    this.setState({
-      errors: {},
-      category: {},
-
-      name: '',
-
-      isSaving: false,
-      hasSaved: false,
-      savingSuccessful: false,
-
-      isDeleting: false,
-      deletingSuccessful: false
-    }, next)
-  }
-
   onSubmit(event) {
-    const { category, formMethod } = this.props
+    const { props } = this
 
     const form = this.form
+    const isPOST = props.formMethod === 'POST'
     const formData = serialize(form, { hash: true })
-    const isAdding = isEqual(formMethod, 'POST')
-    const ajaxEndpoint = isAdding
+    const endpoint = isPOST
       ? '/ajax/categories/'
-      : `/ajax/categories/${toStringId(category)}/`
+      : `/ajax/categories/${toStringId(props.category)}/`
 
     event.preventDefault()
 
     this.setState({ errors: {}, isSaving: true }, () => {
       axios({
-        url: ajaxEndpoint,
+        url: endpoint,
         data: formData,
-        method: formMethod
-      }).then((res) => {
-        const resetData = isAdding ? { name: '' } : {}
+        method: props.formMethod
+      })
+      .then(({ data: category }) => {
+        const resetData = isPOST ? { name: '' } : {}
 
-        this.setState(merge({
+        this.setState({
           errors: {},
-          category: get(res, 'data', {}),
           isSaving: false,
           hasSaved: true,
-          savingSuccessful: true
-        }, resetData))
-      }).catch((res) => {
+          category,
+          savingSuccessful: true,
+          ...resetData
+        })
+      })
+      .catch(({ data }) => {
         this.setState({
-          errors: get(res, 'data.err', {}),
+          errors: get(data, 'err', {}),
           category: {},
           isSaving: false,
           hasSaved: false,
@@ -120,62 +103,76 @@ export default class CategoryForm extends Component {
   }
 
   onClickDelete() {
-    const { csrf } = this.context
-    const { category } = this.props
+    const { props, context } = this
+
     const deleteMessage = (
       'Are you sure you want to delete this category? \n' +
       'This action cannot be undone. ' +
       'Type the word "DELETE" to confirm.'
     )
 
-    if (isEqual(window.prompt(deleteMessage), 'DELETE')) {
+    if (window.prompt(deleteMessage) === 'DELETE') {
       this.setState({ errors: {}, isDeleting: true }, () => {
-        axios({
-          url: `/ajax/categories/${toStringId(category)}/`,
-          data: { _csrf: csrf, _method: 'delete' },
-          method: 'POST'
-        }).then(() => {
-          this.setState({
-            category: {},
-            isDeleting: false,
-            deletingSuccessful: true
+        axios
+          .post(`/ajax/categories/${toStringId(props.category)}/`, {
+            _csrf: context.csrf,
+            _method: 'delete'
           })
-        }).catch((res) => {
-          this.setState({
-            errors: get(res, 'data.err', {}),
-            category: {},
-            isDeleting: false,
-            deletingSuccessful: false
+          .then(() => {
+            this.setState({
+              category: {},
+              isDeleting: false,
+              deletingSuccessful: true
+            })
           })
-        })
+          .catch(({ data }) => {
+            this.setState({
+              errors: get(data, 'err', {}),
+              category: {},
+              isDeleting: false,
+              deletingSuccessful: false
+            })
+          })
       })
     }
   }
 
   renderForm() {
-    const { csrf } = this.context
-    const { formMethod } = this.props
-    const { errors, isSaving, isDeleting, deletingSuccessful } = this.state
+    const { props, state, context } = this
 
-    const isAdding = isEqual(formMethod, 'POST')
-    const shouldDisable = isSaving || isDeleting || deletingSuccessful
+    const isPOST = props.formMethod === 'POST'
 
-    const nameError = get(errors, 'name')
+    const shouldDisable = (
+      state.isSaving ||
+      state.isDeleting ||
+      state.deletingSuccessful
+    )
+
+    const nameError = get(state.errors, 'name')
     const hasNameError = !isEmpty(nameError)
+
+    let btnText
+
+    if (state.isSaving) {
+      btnText = isPOST ? 'Adding...' : 'Add'
+    } else if (state.isSaving) {
+      btnText = isPOST ? 'Updating...' : 'Update'
+    }
 
     return (
       <form
-        ref={(form) => this.form = form}
+        ref={(form) => { this.form = form }}
         method="POST"
         onSubmit={::this.onSubmit}
-        className="form category-form">
-        <input type="hidden" name="_csrf" value={csrf}/>
-        <input type="hidden" name="_method" value={formMethod}/>
+        className="form category-form"
+      >
+        <input type="hidden" name="_csrf" value={context.csrf} />
+        <input type="hidden" name="_method" value={props.formMethod} />
 
         <h1 className="form-title">
-          {isAdding ? 'Add Category' : 'Update Category'}
+          {isPOST ? 'Add Category' : 'Update Category'}
           <a href="/admin/categories/" className="form-title-link">
-            <Icon name="list" width={18} height={18}/>
+            <MaterialDesignIcon name="list" size={18} />
             All Categories
           </a>
         </h1>
@@ -188,18 +185,19 @@ export default class CategoryForm extends Component {
           <input
             type="text"
             name="name"
+            value={state.name}
             required
-            value={get(this.state, 'name', '')}
             disabled={shouldDisable}
-            onChange={(event) => {
-              this.setState({ name: event.currentTarget.value })
+            onChange={({ currentTarget: input }) => {
+              this.setState({ name: input.value })
             }}
             autoFocus
             className={classNames({
-              'textfield': true,
+              textfield: true,
               'textfield--error': hasNameError
             })}
-            placeholder="E.g. Ikea"/>
+            placeholder="E.g. Ikea"
+          />
 
           {hasNameError ? (
             <small className="form-error">{nameError}</small>
@@ -211,17 +209,14 @@ export default class CategoryForm extends Component {
             <button
               type="submit"
               disabled={shouldDisable}
-              className="button button--primary">
+              className="button button--primary"
+            >
               <span className="button-text">
-                <Icon name={isAdding ? 'add' : 'info'}/>
-                {isSaving ? (
-                  isAdding ? 'Adding...' : 'Updating...'
-                ) : (
-                  isAdding ? 'Add' : 'Update'
-                )}
+                <MaterialDesignIcon name={isPOST ? 'add' : 'edit'} />
+                {btnText}
               </span>
             </button>
-            {isAdding ? (
+            {isPOST ? (
               <a href="/admin/categories/" className="button">
                 <span className="button-text">Cancel</span>
               </a>
@@ -230,10 +225,11 @@ export default class CategoryForm extends Component {
                 type="button"
                 onClick={::this.onClickDelete}
                 disabled={shouldDisable}
-                className="button button--danger">
+                className="button button--danger"
+              >
                 <span className="button-text">
-                  <Icon name="delete"/>
-                  {isDeleting ? 'Deleting...' : 'Delete'}
+                  <MaterialDesignIcon name="delete" />
+                  {state.isDeleting ? 'Deleting...' : 'Delete'}
                 </span>
               </button>
             )}
@@ -244,24 +240,17 @@ export default class CategoryForm extends Component {
   }
 
   renderNotification() {
-    const { formMethod } = this.props
+    const { props, state } = this
 
-    const {
-      errors,
-      category,
-      savingSuccessful,
-      deletingSuccessful
-    } = this.state
-
-    const sid = get(category, 'sid', '')
+    const sid = get(state.category, 'sid', '')
     const url = !isEmpty(sid) ? `/admin/categories/${sid}/update/` : '#'
-    const name = get(category, 'name', 'Category')
+    const name = get(state.category, 'name', 'Category')
 
-    const genericError = get(errors, 'generic')
+    const genericError = get(state.errors, 'generic')
     const hasGenericError = !isEmpty(genericError)
 
     const onClose = () => {
-      if (deletingSuccessful) {
+      if (state.deletingSuccessful) {
         window.location.href = '/admin/categories/'
       } else {
         this.setState({
@@ -272,39 +261,56 @@ export default class CategoryForm extends Component {
       }
     }
 
-    if (savingSuccessful) {
-      return isEqual(formMethod, 'POST') ? (
-        <Notification type="success" onClose={onClose}>
-          {`"${name}"`} was added successfully.
-          Click <a href={url}>here</a> to edit.
-        </Notification>
-      ) : (
-        <Notification type="success" onClose={onClose}>
-          {`"${name}"`} was updated successfully.
+    if (state.savingSuccessful) {
+      return (
+        <Notification
+          type="success"
+          timeout={3500}
+          onClose={onClose}
+          isVisible
+        >
+          {props.formMethod === 'POST' ? (
+            <span>
+              "{name}" was added successfully.
+              Click <a href={url}>here</a> to edit.
+            </span>
+          ) : (
+            <span>
+              "{name}" was updated successfully.
+            </span>
+          )}
         </Notification>
       )
-    } else if (deletingSuccessful) {
+    } else if (state.deletingSuccessful) {
       return (
-        <Notification type="success" delay={2500} onClose={onClose}>
-          {`"${name}"`} was deleted successfully. Redirecting...
+        <Notification
+          type="success"
+          timeout={3500}
+          onClose={onClose}
+          isVisible
+        >
+          "{name}" was deleted successfully. Redirecting...
         </Notification>
       )
     } else if (hasGenericError) {
       return (
         <Notification
           type="error"
+          timeout={3500}
           onClose={() => {
             this.setState({
               errors: {},
               savingSuccessful: false
             })
-          }}>
+          }}
+          isVisible
+        >
           {genericError}
         </Notification>
       )
-    } else {
-      return null
     }
+
+    return null
   }
 
   render() {

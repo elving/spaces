@@ -8,8 +8,8 @@ import toIdsFromPath from '../utils/toIdsFromPath'
 import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default (url, returnDocument = false) => {
-  return new Promise((resolve, reject) => {
+export default (url, returnDocument = false) => (
+  new Promise((resolve, reject) => {
     const key = `product-${url}`
 
     const query = () => {
@@ -47,4 +47,4 @@ export default (url, returnDocument = false) => {
       getFromCacheOrQuery(key, query, resolve)
     }
   })
-}
+)

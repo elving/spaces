@@ -2,22 +2,20 @@ import get from 'lodash/get'
 import map from 'lodash/map'
 import axios from 'axios'
 import Modal from 'react-modal'
-import Select from 'react-select'
 import assign from 'lodash/assign'
 import concat from 'lodash/concat'
 import without from 'lodash/without'
 import isEmpty from 'lodash/isEmpty'
-import serialize from 'form-serialize'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import Loader from '../common/Loader'
+import SpaceForm from '../space/Form'
 import ProductCard from '../product/Card'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
 import productInSpace from '../../utils/product/productInSpace'
-import withoutAnyType from '../../utils/spaceType/withoutAnyType'
 import searchCollection from '../../utils/searchCollection'
 import createProductsHash from '../../utils/space/createProductsHash'
 
@@ -37,32 +35,6 @@ const overrideDefaultStyles = {
 }
 
 export default class AddProductModal extends Component {
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      spaces: [],
-      filteredSpaces: [],
-      spacesHashTable: {},
-      hasFetchedSpaces: false,
-      isFetchingSpaces: false,
-      isTogglingProduct: false,
-
-      formType: '',
-      formName: '',
-      formErrors: {},
-      isCreating: false,
-      formIsVisible: false,
-      formDescription: '',
-
-      spaceTypes: [],
-      hasFetchedSpaceTypes: false,
-      isFetchingSpaceTypes: false
-    }
-
-    this.form = null
-  }
-
   static contextTypes = {
     user: PropTypes.object,
     csrf: PropTypes.string
@@ -80,6 +52,23 @@ export default class AddProductModal extends Component {
     isVisible: false
   };
 
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      spaces: [],
+      filteredSpaces: [],
+      spacesHashTable: {},
+      hasFetchedSpaces: false,
+      isFetchingSpaces: true,
+      isTogglingProduct: false,
+      formIsVisible: false,
+      spaceTypes: [],
+      hasFetchedSpaceTypes: false,
+      isFetchingSpaceTypes: true
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     const { state } = this
     const resetFetchingStatus = {
@@ -94,23 +83,18 @@ export default class AddProductModal extends Component {
       !state.hasFetchedSpaces &&
       !state.hasFetchedSpaceTypes
     ) {
-      this.setState({
-        isFetchingSpaces: true,
-        isFetchingSpaceTypes: true
-      }, () => {
-        Promise
-          .all([this.fetchSpaces(), this.fetchSpaceTypes()])
-          .then(([spaces, spaceTypes]) => {
-            this.setState({
-              spaces,
-              spaceTypes,
-              filteredSpaces: spaces,
-              spacesHashTable: createProductsHash(spaces),
-              ...resetFetchingStatus
-            })
+      Promise
+        .all([this.fetchSpaces(), this.fetchSpaceTypes()])
+        .then(([spaces, spaceTypes]) => {
+          this.setState({
+            spaces,
+            spaceTypes,
+            filteredSpaces: spaces,
+            spacesHashTable: createProductsHash(spaces),
+            ...resetFetchingStatus
           })
-          .catch(() => this.setState({ ...resetFetchingStatus }))
-      })
+        })
+        .catch(() => this.setState({ ...resetFetchingStatus }))
     }
   }
 
@@ -144,49 +128,13 @@ export default class AddProductModal extends Component {
     })
   }
 
-  createSpace() {
-    const { props, state } = this
-    const formData = serialize(this.form, { hash: true })
-    const productId = get(props, 'product.id')
-
-    formData.products = [productId]
-
-    this.setState({ formErrors: {}, isCreating: true }, () => {
-      axios
-        .post('/ajax/spaces/', formData)
-        .then(({ data: space }) => {
-          const spaces = concat(state.spaces, space)
-
-          this.setState({
-            spaces,
-            formType: '',
-            formName: '',
-            formErrors: {},
-            isCreating: false,
-            formIsVisible: false,
-            filteredSpaces: spaces,
-            spacesHashTable: assign({}, state.spacesHashTable, {
-              [toStringId(space)]: [productId]
-            }),
-            formDescription: ''
-          })
-        }).catch(({ data }) => {
-          this.setState({
-            formErrors: get(data, 'err', {}),
-            isCreating: false
-          })
-        })
-    })
-  }
-
   toggleProduct(space, remove = false) {
     const { props, state, context } = this
 
     const products = state.spacesHashTable[space]
-    const productId = get(props, 'product.id')
     const updatedProducts = remove
-      ? without(products, productId)
-      : concat(products, productId)
+      ? without(products, toStringId(props.product))
+      : concat(products, toStringId(props.product))
 
     this.setState({ isTogglingProduct: true }, () => {
       axios
@@ -212,12 +160,12 @@ export default class AddProductModal extends Component {
     if (state.isFetchingSpaces || state.isFetchingSpaceTypes) {
       return this.renderLoadingState()
     } else if (state.formIsVisible) {
-      return this.renderCreateForm()
+      return this.renderForm()
     } else if (isEmpty(state.spaces)) {
       return this.renderEmptyState()
-    } else {
-      return this.renderSpaces()
     }
+
+    return this.renderSpaces()
   }
 
   renderCloseButton() {
@@ -226,19 +174,20 @@ export default class AddProductModal extends Component {
         type="button"
         onClick={() => this.props.onClose()}
         className={classNames({
-          'button': true,
+          button: true,
           'button--icon': true,
           'button--transparent': true,
           'add-product-modal-close': true
-        })}>
-        <MaterialDesignIcon name="close"/>
+        })}
+      >
+        <MaterialDesignIcon name="close" />
       </button>
     )
   }
 
   renderLoadingState() {
     return (
-      <Loader size={55}/>
+      <Loader size={55} />
     )
   }
 
@@ -247,7 +196,7 @@ export default class AddProductModal extends Component {
 
     return (
       <div className="add-product-modal-product">
-        <ProductCard {...props.product} forDisplayOnly={true}/>
+        <ProductCard {...props.product} forDisplayOnly />
       </div>
     )
   }
@@ -261,7 +210,8 @@ export default class AddProductModal extends Component {
         <button
           type="button"
           onClick={() => this.setState({ formIsVisible: true })}
-          className="button button--primary">
+          className="button button--primary"
+        >
           Create your first space
         </button>
       </div>
@@ -278,12 +228,13 @@ export default class AddProductModal extends Component {
         </div>
         <div className="add-product-modal-spaces-search">
           <div className="textfield-icon">
-            <MaterialDesignIcon name="search"/>
+            <MaterialDesignIcon name="search" />
             <input
               type="text"
               onChange={({ currentTarget }) => this.search(currentTarget.value)}
               className="textfield"
-              placeholder="Search"/>
+              placeholder="Search"
+            />
           </div>
         </div>
         <div className="add-product-modal-spaces-list">
@@ -293,9 +244,10 @@ export default class AddProductModal extends Component {
           <button
             type="button"
             onClick={() => this.setState({ formIsVisible: true })}
-            className="button button--primary">
+            className="button button--primary"
+          >
             Create a space
-            </button>
+          </button>
         </div>
       </div>
     )
@@ -305,7 +257,7 @@ export default class AddProductModal extends Component {
     const { props, state } = this
     const spaceId = toStringId(space)
     const hasProduct = productInSpace(
-      state.spacesHashTable, space, get(props, 'product.id')
+      state.spacesHashTable, space, toStringId(props.product)
     )
 
     return (
@@ -316,7 +268,8 @@ export default class AddProductModal extends Component {
         className={classNames({
           'add-product-modal-space': true,
           'add-product-modal-space--has-product': hasProduct
-        })}>
+        })}
+      >
         <span className="add-product-modal-space-name">
           {get(space, 'name')}
         </span>
@@ -324,150 +277,67 @@ export default class AddProductModal extends Component {
           <span className="add-product-modal-space-actions">
             <MaterialDesignIcon
               name="check"
-              className="add-product-modal-space-icon"/>
+              className="add-product-modal-space-icon"
+            />
             <MaterialDesignIcon
               name="uncheck"
-              className="add-product-modal-space-icon"/>
+              className="add-product-modal-space-icon"
+            />
+            <a
+              href={`/${get(space, 'detailUrl')}/`}
+              target="_blank"
+              onClick={event => event.stopPropagation()}
+              className="add-product-modal-space-action"
+            >
+              <MaterialDesignIcon
+                name="open"
+                className="add-product-modal-space-icon"
+              />
+            </a>
           </span>
         ) : (
           <span className="spaces-popup-space-actions">
             <MaterialDesignIcon
               name="check-empty"
-              className="add-product-modal-space-icon"/>
+              className="add-product-modal-space-icon"
+            />
+            <a
+              href={`/${get(space, 'detailUrl')}/`}
+              target="_blank"
+              onClick={event => event.stopPropagation()}
+              className="add-product-modal-space-action"
+            >
+              <MaterialDesignIcon
+                name="open"
+                className="add-product-modal-space-icon"
+              />
+            </a>
           </span>
         )}
       </button>
     )
   }
 
-  renderCreateForm() {
-    const { state, context } = this
-
-    const disabled = state.isFetchingSpaceTypes || state.isCreating
-
-    const typeError = get(state.formErrors, 'type')
-    const hasTypeError = !isEmpty(typeError)
-
-    const nameError = get(state.formErrors, 'name')
-    const hasNameError = !isEmpty(nameError)
-
-    const descriptionError = get(state.formErrors, 'description')
-    const hasDescriptionError = !isEmpty(descriptionError)
+  renderForm() {
+    const { props, state } = this
 
     return (
-      <div className="add-product-modal-form-container">
-        <div className="add-product-modal-title">
-          Create a space
-        </div>
+      <SpaceForm
+        onSuccess={space => {
+          const spaces = concat(state.spaces, space)
 
-        <form
-          ref={form => this.form = form}
-          method="POST"
-          onSubmit={(event) => {
-            event.preventDefault()
-            this.createSpace()
-          }}
-          className="form add-product-modal-form">
-          <input type="hidden" name="_csrf" value={context.csrf}/>
-          <input type="hidden" name="_method" value="POST"/>
-
-          <div className="form-group">
-            <label className="form-label">
-              Type <small>required</small>
-            </label>
-
-            <Select
-              name="spaceType"
-              value={state.formType}
-              options={map(withoutAnyType(state.spaceTypes), type => ({
-                value: toStringId(type),
-                label: get(type, 'name')
-              }))}
-              required
-              onChange={formType => this.setState({ formType })}
-              disabled={disabled}
-              className={classNames({
-                'select': true,
-                'select--error': hasTypeError
-              })}
-              placeholder="E.g. Kitchen"/>
-
-            {hasTypeError ? (
-              <small className="form-error">{typeError}</small>
-            ) : null}
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">
-              Name <small>required</small>
-            </label>
-
-            <input
-              type="text"
-              name="name"
-              required
-              value={state.formName}
-              disabled={disabled}
-              onChange={({ currentTarget }) => {
-                this.setState({ formName: currentTarget.value })
-              }}
-              className={classNames({
-                'textfield': true,
-                'textfield--error': hasNameError
-              })}
-              placeholder="E.g. My dream kitchen"/>
-
-            {hasNameError ? (
-              <small className="form-error">{nameError}</small>
-            ) : null}
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">
-              Description <small>optional</small>
-            </label>
-
-            <textarea
-              name="description"
-              value={state.formDescription}
-              disabled={disabled}
-              onChange={({ currentTarget }) => {
-                this.setState({ formDescription: currentTarget.value })
-              }}
-              className={classNames({
-                'textfield': true,
-                'textfield--error': hasDescriptionError
-              })}
-              placeholder="E.g. A modern kitchen with..."/>
-
-            {hasDescriptionError ? (
-              <small className="form-error">{descriptionError}</small>
-            ) : null}
-          </div>
-
-          <div className="form-group">
-            <div className="form-group form-group--inline">
-              <button
-                type="submit"
-                disabled={disabled}
-                className="button button--primary">
-                <span className="button-text">
-                  {state.isCreating ? 'Creating...' : 'Create'}
-                </span>
-              </button>
-              <button
-                type="button"
-                disabled={disabled}
-                onClick={() => this.setState({ formIsVisible: false })}
-                className="button button--link">
-                <span className="button-text">
-                  Cancel
-                </span>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
+          this.setState({
+            spaces,
+            formIsVisible: false,
+            filteredSpaces: spaces,
+            spacesHashTable: assign({}, state.spacesHashTable, {
+              [toStringId(space)]: [toStringId(props.product)]
+            })
+          })
+        }}
+        onCancel={() => this.setState({ formIsVisible: false })}
+        spaceTypes={state.spaceTypes}
+      />
     )
   }
 
@@ -480,16 +350,17 @@ export default class AddProductModal extends Component {
         style={overrideDefaultStyles}
         isOpen={props.isVisible}
         className={classNames({
-          'ui-modal': true,
+          modal: true,
           'add-product-modal': true,
           'add-product-modal--has-spaces': !isEmpty(spaces)
         })}
-        onRequestClose={props.onClose}>
+        onRequestClose={props.onClose}
+      >
         <section className="add-product-modal-content">
           {this.renderCloseButton()}
           <div className="add-product-modal-left">
             {this.renderProduct()}
-            </div>
+          </div>
           <div className="add-product-modal-right">
             {this.renderContent()}
           </div>

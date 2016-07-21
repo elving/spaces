@@ -10,7 +10,7 @@ import ProfileCard from '../user/Card'
 import CategoryCard from '../category/Card'
 import SpaceTypeCard from '../spaceType/Card'
 import AddProductModal from '../modal/AddProduct'
-import AddProductModalContainer from '../container/AddProductModal'
+import addProductModalContainer from '../container/AddProductModal'
 
 import fullReload from '../../utils/fullReload'
 import toStringId from '../../api/utils/toStringId'
@@ -218,4 +218,4 @@ class Home extends Component {
   }
 }
 
-export default AddProductModalContainer(Home)
+export default addProductModalContainer(Home)

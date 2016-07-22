@@ -47,7 +47,8 @@ export default class MiniProfile extends Component {
               height: 52
             }, this.props)}
             initials={get(user, 'initials', '')}
-            imageUrl={get(user, 'avatar', '')}/>
+            imageUrl={get(user, 'avatar', '')}
+          />
         </div>
         <div className="user-mini-profile-right">
           <div className="user-mini-profile-info">

@@ -19,9 +19,13 @@
   width: 100%;
   margin: 30px auto;
   display: flex;
-  padding: 30px;
   max-width: 620px;
   align-items: center;
   flex-direction: column;
   justify-content: center;
+}
+
+.color-form > .form-group {
+  margin: 0 auto;
+  padding: 0 30px 30px;
 }

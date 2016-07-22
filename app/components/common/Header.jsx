@@ -20,8 +20,9 @@ export default class Header extends Component {
               category: 'Main Header'
             })
           }}
-          className="header-link">
-          <Logo width={35} height={35}/>
+          className="header-link"
+        >
+          <Logo width={35} height={35} />
         </a>
         <a href="#" className="header-link">Discover</a>
         <a href="#" className="header-link">Create</a>
@@ -37,10 +38,10 @@ export default class Header extends Component {
             {this.renderNav()}
           </div>
           <div className="header-container-right">
-            <Search/>
-            <AdminNav/>
-            <AddProductButton/>
-            <CurrentUserNav/>
+            <Search />
+            <AddProductButton />
+            <AdminNav />
+            <CurrentUserNav />
           </div>
         </div>
       </header>

@@ -20,7 +20,7 @@
 
 .dropdown-trigger:after {
   content: "";
-  border-top: 8px solid #d8d8d8;
+  border-top: 8px solid #999999;
 	border-left: 6px solid transparent;
 	border-right: 6px solid transparent;
   margin-left: 10px;
@@ -62,7 +62,7 @@
   font-size: 16px;
   text-align: center;
   text-decoration: none;
-  transition: background-color 0.15s linear;
+  /*transition: background-color 0.15s linear;*/
   width: 100%;
   padding: 15px;
   display: flex;

@@ -20,6 +20,12 @@ export default class MaterialDesignIcon extends Component {
     const { props } = this
 
     switch (props.name) {
+      case 'build': {
+        return (
+          <path fill={props.fill} className="icon-fill" d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z" />
+        )
+      }
+
       case 'open': {
         return (
           <path fill={props.fill} className="icon-fill" d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z" />

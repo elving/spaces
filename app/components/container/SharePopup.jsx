@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-const SharePopupContainer = Composed => class extends Component {
+const sharePopupContainer = Composed => class extends Component {
   constructor(props) {
     super(props)
 
@@ -34,4 +34,4 @@ const SharePopupContainer = Composed => class extends Component {
   }
 }
 
-export default SharePopupContainer
+export default sharePopupContainer

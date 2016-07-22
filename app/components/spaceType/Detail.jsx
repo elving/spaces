@@ -13,7 +13,7 @@ import SharePopup from '../common/SharePopup'
 import FollowButton from '../common/FollowButton'
 import AddProductModal from '../modal/AddProduct'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
-import SharePopupContainer from '../container/SharePopup'
+import sharePopupContainer from '../container/SharePopup'
 import addProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
@@ -181,9 +181,8 @@ class SpaceTypeDetail extends Component {
             type="button"
             onClick={props.openSharePopup}
             className={(
-              "button button--icon button--small tooltip"
+              "button button--icon button--small"
             )}
-            data-tooltip="Share this spaceType"
           >
             <MaterialDesignIcon name="send" />
           </button>
@@ -330,5 +329,5 @@ class SpaceTypeDetail extends Component {
 }
 
 export default addProductModalContainer(
-  SharePopupContainer(SpaceTypeDetail)
+  sharePopupContainer(SpaceTypeDetail)
 )

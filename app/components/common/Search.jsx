@@ -33,7 +33,6 @@ export default class Search extends Component {
     super(props)
 
     this.state = {
-      isFocused: false,
       isSearching: false,
       searchType: 'spaces',
       searchTypesAreOpen: false,
@@ -122,8 +121,6 @@ export default class Search extends Component {
           ref={input => { this.searchInput = input }}
           type="text"
           name={state.searchType === 'designers' ? 'username' : 'name'}
-          onBlur={() => this.setState({ isFocused: false })}
-          onFocus={() => this.setState({ isFocused: true })}
           disabled={state.isSearching}
           className="search-input textfield"
           placeholder="Search"
@@ -248,6 +245,10 @@ export default class Search extends Component {
   renderFilters() {
     const { state } = this
 
+    const allSpaceTypes = state.searchType === 'spaces'
+      ? withoutAnyType(state.allSpaceTypes)
+      : state.allSpaceTypes
+
     return state.filtersAreOpen ? (
       <div className="search-filters">
         {state.searchType === 'spaces' || state.searchType === 'products' ? (
@@ -255,13 +256,13 @@ export default class Search extends Component {
             name="spaceTypes"
             multi
             value={state.spaceTypes}
-            options={map(state.allSpaceTypes, type => ({
+            options={map(allSpaceTypes, type => ({
               value: toStringId(type),
               label: get(type, 'name')
             }))}
             onChange={spaceTypes => this.setState({ spaceTypes })}
             disabled={state.isSearhing}
-            className="search-filter-input select"
+            className="search-filter-input select select--small"
             placeholder="Filter by room"
           />
         ) : null}
@@ -277,7 +278,7 @@ export default class Search extends Component {
             }))}
             onChange={categories => this.setState({ categories })}
             disabled={state.isSearhing}
-            className="search-filter-input select"
+            className="search-filter-input select select--small"
             placeholder="Filter by category"
           />
         ) : null}
@@ -293,17 +294,28 @@ export default class Search extends Component {
             }))}
             onChange={colors => this.setState({ colors })}
             disabled={state.isSearhing}
-            className="search-filter-input select"
+            className="search-filter-input select select--small"
             placeholder="Filter by color"
           />
         ) : null}
 
-        <button
-          type="submit"
-          className="search-filters-button button button--primary"
-        >
-          {`Search ${upperFirst(state.searchType)}`}
-        </button>
+        <div className="search-filters-buttons">
+          <button
+            type="submit"
+            className={
+              "search-filters-button button button--small button--primary"
+            }
+          >
+            {`Search ${upperFirst(state.searchType)}`}
+          </button>
+          <button
+            type="submit"
+            onClick={() => this.setState({ filtersAreOpen: false })}
+            className="search-filters-button button button--small"
+          >
+            Close
+          </button>
+        </div>
       </div>
     ) : null
   }
@@ -322,11 +334,6 @@ export default class Search extends Component {
         onSubmit={onSubmit}
         className={classNames({
           search: true,
-          'search--is-focused': (
-            state.isFocused ||
-            state.filtersAreOpen ||
-            state.searchTypesAreOpen
-          ),
           'search--has-filters': this.getFiltersCount()
         })}
       >

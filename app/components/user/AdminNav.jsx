@@ -18,33 +18,39 @@ export default class CurrentUserNav extends Component {
       <div className="admin-nav">
         <Dropdown className="dropdown">
           <DropdownTrigger
-            className="dropdown-trigger button button--outline">
-            <MaterialDesignIcon name="settings"/> Admin
+            className="dropdown-trigger button button--icon button--outline"
+          >
+            <MaterialDesignIcon name="build" />
           </DropdownTrigger>
           <DropdownContent className="dropdown-content">
             <a
               href="/admin/categories/"
-              className="dropdown-link">
+              className="dropdown-link"
+            >
               Manage Categories
             </a>
             <a
               href="/admin/brands/"
-              className="dropdown-link">
+              className="dropdown-link"
+            >
               Manage Brands
             </a>
             <a
               href="/admin/colors/"
-              className="dropdown-link">
+              className="dropdown-link"
+            >
               Manage Colors
             </a>
             <a
               href="/admin/space-types/"
-              className="dropdown-link">
+              className="dropdown-link"
+            >
               Manage Rooms
             </a>
             <a
               href="/admin/products/"
-              className="dropdown-link">
+              className="dropdown-link"
+            >
               Manage Products
             </a>
           </DropdownContent>

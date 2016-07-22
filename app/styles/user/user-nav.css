@@ -1,3 +1,8 @@
+.current-user-nav {
+  border-left: 1px solid #e5e5e5;
+  padding-left: 15px;
+}
+
 .current-user-nav-cta {
   display: flex;
   align-items: center;
@@ -6,6 +11,7 @@
 
 .current-user-nav-link {
   font-size: 16px;
+  text-decoration: none;
   margin-right: 15px;
 }
 

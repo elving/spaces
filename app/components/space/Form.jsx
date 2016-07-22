@@ -149,16 +149,12 @@ export default class SpaceForm extends Component {
     const descriptionError = get(state.errors, 'description')
     const hasDescriptionError = !isEmpty(descriptionError)
 
-    let btnText
+    let btnText = ''
 
-    if (isPOST && state.isWaiting) {
-      btnText = 'Creating...'
-    } else if (isPOST) {
-      btnText = 'Create'
-    } else if (state.isWaiting) {
-      btnText = 'Updating...'
+    if (isPOST) {
+      btnText = state.isWaiting ? 'Creating Space...' : 'Create Space'
     } else {
-      btnText = 'Update'
+      btnText = state.isWaiting ? 'Updating Space...' : 'Update Space'
     }
 
     return (

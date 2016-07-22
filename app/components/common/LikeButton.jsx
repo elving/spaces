@@ -82,11 +82,8 @@ export default class LikeButton extends Component {
   render() {
     const { props, state, context } = this
 
-    const verb = state.liked ? 'Unlike' : 'Like'
-
     const btnClassName = classNames({
       button: true,
-      tooltip: !props.showText,
       [props.className]: !isEmpty(props.className),
       'like-button': true,
       'button--icon': !props.showText,
@@ -103,7 +100,6 @@ export default class LikeButton extends Component {
           onClick={::this.onClick}
           disabled={state.isSaving}
           className={btnClassName}
-          data-tooltip={`${verb} this ${props.parentType}`}
         >
           <MaterialDesignIcon name="like" />
         </button>
@@ -111,7 +107,6 @@ export default class LikeButton extends Component {
         <a
           href="/login/"
           className={btnClassName}
-          data-tooltip={`${verb} this ${props.parentType}`}
         >
           <MaterialDesignIcon name="like" />
         </a>

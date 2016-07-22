@@ -164,12 +164,12 @@ export default class BrandForm extends Component {
     const descriptionError = get(state.errors, 'description')
     const hasDescriptionError = !isEmpty(descriptionError)
 
-    let btnText
+    let btnText = ''
 
-    if (state.isSaving) {
-      btnText = isPOST ? 'Adding...' : 'Add'
-    } else if (state.isSaving) {
-      btnText = isPOST ? 'Updating...' : 'Update'
+    if (isPOST) {
+      btnText = state.isSaving ? 'Adding Brand...' : 'Add Brand'
+    } else {
+      btnText = state.isSaving ? 'Updating Brand...' : 'Update Brand'
     }
 
     return (

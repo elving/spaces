@@ -13,8 +13,9 @@ export default class AddProductButton extends Component {
     return context.currentUserIsCurator() ? (
       <a
         href="/products/add/"
-        className="add-product-button button button--primary">
-        <MaterialDesignIcon name="add"/>
+        className="add-product-button button button--primary"
+      >
+        <MaterialDesignIcon name="add" />
         Add Product
       </a>
     ) : null

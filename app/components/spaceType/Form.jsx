@@ -157,12 +157,12 @@ export default class SpaceTypeForm extends Component {
     const descriptionError = get(state.errors, 'description')
     const hasDescriptionError = !isEmpty(descriptionError)
 
-    let btnText
+    let btnText = ''
 
-    if (state.isSaving) {
-      btnText = isPOST ? 'Adding...' : 'Add'
-    } else if (state.isSaving) {
-      btnText = isPOST ? 'Updating...' : 'Update'
+    if (isPOST) {
+      btnText = state.isSaving ? 'Adding Space Type...' : 'Add Space Type'
+    } else {
+      btnText = state.isSaving ? 'Updating Space Type...' : 'Update Space Type'
     }
 
     return (

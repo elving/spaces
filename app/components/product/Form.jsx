@@ -298,7 +298,7 @@ export default class ProductForm extends Component {
   }
 
   renderScrapeForm() {
-    const { props, state, context } = this.context
+    const { props, state, context } = this
 
     return (
       <form
@@ -317,7 +317,7 @@ export default class ProductForm extends Component {
 
         <div className="form-group">
           <label className="form-label">
-            Product's Url <small>required</small>
+            Product Url <small>required</small>
           </label>
 
           <div className="textfield-icon">
@@ -346,10 +346,9 @@ export default class ProductForm extends Component {
               className="button button--primary"
             >
               <span className="button-text">
-                <MaterialDesignIcon name="edit" />
                 {state.isScraping
-                  ? 'Getting Product Info...'
-                  : 'Get Product Info'
+                  ? 'Finding Product...'
+                  : 'Find Product'
                 }
               </span>
             </button>
@@ -449,30 +448,20 @@ export default class ProductForm extends Component {
             <input
               ref={input => { this.imageUrlInput = input }}
               type="url"
-              value={state.image}
-              onChange={({ currentTarget: input }) => {
-                const newImage = input.value
-
-                if (state.newImage !== state.image) {
-                  this.setState({
-                    image: newImage,
-                    isLoadingImage: true
-                  })
-                }
-              }}
               disabled={shouldDisable}
               autoFocus
               className="textfield image-picker-url-form-input"
               placeholder="E.g. https://amzn.com/ABC123"
+              defaultValue={state.image}
             />
             <button
               type="button"
               onClick={() => {
-                const newImage = this.imageUrlInput.value
+                const image = this.imageUrlInput.value
 
-                if (state.newImage !== state.image) {
+                if (image !== state.image) {
                   this.setState({
-                    image: newImage,
+                    image,
                     isLoadingImage: true
                   })
                 }
@@ -489,9 +478,13 @@ export default class ProductForm extends Component {
               <button
                 type="button"
                 onClick={() => {
+                  const image = state.image !== this.imageUrlInput.value
+                    ? state.images[state.imageIndex] || this.imageUrlInput.value
+                    : state.image
+
                   this.setState({
-                    image: state.images[state.imageIndex],
-                    isLoadingImage: true,
+                    image,
+                    isLoadingImage: state.image !== this.imageUrlInput.value,
                     imageUrlFormIsVisible: false
                   })
                 }}
@@ -516,7 +509,7 @@ export default class ProductForm extends Component {
               >
                 <span className="button-text">
                   <MaterialDesignIcon name="link" />
-                  Upload From Url
+                  Upload Image From Url
                 </span>
               </button>
             </div>
@@ -544,7 +537,7 @@ export default class ProductForm extends Component {
                   className="button button--icon image-picker-nav-next"
                 >
                   <span className="button-text">
-                    <MaterialDesignIcon name="caret-next" />
+                    <MaterialDesignIcon name="caret-right" />
                   </span>
                 </button>
               ) : null}
@@ -595,12 +588,16 @@ export default class ProductForm extends Component {
     const colorsError = get(state.errors, 'colors')
     const hasColorsError = !isEmpty(colorsError)
 
-    let btnText
+    let btnText = ''
 
-    if (state.isSaving) {
-      btnText = isPOST ? 'Adding...' : 'Add'
-    } else if (state.isSaving) {
-      btnText = isPOST ? 'Updating...' : 'Update'
+    if (isPOST) {
+      btnText = state.isSaving
+        ? 'Adding Product...'
+        : 'Add Product'
+    } else {
+      btnText = state.isSaving
+        ? 'Updating Product...'
+        : 'Update Product'
     }
 
     return (
@@ -890,9 +887,9 @@ export default class ProductForm extends Component {
               </span>
             </button>
             {isPOST ? (
-              <a href="/admin/brands/" className="button">
+              <button type="button" onClick={::this.reset} className="button">
                 <span className="button-text">Cancel</span>
-              </a>
+              </button>
             ) : (
               <button
                 type="button"

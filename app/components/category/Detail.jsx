@@ -11,28 +11,13 @@ import SharePopup from '../common/SharePopup'
 import FollowButton from '../common/FollowButton'
 import AddProductModal from '../modal/AddProduct'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
-import SharePopupContainer from '../container/SharePopup'
+import sharePopupContainer from '../container/SharePopup'
 import addProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
 import toStringId from '../../api/utils/toStringId'
 
 class CategoryDetail extends Component {
-  constructor(props) {
-    super(props)
-
-    const results = get(props, 'products.results', [])
-
-    this.state = {
-      skip: 40,
-      offset: size(results),
-      results,
-      isSearhing: false,
-      lastResults: results,
-      followersCount: get(props, 'category.followersCount', 0)
-    }
-  }
-
   static propTypes = {
     category: PropTypes.object,
     products: PropTypes.object,
@@ -50,6 +35,21 @@ class CategoryDetail extends Component {
     addProductModalIsOpen: false,
     createaddProductModal: false
   };
+
+  constructor(props) {
+    super(props)
+
+    const results = get(props, 'products.results', [])
+
+    this.state = {
+      skip: 40,
+      offset: size(results),
+      results,
+      isSearhing: false,
+      lastResults: results,
+      followersCount: get(props, 'category.followersCount', 0)
+    }
+  }
 
   fetch() {
     const { props, state } = this
@@ -81,7 +81,8 @@ class CategoryDetail extends Component {
         <button
           onClick={::this.fetch}
           disabled={state.isSearhing}
-          className="button button--outline">
+          className="button button--outline"
+        >
           {state.isSearhing ? 'Loading More...' : 'Load More'}
         </button>
       </div>
@@ -119,7 +120,8 @@ class CategoryDetail extends Component {
         {state.followersCount ? (
           <div
             className="category-detail-counter"
-            data-action="followers">
+            data-action="followers"
+          >
             <div className="category-detail-counter-number">
               {state.followersCount}
             </div>
@@ -144,18 +146,17 @@ class CategoryDetail extends Component {
       <div className="category-detail-actions">
         <FollowButton
           parent={toStringId(props.category)}
-          showText={true}
+          showText
           className="category-detail-follow-button"
-          parentType="category"/>
+          parentType="category"
+        />
         <div className="category-detail-action">
           <button
             type="button"
             onClick={props.openSharePopup}
-            className={(
-              "button button--icon button--small tooltip"
-            )}
-            data-tooltip="Share this category">
-            <MaterialDesignIcon name="send"/>
+            className="button button--icon button--small"
+          >
+            <MaterialDesignIcon name="send" />
           </button>
           {props.sharePopupIsCreated ? (
             <SharePopup
@@ -170,7 +171,8 @@ class CategoryDetail extends Component {
                 `${inflect(categoryProductsCount, 'product')}.`
               )}
               shareImage={categoryImage}
-              onClickClose={props.closeSharePopup}/>
+              onClickClose={props.closeSharePopup}
+            />
             ) : null}
         </div>
       </div>
@@ -198,7 +200,8 @@ class CategoryDetail extends Component {
             <Product
               {...product}
               key={toStringId(product)}
-              onAddButtonClick={() => props.openAddProductModal(product)}/>
+              onAddButtonClick={() => props.openAddProductModal(product)}
+            />
           )}
         </div>
       </div>
@@ -213,7 +216,8 @@ class CategoryDetail extends Component {
         <AddProductModal
           product={props.addProductModalCurrent}
           onClose={props.closeAddProductModal}
-          isVisible={props.addProductModalIsOpen}/>
+          isVisible={props.addProductModalIsOpen}
+        />
 
         <div className="category-detail">
           {this.renderHeader()}
@@ -227,5 +231,5 @@ class CategoryDetail extends Component {
 }
 
 export default addProductModalContainer(
-  SharePopupContainer(CategoryDetail)
+  sharePopupContainer(CategoryDetail)
 )

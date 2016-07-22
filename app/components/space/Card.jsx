@@ -152,13 +152,11 @@ export default class SpaceCard extends Component {
             onClick={::this.openRedesignPopup}
             className={classNames({
               button: true,
-              tooltip: true,
               'card-action': true,
               'button--icon': true,
               'button--active': state.redesignPopupIsOpen
             })}
             data-action="redesign"
-            data-tooltip="Redesign this space"
           >
             <MaterialDesignIcon name="redesign" fill="#2ECC71" />
           </button>
@@ -178,13 +176,11 @@ export default class SpaceCard extends Component {
             onClick={::this.openSharePopup}
             className={classNames({
               button: true,
-              tooltip: true,
               'card-action': true,
               'button--icon': true,
               'button--active': state.sharePopupIsOpen
             })}
             data-action="share"
-            data-tooltip="Share this space"
           >
             <MaterialDesignIcon name="send" />
           </button>

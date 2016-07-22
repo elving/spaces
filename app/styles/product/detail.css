@@ -92,7 +92,7 @@
   font-weight: 500;
   line-height: 14px;
   text-decoration: none;
-  transition: color 0.15s linear, background-color 0.15s linear;
+  /*transition: color 0.15s linear, background-color 0.15s linear;*/
   margin: 10px 10px 0 0;
   display: flex;
   padding: 6px 8px;

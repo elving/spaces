@@ -151,12 +151,12 @@ export default class CategoryForm extends Component {
     const nameError = get(state.errors, 'name')
     const hasNameError = !isEmpty(nameError)
 
-    let btnText
+    let btnText = ''
 
-    if (state.isSaving) {
-      btnText = isPOST ? 'Adding...' : 'Add'
-    } else if (state.isSaving) {
-      btnText = isPOST ? 'Updating...' : 'Update'
+    if (isPOST) {
+      btnText = state.isSaving ? 'Adding Category...' : 'Add Category'
+    } else {
+      btnText = state.isSaving ? 'Updating Category...' : 'Update Category'
     }
 
     return (

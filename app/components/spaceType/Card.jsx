@@ -91,10 +91,10 @@ export default class SpaceTypeCard extends Component {
           </div>
           <FollowButton
             parent={toStringId(props)}
-            showText={false}
             className="button--tiny space-type-card-follow"
             parentType="room"
-            hideWhenLoggedOut={true}/>
+            hideWhenLoggedOut
+          />
         </div>
 
         {this.renderProducts()}

@@ -27,7 +27,7 @@ export default class FollowButton extends Component {
   };
 
   static defaultProps = {
-    showText: false,
+    showText: true,
     onFollow: (() => {}),
     onUnfollow: (() => {}),
     hideWhenLoggedOut: false
@@ -92,21 +92,25 @@ export default class FollowButton extends Component {
 
     const btnClassName = classNames({
       button: true,
-      [props.className]: !isEmpty(props.className),
       'button--icon': !props.showText,
       'button--small': true,
       'follow-button': true,
       'button--primary': true,
       'follow-button--show-text': props.showText,
-      'follow-button--following': state.following
+      'follow-button--following': state.following,
+      [props.className]: !isEmpty(props.className)
     })
+
+    if (state.currentUserIsParent) {
+      return null
+    }
 
     if (context.userLoggedIn()) {
       return (
         <button
           type="button"
           onClick={::this.onClick}
-          disabled={state.isSaving || state.currentUserIsParent}
+          disabled={state.isSaving}
           className={btnClassName}
         >
           <MaterialDesignIcon name="follow" />
@@ -114,10 +118,14 @@ export default class FollowButton extends Component {
       )
     }
 
-    return !props.hideWhenLoggedOut ? (
-      <a href="/login/" className={btnClassName}>
-        <MaterialDesignIcon name="follow" />
-      </a>
-    ) : null
+    if (!props.hideWhenLoggedOut) {
+      return (
+        <a href="/login/" className={btnClassName}>
+          <MaterialDesignIcon name="follow" />
+        </a>
+      )
+    }
+
+    return null
   }
 }

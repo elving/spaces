@@ -146,7 +146,6 @@ class CategoryDetail extends Component {
       <div className="category-detail-actions">
         <FollowButton
           parent={toStringId(props.category)}
-          showText
           className="category-detail-follow-button"
           parentType="category"
         />

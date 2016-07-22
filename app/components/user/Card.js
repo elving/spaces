@@ -101,10 +101,10 @@ export default class ProfileCard extends Component {
               </div>
               <FollowButton
                 parent={userId}
-                showText={false}
                 className="button--tiny profile-card-follow"
                 parentType="user"
-                hideWhenLoggedOut={true}/>
+                hideWhenLoggedOut
+              />
             </div>
             {!isEmpty(bio) ?(
               <p className="profile-card-bio">{bio}</p>

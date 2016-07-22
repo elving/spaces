@@ -172,7 +172,6 @@ class SpaceTypeDetail extends Component {
       <div className="spaceType-detail-actions">
         <FollowButton
           parent={toStringId(props.spaceType)}
-          showText
           className="spaceType-detail-follow-button"
           parentType="spaceType"
         />

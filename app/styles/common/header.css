@@ -53,3 +53,7 @@
 .header-container-right .add-product-button {
   margin-right: 15px;
 }
+
+.header-container-right .add-product-button {
+  width: 47px;
+}

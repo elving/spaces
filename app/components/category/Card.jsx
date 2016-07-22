@@ -2,7 +2,7 @@ import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
 import isEmpty from 'lodash/isEmpty'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import FollowButton from '../common/FollowButton'
 
@@ -11,7 +11,19 @@ import toStringId from '../../api/utils/toStringId'
 
 export default class CategoryCard extends Component {
   static propTypes = {
-    user: Type.object
+    name: PropTypes.string,
+    products: PropTypes.array,
+    detailUrl: PropTypes.string,
+    productsCount: PropTypes.number,
+    followersCount: PropTypes.number
+  };
+
+  static defaultProps = {
+    name: '',
+    products: [],
+    detailUrl: '',
+    productsCount: 0,
+    followersCount: 0
   };
 
   renderProducts() {
@@ -20,36 +32,38 @@ export default class CategoryCard extends Component {
     return !isEmpty(props.products) ? (
       <div
         className="category-card-products"
-        data-products={size(props.products)}>
+        data-products={size(props.products)}
+      >
         {map(props.products, product =>
           <div
             key={`${toStringId(props)}-${toStringId(product)}`}
             style={{ backgroundImage: `url(${get(product, 'image')})` }}
-            className="category-card-product"/>
+            className="category-card-product"
+          />
         )}
       </div>
     ) : null
   }
 
   renderCounters() {
-    const { productsCount, followersCount } = this.props
+    const { props } = this
 
     return (
       <div className="category-card-stats">
         <div className="category-card-stat">
           <div className="category-card-stat-number">
-            {followersCount}
+            {props.followersCount}
           </div>
           <div className="category-card-stat-text">
-            {inflect(followersCount, 'Follower')}
+            {inflect(props.followersCount, 'Follower')}
           </div>
         </div>
         <div className="category-card-stat">
           <div className="category-card-stat-number">
-            {productsCount}
+            {props.productsCount}
           </div>
           <div className="category-card-stat-text">
-            {inflect(productsCount, 'Product')}
+            {inflect(props.productsCount, 'Product')}
           </div>
         </div>
       </div>
@@ -57,20 +71,20 @@ export default class CategoryCard extends Component {
   }
 
   render() {
-    const { id, name, detailUrl } = this.props
+    const { props } = this
 
     return (
-      <a href={`/${detailUrl}/`} className="card category-card">
+      <a href={`/${props.detailUrl}/`} className="card category-card">
         <div className="category-card-name-container">
           <div className="category-card-name">
-            {name}
+            {props.name}
           </div>
           <FollowButton
-            parent={id}
-            showText={false}
+            parent={toStringId(props)}
             className="button--tiny category-card-follow"
             parentType="category"
-            hideWhenLoggedOut={true}/>
+            hideWhenLoggedOut
+          />
         </div>
 
         {this.renderProducts()}

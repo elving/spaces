@@ -19,6 +19,7 @@ class SearchResults extends Component {
   static propTypes = {
     count: PropTypes.number,
     resuts: PropTypes.array,
+    location: PropTypes.object,
     openAddProductModal: PropTypes.func,
     closeAddProductModal: PropTypes.func,
     addProductModalIsOpen: PropTypes.bool,
@@ -50,11 +51,12 @@ class SearchResults extends Component {
   }
 
   fetch() {
-    const { state } = this
+    const { props, state } = this
+    const params = get(props.location, 'search', '?')
 
     this.setState({ isSearhing: true }, () => {
       axios
-        .get(`/ajax/products/search/?skip=${state.offset}`)
+        .get(`/ajax/products/search/${params}&skip=${state.offset}`)
         .then(({ data }) => {
           const results = get(data, 'results', [])
 

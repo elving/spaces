@@ -66,11 +66,10 @@ export default class CardTags extends Component {
       <div className="card-avatars-users">
         {map(props.users, user =>
           <Avatar
+            user={user}
             style={{ marginLeft: -(props.avatarSize / 2.5) }}
             width={props.avatarSize}
             height={props.avatarSize}
-            imageUrl={get(user, 'avatar', '')}
-            initials={get(user, 'initials', '')}
             className="card-avatars-user"
           />
         )}

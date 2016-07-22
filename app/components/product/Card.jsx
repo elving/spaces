@@ -8,6 +8,7 @@ import CardTags from '../card/CardTags'
 import CardTitle from '../card/CardTitle'
 import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
+import CuratorBadge from '../user/CuratorBadge'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 export default class ProductCard extends Component {
@@ -51,7 +52,7 @@ export default class ProductCard extends Component {
 
     this.state = {
       imageIsLoaded: false,
-      imageIsLoading: false,
+      imageIsLoading: true,
       sharePopupIsOpen: false,
       sharePopupIsCreated: false
     }
@@ -68,14 +69,12 @@ export default class ProductCard extends Component {
       })
     }
 
-    this.setState({ imageIsLoading: true }, () => {
-      imagePreloader.onload = onImageLoad
-      imagePreloader.src = props.image
+    imagePreloader.onload = onImageLoad
+    imagePreloader.src = props.image
 
-      if (imagePreloader.complete) {
-        onImageLoad()
-      }
-    })
+    if (imagePreloader.complete) {
+      onImageLoad()
+    }
   }
 
   openSharePopup() {
@@ -210,10 +209,9 @@ export default class ProductCard extends Component {
     return (
       <div className="product-card-designer">
         <Avatar
+          user={props.createdBy}
           width={26}
           height={26}
-          imageUrl={get(props.createdBy, 'avatar', '')}
-          initials={get(props.createdBy, 'initials', '')}
           className="product-card-designer-avatar"
         />
         <span className="product-card-designer-name">
@@ -224,10 +222,12 @@ export default class ProductCard extends Component {
               className="product-card-designer-link"
             >
               {get(props.createdBy, 'name')}
+              <CuratorBadge user={props.createdBy} size={16} />
             </a>
           ) : (
             <span className="product-card-designer-link">
               {get(props.createdBy, 'name')}
+              <CuratorBadge user={props.createdBy} size={16} />
             </span>
           )}
         </span>

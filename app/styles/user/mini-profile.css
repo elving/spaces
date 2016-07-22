@@ -28,8 +28,13 @@
   font-size: 16px;
   white-space: nowrap;
   text-overflow: ellipsis;
+  display: flex;
   max-width: 160px;
   overflow-x: hidden;
+}
+
+.user-mini-profile-username-text .user-curator-badge {
+  margin-left: 2px;
 }
 
 .user-mini-profile-stats {

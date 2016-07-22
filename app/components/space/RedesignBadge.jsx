@@ -28,9 +28,9 @@ export default class MiniProfile extends Component {
           href={`/${get(space, 'detailUrl', '')}/`}
           className="redesign-badge-link">
           <Avatar
-            initials={get(user, 'initials', '')}
-            imageUrl={get(user, 'avatar', '')}
-            {...merge({ width: 40, height: 40 }, this.props)}/>
+            user={user}
+            {...merge({ width: 40, height: 40 }, this.props)}
+          />
           <span className="redesign-badge-icon-container">
             <MaterialDesignIcon
               name="redesign"

@@ -32,18 +32,16 @@ export default class UserProfile extends Component {
     const { profile } = this.props
     const username = get(profile, 'username')
     const fullName = get(profile, 'fullName')
-    const initials = get(profile, 'initials')
-    const avatarUrl = get(profile, 'avatarUrl')
 
     return (
       <div className="user-profile-header">
         <div className="user-profile-header-info">
           <Avatar
+            user={profile}
             width={82}
             height={82}
-            imageUrl={avatarUrl}
-            initials={initials}
-            className="user-profile-header-avatar"/>
+            className="user-profile-header-avatar"
+          />
 
           <h1 className="user-profile-header-username">
             {fullName}

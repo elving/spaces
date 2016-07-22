@@ -12,7 +12,6 @@
   padding: 3px 8px;
   position: absolute;
   min-width: 100px;
-  max-width: 160px;
   transform: translateX(-50%);
 }
 
@@ -34,7 +33,7 @@
   color: #ffffff;
   font-size: 12px;
   text-align: center;
-  word-break: break-word;
+  white-space: nowrap;
   opacity: 0;
   pointer-events: none;
 }

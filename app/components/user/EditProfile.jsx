@@ -95,8 +95,8 @@ export default class EditProfile extends Component {
             }}
             className="edit-profile-form"
             data-form="profile">
-            <input type="hidden" name="_csrf" value={csrf}/>
-            <input type="hidden" name="_method" value="PUT"/>
+            <input type="hidden" name="_csrf" value={csrf} />
+            <input type="hidden" name="_method" value="PUT" />
 
             <div className="ui-form-group">
               <div className="edit-profile-avatar-wrapper">
@@ -104,7 +104,8 @@ export default class EditProfile extends Component {
                   width={82}
                   height={82}
                   imageUrl={removeAvatar ? null : (avatarPreview || avatarUrl)}
-                  initials={initials}/>
+                  initials={initials}
+                />
 
                 <div className="edit-profile-avatar-actions">
                   <button

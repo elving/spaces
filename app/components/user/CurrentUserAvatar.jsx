@@ -1,21 +1,17 @@
-import get from 'lodash/get'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Avatar from './Avatar'
 
 export default class CurrentUserAvatar extends Component {
   static contextTypes = {
-    user: Type.object
+    user: PropTypes.object
   };
 
   render() {
-    const { user } = this.context
+    const { context } = this
 
     return (
-      <Avatar
-        {...this.props}
-        initials={get(user, 'initials', '')}
-        imageUrl={get(user, 'avatar', '')}/>
+      <Avatar user={context.user} {...this.props} />
     )
   }
 }

@@ -110,8 +110,19 @@
 .space-card-designer-name {
   color: #999999;
   font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .space-card-designer-link {
   text-decoration: none;
+  display: flex;
+  margin-left: 5px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.space-card-designer-link .user-curator-badge {
+  margin-left: 2px;
 }

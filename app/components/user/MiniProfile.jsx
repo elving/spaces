@@ -1,10 +1,10 @@
 import get from 'lodash/get'
 import size from 'lodash/size'
 import merge from 'lodash/merge'
-import isEqual from 'lodash/isEqual'
 import React, { Component, PropTypes as Type } from 'react'
 
 import Avatar from './Avatar'
+import CuratorBadge from './CuratorBadge'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import inflect from '../../utils/inflect'
@@ -28,26 +28,23 @@ export default class MiniProfile extends Component {
   }
 
   render() {
-    const { user } = this.props
+    const { props, context } = this
 
-    const userId = toStringId(user)
-    const username = get(user, 'username', '')
-    const spacesCount = size(get(user, 'spaces', []))
-    const currentUserId = get(this.context, 'user.id', '')
-    const followersCount = get(user, 'followersCount', 0)
+    const userId = toStringId(props.user)
+    const username = get(props.user, 'username', '')
+    const spacesCount = size(get(props.user, 'spaces', []))
+    const currentUserId = toStringId(context.user)
+    const followersCount = get(props.user, 'followersCount', 0)
 
     return (
       <a
-        href={`/${get(user, 'detailUrl', '')}/`}
-        className="user-mini-profile">
+        href={`/${get(props.user, 'detailUrl', '')}/`}
+        className="user-mini-profile"
+      >
         <div className="user-mini-profile-left">
           <Avatar
-            {...merge({
-              width: 52,
-              height: 52
-            }, this.props)}
-            initials={get(user, 'initials', '')}
-            imageUrl={get(user, 'avatar', '')}
+            user={props.user}
+            {...merge({ width: 52, height: 52 }, props)}
           />
         </div>
         <div className="user-mini-profile-right">
@@ -57,21 +54,24 @@ export default class MiniProfile extends Component {
                 <div className="tooltip" data-tooltip={`@${username}`}>
                   <div className="user-mini-profile-username-text">
                     {`@${username}`}
+                    <CuratorBadge user={props.user} size={16} />
                   </div>
                 </div>
               ) : (
                 <div className="user-mini-profile-username-text">
                   {`@${username}`}
+                  <CuratorBadge user={props.user} size={16} />
                 </div>
               )}
             </div>
-            {!isEqual(userId, currentUserId) ? (
+            {userId !== currentUserId ? (
               <button
                 type="button"
                 onClick={::this.toggleFollow}
                 className="button button--primary button--mini"
-                data-action="follow-user">
-                <MaterialDesignIcon name="follow-user" size={14}/>
+                data-action="follow-user"
+              >
+                <MaterialDesignIcon name="follow-user" size={14} />
                 Follow
               </button>
             ) : null}

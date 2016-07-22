@@ -13,6 +13,7 @@ import CardTitle from '../card/CardTitle'
 import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
 import CardActivity from '../card/CardActivity'
+import CuratorBadge from '../user/CuratorBadge'
 import RedesignPopup from './RedesignPopup'
 import RedesignBadge from './RedesignBadge'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
@@ -229,19 +230,19 @@ export default class SpaceCard extends Component {
     return (
       <div className="space-card-designer">
         <Avatar
+          user={props.createdBy}
           width={26}
           height={26}
-          imageUrl={get(props.createdBy, 'avatar', '')}
-          initials={get(props.createdBy, 'initials', '')}
           className="space-card-designer-avatar"
         />
         <span className="space-card-designer-name">
-          {isRedesign(props) ? 'Redesigned' : 'Designed'} by {' '}
+          {isRedesign(props) ? 'Redesigned by ' : 'Designed by '}
           <a
             href={`/${get(props.createdBy, 'detailUrl')}/`}
             className="space-card-designer-link"
           >
             {get(props.createdBy, 'name')}
+            <CuratorBadge user={props.createdBy} size={16} />
           </a>
         </span>
       </div>

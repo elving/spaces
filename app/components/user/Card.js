@@ -3,21 +3,18 @@ import size from 'lodash/size'
 import merge from 'lodash/merge'
 import isEmpty from 'lodash/isEmpty'
 import truncate from 'lodash/truncate'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Avatar from './Avatar'
+import CuratorBadge from './CuratorBadge'
 import FollowButton from '../common/FollowButton'
 
 import inflect from '../../utils/inflect'
 import toStringId from '../../api/utils/toStringId'
 
 export default class ProfileCard extends Component {
-  static contextTypes = {
-    user: Type.object
-  };
-
   static propTypes = {
-    user: Type.object
+    user: PropTypes.object
   };
 
   static defaultProps = {
@@ -25,11 +22,11 @@ export default class ProfileCard extends Component {
   };
 
   renderCounters() {
-    const { user } = this.props
-    const likesCount = size(get(user, 'likes', []))
-    const spacesCount = size(get(user, 'spaces', []))
-    const commentsCount = size(get(user, 'comments', []))
-    const followersCount = get(user, 'followersCount', 0)
+    const { props } = this
+    const likesCount = size(get(props.user, 'likes', []))
+    const spacesCount = size(get(props.user, 'spaces', []))
+    const commentsCount = size(get(props.user, 'comments', []))
+    const followersCount = get(props.user, 'followersCount', 0)
 
     return (
       <div className="profile-card-stats">
@@ -70,33 +67,34 @@ export default class ProfileCard extends Component {
   }
 
   render() {
-    const { user } = this.props
+    const { props } = this
 
-    const url = `/${get(user, 'detailUrl', '')}/`
-    const bio = truncate(get(user, 'bio', ''), {
-      'length': 140,
-      'separator': '...'
+    const url = `/${get(props.user, 'detailUrl', '')}/`
+    const bio = truncate(get(props.user, 'bio', ''), {
+      length: 140,
+      separator: '...'
     })
-    const userId = toStringId(user)
-    const username = get(user, 'username', '')
+    const userId = toStringId(props.user)
+    const username = get(props.user, 'username', '')
     const userHandler = `@${username}`
 
     return (
       <a href={url} className="card profile-card">
         <div className="profile-card-info">
           <Avatar
-            imageUrl={get(user, 'avatar', '')}
-            initials={get(user, 'initials', '')}
+            user={props.user}
             className="profile-card-avatar"
-            {...merge({ width: 80, height: 80 }, this.props)}/>
+            {...merge({ width: 80, height: 80 }, props)}
+          />
           <div className="profile-card-info-right">
             <div className="profile-card-name-container">
               <div className="profile-card-name-container-left">
                 <div className="profile-card-name">
-                  {get(user, 'name', username)}
+                  {get(props.user, 'name', username)}
                 </div>
                 <div className="profile-card-username">
                   {userHandler}
+                  <CuratorBadge user={props.user} size={16} />
                 </div>
               </div>
               <FollowButton
@@ -106,7 +104,7 @@ export default class ProfileCard extends Component {
                 hideWhenLoggedOut
               />
             </div>
-            {!isEmpty(bio) ?(
+            {!isEmpty(bio) ? (
               <p className="profile-card-bio">{bio}</p>
             ) : null}
           </div>

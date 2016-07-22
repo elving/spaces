@@ -1,12 +1,10 @@
+import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import React, { Component, PropTypes } from 'react'
 
 export default class Avatar extends Component {
-  static contextTypes = {
-    user: PropTypes.object
-  };
-
   static propTypes = {
+    user: PropTypes.object,
     style: PropTypes.object,
     width: PropTypes.number,
     height: PropTypes.number,
@@ -16,23 +14,31 @@ export default class Avatar extends Component {
   };
 
   static defaultProps = {
+    user: {},
     style: {},
     width: 32,
     height: 32,
+    imageUrl: '',
     initials: '?',
     className: ''
   };
 
   render() {
     const { props } = this
-    const fontSize = (props.height - 46) > 14 ? (props.height - 46) : 14
+
+    const imageUrl = get(props.user, 'imageUrl', props.imageUrl)
+
+    const fontSize = (props.height - 46) > 14
+      ? (props.height - 46)
+      : 14
+
     const lineHeight = `${fontSize + 2}px`
 
     return (
       <div style={props.style} className={`user-avatar ${props.className}`}>
-        {!isEmpty(props.imageUrl) ? (
+        {!isEmpty(imageUrl) ? (
           <img
-            src={props.imageUrl}
+            src={imageUrl}
             role="presentation"
             width={props.width}
             height={props.height}
@@ -43,12 +49,12 @@ export default class Avatar extends Component {
             style={{
               width: props.width,
               height: props.height,
-              fontSize: props.fontSize,
+              fontSize,
               lineHeight
             }}
             className="user-avatar-initials"
           >
-            {props.initials}
+            {get(props.user, 'initials', props.initials)}
           </span>
         )}
       </div>

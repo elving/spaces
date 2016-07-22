@@ -20,7 +20,7 @@ export default class Avatar extends Component {
     return isCurator(props.user) ? (
       <div
         className="user-curator-badge tooltip"
-        data-tooltip="Product Curator"
+        data-tooltip="Curator"
       >
         <MaterialDesignIcon
           name="verified"

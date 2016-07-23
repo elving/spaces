@@ -1,4 +1,4 @@
-import ga from 'react-ga'
+import { Link } from 'react-router'
 import React, { Component } from 'react'
 
 import Logo from './Logo'
@@ -7,25 +7,47 @@ import AdminNav from '../user/AdminNav'
 import CurrentUserNav from '../user/CurrentUserNav'
 import AddProductButton from './AddProductButton'
 
+import fullReload from '../../utils/fullReload'
+
 export default class Header extends Component {
   renderNav() {
     return (
       <nav className="header-nav">
-        <a
-          href="/"
-          onClick={() => {
-            ga.event({
-              label: 'Logo',
-              action: 'Clicked Home Link',
-              category: 'Main Header'
-            })
-          }}
-          className="header-link"
-        >
+        <a href="/" className="header-link">
           <Logo width={35} height={35} />
         </a>
-        <a href="#" className="header-link">Discover</a>
-        <a href="#" className="header-link">Create</a>
+        <Link
+          to={{ pathname: '/' }}
+          onClick={fullReload}
+          className="header-link"
+          activeClassName="is-active"
+        >
+          Trending
+        </Link>
+        <Link
+          to={{ pathname: '/feed/' }}
+          onClick={fullReload}
+          className="header-link"
+          activeClassName="is-active"
+        >
+          Your Feed
+        </Link>
+        <Link
+          to={{ pathname: '/spaces/' }}
+          onClick={fullReload}
+          className="header-link"
+          activeClassName="is-active"
+        >
+          Spaces
+        </Link>
+        <Link
+          to={{ pathname: '/products/' }}
+          onClick={fullReload}
+          className="header-link"
+          activeClassName="is-active"
+        >
+          Products
+        </Link>
       </nav>
     )
   }

@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 
 import parseError from '../utils/parseError'
 import makeSearchQuery from '../utils/makeSearchQuery'
+import makeConditionalSearchQuery from '../utils/makeConditionalSearchQuery'
 
 const getCount = (params) => (
   new Promise((resolve, reject) => {
@@ -27,7 +28,13 @@ export default (params = {}, operation = 'where') => (
     const searchParams = makeSearchQuery(params)
 
     if (operation === 'and') {
-      query = mongoose.model('Product').find({ $and: [searchParams] })
+      query = mongoose.model('Product').find({
+        $and: makeConditionalSearchQuery(searchParams)
+      })
+    } else if (operation === 'or') {
+      query = mongoose.model('Product').find({
+        $or: makeConditionalSearchQuery(searchParams)
+      })
     } else {
       query = mongoose.model('Product').where(searchParams)
     }

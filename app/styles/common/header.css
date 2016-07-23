@@ -37,6 +37,10 @@
   text-decoration: none;
 }
 
+.header-link.is-active {
+  color: #333333;
+}
+
 .header-nav > .header-link:last-child {
   margin-right: 0;
 }

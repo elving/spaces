@@ -60,9 +60,10 @@ export default class RedesignPopup extends Component {
         .post(`/ajax/spaces/${props.spaceId}/redesign/`, formData)
         .then(({ data: space }) => {
           window.location.href = `/${get(space, 'detailUrl')}/`
-        }).catch(({ data }) => {
+        })
+        .catch(({ response }) => {
           this.setState({
-            errors: get(data, 'err', {}),
+            errors: get(response, 'data.err', {}),
             isSaving: false
           })
         })

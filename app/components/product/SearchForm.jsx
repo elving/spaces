@@ -97,10 +97,10 @@ export default class ProductSearchForm extends Component {
           allResults: newResults,
           lastResults: get(res, 'data', [])
         }))
-      }).catch((res) => {
+      }).catch(({ response }) => {
         this.setState({
           skip: 0,
-          errors: get(res, 'data.err'),
+          errors: get(response, 'data.err', {}),
           allResults: [],
           isSearhing: false,
           hasSearched: true,

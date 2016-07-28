@@ -171,9 +171,9 @@ export default class ProductForm extends Component {
             })
           }
         })
-        .catch(({ data }) => {
+        .catch(({ response }) => {
           this.setState({
-            errors: get(data, 'err', {}),
+            errors: get(response, 'data.err', {}),
             product: {},
             isScraping: false,
             hasScrapped: true,
@@ -221,9 +221,9 @@ export default class ProductForm extends Component {
           savingSuccessful: true
         }, () => props.onAdded(product))
       })
-      .catch(({ data }) => {
+      .catch(({ response }) => {
         this.setState({
-          errors: get(data, 'err', {}),
+          errors: get(response, 'data.err', {}),
           product: {},
           isSaving: false,
           hasSaved: false,
@@ -255,9 +255,9 @@ export default class ProductForm extends Component {
               deletingSuccessful: true
             })
           })
-          .catch(({ data }) => {
+          .catch(({ response }) => {
             this.setState({
-              errors: get(data, 'err', {}),
+              errors: get(response, 'data.err', {}),
               product: {},
               isDeleting: false,
               deletingSuccessful: false

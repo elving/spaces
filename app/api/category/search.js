@@ -27,7 +27,7 @@ const getProducts = category => (
   new Promise(async (resolve, reject) => {
     mongoose
       .model('Product')
-      .where({ categories: { $in: [category] }})
+      .where({ categories: { $in: [category] } })
       .limit(3)
       .exec((err, product) => {
         if (err) {
@@ -60,7 +60,7 @@ export default (params = {}) => (
 
         const count = await getCount(searchParams)
 
-        for (let category of categories) {
+        for (const category of categories) {
           const products = await getProducts(toStringId(category))
           category.set('products', products)
         }

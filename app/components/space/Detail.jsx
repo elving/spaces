@@ -92,9 +92,9 @@ class SpaceDetail extends Component {
           .then(() => {
             window.location.href = '/spaces/'
           })
-          .catch(({ data }) => {
+          .catch(({ response }) => {
             this.setState({
-              errors: get(data, 'err', {}),
+              errors: get(response, 'data.err', {}),
               isDeleting: false
             })
           })

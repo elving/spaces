@@ -48,7 +48,7 @@ export const renderAddColor = (req, res, next) => {
 
 export const addColor = async (req, res) => {
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: 'Not authorized' })
+    res.status(500).json({ err: { generic: 'Not authorized' }})
   }
 
   try {
@@ -103,7 +103,7 @@ export const updateColor = async (req, res) => {
   const sid = get(req, 'params.sid')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: 'Not authorized' })
+    res.status(500).json({ err: { generic: 'Not authorized' }})
   }
 
   try {
@@ -118,7 +118,7 @@ export const destroyColor = async (req, res) => {
   const sid = get(req, 'params.sid')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: 'Not authorized' })
+    res.status(500).json({ err: { generic: 'Not authorized' }})
   }
 
   try {

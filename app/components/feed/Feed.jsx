@@ -7,18 +7,29 @@ import Layout from '../common/Layout'
 import SpaceCard from '../space/Card'
 import ProductCard from '../product/Card'
 import AddProductModal from '../modal/AddProduct'
+import OnboardingModal from '../modal/Onboarding'
 import addProductModalContainer from '../container/AddProductModal'
 
 import toStringId from '../../api/utils/toStringId'
 
 class Feed extends Component {
   static propTypes = {
-    feed: PropTypes.object
+    feed: PropTypes.object,
+    location: PropTypes.object
   };
 
   static defaultProps = {
-    feed: {}
+    feed: {},
+    location: {}
   };
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      onboardingModalIsOpen: get(props.location, 'query.onboarding') === '1'
+    }
+  }
 
   renderCards() {
     const { props } = this
@@ -51,10 +62,15 @@ class Feed extends Component {
   }
 
   render() {
-    const { props } = this
+    const { props, state } = this
 
     return (
       <Layout>
+        <OnboardingModal
+          onClose={() => this.setState({ onboardingModalIsOpen: false })}
+          isVisible={state.onboardingModalIsOpen}
+        />
+
         <AddProductModal
           product={props.addProductModalCurrent}
           onClose={props.closeAddProductModal}

@@ -123,8 +123,8 @@ export default class SpaceForm extends Component {
           ...resetData
         }, () => props.onSuccess(space))
       })
-      .catch(({ data }) => {
-        const errors = get(data, 'err', {})
+      .catch(({ response }) => {
+        const errors = get(response, 'data.err', {})
 
         this.setState({
           errors,

@@ -10,7 +10,8 @@
   justify-content: center;
 }
 
-.button-unstyled:disabled {
+.button-unstyled:disabled,
+.button-unstyled[disabled] {
   opacity: 0.45;
   pointer-events: none;
 }
@@ -44,7 +45,8 @@
   text-decoration: none;
 }
 
-.button:disabled {
+.button:disabled,
+.button[disabled] {
   opacity: 0.45;
   pointer-events: none;
 }
@@ -184,6 +186,23 @@
 }
 
 .button--primary-outline:hover .icon-fill {
+  fill: #ffffff;
+}
+
+.button--primary-alt,
+.button--primary-alt:active {
+  color: #ffffff;
+  border-color: #439fe0;
+  background-color: #439fe0;
+}
+
+.button--primary-alt:hover {
+  color: #ffffff;
+  border-color: #3f95d2;
+  background-color: #3f95d2;
+}
+
+.button--primary-alt .icon-fill {
   fill: #ffffff;
 }
 

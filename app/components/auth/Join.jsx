@@ -74,9 +74,9 @@ export default class Join extends Component {
           method: 'post'
         }).then(() => {
           window.location.href = '/'
-        }).catch((resp) => {
+        }).catch(({ response }) => {
           this.setState({
-            errors: resp.data.err,
+            errors: get(response, 'data.err', {}),
             isFetching: false
           })
         })

@@ -101,7 +101,7 @@ export const renderAddSpaceType = (req, res, next) => {
 
 export const addSpaceType = async (req, res) => {
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: 'Not authorized' })
+    res.status(500).json({ err: { generic: 'Not authorized' }})
   }
 
   try {
@@ -156,7 +156,7 @@ export const updateSpaceType = async (req, res) => {
   const sid = get(req, 'params.sid')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: 'Not authorized' })
+    res.status(500).json({ err: { generic: 'Not authorized' }})
   }
 
   try {
@@ -171,7 +171,7 @@ export const destroySpaceType = async (req, res) => {
   const sid = get(req, 'params.sid')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: 'Not authorized' })
+    res.status(500).json({ err: { generic: 'Not authorized' }})
   }
 
   try {

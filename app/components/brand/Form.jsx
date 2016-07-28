@@ -98,10 +98,10 @@ export default class BrandForm extends Component {
           ...resetData
         })
       })
-      .catch(({ data }) => {
+      .catch(({ response }) => {
         this.setState({
           brand: {},
-          errors: get(data, 'err', {}),
+          errors: get(response, 'data.err', {}),
           isSaving: false,
           hasSaved: false,
           savingSuccessful: false

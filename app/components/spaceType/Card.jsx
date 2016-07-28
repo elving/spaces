@@ -13,8 +13,10 @@ export default class SpaceTypeCard extends Component {
   static propTypes = {
     id: PropTypes.string,
     name: PropTypes.string,
+    onFollow: PropTypes.func,
     products: PropTypes.array,
     detailUrl: PropTypes.string,
+    onUnfollow: PropTypes.func,
     spacesCount: PropTypes.number,
     productsCount: PropTypes.number,
     followersCount: PropTypes.number
@@ -23,8 +25,10 @@ export default class SpaceTypeCard extends Component {
   static defaultProps = {
     id: '',
     name: '',
+    onFollow: (() => {}),
     products: [],
     detailUrl: '',
+    onUnfollow: (() => {}),
     spacesCount: 0,
     productsCount: 0,
     followersCount: 0
@@ -36,12 +40,14 @@ export default class SpaceTypeCard extends Component {
     return !isEmpty(props.products) ? (
       <div
         className="space-type-card-products"
-        data-products={size(props.products)}>
+        data-products={size(props.products)}
+      >
         {map(props.products, product =>
           <div
             key={`${toStringId(props)}-${toStringId(product)}`}
             style={{ backgroundImage: `url(${get(product, 'image')})` }}
-            className="space-type-card-product"/>
+            className="space-type-card-product"
+          />
         )}
       </div>
     ) : null
@@ -91,7 +97,9 @@ export default class SpaceTypeCard extends Component {
           </div>
           <FollowButton
             parent={toStringId(props)}
-            className="button--tiny space-type-card-follow"
+            onFollow={props.onFollow}
+            className="space-type-card-follow button--tiny"
+            onUnfollow={props.onUnfollow}
             parentType="spaceType"
             hideWhenLoggedOut
           />

@@ -12,16 +12,20 @@ import toStringId from '../../api/utils/toStringId'
 export default class CategoryCard extends Component {
   static propTypes = {
     name: PropTypes.string,
+    onFollow: PropTypes.func,
     products: PropTypes.array,
     detailUrl: PropTypes.string,
+    onUnfollow: PropTypes.func,
     productsCount: PropTypes.number,
     followersCount: PropTypes.number
   };
 
   static defaultProps = {
     name: '',
+    onFollow: (() => {}),
     products: [],
     detailUrl: '',
+    onUnfollow: (() => {}),
     productsCount: 0,
     followersCount: 0
   };
@@ -81,7 +85,9 @@ export default class CategoryCard extends Component {
           </div>
           <FollowButton
             parent={toStringId(props)}
-            className="button--tiny category-card-follow"
+            onFollow={props.onFollow}
+            className="category-card-follow button--tiny"
+            onUnfollow={props.onUnfollow}
             parentType="category"
             hideWhenLoggedOut
           />

@@ -162,7 +162,7 @@ export const renderAddProduct = async (req, res, next) => {
 
 export const addProduct = async (req, res) => {
   if (!isAuthenticatedUser(req.user) || !userCanAddProducts(req.user)) {
-    res.status(500).json({ err: 'Not authorized' })
+    res.status(500).json({ err: { generic: 'Not authorized' }})
   }
 
   try {
@@ -230,7 +230,7 @@ export const updateProduct = async (req, res) => {
   const id = get(req, 'params.id')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: 'Not authorized' })
+    res.status(500).json({ err: { generic: 'Not authorized' }})
   }
 
   try {
@@ -249,7 +249,7 @@ export const destroyProduct = async (req, res) => {
   const id = get(req, 'params.id')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: 'Not authorized' })
+    res.status(500).json({ err: { generic: 'Not authorized' }})
   }
 
   try {

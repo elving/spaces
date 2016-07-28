@@ -63,9 +63,9 @@ export default class CommentForm extends Component {
           }, () => {
             onCreate(merge(get(res, 'data', {}), { createdBy: user }))
           })
-        }).catch((res) => {
+        }).catch(({ response }) => {
           this.setState({
-            errors: get(res, 'data.err', {}),
+            errors: get(response, 'data.err', {}),
             isSaving: false
           })
         })

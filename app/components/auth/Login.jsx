@@ -1,112 +1,79 @@
-import ga from 'react-ga'
 import get from 'lodash/get'
 import size from 'lodash/size'
 import axios from 'axios'
 import isEmpty from 'lodash/isEmpty'
 import serialize from 'form-serialize'
 import classNames from 'classnames'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
-import Icon from '../common/Icon'
 import Layout from '../common/Layout'
+import SocialIcon from '../common/SocialIcon'
 
 export default class Login extends Component {
+  static contextTypes = {
+    csrf: PropTypes.string
+  };
+
   constructor(props) {
     super(props)
 
     this.state = {
       errors: {},
-      isFetching: false
+      isWaiting: false
     }
+
+    this.form = null
   }
 
-  static contextTypes = {
-    csrf: Type.string
-  };
-
   onSubmit(event) {
-    const form = get(this.refs, 'form')
-    const formData = serialize(form, { hash: true })
-    const password = get(this.refs, 'password.value')
+    const formData = serialize(this.form, { hash: true })
 
     event.preventDefault()
 
-    ga.event({
-      label: 'Login Form',
-      action: 'Submitted Form',
-      category: 'Login'
-    })
-
-    this.setState({ errors: {}, isFetching: true }, () => {
-      if (size(password) < 8) {
-        this.setState({
-          errors: {
-            password: 'Password must have at least 8 characters.'
-          },
-          isFetching: false
-        })
-      } else {
-        axios({
-          url: '/ajax/login/',
-          data: formData,
-          method: 'post',
-          withCredentials: true
-        }).then(() => {
-          window.location.href = '/spaces/'
-        }).catch((resp) => {
-          this.setState({
-            errors: resp.data.err,
-            isFetching: false
-          })
-        })
-      }
-    })
-  }
-
-  onClickFacebook() {
-    ga.event({
-        label: 'Login with Facebook',
-        action: 'Clicked Facebook Login Button',
-        category: 'Login'
+    if (size(formData.password) < 8) {
+      this.setState({
+        errors: {
+          password: 'Password must have at least 8 characters.'
+        },
+        isWaiting: false
       })
-  }
-
-  onClickTwitter() {
-    ga.event({
-      label: 'Login with Twitter',
-      action: 'Clicked Twitter Login Button',
-      category: 'Login'
-    })
-  }
-
-  onClickSubmit() {
-    ga.event({
-      label: 'Login',
-      action: 'Clicked Login Button',
-      category: 'Login'
-    })
+    } else {
+      this.setState({ errors: {}, isWaiting: true }, () => {
+        axios
+          .post('/ajax/login/', formData)
+          .then(() => {
+            window.location.href = '/feed/'
+          })
+          .catch(({ response }) => {
+            this.setState({
+              errors: get(response, 'data.err', {}),
+              isWaiting: false
+            })
+          })
+      })
+    }
   }
 
   render() {
-    const { csrf } = this.context
-    const { errors, isFetching } = this.state
+    const { state, context } = this
 
-    const genericError = get(errors, 'generic')
-    const passwordError = get(errors, 'password')
+    const genericError = get(state.errors, 'generic')
+    const passwordError = get(state.errors, 'password')
 
-    const hasError = !isEmpty(errors)
+    const hasError = !isEmpty(state.errors)
     const hasGenericError = !isEmpty(genericError)
     const hasPasswordError = !isEmpty(passwordError)
 
     return (
       <Layout>
         <form
-          ref="form"
+          ref={form => { this.form = form }}
           action="/login/"
           method="POST"
           onSubmit={::this.onSubmit}
-          className="form auth-form login-form">
-          <input type="hidden" name="_csrf" value={csrf}/>
+          className="form auth-form login-form"
+        >
+          <input type="hidden" name="_csrf" value={context.csrf} />
 
           <h1 className="form-title">
             Good to see you again!
@@ -115,18 +82,18 @@ export default class Login extends Component {
           <div className="auth-form-social">
             <a
               href="/auth/facebook/"
-              onClick={::this.onClickFacebook}
-              disabled={isFetching}
-              className="button button--facebook">
-              <Icon name="facebook"/>
+              disabled={state.isWaiting}
+              className="button button--facebook"
+            >
+              <SocialIcon name="facebook" />
               Login with Facebook
             </a>
             <a
               href="/auth/twitter/"
-              onClick={::this.onClickTwitter}
-              disabled={isFetching}
-              className="button button--twitter">
-              <Icon name="twitter"/>
+              disabled={state.isWaiting}
+              className="button button--twitter"
+            >
+              <SocialIcon name="twitter" />
               Login with Twitter
             </a>
           </div>
@@ -136,27 +103,28 @@ export default class Login extends Component {
               type="text"
               name="emailOrUsername"
               required
-              disabled={isFetching}
+              disabled={state.isWaiting}
               autoFocus
               className={classNames({
-                'textfield': true,
+                textfield: true,
                 'textfield--error': hasError
               })}
-              placeholder="username or email"/>
+              placeholder="username or email"
+            />
           </div>
 
           <div className="form-group">
             <input
-              ref="password"
               type="password"
               name="password"
               required
-              disabled={isFetching}
+              disabled={state.isWaiting}
               className={classNames({
-                'textfield': true,
+                textfield: true,
                 'textfield--error': hasError
               })}
-              placeholder="password"/>
+              placeholder="password"
+            />
 
             {hasPasswordError ? (
               <small className="form-error">{passwordError}</small>
@@ -170,17 +138,18 @@ export default class Login extends Component {
           <div className="form-group form-group--inline">
             <button
               type="submit"
-              onClick={::this.onClickSubmit}
-              disabled={isFetching}
-              className="button button--primary">
+              disabled={state.isWaiting}
+              className="button button--primary"
+            >
               <span className="button-text">
-                {isFetching ? 'Logging in...' : 'Login'}
+                {state.isWaiting ? 'Logging in...' : 'Login'}
               </span>
             </button>
             <a
               href="/reset-password/"
-              disabled={isFetching}
-              className="button button--link">
+              disabled={state.isWaiting}
+              className="button button--link"
+            >
               I forgot my password
             </a>
           </div>

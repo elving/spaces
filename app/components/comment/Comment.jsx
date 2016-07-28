@@ -53,9 +53,9 @@ export default class Comment extends Component {
           method: 'DELETE'
         }).then(() => {
           onDelete(id)
-        }).catch((res) => {
+        }).catch(({ response }) => {
           this.setState({
-            errors: get(res, 'data.err', {}),
+            errors: get(response, 'data.err', {}),
             isDeleting: false
           })
         })

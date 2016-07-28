@@ -90,9 +90,9 @@ export default class CategoryForm extends Component {
           ...resetData
         })
       })
-      .catch(({ data }) => {
+      .catch(({ response }) => {
         this.setState({
-          errors: get(data, 'err', {}),
+          errors: get(response, 'data.err', {}),
           category: {},
           isSaving: false,
           hasSaved: false,
@@ -125,9 +125,9 @@ export default class CategoryForm extends Component {
               deletingSuccessful: true
             })
           })
-          .catch(({ data }) => {
+          .catch(({ response }) => {
             this.setState({
-              errors: get(data, 'err', {}),
+              errors: get(response, 'data.err', {}),
               category: {},
               isDeleting: false,
               deletingSuccessful: false

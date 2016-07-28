@@ -93,9 +93,9 @@ export default class SpaceTypeForm extends Component {
           ...resetData
         })
       })
-      .catch(({ data }) => {
+      .catch(({ response }) => {
         this.setState({
-          errors: get(data, 'err', {}),
+          errors: get(response, 'data.err', {}),
           isSaving: false,
           hasSaved: false,
           spaceType: {},
@@ -128,9 +128,9 @@ export default class SpaceTypeForm extends Component {
               deletingSuccessful: true
             })
           })
-          .catch(({ data }) => {
+          .catch(({ response }) => {
             this.setState({
-              errors: get(data, 'err', {}),
+              errors: get(response, 'data.err', {}),
               spaceType: {},
               isDeleting: false,
               deletingSuccessful: false

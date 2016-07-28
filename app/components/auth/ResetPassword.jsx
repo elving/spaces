@@ -53,9 +53,9 @@ export default class ResetPassword extends Component {
           success: true,
           isFetching: false
          })
-      }).catch((resp) => {
+      }).catch(({ response }) => {
         this.setState({
-          errors: resp.data.err,
+          errors: get(response, 'data.err', {}),
           isFetching: false
         })
       })

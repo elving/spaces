@@ -103,10 +103,10 @@ export default class ColorForm extends Component {
           ...resetData
         })
       })
-      .catch(({ data }) => {
+      .catch(({ response }) => {
         this.setState({
           color: {},
-          errors: get(data, 'err', {}),
+          errors: get(response, 'data.err', {}),
           isSaving: false,
           hasSaved: false,
           savingSuccessful: false
@@ -138,10 +138,10 @@ export default class ColorForm extends Component {
               deletingSuccessful: true
             })
           })
-          .catch(({ data }) => {
+          .catch(({ response }) => {
             this.setState({
               color: {},
-              errors: get(data, 'err', {}),
+              errors: get(response, 'data.err', {}),
               isDeleting: false,
               deletingSuccessful: false
             })

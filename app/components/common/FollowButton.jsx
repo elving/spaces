@@ -46,11 +46,13 @@ export default class FollowButton extends Component {
     }
   }
 
-  onClick() {
+  onClick(event) {
     let options = {}
     const { props, state, context } = this
     const createdBy = toStringId(context.user)
     const { parent, parentType } = props
+
+    event.preventDefault()
 
     if (state.currentUserIsParent) {
       return false

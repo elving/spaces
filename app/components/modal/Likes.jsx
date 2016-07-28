@@ -14,164 +14,164 @@ import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import toStringId from '../../api/utils/toStringId'
 
 const overrideDefaultStyles = {
- overlay: { backgroundColor: null },
- content: {
-   top: 'initial',
-   left: 'initial',
-   right: 'initial',
-   bottom: 'initial',
-   border: null,
-   padding: null,
-   position: null,
-   background: null,
-   borderRadius: null
- }
+  overlay: { backgroundColor: null },
+  content: {
+    top: 'initial',
+    left: 'initial',
+    right: 'initial',
+    bottom: 'initial',
+    border: null,
+    padding: null,
+    position: null,
+    background: null,
+    borderRadius: null
+  }
 }
 
 export default class LikesModal extends Component {
- constructor(props, context) {
-   super(props, context)
+  constructor(props, context) {
+    super(props, context)
 
-   this.state = {
-     likes: [],
-     isLoadingLikes: true
-   }
- }
+    this.state = {
+      likes: [],
+      isLoadingLikes: true
+    }
+  }
+  
+  static propTypes = {
+    parent: Type.string.isRequired,
+    onClose: Type.func.isRequired,
+    isVisible: Type.bool.isRequired,
+    parentType: Type.string.isRequired
+  };
 
- static propTypes = {
-   parent: Type.string.isRequired,
-   onClose: Type.func.isRequired,
-   isVisible: Type.bool.isRequired,
-   parentType: Type.string.isRequired
- };
+  static defaultProps = {
+    onClose: (() => {}),
+    isVisible: false
+  };
 
- static defaultProps = {
-   onClose: (() => {}),
-   isVisible: false
- };
+  componentDidMount() {
+    this.fetch()
+    ga.modalview(`${this.props.parentType}-likes-modal`)
+  }
 
- componentDidMount() {
-   this.fetch()
-   ga.modalview(`${this.props.parentType}-likes-modal`)
- }
+  componentWillReceiveProps(nextProps) {
+    const { isVisible } = nextProps
+    const { isLoadingLikes } = this.state
 
- componentWillReceiveProps(nextProps) {
-   const { isVisible } = nextProps
-   const { isLoadingLikes } = this.state
+    if (isVisible && !isLoadingLikes) {
+      this.fetch()
+    }
+  }
 
-   if (isVisible && !isLoadingLikes) {
-     this.fetch()
-   }
- }
+  fetch() {
+    const { parent, parentType } = this.props
 
- fetch() {
-   const { parent, parentType } = this.props
+    axios({
+      url: `/ajax/likes/${parentType}/${parent}/`,
+      method: 'GET'
+    }).then((res) => {
+      this.setState({
+        likes: get(res, 'data.likes', []),
+        isLoadingLikes: false
+      })
+    }).catch(() => {
+      this.setState({
+        likes: [],
+        isLoadingLikes: false
+      })
+    })
+  }
 
-   axios({
-     url: `/ajax/likes/${parentType}/${parent}/`,
-     method: 'GET'
-   }).then((res) => {
-     this.setState({
-       likes: get(res, 'data.likes', []),
-       isLoadingLikes: false
-     })
-   }).catch(() => {
-     this.setState({
-       likes: [],
-       isLoadingLikes: false
-     })
-   })
- }
+  renderContent() {
+    const { likes, isLoadingLikes } = this.state
 
- renderContent() {
-   const { likes, isLoadingLikes } = this.state
+    if (isLoadingLikes) {
+      return this.renderLoadingState()
+    } else if (isEmpty(likes)) {
+      return this.renderEmptyState()
+    } else {
+      return this.renderLikes()
+    }
+  }
 
-   if (isLoadingLikes) {
-     return this.renderLoadingState()
-   } else if (isEmpty(likes)) {
-     return this.renderEmptyState()
-   } else {
-     return this.renderLikes()
-   }
- }
+  renderLoadingState() {
+    return (
+      <section className="likes-modal-inner">
+      {this.renderCloseButton()}
+      <Loader size={55}/>
+      </section>
+    )
+  }
 
- renderLoadingState() {
-   return (
-     <section className="likes-modal-inner">
-       {this.renderCloseButton()}
-       <Loader size={55}/>
-     </section>
-   )
- }
+  renderEmptyState() {
+    return (
+      <section className="likes-modal-inner">
+      {this.renderCloseButton()}
+      <h1 className="likes-modal-title">
+      {`This ${this.props.parentType} hasn't been liked yet.`}
+      </h1>
+      </section>
+    )
+  }
 
- renderEmptyState() {
-   return (
-     <section className="likes-modal-inner">
-       {this.renderCloseButton()}
-       <h1 className="likes-modal-title">
-         {`This ${this.props.parentType} hasn't been liked yet.`}
-       </h1>
-     </section>
-   )
- }
+  renderLikes() {
+    const { likes } = this.state
+    const { parentType } = this.props
 
- renderLikes() {
-   const { likes } = this.state
-   const { parentType } = this.props
+    const count = size(likes)
+    const countTerm = size(likes) === 1 ? 'person' : 'people'
 
-   const count = size(likes)
-   const countTerm = size(likes) === 1 ? 'person' : 'people'
+    return (
+      <section
+      className="likes-modal-inner likes-modal-inner--has-likes"
+      data-type={parentType}>
+      {this.renderCloseButton()}
+      <h1 className="likes-modal-title">
+      {`Liked by ${count} ${countTerm}`}
+      </h1>
+      <ul className="likes-modal-list">
+      {map(likes, ::this.renderLike)}
+      </ul>
+      </section>
+    )
+  }
 
-   return (
-     <section
-       className="likes-modal-inner likes-modal-inner--has-likes"
-       data-type={parentType}>
-       {this.renderCloseButton()}
-       <h1 className="likes-modal-title">
-         {`Liked by ${count} ${countTerm}`}
-       </h1>
-       <ul className="likes-modal-list">
-         {map(likes, ::this.renderLike)}
-       </ul>
-     </section>
-   )
- }
+  renderLike(like) {
+    const createdBy = get(like, 'createdBy')
 
- renderLike(like) {
-   const createdBy = get(like, 'createdBy')
+    return (
+      <li
+      key={`likes-user-${toStringId(createdBy)}`}
+      className="likes-modal-user">
+      <MiniProfile user={createdBy}/>
+      </li>
+    )
+  }
 
-   return (
-     <li
-       key={`likes-user-${toStringId(createdBy)}`}
-       className="likes-modal-user">
-       <MiniProfile user={createdBy}/>
-     </li>
-   )
- }
+  renderCloseButton() {
+    return (
+      <button
+      type="button"
+      onClick={() => this.props.onClose()}
+      className="likes-modal-close button button--icon button--transparent">
+      <MaterialDesignIcon name="close"/>
+      </button>
+    )
+  }
 
- renderCloseButton() {
-   return (
-     <button
-       type="button"
-       onClick={() => this.props.onClose()}
-       className="likes-modal-close button button--icon button--transparent">
-       <MaterialDesignIcon name="close"/>
-     </button>
-   )
- }
+  render() {
+    const { onClose, isVisible } = this.props
 
- render() {
-   const { onClose, isVisible } = this.props
-
-   return (
-     <Modal
-       style={overrideDefaultStyles}
-       isOpen={isVisible}
-       className="modal likes-modal"
-       onRequestClose={onClose}
+    return (
+      <Modal
+      style={overrideDefaultStyles}
+      isOpen={isVisible}
+      className="modal likes-modal"
+      onRequestClose={onClose}
       >
-       {this.renderContent()}
-     </Modal>
-   )
- }
+      {this.renderContent()}
+      </Modal>
+    )
+  }
 }

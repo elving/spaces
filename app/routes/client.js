@@ -9,8 +9,8 @@ import SetPassword from '../components/auth/SetPassword'
 import ResetPassword from '../components/auth/ResetPassword'
 
 import Home from '../components/home/Home'
-
 import Feed from '../components/feed/Feed'
+import Onboarding from '../components/onboarding/Onboarding'
 
 import AddProduct from '../components/product/Add'
 import ProductDetail from '../components/product/Detail'
@@ -54,8 +54,8 @@ const routes = (
     <Route path="set-password/:code" component={SetPassword} />
 
     <Route path="/" component={Home} />
-
     <Route path="/feed" component={Feed} />
+    <Route path="/onboarding" component={Onboarding} />
 
     <Route path="products" component={ProductsIndex} />
     <Route path="p/:sid" component={ProductDetail} />

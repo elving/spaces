@@ -4,6 +4,7 @@ import * as controller from '../controllers/like'
 const router = express.Router()
 const ajaxRoot = '/ajax/likes'
 
+router.get(`${ajaxRoot}/user/:user/`, controller.getUserLikes)
 router.get(`${ajaxRoot}/space/:space/`, controller.getSpaceLikes)
 router.post(`${ajaxRoot}/`, controller.like)
 router.delete(`${ajaxRoot}/:parentType/:parent/:createdBy/`, controller.unlike)

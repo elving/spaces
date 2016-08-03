@@ -39,10 +39,17 @@ import UpdateSpaceType from '../components/spaceType/Update'
 import SpaceTypesTable from '../components/spaceType/Table'
 import SpaceTypesIndex from '../components/spaceType/Index'
 
-import SpaceDetail from '../components/space/Detail'
 import SpacesIndex from '../components/space/Index'
+import SpaceDetail from '../components/space/Detail'
 
 import UsersIndex from '../components/user/Index'
+import UserProfile from '../components/user/Profile'
+import ProfileLikes from '../components/user/ProfileLikes'
+import ProfileSpaces from '../components/user/ProfileSpaces'
+import ProfileProducts from '../components/user/ProfileProducts'
+// import EditProfile from '../components/user/EditProfile'
+// import ChangePassword from '../components/user/ChangePassword'
+
 
 import SearchResults from '../components/search/Results'
 
@@ -69,6 +76,15 @@ const routes = (
     <Route path="spaces/:sid/:name" component={SpaceDetail} />
 
     <Route path="designers" component={UsersIndex} />
+
+    <Route path="designers/:username" component={UserProfile}>
+      <Route path="likes" component={ProfileLikes} />
+      <Route path="spaces" component={ProfileSpaces} />
+      <Route path="products" component={ProfileProducts} />
+      {/* <Route path="spaces" component={UserProfileSpace} />
+      <Route path="products" component={UserProfileProduct} />
+      <Route path="likes" component={UserProfileLikes} /> */}
+    </Route>
 
     <Route path="categories" component={CategoriesIndex} />
     <Route path="categories/:slug" component={CategoryDetail} />

@@ -47,7 +47,13 @@ export default (schema) => {
   schema
     .virtual('detailUrl')
     .get(function() {
-      return `users/${this.get('username')}`
+      return `designers/${this.get('username')}`
+    })
+
+  schema
+    .virtual('shortUrl')
+    .get(function() {
+      return `d/${this.get('sid')}`
     })
 
   return schema

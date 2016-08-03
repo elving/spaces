@@ -71,7 +71,7 @@ export default class ProfileCard extends Component {
 
     const url = `/${get(props.user, 'detailUrl', '')}/`
     const bio = truncate(get(props.user, 'bio', ''), {
-      length: 140,
+      length: 70,
       separator: '...'
     })
     const userId = toStringId(props.user)

@@ -5,6 +5,7 @@ import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import getAll from '../api/like/getAll'
 import create from '../api/like/create'
+import search from '../api/like/search'
 import destroy from '../api/like/destroy'
 import hasLiked from '../api/like/hasLiked'
 import updateUser from '../api/user/update'
@@ -91,6 +92,27 @@ export const unlike = async (req, res) => {
     res.status(500).json({
       err: {
         genereic: `There was an error while trying to unlike ${parentType}.`
+      }
+    })
+  }
+}
+
+export const getUserLikes = async (req, res) => {
+  const createdBy = get(req.params, 'user', '')
+
+  if (isEmpty(createdBy)) {
+    return res.status(200).json({ likes: [] })
+  }
+
+  try {
+    const likes = await search({ createdBy })
+    res.status(200).json(likes)
+  } catch (err) {
+    res.status(500).json({
+      err: {
+        genereic: (
+          'There was an error while trying to fetch likes from this designer.'
+        )
       }
     })
   }

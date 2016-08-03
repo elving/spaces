@@ -1,74 +1,79 @@
-import ga from 'react-ga'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import { Link } from 'react-router'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { PropTypes, PureComponent } from 'react'
 
 import Layout from '../common/Layout'
 import Avatar from './Avatar'
-import fullReload from '../../utils/fullReload'
+import CuratorBadge from './CuratorBadge'
+
+import isCurator from '../../utils/user/isCurator'
+import toStringId from '../../api/utils/toStringId'
 import addTwitterLinks from '../../utils/addTwitterLinks'
 
-export default class UserProfile extends Component {
+export default class UserProfile extends PureComponent {
   static propTypes = {
-    profile: Type.object.isRequired,
-    productLikes: Type.array
+    profile: PropTypes.object,
+    children: PropTypes.node
+  };
+
+  static defaultProps = {
+    profile: {}
   };
 
   static contextTypes = {
-    user: Type.object
+    user: PropTypes.object
   };
 
   isProfileOwner() {
-    const userId = get(this.context, 'user.id')
-    const profileId = get(this.props, 'profile.id')
+    const { props, context } = this
+
+    const userId = toStringId(context.user)
+    const profileId = toStringId(props.profile)
 
     return (
-      !isEmpty(userId) && !isEmpty(profileId) && userId === profileId
+      !isEmpty(userId) &&
+      !isEmpty(profileId) &&
+      userId === profileId
     )
   }
 
   renderHeader() {
-    const { profile } = this.props
-    const username = get(profile, 'username')
-    const fullName = get(profile, 'fullName')
+    const { props } = this
+
+    const bio = get(props.profile, 'bio')
+    const username = get(props.profile, 'username')
 
     return (
       <div className="user-profile-header">
         <div className="user-profile-header-info">
           <Avatar
-            user={profile}
+            user={props.profile}
             width={82}
             height={82}
             className="user-profile-header-avatar"
           />
 
           <h1 className="user-profile-header-username">
-            {fullName}
+            {get(props.profile, 'name')}
+            <CuratorBadge user={props.profile} size={22} />
           </h1>
 
-          {!isEmpty(profile.bio) ? (
+          {!isEmpty(bio) ? (
             <p
               className="user-profile-header-bio"
               dangerouslySetInnerHTML={{
-                __html: addTwitterLinks(profile.bio)
-              }}/>
+                __html: addTwitterLinks(bio)
+              }}
+            />
           ) : null}
 
           {this.isProfileOwner() ? (
             <div className="user-profile-header-actions">
               <a
                 href={`/users/${username}/edit/`}
-                onClick={() => {
-                  ga.event({
-                    label: username,
-                    action: 'Clicked Edit Button',
-                    category: 'Profile'
-                  })
-                }}
-                data-type="primary"
-                data-size="small"
-                className="ui-button">
+                className="button button--small button--primary-alt"
+              >
                 Edit
               </a>
             </div>
@@ -81,50 +86,48 @@ export default class UserProfile extends Component {
   }
 
   renderNavigation() {
-    const { username } = this.props.profile
+    const { props } = this
+    const username = get(props.profile, 'username')
 
     return (
       <div className="user-profile-navigation">
         <Link
-          to={{pathname: `/users/${username}/likes`}}
-          onClick={(event) => {
-            ga.event({
-              label: username,
-              action: 'Clicked Likes Link',
-              category: 'Profile'
-            })
-
-            fullReload(event)
-          }}
+          to={{ pathname: `/designers/${username}/spaces` }}
           className="user-profile-navigation-link"
-          activeClassName="is-active">
-          Likes
+          activeClassName="is-active"
+        >
+          Spaces
         </Link>
+        {isCurator(props.profile) ? (
+          <Link
+            to={{ pathname: `/designers/${username}/products` }}
+            className="user-profile-navigation-link"
+            activeClassName="is-active"
+          >
+            Products
+          </Link>
+        ) : null}
         <Link
-          to={{pathname: `/users/${username}/collections`}}
-          onClick={(event) => {
-            ga.event({
-              label: username,
-              action: 'Clicked Collections Link',
-              category: 'Profile'
-            })
-
-            fullReload(event)
-          }}
+          to={{ pathname: `/designers/${username}/likes` }}
           className="user-profile-navigation-link"
-          activeClassName="is-active">
-          Collections
+          activeClassName="is-active"
+        >
+          Likes
         </Link>
       </div>
     )
   }
 
   render() {
+    const { props } = this
+
     return (
       <Layout>
         <div className="user-profile">
           {this.renderHeader()}
-          {this.props.children}
+          <div className="user-profile-content">
+            {props.children}
+          </div>
         </div>
       </Layout>
     )

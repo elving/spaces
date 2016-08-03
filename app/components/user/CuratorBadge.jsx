@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react'
 import isCurator from '../../utils/user/isCurator'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
-export default class Avatar extends Component {
+export default class CuratorBadge extends Component {
   static propTypes = {
     user: PropTypes.object,
     size: PropTypes.number

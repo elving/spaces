@@ -4,31 +4,41 @@ import size from 'lodash/size'
 import axios from 'axios'
 import concat from 'lodash/concat'
 import isEmpty from 'lodash/isEmpty'
+import { default as queryString } from 'query-string'
 import React, { Component, PropTypes } from 'react'
 
-import Space from '../space/Card'
+import Space from './Card'
 import Loader from '../common/Loader'
-import Product from '../product/Card'
+
 import toStringId from '../../api/utils/toStringId'
 
-export default class ProfileLikes extends Component {
+export default class Spaces extends Component {
   static propTypes = {
-    profile: PropTypes.object
+    spaces: PropTypes.object,
+    params: PropTypes.object,
+    emptyMessage: PropTypes.string
   };
 
   static defaultProps = {
-    profile: {}
+    spaces: {},
+    params: {},
+    emptyMessage: 'No Spaces Found...'
   };
 
   constructor(props) {
     super(props)
 
+    const count = get(props, 'spaces.count', 0)
+    const results = get(props, 'spaces.results', [])
+
     this.state = {
-      offset: 0,
-      results: [],
-      isFetching: true,
-      hasFetched: false,
-      lastResults: []
+      skip: 40,
+      count,
+      offset: size(results),
+      results,
+      isFetching: isEmpty(results),
+      hasFetched: !isEmpty(results),
+      lastResults: results
     }
   }
 
@@ -43,9 +53,13 @@ export default class ProfileLikes extends Component {
   fetch() {
     const { props, state } = this
 
-    this.setState(() => {
+    this.setState({ isFetching: true }, () => {
+      const params = !isEmpty(props.params)
+        ? queryString.stringify(props.params)
+        : ''
+
       axios
-        .get(`/ajax/likes/user/${toStringId(props.profile)}/`)
+        .get(`/ajax/spaces/search/?skip=${state.offset}&${params}`)
         .then(({ data }) => {
           const results = get(data, 'results', [])
 
@@ -75,7 +89,7 @@ export default class ProfileLikes extends Component {
           disabled={state.isFetching}
           className="button button--outline"
         >
-          {state.isFetching ? 'Loading More Likes...' : 'Load More Likes'}
+          {state.isFetching ? 'Loading More Spaces...' : 'Load More Spaces'}
         </button>
       </div>
     ) : null
@@ -98,15 +112,9 @@ export default class ProfileLikes extends Component {
               {props.emptyMessage}
             </p>
           ) : (
-            map(state.results, like => {
-              const parent = get(like, 'parent', {})
-
-              return like.parentType === 'space' ? (
-                <Space key={toStringId(parent)} {...parent} />
-              ) : (
-                <Product key={toStringId(parent)} {...parent} />
-              )
-            })
+            map(state.results, space =>
+              <Space key={toStringId(space)} {...space} />
+            )
           )}
         </div>
       </div>

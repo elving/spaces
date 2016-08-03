@@ -29,13 +29,17 @@ import { default as getAllSpaceTypes } from '../api/spaceType/getAll'
 
 export const renderIndex = async (req, res, next) => {
   try {
-    res.locals.metadata = {
+    const products = await search()
+
+    setMetadata(res, {
       title: 'Discover Products | Spaces',
       bodyId: 'all-products',
       bodyClass: 'page page-all-products'
-    }
+    })
 
-    res.locals.props = await search()
+    setProps(res, {
+      products: toJSON(products)
+    })
     next()
   } catch (err) {
     next(err)

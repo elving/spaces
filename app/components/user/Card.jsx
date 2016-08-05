@@ -15,11 +15,11 @@ import toStringId from '../../api/utils/toStringId'
 export default class ProfileCard extends Component {
   static propTypes = {
     user: PropTypes.object
-  };
+  }
 
   static defaultProps = {
     user: {}
-  };
+  }
 
   renderCounters() {
     const { props } = this

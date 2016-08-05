@@ -25,27 +25,28 @@ export default class OnboardingModal extends Component {
   static propTypes = {
     onClose: PropTypes.func,
     isVisible: PropTypes.bool
-  };
+  }
 
   static defaultProps = {
     onClose: (() => {}),
     isVisible: false
-  };
+  }
+
+  onClose = () => {
+    const { props } = this
+    history.replaceState({}, document.title, location.pathname)
+    props.onClose()
+  }
 
   render() {
     const { props } = this
-
-    const onClose = () => {
-      history.replaceState({}, document.title, location.pathname)
-      props.onClose()
-    }
 
     return (
       <Modal
         style={resetModalStyles}
         isOpen={props.isVisible}
         className="modal onboarding-modal"
-        onRequestClose={onClose}
+        onRequestClose={this.onClose}
       >
         <h1 className="onboarding-modal-title">
           What's Next?
@@ -138,7 +139,7 @@ export default class OnboardingModal extends Component {
         </div>
         <div className="onboarding-modal-actions">
           <button
-            onClick={onClose}
+            onClick={this.onClose}
             className="onboarding-modal-action button button--primary-alt"
           >
             Ok, got it!

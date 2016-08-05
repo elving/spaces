@@ -17,7 +17,6 @@ import ProductDetail from '../components/product/Detail'
 import ProductsIndex from '../components/product/Index'
 import UpdateProduct from '../components/product/Update'
 import ProductsTable from '../components/product/Table'
-import ProductSearch from '../components/product/Search'
 
 import AddCategory from '../components/category/Add'
 import CategoryDetail from '../components/category/Detail'
@@ -47,9 +46,6 @@ import UserProfile from '../components/user/Profile'
 import ProfileLikes from '../components/user/ProfileLikes'
 import ProfileSpaces from '../components/user/ProfileSpaces'
 import ProfileProducts from '../components/user/ProfileProducts'
-// import EditProfile from '../components/user/EditProfile'
-// import ChangePassword from '../components/user/ChangePassword'
-
 
 import SearchResults from '../components/search/Results'
 
@@ -69,7 +65,6 @@ const routes = (
     <Route path="products/:sid/:name" component={ProductDetail} />
     <Route path="products/add" component={AddProduct} />
     <Route path="products/:id/update" component={UpdateProduct} />
-    <Route path="products/search" component={ProductSearch} />
 
     <Route path="spaces" component={SpacesIndex} />
     <Route path="s/:sid" component={SpaceDetail} />
@@ -81,9 +76,6 @@ const routes = (
       <Route path="likes" component={ProfileLikes} />
       <Route path="spaces" component={ProfileSpaces} />
       <Route path="products" component={ProfileProducts} />
-      {/* <Route path="spaces" component={UserProfileSpace} />
-      <Route path="products" component={UserProfileProduct} />
-      <Route path="likes" component={UserProfileLikes} /> */}
     </Route>
 
     <Route path="categories" component={CategoriesIndex} />

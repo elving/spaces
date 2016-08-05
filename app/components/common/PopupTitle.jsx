@@ -1,35 +1,37 @@
 import classNames from 'classnames'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 export default class PopupTitle extends Component {
   static propTypes = {
-    onClickClose: Type.func
-  };
+    children: PropTypes.node,
+    onClickClose: PropTypes.func
+  }
 
   static defaultProps = {
     onClickClose: (() => {})
-  };
+  }
 
   render() {
-    const { onClickClose } = this.props
+    const { props } = this
 
     return (
       <div className="popup-title-container">
         <div className="popup-title">
-          {this.props.children}
+          {props.children}
         </div>
         <button
           type="button"
-          onClick={onClickClose}
+          onClick={props.onClickClose}
           className={classNames({
-            'button': true,
+            button: true,
             'button--icon': true,
             'button--transparent': true,
             'popup-close-button': true
-          })}>
-          <MaterialDesignIcon name="cancel"/>
+          })}
+        >
+          <MaterialDesignIcon name="cancel" />
         </button>
       </div>
     )

@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import size from 'lodash/size'
 import merge from 'lodash/merge'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Avatar from './Avatar'
 import CuratorBadge from './CuratorBadge'
@@ -12,18 +12,18 @@ import toStringId from '../../api/utils/toStringId'
 
 export default class MiniProfile extends Component {
   static contextTypes = {
-    user: Type.object
-  };
+    user: PropTypes.object
+  }
 
   static propTypes = {
-    user: Type.object
-  };
+    user: PropTypes.object
+  }
 
   static defaultProps = {
     user: {}
-  };
+  }
 
-  toggleFollow(event) {
+  onToggleFollowClick = (event) => {
     event.preventDefault()
   }
 
@@ -67,7 +67,7 @@ export default class MiniProfile extends Component {
             {userId !== currentUserId ? (
               <button
                 type="button"
-                onClick={::this.toggleFollow}
+                onClick={this.onToggleFollowClick}
                 className="button button--primary button--mini"
                 data-action="follow-user"
               >

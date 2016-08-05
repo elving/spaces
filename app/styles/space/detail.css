@@ -22,6 +22,8 @@
 }
 
 .space-detail-counter {
+  border: 0 none;
+  background-color: transparent;
   text-align: center;
   text-decoration: none;
   margin: 0 15px;

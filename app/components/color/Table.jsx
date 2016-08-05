@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import size from 'lodash/size'
 import isEqual from 'lodash/isEqual'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Table from '../common/Table'
 import Layout from '../common/Layout'
@@ -9,10 +9,10 @@ import formatDate from '../../utils/formatDate'
 
 export default class ColorsTable extends Component {
   static propTypes = {
-    colors: Type.array.isRequired
-  };
+    colors: PropTypes.array.isRequired
+  }
 
-  renderRow(color) {
+  renderRow = (color) => {
     const sid = get(color, 'sid', '')
     const hex = get(color, 'hex', '')
     const name = get(color, 'name', '')
@@ -31,7 +31,8 @@ export default class ColorsTable extends Component {
             color: isEqual(name, 'White') ? '#555' : '#fff',
             backgroundColor: hex
           }}
-          className="table-centered">
+          className="table-centered"
+        >
           {hex}
         </td>
         <td className="table-actions">
@@ -44,13 +45,13 @@ export default class ColorsTable extends Component {
   }
 
   render() {
-    const { colors } = this.props
+    const { props } = this
 
     return (
       <Layout>
         <Table
-          items={colors}
-          count={size(colors)}
+          items={props.colors}
+          count={size(props.colors)}
           headerTitle="Colors"
           tableHeaders={[{
             label: 'Date Created',
@@ -67,8 +68,9 @@ export default class ColorsTable extends Component {
           searchPath="name"
           headerCtaLink="/admin/colors/add/"
           headerCtaText="Add Color"
-          renderTableRow={::this.renderRow}
-          searchPlaceholder="Search colors by name"/>
+          renderTableRow={this.renderRow}
+          searchPlaceholder="Search colors by name"
+        />
       </Layout>
     )
   }

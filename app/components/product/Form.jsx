@@ -22,7 +22,7 @@ export default class ProductForm extends Component {
   static contextTypes = {
     csrf: PropTypes.string,
     currentUserIsAdmin: PropTypes.func
-  };
+  }
 
   static propTypes = {
     brands: PropTypes.array,
@@ -33,14 +33,14 @@ export default class ProductForm extends Component {
     spaceTypes: PropTypes.array,
     formMethod: PropTypes.string,
     isPOSTForSpace: PropTypes.bool
-  };
+  }
 
   static defaultProps = {
     product: {},
     onAdded: (() => {}),
     formMethod: 'POST',
     isPOSTForSpace: false
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -73,10 +73,6 @@ export default class ProductForm extends Component {
       imageUrlFormIsVisible: isEqual(get(props, 'formMethod'), 'PUT'),
       isLoadingImageFromUrl: false
     }
-
-    this.form = null
-    this.scraperForm = null
-    this.imageUrlInput = null
   }
 
   componentDidMount() {
@@ -101,13 +97,15 @@ export default class ProductForm extends Component {
     }
   }
 
-  onScrapeFormSubmit(event) {
-    const form = this.scraperForm
-    const formData = serialize(form, { hash: true })
+  onScrapeFormSubmit = (event) => {
+    const formData = serialize(this.scraperForm, { hash: true })
 
     event.preventDefault()
 
-    this.setState({ errors: {}, isScraping: true }, () => {
+    this.setState({
+      errors: {},
+      isScraping: true
+    }, () => {
       axios
         .get(`/ajax/products/fetch/?url=${formData.url}`)
         .then(({ data: product }) => {
@@ -185,7 +183,7 @@ export default class ProductForm extends Component {
     })
   }
 
-  onSubmit(event) {
+  onSubmit = (event) => {
     const { props, state } = this
 
     const isPOST = props.formMethod === 'POST'
@@ -206,7 +204,10 @@ export default class ProductForm extends Component {
       ? '/ajax/products/add/'
       : `/ajax/products/${toStringId(props.product)}/`
 
-    this.setState({ errors: {}, isSaving: true }, () => {
+    this.setState({
+      errors: {},
+      isSaving: true
+    }, () => {
       axios({
         url: endpoint,
         data: formData,
@@ -233,7 +234,7 @@ export default class ProductForm extends Component {
     })
   }
 
-  onClickDelete() {
+  onClickDelete = () => {
     const { props, context } = this.context
 
     const deleteMessage = (
@@ -243,7 +244,10 @@ export default class ProductForm extends Component {
     )
 
     if (window.prompt(deleteMessage === 'DELETE')) {
-      this.setState({ errors: {}, isDeleting: true }, () => {
+      this.setState({
+        errors: {},
+        isDeleting: true
+      }, () => {
         axios
           .delete(`/ajax/products/${toStringId(props.product)}/`, {
             _csrf: context.csrf
@@ -267,7 +271,152 @@ export default class ProductForm extends Component {
     }
   }
 
-  reset(next = (() => {})) {
+  onLoadImageClick = () => {
+    const { state } = this
+    const image = this.imageUrlInput.value
+
+    if (image !== state.image) {
+      this.setState({
+        image,
+        isLoadingImage: true
+      })
+    }
+  }
+
+  onCancelLoadImageClick = () => {
+    const { state } = this
+    const image = state.image !== this.imageUrlInput.value
+      ? state.images[state.imageIndex] || this.imageUrlInput.value
+      : state.image
+
+    this.setState({
+      image,
+      isLoadingImage: state.image !== this.imageUrlInput.value,
+      imageUrlFormIsVisible: false
+    })
+  }
+
+  onProductUrlChange = ({ currentTarget: input }) => {
+    this.setState({
+      url: input.value
+    })
+  }
+
+  onPriceChange = ({ currentTarget: input }) => {
+    this.setState({
+      price: input.value
+    })
+  }
+
+  onCategoriesChange = (categories) => {
+    this.setState({
+      categories
+    })
+  }
+
+  onColorsChange = (colors) => {
+    this.setState({
+      colors
+    })
+  }
+
+  onSpaceTypesChange = (spaceTypes) => {
+    this.setState({
+      spaceTypes
+    })
+  }
+
+  onUrlChange = ({ currentTarget: input }) => {
+    this.setState({
+      url: input.value
+    })
+  }
+
+  onNameChange = ({ currentTarget: input }) => {
+    this.setState({
+      name: input.value
+    })
+  }
+
+  onDescriptionChange = ({ currentTarget: input }) => {
+    this.setState({
+      description: input.value
+    })
+  }
+
+  onBrandChange = (brand) => {
+    this.setState({
+      brand
+    })
+  }
+
+  onNotificationClose = () => {
+    const { props, state } = this
+    const isPUT = props.formMethod === 'PUT'
+
+    if (state.deletingSuccessful || (!props.isPOSTForSpace && !isPUT)) {
+      window.onbeforeunload = null
+      window.location.href = '/products/add/'
+    } else {
+      this.setState({
+        product: {},
+        hasSaved: false,
+        savingSuccessful: false,
+        productAlreadyExists: false
+      })
+    }
+  }
+
+  onErrorNotificationClose = () => {
+    this.setState({
+      errors: {},
+      savingSuccessful: false
+    })
+  }
+
+  onImageLoad = () => {
+    this.setState({
+      isLoadingImage: false
+    })
+  }
+
+  form = null
+  scraperForm = null
+  imageUrlInput = null
+
+  selectPrevImage = () => {
+    const { state } = this
+    const nextImage = state.imageIndex - 1
+
+    if (nextImage >= 0) {
+      this.setState({
+        image: state.images[nextImage],
+        imageIndex: nextImage,
+        isLoadingImage: true
+      })
+    }
+  }
+
+  selectNextImage = () => {
+    const { state } = this
+    const nextImage = state.imageIndex + 1
+
+    if (nextImage <= size(state.images) - 1) {
+      this.setState({
+        image: state.images[nextImage],
+        imageIndex: nextImage,
+        isLoadingImage: true
+      })
+    }
+  }
+
+  showImageUrlInput = () => {
+    this.setState({
+      imageUrlFormIsVisible: true
+    })
+  }
+
+  reset = (next = (() => {})) => {
     this.setState({
       url: '',
       name: '',
@@ -305,7 +454,7 @@ export default class ProductForm extends Component {
         ref={form => { this.scraperForm = form }}
         action="/ajax/products/fetch/"
         method="POST"
-        onSubmit={::this.onScrapeFormSubmit}
+        onSubmit={this.onScrapeFormSubmit}
         className="form product-form-scrape"
       >
         <input type="hidden" name="_csrf" value={context.csrf} />
@@ -316,20 +465,19 @@ export default class ProductForm extends Component {
         </h1>
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="product-url" className="form-label">
             Product Url <small>required</small>
           </label>
 
           <div className="textfield-icon">
             <MaterialDesignIcon name="search" />
             <input
+              id="product-url"
               type="url"
               name="url"
               value={state.url}
               required
-              onChange={({ currentTarget: input }) => {
-                this.setState({ url: input.value })
-              }}
+              onChange={this.onProductUrlChange}
               disabled={state.isScraping}
               autoFocus
               className="textfield"
@@ -352,7 +500,7 @@ export default class ProductForm extends Component {
                 }
               </span>
             </button>
-            <button onClick={::this.reset} className="button">
+            <button onClick={this.reset} className="button">
               <span className="button-text">Cancel</span>
             </button>
           </div>
@@ -382,36 +530,6 @@ export default class ProductForm extends Component {
       !state.isLoadingImage
     )
 
-    const selectPrevImage = () => {
-      const nextImage = state.imageIndex - 1
-
-      if (nextImage >= 0) {
-        this.setState({
-          image: state.images[nextImage],
-          imageIndex: nextImage,
-          isLoadingImage: true
-        })
-      }
-    }
-
-    const selectNextImage = () => {
-      const nextImage = state.imageIndex + 1
-
-      if (nextImage <= size(state.images) - 1) {
-        this.setState({
-          image: state.images[nextImage],
-          imageIndex: nextImage,
-          isLoadingImage: true
-        })
-      }
-    }
-
-    const onImageLoad = () => {
-      this.setState({
-        isLoadingImage: false
-      })
-    }
-
     return (
       <div className="image-picker">
         <input type="hidden" name="image" value={state.image} />
@@ -437,7 +555,7 @@ export default class ProductForm extends Component {
             <img
               src={state.image}
               role="presentation"
-              onLoad={onImageLoad}
+              onLoad={this.onImageLoad}
               className="image-picker-current-image"
             />
           )}
@@ -446,6 +564,7 @@ export default class ProductForm extends Component {
         {state.imageUrlFormIsVisible || !hasImages ? (
           <div className="image-picker-url-form">
             <input
+              id="image"
               ref={input => { this.imageUrlInput = input }}
               type="url"
               disabled={shouldDisable}
@@ -456,16 +575,7 @@ export default class ProductForm extends Component {
             />
             <button
               type="button"
-              onClick={() => {
-                const image = this.imageUrlInput.value
-
-                if (image !== state.image) {
-                  this.setState({
-                    image,
-                    isLoadingImage: true
-                  })
-                }
-              }}
+              onClick={this.onLoadImageClick}
               disabled={shouldDisable}
               className="button"
             >
@@ -477,17 +587,7 @@ export default class ProductForm extends Component {
             {isPOST ? (
               <button
                 type="button"
-                onClick={() => {
-                  const image = state.image !== this.imageUrlInput.value
-                    ? state.images[state.imageIndex] || this.imageUrlInput.value
-                    : state.image
-
-                  this.setState({
-                    image,
-                    isLoadingImage: state.image !== this.imageUrlInput.value,
-                    imageUrlFormIsVisible: false
-                  })
-                }}
+                onClick={this.onCancelLoadImageClick}
                 disabled={shouldDisable}
                 className="button"
               >
@@ -503,7 +603,7 @@ export default class ProductForm extends Component {
             <div className="image-picker-actions-left">
               <button
                 type="button"
-                onClick={() => this.setState({ imageUrlFormIsVisible: true })}
+                onClick={this.showImageUrlInput}
                 disabled={shouldDisable}
                 className="button"
               >
@@ -517,7 +617,7 @@ export default class ProductForm extends Component {
               {hasImages ? (
                 <button
                   type="button"
-                  onClick={selectPrevImage}
+                  onClick={this.selectPrevImage}
                   disabled={shouldDisable || state.imageIndex === 0}
                   className="button button--icon image-picker-nav-prev"
                 >
@@ -529,7 +629,7 @@ export default class ProductForm extends Component {
               {hasImages ? (
                 <button
                   type="button"
-                  onClick={selectNextImage}
+                  onClick={this.selectNextImage}
                   disabled={(
                     shouldDisable ||
                     state.imageIndex >= size(state.images) - 1
@@ -605,7 +705,7 @@ export default class ProductForm extends Component {
         ref={form => { this.form = form }}
         action={formAction}
         method="POST"
-        onSubmit={::this.onSubmit}
+        onSubmit={this.onSubmit}
         className="form product-form"
       >
         <input type="hidden" name="_csrf" value={context.csrf} />
@@ -617,18 +717,17 @@ export default class ProductForm extends Component {
 
         {!isPOST ? (
           <div className="form-group">
-            <label className="form-label">
+            <label htmlFor="url" className="form-label">
               Url <small>required</small>
             </label>
 
             <input
+              id="url"
               type="text"
               name="url"
               value={state.url}
               required
-              onChange={({ currentTarget: input }) => {
-                this.setState({ url: input.value })
-              }}
+              onChange={this.onUrlChange}
               disabled={state.isSaving}
               className={classNames({
                 textfield: true,
@@ -646,25 +745,24 @@ export default class ProductForm extends Component {
         )}
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="image" className="form-label">
             Image <small>required</small>
           </label>
           {this.renderProductImagePicker()}
         </div>
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="name" className="form-label">
             Name <small>required</small>
           </label>
 
           <input
+            id="name"
             type="text"
             name="name"
             value={state.name}
             required
-            onChange={({ currentTarget: input }) => {
-              this.setState({ name: input.value })
-            }}
+            onChange={this.onNameChange}
             disabled={state.isSaving}
             className={classNames({
               textfield: true,
@@ -679,17 +777,16 @@ export default class ProductForm extends Component {
         </div>
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="description" className="form-label">
             Description <small>optional</small>
           </label>
 
           <textarea
+            id="description"
             name="description"
             value={state.description}
             disabled={state.isSaving}
-            onChange={({ currentTarget: input }) => {
-              this.setState({ description: input.value })
-            }}
+            onChange={this.onDescriptionChange}
             className={classNames({
               textfield: true,
               'textfield--error': hasDescriptionError
@@ -705,11 +802,12 @@ export default class ProductForm extends Component {
         <div className="form-group">
           <div className="form-group form-group--inline">
             <div className="form-group">
-              <label className="form-label">
+              <label htmlFor="brand" className="form-label">
                 Brand <small>required</small>
               </label>
 
               <Select
+                id="brand"
                 name="brand"
                 value={state.brand}
                 options={map(props.brands, brand => ({
@@ -717,7 +815,7 @@ export default class ProductForm extends Component {
                   label: get(brand, 'name')
                 }))}
                 required
-                onChange={brand => this.setState({ brand })}
+                onChange={this.onBrandChange}
                 disabled={state.isSaving}
                 className={classNames({
                   select: true,
@@ -734,18 +832,17 @@ export default class ProductForm extends Component {
             </div>
 
             <div className="form-group">
-              <label className="form-label">
+              <label htmlFor="price" className="form-label">
                 Price <small>required</small>
               </label>
 
               <input
+                id="price"
                 type="text"
                 name="price"
                 value={state.price}
                 required
-                onChange={({ currentTarget: input }) => {
-                  this.setState({ price: input.value })
-                }}
+                onChange={this.onPriceChange}
                 disabled={state.isSaving}
                 className={classNames({
                   textfield: true,
@@ -762,11 +859,12 @@ export default class ProductForm extends Component {
         </div>
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="categories" className="form-label">
             Categories <small>required</small>
           </label>
 
           <Select
+            id="categories"
             name="categories"
             multi
             value={state.categories}
@@ -775,7 +873,7 @@ export default class ProductForm extends Component {
               label: get(category, 'name')
             }))}
             required
-            onChange={categories => this.setState({ categories })}
+            onChange={this.onCategoriesChange}
             disabled={state.isSaving}
             className={classNames({
               select: true,
@@ -792,11 +890,12 @@ export default class ProductForm extends Component {
         </div>
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="colors" className="form-label">
             Colors <small>optional</small>
           </label>
 
           <Select
+            id="colors"
             name="colors"
             multi
             value={state.colors}
@@ -806,7 +905,7 @@ export default class ProductForm extends Component {
               color: get(color, 'hex')
             }))}
             required
-            onChange={colors => this.setState({ colors })}
+            onChange={this.onColorsChange}
             disabled={state.isSaving}
             className={classNames({
               select: true,
@@ -845,11 +944,12 @@ export default class ProductForm extends Component {
         </div>
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="spaces" className="form-label">
             Spaces <small>required</small>
           </label>
 
           <Select
+            id="spaces"
             name="spaceTypes"
             multi
             value={state.spaceTypes}
@@ -858,7 +958,7 @@ export default class ProductForm extends Component {
               label: get(spaceTpye, 'name')
             }))}
             required
-            onChange={spaceTypes => this.setState({ spaceTypes })}
+            onChange={this.onSpaceTypesChange}
             disabled={state.isSaving}
             className={classNames({
               select: true,
@@ -887,13 +987,13 @@ export default class ProductForm extends Component {
               </span>
             </button>
             {isPOST ? (
-              <button type="button" onClick={::this.reset} className="button">
+              <button type="button" onClick={this.reset} className="button">
                 <span className="button-text">Cancel</span>
               </button>
             ) : (
               <button
                 type="button"
-                onClick={::this.onClickDelete}
+                onClick={this.onClickDelete}
                 disabled={shouldDisable}
                 className="button button--danger"
               >
@@ -924,45 +1024,49 @@ export default class ProductForm extends Component {
 
     const sid = get(state.product, 'sid', '')
     const name = get(state.product, 'name', 'Color')
-    const isPUT = props.formMethod === 'PUT'
 
     const genericError = get(state.errors, 'generic')
     const hasGenericError = !isEmpty(genericError)
 
-    const onClose = () => {
-      if (state.deletingSuccessful || !props.isPOSTForSpace && !isPUT) {
-        window.onbeforeunload = null
-        window.location.href = '/products/add/'
-      } else {
-        this.setState({
-          product: {},
-          hasSaved: false,
-          savingSuccessful: false,
-          productAlreadyExists: false
-        })
-      }
-    }
-
     if (state.productAlreadyExists) {
       return (
-        <Notification onClose={onClose} timeout={3500} isVisible>
+        <Notification
+          timeout={3500}
+          onClose={this.onNotificationClose}
+          isVisible
+        >
           This product aleary exists. <a href={`/products/${sid}/`}>{name}</a>.
         </Notification>
       )
     } else if (state.savingSuccessful) {
       return props.formMethod === 'POST' ? (
-        <Notification type="success" timeout={3500} onClose={onClose} isVisible>
+        <Notification
+          type="success"
+          onClose={this.onNotificationClose}
+          timeout={3500}
+          isVisible
+        >
           "{name}" was added successfully.
           Click <a href={`/products/${sid}/update/`}>here</a> to edit.
         </Notification>
       ) : (
-        <Notification type="success" timeout={3500} onClose={onClose} isVisible>
+        <Notification
+          type="success"
+          timeout={3500}
+          onClose={this.onNotificationClose}
+          isVisible
+        >
           "{name}" was updated successfully.
         </Notification>
       )
     } else if (state.deletingSuccessful) {
       return (
-        <Notification type="success" timeout={3500} onClose={onClose} isVisible>
+        <Notification
+          type="success"
+          timeout={3500}
+          onClose={this.onNotificationClose}
+          isVisible
+        >
           "{name}" was deleted successfully. Redirecting...
         </Notification>
       )
@@ -970,13 +1074,8 @@ export default class ProductForm extends Component {
       return (
         <Notification
           type="error"
-          onClose={() => {
-            this.setState({
-              errors: {},
-              savingSuccessful: false
-            })
-          }}
           timeout={3500}
+          onClose={this.onErrorNotificationClose}
           isVisible
         >
           {genericError}

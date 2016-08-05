@@ -23,7 +23,7 @@ class ProductsIndex extends Component {
     closeAddProductModal: PropTypes.func,
     addProductModalIsOpen: PropTypes.bool,
     createaddProductModal: PropTypes.bool
-  };
+  }
 
   static defaultProps = {
     params: {},
@@ -33,7 +33,7 @@ class ProductsIndex extends Component {
     closeAddProductModal: (() => {}),
     addProductModalIsOpen: false,
     createaddProductModal: false
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -60,7 +60,7 @@ class ProductsIndex extends Component {
     }
   }
 
-  fetch() {
+  fetch = () => {
     const { props, state } = this
 
     this.setState({ isFetching: true }, () => {
@@ -96,7 +96,7 @@ class ProductsIndex extends Component {
     return size(state.results) < state.count ? (
       <div className="grid-pagination">
         <button
-          onClick={::this.fetch}
+          onClick={this.fetch}
           disabled={state.isFetching}
           className="button button--outline"
         >

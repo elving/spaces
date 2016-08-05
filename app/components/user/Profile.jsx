@@ -15,15 +15,15 @@ export default class UserProfile extends PureComponent {
   static propTypes = {
     profile: PropTypes.object,
     children: PropTypes.node
-  };
+  }
 
   static defaultProps = {
     profile: {}
-  };
+  }
 
   static contextTypes = {
     user: PropTypes.object
-  };
+  }
 
   isProfileOwner() {
     const { props, context } = this

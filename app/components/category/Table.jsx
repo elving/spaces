@@ -9,9 +9,9 @@ import formatDate from '../../utils/formatDate'
 export default class CategoriesTable extends Component {
   static propTypes = {
     categories: Type.array.isRequired
-  };
+  }
 
-  renderRow(category) {
+  renderRow = (category) => {
     const sid = get(category, 'sid', '')
     const name = get(category, 'name', '')
     const createdAt = get(category, 'createdAt', (new Date()))
@@ -54,8 +54,9 @@ export default class CategoriesTable extends Component {
           searchPath="name"
           headerCtaLink="/admin/categories/add/"
           headerCtaText="Add Category"
-          renderTableRow={::this.renderRow}
-          searchPlaceholder="Search categories by name"/>
+          renderTableRow={this.renderRow}
+          searchPlaceholder="Search categories by name"
+        />
       </Layout>
     )
   }

@@ -26,7 +26,7 @@ export default class SpaceCard extends Component {
   static contextTypes = {
     csrf: PropTypes.string,
     userLoggedIn: PropTypes.func
-  };
+  }
 
   static propTypes = {
     sid: PropTypes.string,
@@ -42,7 +42,7 @@ export default class SpaceCard extends Component {
     commentsCount: PropTypes.number,
     originalSpace: PropTypes.object,
     redesignsCount: PropTypes.number
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -76,26 +76,52 @@ export default class SpaceCard extends Component {
     })
   }
 
-  openSharePopup() {
+  onLike = () => {
+    const { state } = this
+
+    this.setState({
+      likesCount: state.likesCount + 1
+    })
+  }
+
+  onUnlike = () => {
+    const { state } = this
+
+    this.setState({
+      likesCount: state.likesCount - 1
+    })
+  }
+
+  getShortUrl = () => {
+    const { props } = this
+    return `${window.location.origin}/${props.shortUrl}/`
+  }
+
+  getDetailUrl = () => {
+    const { props } = this
+    return `${window.location.origin}/${props.detailUrl}/`
+  }
+
+  openSharePopup = () => {
     this.setState({
       sharePopupIsOpen: true,
       sharePopupIsCreated: true
     })
   }
 
-  closeSharePopup() {
+  closeSharePopup = () => {
     this.setState({
       sharePopupIsOpen: false
     })
   }
 
-  openRedesignPopup() {
+  openRedesignPopup = () => {
     this.setState({
       redesignPopupIsOpen: true
     })
   }
 
-  closeRedesignPopup() {
+  closeRedesignPopup = () => {
     this.setState({
       redesignPopupIsOpen: false
     })
@@ -112,7 +138,7 @@ export default class SpaceCard extends Component {
         })}
         data-images={size(state.images)}
       >
-        <a href={`/${props.detailUrl}/`} className="card-actions-overlay"></a>
+        <a href={`/${props.detailUrl}/`} className="card-actions-overlay" />
 
         {this.renderActions()}
         {this.renderRedesignBadge()}
@@ -150,7 +176,7 @@ export default class SpaceCard extends Component {
         <div className="card-actions card-actions--left">
           <button
             type="button"
-            onClick={::this.openRedesignPopup}
+            onClick={this.openRedesignPopup}
             className={classNames({
               button: true,
               'card-action': true,
@@ -163,9 +189,9 @@ export default class SpaceCard extends Component {
           </button>
           <LikeButton
             parent={toStringId(props)}
-            onLike={() => this.setState({ likesCount: state.likesCount + 1 })}
+            onLike={this.onLike}
             isWhite
-            onUnlike={() => this.setState({ likesCount: state.likesCount - 1 })}
+            onUnlike={this.onUnlike}
             className="card-action"
             parentType="space"
           />
@@ -174,7 +200,7 @@ export default class SpaceCard extends Component {
         <div className="card-actions card-actions--right">
           <button
             type="button"
-            onClick={::this.openSharePopup}
+            onClick={this.openSharePopup}
             className={classNames({
               button: true,
               'card-action': true,
@@ -254,10 +280,10 @@ export default class SpaceCard extends Component {
 
     return state.sharePopupIsCreated ? (
       <SharePopup
-        url={() => `${window.location.origin}/${props.shortUrl}/`}
+        url={this.getShortUrl}
         title="Share this space"
         isOpen={state.sharePopupIsOpen}
-        shareUrl={() => `${window.location.origin}/${props.detailUrl}/`}
+        shareUrl={this.getDetailUrl}
         className="share-popup"
         shareText={(
           `${props.name} — Designed by ` +
@@ -265,7 +291,7 @@ export default class SpaceCard extends Component {
           `featuring ${size(props.products)} products.`
         )}
         shareImage={props.image}
-        onClickClose={::this.closeSharePopup}
+        onClickClose={this.closeSharePopup}
       />
     ) : null
   }
@@ -279,7 +305,7 @@ export default class SpaceCard extends Component {
         spaceId={toStringId(props)}
         spaceType={toStringId(props.spaceType)}
         className="redesign-popup"
-        onClickClose={::this.closeRedesignPopup}
+        onClickClose={this.closeRedesignPopup}
       />
     )
   }

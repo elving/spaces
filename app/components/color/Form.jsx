@@ -14,17 +14,17 @@ import toStringId from '../../api/utils/toStringId'
 export default class ColorForm extends Component {
   static contextTypes = {
     csrf: PropTypes.string
-  };
+  }
 
   static propTypes = {
     color: PropTypes.object,
     formMethod: PropTypes.string
-  };
+  }
 
   static defaultProps = {
     color: {},
     formMethod: 'POST'
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -60,12 +60,11 @@ export default class ColorForm extends Component {
     }
   }
 
-  onSubmit(event) {
+  onSubmit = (event) => {
     const { props } = this
 
-    const form = this.form
     const isPOST = props.formMethod === 'POST'
-    const formData = serialize(form, { hash: true })
+    const formData = serialize(this.form, { hash: true })
     const endpoint = isPOST
       ? '/ajax/colors/'
       : `/ajax/colors/${toStringId(props.color)}/`
@@ -82,7 +81,10 @@ export default class ColorForm extends Component {
       return
     }
 
-    this.setState({ errors: {}, isSaving: true }, () => {
+    this.setState({
+      errors: {},
+      isSaving: true
+    }, () => {
       axios({
         url: endpoint,
         data: formData,
@@ -115,7 +117,7 @@ export default class ColorForm extends Component {
     })
   }
 
-  onClickDelete() {
+  onClickDelete = () => {
     const { props, context } = this
 
     const deleteMessage = (
@@ -125,7 +127,10 @@ export default class ColorForm extends Component {
     )
 
     if (window.prompt(deleteMessage) === 'DELETE') {
-      this.setState({ errors: {}, isDeleting: true }, () => {
+      this.setState({
+        errors: {},
+        isDeleting: true
+      }, () => {
         axios
           .post(`/ajax/colors/${toStringId(props.color)}/`, {
             _csrf: context.csrf,
@@ -148,6 +153,18 @@ export default class ColorForm extends Component {
           })
       })
     }
+  }
+
+  onNameChange = ({ currentTarget: input }) => {
+    this.setState({
+      name: input.value
+    })
+  }
+
+  onColorChange = ({ currentTarget: input }) => {
+    this.setState({
+      name: input.value
+    })
   }
 
   renderForm() {
@@ -177,9 +194,9 @@ export default class ColorForm extends Component {
 
     return (
       <form
-        ref={(form) => { this.form = form }}
+        ref={form => { this.form = form }}
         method="POST"
-        onSubmit={::this.onSubmit}
+        onSubmit={this.onSubmit}
         className="form color-form"
       >
         <input type="hidden" name="hex" value={state.hex} />
@@ -195,19 +212,18 @@ export default class ColorForm extends Component {
         </h1>
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="name" className="form-label">
             Name <small>required</small>
           </label>
 
           <input
+            id="name"
             type="text"
             name="name"
             value={state.name}
             required
             disabled={shouldDisable}
-            onChange={({ currentTarget: input }) => {
-              this.setState({ name: input.value })
-            }}
+            onChange={this.onNameChange}
             autoFocus
             className={classNames({
               textfield: true,
@@ -222,15 +238,14 @@ export default class ColorForm extends Component {
         </div>
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="hex" className="form-label">
             Hex <small>required</small>
           </label>
 
           <ColorPickerPanel
+            id="hex"
             color={get(state, 'hex', '#666666')}
-            onChange={value => {
-              this.setState({ hex: value || 'color' })
-            }}
+            onChange={this.onColorChange}
           />
 
           {hasHexError ? (
@@ -257,7 +272,7 @@ export default class ColorForm extends Component {
             ) : (
               <button
                 type="button"
-                onClick={::this.onClickDelete}
+                onClick={this.onClickDelete}
                 disabled={shouldDisable}
                 className="button button--danger"
               >

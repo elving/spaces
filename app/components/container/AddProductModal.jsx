@@ -1,17 +1,13 @@
 import React, { Component } from 'react'
 
 const addProductModalContainer = Composed => class extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      addProductModalIsOpen: false,
-      createaddProductModal: false,
-      addProductModalCurrent: {}
-    }
+  state = {
+    addProductModalIsOpen: false,
+    createaddProductModal: false,
+    addProductModalCurrent: {}
   }
 
-  openAddProductModal(product) {
+  openAddProductModal = (product) => {
     this.setState({
       addProductModalIsOpen: true,
       createaddProductModal: true,
@@ -19,7 +15,7 @@ const addProductModalContainer = Composed => class extends Component {
     })
   }
 
-  closeAddProductModal() {
+  closeAddProductModal = () => {
     this.setState({
       addProductModalIsOpen: false
     })
@@ -30,8 +26,8 @@ const addProductModalContainer = Composed => class extends Component {
       <Composed
         {...this.props}
         {...this.state}
-        openAddProductModal={::this.openAddProductModal}
-        closeAddProductModal={::this.closeAddProductModal}
+        openAddProductModal={this.openAddProductModal}
+        closeAddProductModal={this.closeAddProductModal}
       />
     )
   }

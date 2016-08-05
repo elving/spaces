@@ -5,7 +5,7 @@ import MaterialDesignIcon from './MaterialDesignIcon'
 export default class AddProductButton extends Component {
   static contextTypes = {
     currentUserIsCurator: PropTypes.func
-  };
+  }
 
   render() {
     const { context } = this

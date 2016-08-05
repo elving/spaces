@@ -1,21 +1,21 @@
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
 import ProductForm from './Form'
 
 export default class UpdateProduct extends Component {
   static propTypes = {
-    colors: Type.array,
-    brands: Type.array,
-    product: Type.object,
-    categories: Type.array,
-    spaceTypes: Type.array
-  };
+    colors: PropTypes.array,
+    brands: PropTypes.array,
+    product: PropTypes.object,
+    categories: PropTypes.array,
+    spaceTypes: PropTypes.array
+  }
 
   render() {
     return (
       <Layout>
-        <ProductForm {...this.props} formMethod="PUT"/>
+        <ProductForm {...this.props} formMethod="PUT" />
       </Layout>
     )
   }

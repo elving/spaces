@@ -28,7 +28,7 @@ class ProductDetail extends Component {
   static contextTypes = {
     csrf: PropTypes.string,
     userLoggedIn: PropTypes.func
-  };
+  }
 
   static propTypes = {
     product: PropTypes.object,
@@ -36,7 +36,7 @@ class ProductDetail extends Component {
     openAddProductModal: PropTypes.func,
     closeAddProductModal: PropTypes.func,
     addProductModalIsOpen: PropTypes.bool
-  };
+  }
 
   static defaultProps = {
     product: {},
@@ -44,28 +44,15 @@ class ProductDetail extends Component {
     openAddProductModal: (() => {}),
     closeAddProductModal: (() => {}),
     addProductModalIsOpen: false
-  };
+  }
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      imageWidth: '100%',
-      imageHeight: '100%',
-      imageIsLoaded: false,
-      imageIsLoading: true,
-      sharePopupIsOpen: false,
-      sharePopupIsCreated: false
-    }
-
-    this.imageDidLoad = (img) => {
-      this.setState({
-        imageWidth: get(img, 'width', '100%'),
-        imageHeight: get(img, 'height', '100%'),
-        imageIsLoaded: true,
-        imageIsLoading: false
-      })
-    }
+  state = {
+    imageWidth: '100%',
+    imageHeight: '100%',
+    imageIsLoaded: false,
+    imageIsLoading: true,
+    sharePopupIsOpen: false,
+    sharePopupIsCreated: false
   }
 
   componentDidMount() {
@@ -80,14 +67,38 @@ class ProductDetail extends Component {
     }
   }
 
-  openSharePopup() {
+  getShortUrl = () => {
+    const { props } = this
+    return `${window.location.origin}/${get(props.product, 'shortUrl')}/`
+  }
+
+  getDetailUrl = () => {
+    const { props } = this
+    return `${window.location.origin}/${get(props.product, 'detailUrl')}/`
+  }
+
+  imageDidLoad = (img) => {
+    this.setState({
+      imageWidth: get(img, 'width', '100%'),
+      imageHeight: get(img, 'height', '100%'),
+      imageIsLoaded: true,
+      imageIsLoading: false
+    })
+  }
+
+  openAddModal = () => {
+    const { props } = this
+    props.openAddProductModal(props.product)
+  }
+
+  openSharePopup = () => {
     this.setState({
       sharePopupIsOpen: true,
       sharePopupIsCreated: true
     })
   }
 
-  closeSharePopup() {
+  closeSharePopup = () => {
     this.setState({
       sharePopupIsOpen: false
     })
@@ -220,6 +231,7 @@ class ProductDetail extends Component {
 
     return (
       <a
+        rel="noopener noreferrer"
         href={url}
         target="_blank"
         className="product-detail-url button button--primary"
@@ -235,21 +247,17 @@ class ProductDetail extends Component {
 
     return state.sharePopupIsCreated ? (
       <SharePopup
-        url={() => (
-          `${window.location.origin}/${get(props.product, 'shortUrl')}/`
-        )}
+        url={this.getShortUrl}
         title="Share this product"
         isOpen={state.sharePopupIsOpen}
-        shareUrl={() => (
-          `${window.location.origin}/${get(props.product, 'detailUrl')}/`
-        )}
+        shareUrl={this.getDetailUrl}
         className="share-popup"
         shareText={(
           `${get(props.product, 'name')} by ` +
           `${get(props.product, 'brand.name')}.`
         )}
         shareImage={get(props.product, 'image')}
-        onClickClose={::this.closeSharePopup}
+        onClickClose={this.closeSharePopup}
       />
     ) : null
   }
@@ -261,7 +269,7 @@ class ProductDetail extends Component {
       <div className="product-detail-actions">
         <button
           type="button"
-          onClick={() => props.openAddProductModal(props.product)}
+          onClick={this.openAddModal}
           className="product-detail-action collect-button button"
           data-action="add"
         >
@@ -281,7 +289,7 @@ class ProductDetail extends Component {
         <div className="product-detail-action">
           <button
             type="button"
-            onClick={::this.openSharePopup}
+            onClick={this.openSharePopup}
             className="button button--outline"
           >
             <MaterialDesignIcon name="send" />

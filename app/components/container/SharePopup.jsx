@@ -1,16 +1,12 @@
 import React, { Component } from 'react'
 
 const sharePopupContainer = Composed => class extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      sharePopupIsOpen: false,
-      sharePopupIsCreated: false
-    }
+  state = {
+    sharePopupIsOpen: false,
+    sharePopupIsCreated: false
   }
 
-  openSharePopup() {
+  openSharePopup = () => {
     this.setState({
       sharePopupIsOpen: true,
       sharePopupIsCreated: true
@@ -28,8 +24,9 @@ const sharePopupContainer = Composed => class extends Component {
       <Composed
         {...this.props}
         {...this.state}
-        openSharePopup={::this.openSharePopup}
-        closeSharePopup={::this.closeSharePopup}/>
+        openSharePopup={this.openSharePopup}
+        closeSharePopup={this.closeSharePopup}
+      />
     )
   }
 }

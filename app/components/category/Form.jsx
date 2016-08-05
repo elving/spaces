@@ -13,17 +13,17 @@ import toStringId from '../../api/utils/toStringId'
 export default class CategoryForm extends Component {
   static contextTypes = {
     csrf: PropTypes.string
-  };
+  }
 
   static propTypes = {
     category: PropTypes.object,
     formMethod: PropTypes.string
-  };
+  }
 
   static defaultProps = {
     category: {},
     formMethod: 'POST'
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -60,7 +60,7 @@ export default class CategoryForm extends Component {
     }
   }
 
-  onSubmit(event) {
+  onSubmit = (event) => {
     const { props } = this
 
     const form = this.form
@@ -72,7 +72,10 @@ export default class CategoryForm extends Component {
 
     event.preventDefault()
 
-    this.setState({ errors: {}, isSaving: true }, () => {
+    this.setState({
+      errors: {},
+      isSaving: true
+    }, () => {
       axios({
         url: endpoint,
         data: formData,
@@ -102,7 +105,7 @@ export default class CategoryForm extends Component {
     })
   }
 
-  onClickDelete() {
+  onClickDelete = () => {
     const { props, context } = this
 
     const deleteMessage = (
@@ -112,7 +115,10 @@ export default class CategoryForm extends Component {
     )
 
     if (window.prompt(deleteMessage) === 'DELETE') {
-      this.setState({ errors: {}, isDeleting: true }, () => {
+      this.setState({
+        errors: {},
+        isDeleting: true
+      }, () => {
         axios
           .post(`/ajax/categories/${toStringId(props.category)}/`, {
             _csrf: context.csrf,
@@ -135,6 +141,12 @@ export default class CategoryForm extends Component {
           })
       })
     }
+  }
+
+  onNameChange = ({ currentTarget: input }) => {
+    this.setState({
+      name: input.value
+    })
   }
 
   renderForm() {
@@ -161,9 +173,9 @@ export default class CategoryForm extends Component {
 
     return (
       <form
-        ref={(form) => { this.form = form }}
+        ref={form => { this.form = form }}
         method="POST"
-        onSubmit={::this.onSubmit}
+        onSubmit={this.onSubmit}
         className="form category-form"
       >
         <input type="hidden" name="_csrf" value={context.csrf} />
@@ -178,19 +190,18 @@ export default class CategoryForm extends Component {
         </h1>
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="name" className="form-label">
             Name <small>required</small>
           </label>
 
           <input
+            id="name"
             type="text"
             name="name"
             value={state.name}
             required
             disabled={shouldDisable}
-            onChange={({ currentTarget: input }) => {
-              this.setState({ name: input.value })
-            }}
+            onChange={this.onNameChange}
             autoFocus
             className={classNames({
               textfield: true,
@@ -223,7 +234,7 @@ export default class CategoryForm extends Component {
             ) : (
               <button
                 type="button"
-                onClick={::this.onClickDelete}
+                onClick={this.onClickDelete}
                 disabled={shouldDisable}
                 className="button button--danger"
               >

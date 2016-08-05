@@ -3,7 +3,7 @@ import map from 'lodash/map'
 import size from 'lodash/size'
 import axios from 'axios'
 import concat from 'lodash/concat'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
 import SpaceTypeCard from './Card'
@@ -12,14 +12,14 @@ import toStringId from '../../api/utils/toStringId'
 
 export default class SpaceTypesIndex extends Component {
   static propTypes = {
-    count: Type.number,
-    results: Type.array
-  };
+    count: PropTypes.number,
+    results: PropTypes.array
+  }
 
   static defaultProps = {
     count: 0,
     results: []
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -35,10 +35,12 @@ export default class SpaceTypesIndex extends Component {
     }
   }
 
-  fetch() {
+  fetch = () => {
     const { state } = this
 
-    this.setState({ isSearhing: true }, () => {
+    this.setState({
+      isSearhing: true
+    }, () => {
       axios
         .get(`/ajax/rooms/search/?skip=${state.offset}`)
         .then(({ data }) => {
@@ -52,7 +54,9 @@ export default class SpaceTypesIndex extends Component {
           })
         })
         .catch(() => {
-          this.setState({ isSearhing: false })
+          this.setState({
+            isSearhing: false
+          })
         })
     })
   }
@@ -63,9 +67,10 @@ export default class SpaceTypesIndex extends Component {
     return size(state.results) < props.count ? (
       <div className="grid-pagination">
         <button
-          onClick={::this.fetch}
+          onClick={this.fetch}
           disabled={state.isSearhing}
-          className="button button--outline">
+          className="button button--outline"
+        >
           {state.isSearhing ? 'Loading More Rooms...' : 'Load More Rooms'}
         </button>
       </div>
@@ -79,7 +84,7 @@ export default class SpaceTypesIndex extends Component {
       <div className="grid">
         <div className="grid-items grid-items--3-cards">
           {map(state.results, room =>
-            <SpaceTypeCard key={toStringId(room)} {...room}/>
+            <SpaceTypeCard key={toStringId(room)} {...room} />
           )}
         </div>
       </div>

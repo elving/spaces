@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import map from 'lodash/map'
 import React, { Component, PropTypes } from 'react'
 
@@ -14,7 +13,7 @@ export default class CardTags extends Component {
     count: PropTypes.number,
     action: PropTypes.string,
     avatarSize: PropTypes.number
-  };
+  }
 
   static defaultProps = {
     verb: '',
@@ -22,7 +21,7 @@ export default class CardTags extends Component {
     count: 0,
     action: '',
     avatarSize: 28
-  };
+  }
 
   getIconName() {
     const { props } = this

@@ -26,7 +26,7 @@ class Home extends Component {
     closeAddProductModal: PropTypes.func,
     addProductModalIsOpen: PropTypes.bool,
     createaddProductModal: PropTypes.bool
-  };
+  }
 
   static defaultProps = {
     users: [],
@@ -38,7 +38,7 @@ class Home extends Component {
     closeAddProductModal: (() => {}),
     addProductModalIsOpen: false,
     createaddProductModal: false
-  };
+  }
 
   renderSpaces() {
     const { props } = this

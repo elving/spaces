@@ -6,15 +6,16 @@ export default class CardTitle extends Component {
     url: PropTypes.string,
     title: PropTypes.string,
     subTitle: PropTypes.string,
-    className: PropTypes.string,
-  };
+    children: PropTypes.node,
+    className: PropTypes.string
+  }
 
   static defaultProps = {
     url: '',
     title: '',
     subTitle: '',
     className: '',
-  };
+  }
 
   render() {
     const { url, title, subTitle, className } = this.props

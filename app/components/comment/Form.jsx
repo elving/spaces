@@ -5,119 +5,115 @@ import axios from 'axios'
 import isEmpty from 'lodash/isEmpty'
 import serialize from 'form-serialize'
 import classNames from 'classnames'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import toStringId from '../../api/utils/toStringId'
 
 export default class CommentForm extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      errors: {},
-      content: '',
-      isSaving: false,
-      contentCharsLeft: 500,
-      hasContentCharsError: false
-    }
-
-    this.form = null
+  static contextTypes = {
+    csrf: PropTypes.string,
+    user: PropTypes.object,
+    userLoggedIn: PropTypes.func
   }
 
-  static contextTypes = {
-    csrf: Type.string,
-    user: Type.object,
-    userLoggedIn: Type.func
-  };
-
   static propTypes = {
-    parent: Type.string.isRequired,
-    onCreate: Type.func,
-    parentType: Type.string.isRequired
-  };
+    parent: PropTypes.string.isRequired,
+    onCreate: PropTypes.func,
+    parentType: PropTypes.string.isRequired
+  }
 
   static defaultProps = {
     onCreate: (() => {})
-  };
+  }
 
-  onSubmit(event) {
+  state = {
+    errors: {},
+    content: '',
+    isSaving: false,
+    contentCharsLeft: 500,
+    hasContentCharsError: false
+  }
+
+  onSubmit = (event) => {
     event.preventDefault()
 
     const formData = serialize(this.form, { hash: true })
-    const { user } = this.context
-    const { content } = this.state
-    const { onCreate } = this.props
+    const { props, state, context } = this
 
-    if (!isEmpty(content)) {
-      this.setState({ errors: {}, isSaving: true }, () => {
-        axios({
-          url: '/ajax/comments/',
-          data: formData,
-          method: 'POST'
-        }).then((res) => {
-          this.setState({
-            content: '',
-            isSaving: false,
-            contentCharsLeft: 500,
-            hasContentCharsError: false
-          }, () => {
-            onCreate(merge(get(res, 'data', {}), { createdBy: user }))
+    if (!isEmpty(state.content)) {
+      this.setState({
+        errors: {},
+        isSaving: true
+      }, () => {
+        axios
+          .post('/ajax/comments/', formData)
+          .then(({ data: comment }) => {
+            this.setState({
+              content: '',
+              isSaving: false,
+              contentCharsLeft: 500,
+              hasContentCharsError: false
+            }, () => {
+              context.onCreate(merge({}, comment, { createdBy: props.user }))
+            })
           })
-        }).catch(({ response }) => {
-          this.setState({
-            errors: get(response, 'data.err', {}),
-            isSaving: false
+          .catch(({ response }) => {
+            this.setState({
+              errors: get(response, 'data.err', {}),
+              isSaving: false
+            })
           })
-        })
       })
     }
   }
 
-  render() {
-    const { csrf, user } = this.context
-    const { parent, parentType } = this.props
+  onContentChange = ({ currentTarget: input }) => {
+    const contentCharsLeft = 500 - size(input.value)
 
-    const {
-      errors,
-      isSaving,
+    this.setState({
+      content: input.value,
       contentCharsLeft,
-      hasContentCharsError
-    } = this.state
+      hasContentCharsError: contentCharsLeft < 0
+    })
+  }
 
-    const contentError = get(errors, 'content')
+  form = null;
+
+  render() {
+    const { props, state, context } = this
+
+    const contentError = get(state.errors, 'content')
     const hasContentError = !isEmpty(contentError)
 
     return (
       <form
-        ref={(form) => this.form = form}
+        ref={form => { this.form = form }}
         className="form comment-form"
-        onSubmit={::this.onSubmit}>
-        <input type="hidden" name="_csrf" value={csrf}/>
-        <input type="hidden" name="parent" value={parent}/>
-        <input type="hidden" name="createdBy" value={toStringId(user)}/>
-        <input type="hidden" name="parentType" value={parentType}/>
+        onSubmit={this.onSubmit}
+      >
+        <input type="hidden" name="_csrf" value={context.csrf} />
+        <input type="hidden" name="parent" value={props.parent} />
+        <input type="hidden" name="parentType" value={props.parentType} />
+
+        <input
+          type="hidden"
+          name="createdBy"
+          value={toStringId(context.user)}
+        />
 
         <div className="form-group form-group--small">
           <textarea
             name="content"
-            value={get(this.state, 'content', '')}
-            disabled={isSaving}
-            onChange={(event) => {
-              const { value } = event.target
-              const contentCharsLeft = 500 - size(value)
-
-              this.setState({
-                content: value,
-                contentCharsLeft,
-                hasContentCharsError: contentCharsLeft < 0
-              })
-            }}
+            value={state.content}
+            disabled={state.isSaving}
+            onChange={this.onContentChange}
             className={classNames({
-              'textfield': true,
+              textfield: true,
               'textfield--small': true,
               'textfield--error': hasContentError
             })}
-            placeholder={`Post a comment about this ${parentType}...`}/>
+            placeholder={`Post a comment about this ${props.parentType}...`}
+          />
 
           {hasContentError ? (
             <small className="form-error">{contentError}</small>
@@ -128,17 +124,21 @@ export default class CommentForm extends Component {
           <div className="form-group form-group--inline form-group--small">
             <button
               type="submit"
-              disabled={isSaving || hasContentCharsError}
+              disabled={state.isSaving || state.hasContentCharsError}
               className="button button--primary button--small"
-              data-action="post">
+              data-action="post"
+            >
               <span className="button-text">
-                {isSaving ? 'Posting...' : 'Post'}
+                {state.isSaving ? 'Posting...' : 'Post'}
               </span>
             </button>
             <small
-              style={{color: hasContentCharsError ? '#ED4542' : '#999999'}}
-              className="form-note">
-              {`${contentCharsLeft} characters left`}
+              style={{
+                color: state.hasContentCharsError ? '#ED4542' : '#999999'
+              }}
+              className="form-note"
+            >
+              {`${state.contentCharsLeft} characters left`}
             </small>
           </div>
         </div>

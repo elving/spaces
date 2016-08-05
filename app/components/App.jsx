@@ -10,12 +10,12 @@ export default class App extends Component {
   static propTypes = {
     csrf: PropTypes.string,
     user: PropTypes.object
-  };
+  }
 
   static defaultProps = {
     user: {},
     csrf: ''
-  };
+  }
 
   static childContextTypes = {
     csrf: PropTypes.string,
@@ -24,7 +24,7 @@ export default class App extends Component {
     currentUserIsOwner: PropTypes.func,
     currentUserIsAdmin: PropTypes.func,
     currentUserIsCurator: PropTypes.func
-  };
+  }
 
   getChildContext() {
     const { props } = this

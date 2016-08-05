@@ -14,11 +14,11 @@ import toStringId from '../../api/utils/toStringId'
 export default class ProfileLikes extends Component {
   static propTypes = {
     profile: PropTypes.object
-  };
+  }
 
   static defaultProps = {
     profile: {}
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -40,29 +40,27 @@ export default class ProfileLikes extends Component {
     }
   }
 
-  fetch() {
+  fetch = () => {
     const { props, state } = this
 
-    this.setState(() => {
-      axios
-        .get(`/ajax/likes/user/${toStringId(props.profile)}/`)
-        .then(({ data }) => {
-          const results = get(data, 'results', [])
+    axios
+      .get(`/ajax/likes/user/${toStringId(props.profile)}/`)
+      .then(({ data }) => {
+        const results = get(data, 'results', [])
 
-          this.setState({
-            offset: state.offset + size(results),
-            results: concat(state.results, results),
-            isFetching: false,
-            hasFetched: true,
-            lastResults: results
-          })
+        this.setState({
+          offset: state.offset + size(results),
+          results: concat(state.results, results),
+          isFetching: false,
+          hasFetched: true,
+          lastResults: results
         })
-        .catch(() => {
-          this.setState({
-            isFetching: false
-          })
+      })
+      .catch(() => {
+        this.setState({
+          isFetching: false
         })
-    })
+      })
   }
 
   renderPagination() {
@@ -71,7 +69,7 @@ export default class ProfileLikes extends Component {
     return size(state.results) < state.count ? (
       <div className="grid-pagination">
         <button
-          onClick={::this.fetch}
+          onClick={this.fetch}
           disabled={state.isFetching}
           className="button button--outline"
         >

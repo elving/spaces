@@ -15,7 +15,7 @@ export default class SpaceForm extends Component {
   static contextTypes = {
     user: PropTypes.object,
     csrf: PropTypes.string
-  };
+  }
 
   static propTypes = {
     space: PropTypes.object,
@@ -25,7 +25,7 @@ export default class SpaceForm extends Component {
     onSuccess: PropTypes.func,
     formMethod: PropTypes.string,
     spaceTypes: PropTypes.array
-  };
+  }
 
   static defaultProps = {
     space: {},
@@ -35,7 +35,7 @@ export default class SpaceForm extends Component {
     onSuccess: (() => {}),
     formMethod: 'POST',
     spaceTypes: []
-  };
+  }
 
   constructor(props, context) {
     super(props, context)
@@ -77,20 +77,35 @@ export default class SpaceForm extends Component {
             ...resetFetchingStatus
           })
         })
-        .catch(() => this.setState({ ...resetFetchingStatus }))
+        .catch(() => {
+          this.setState({
+            ...resetFetchingStatus
+          })
+        })
     }
   }
 
-  fetchSpaceTypes() {
-    return new Promise(async (resolve, reject) => {
-      axios
-        .get('/ajax/space-types/')
-        .then(({ data }) => resolve(get(data, 'spaceTypes', [])))
-        .catch(reject)
+  onSpaceTypeChange = (spaceType) => {
+    this.setState({
+      spaceType
     })
   }
 
-  createSpace() {
+  onNameChange = ({ currentTarget }) => {
+    this.setState({
+      name: currentTarget.value
+    })
+  }
+
+  onDescriptionChange = ({ currentTarget }) => {
+    this.setState({
+      description: currentTarget.value
+    })
+  }
+
+  onSubmit = (event) => {
+    event.preventDefault()
+
     const { props } = this
 
     const isPOST = props.formMethod === 'POST'
@@ -104,7 +119,10 @@ export default class SpaceForm extends Component {
       ? '/ajax/spaces/'
       : `/ajax/spaces/${toStringId(props.space)}/`
 
-    this.setState({ errors: {}, isWaiting: true }, () => {
+    this.setState({
+      errors: {},
+      isWaiting: true
+    }, () => {
       axios({
         url: endpoint,
         data: formData,
@@ -131,6 +149,17 @@ export default class SpaceForm extends Component {
           isWaiting: false
         }, () => props.onError(errors))
       })
+    })
+  }
+
+  fetchSpaceTypes() {
+    return new Promise(async (resolve, reject) => {
+      axios
+        .get('/ajax/space-types/')
+        .then(({ data }) => {
+          resolve(get(data, 'spaceTypes', []))
+        })
+        .catch(reject)
     })
   }
 
@@ -166,10 +195,7 @@ export default class SpaceForm extends Component {
         <form
           ref={form => { this.form = form }}
           method={props.formMethod}
-          onSubmit={(event) => {
-            event.preventDefault()
-            this.createSpace()
-          }}
+          onSubmit={this.onSubmit}
           className="form space-form"
         >
           <input type="hidden" name="_csrf" value={context.csrf} />
@@ -177,11 +203,12 @@ export default class SpaceForm extends Component {
 
           {isPOST ? (
             <div className="form-group">
-              <label className="form-label">
+              <label htmlFor="type" className="form-label">
                 Type <small>required</small>
               </label>
 
               <Select
+                id="type"
                 name="spaceType"
                 value={state.spaceType}
                 options={map(withoutAnyType(state.spaceTypes), type => ({
@@ -189,7 +216,7 @@ export default class SpaceForm extends Component {
                   label: get(type, 'name')
                 }))}
                 required
-                onChange={spaceType => this.setState({ spaceType })}
+                onChange={this.onSpaceTypeChange}
                 disabled={disabled}
                 className={classNames({
                   select: true,
@@ -205,18 +232,17 @@ export default class SpaceForm extends Component {
           ) : null}
 
           <div className="form-group">
-            <label className="form-label">
+            <label htmlFor="name" className="form-label">
               Name <small>required</small>
             </label>
 
             <input
+              id="name"
               type="text"
               name="name"
               required
               disabled={disabled}
-              onChange={({ currentTarget }) => {
-                this.setState({ name: currentTarget.value })
-              }}
+              onChange={this.onNameChange}
               className={classNames({
                 textfield: true,
                 'textfield--error': hasNameError
@@ -231,16 +257,15 @@ export default class SpaceForm extends Component {
           </div>
 
           <div className="form-group">
-            <label className="form-label">
+            <label htmlFor="description" className="form-label">
               Description <small>optional</small>
             </label>
 
             <textarea
+              id="description"
               name="description"
               disabled={disabled}
-              onChange={({ currentTarget }) => {
-                this.setState({ description: currentTarget.value })
-              }}
+              onChange={this.onDescriptionChange}
               className={classNames({
                 textfield: true,
                 'textfield--error': hasDescriptionError

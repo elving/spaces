@@ -11,7 +11,7 @@ export default class Avatar extends Component {
     imageUrl: PropTypes.string,
     initials: PropTypes.string,
     className: PropTypes.string
-  };
+  }
 
   static defaultProps = {
     user: {},
@@ -21,7 +21,7 @@ export default class Avatar extends Component {
     imageUrl: '',
     initials: '?',
     className: ''
-  };
+  }
 
   render() {
     const { props } = this

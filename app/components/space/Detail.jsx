@@ -28,13 +28,12 @@ import addProductModalContainer from '../container/AddProductModal'
 import inflect from '../../utils/inflect'
 import canModify from '../../utils/user/canModify'
 import toStringId from '../../api/utils/toStringId'
-import { default as $ } from '../../utils/dom/selector'
 
 class SpaceDetail extends Component {
   static contextTypes = {
     user: PropTypes.object,
     csrf: PropTypes.string
-  };
+  }
 
   static propTypes = {
     space: PropTypes.object,
@@ -42,7 +41,7 @@ class SpaceDetail extends Component {
     closeAddProductModal: PropTypes.func,
     addProductModalIsOpen: PropTypes.bool,
     createaddProductModal: PropTypes.bool
-  };
+  }
 
   static defaultProps = {
     space: {},
@@ -50,7 +49,7 @@ class SpaceDetail extends Component {
     closeAddProductModal: (() => {}),
     addProductModalIsOpen: false,
     createaddProductModal: false
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -73,7 +72,60 @@ class SpaceDetail extends Component {
     }
   }
 
-  delete() {
+  onLikesCounterClick = (event) => {
+    event.preventDefault()
+    this.openLikesModal()
+  }
+
+  onLike = () => {
+    const { state } = this
+
+    this.setState({
+      likesCount: state.likesCount + 1
+    })
+  }
+
+  onUnlike = () => {
+    const { state } = this
+
+    this.setState({
+      likesCount: state.likesCount - 1
+    })
+  }
+
+  onCommentAdded = () => {
+    const { state } = this
+
+    this.setState({
+      commentsCount: state.commentsCount + 1
+    })
+  }
+
+  onCommentRemoved = () => {
+    const { state } = this
+
+    this.setState({
+      commentsCount: state.commentsCount - 1
+    })
+  }
+
+  onCloseNotification = () => {
+    this.setState({
+      editSuccessful: false
+    })
+  }
+
+  getShortUrl = () => {
+    const { props } = this
+    return `${window.location.origin}/${props.shortUrl}/`
+  }
+
+  getDetailUrl = () => {
+    const { props } = this
+    return `${window.location.origin}/${props.detailUrl}/`
+  }
+
+  delete = () => {
     const { props, context } = this
 
     const deleteMessage = (
@@ -83,7 +135,9 @@ class SpaceDetail extends Component {
     )
 
     if (window.prompt(deleteMessage) === 'DELETE') {
-      this.setState({ isDeleting: true }, () => {
+      this.setState({
+        isDeleting: true
+      }, () => {
         axios
           .post(`/ajax/spaces/${toStringId(props.space)}/`, {
             _csrf: context.csrf,
@@ -102,52 +156,52 @@ class SpaceDetail extends Component {
     }
   }
 
-  openRedesignPopup() {
+  openRedesignPopup = () => {
     this.setState({
       redesignPopupIsOpen: true
     })
   }
 
-  closeRedesignPopup() {
+  closeRedesignPopup = () => {
     this.setState({
       redesignPopupIsOpen: false
     })
   }
 
-  openSharePopup() {
+  openSharePopup = () => {
     this.setState({
       sharePopupIsOpen: true,
       sharePopupIsCreated: true
     })
   }
 
-  closeSharePopup() {
+  closeSharePopup = () => {
     this.setState({
       sharePopupIsOpen: false
     })
   }
 
-  openLikesModal() {
+  openLikesModal = () => {
     this.setState({
       likesModalIsOpen: true,
       createLikesModal: true
     })
   }
 
-  closeLikesModal() {
+  closeLikesModal = () => {
     this.setState({
       likesModalIsOpen: false
     })
   }
 
-  openEditFormModal() {
+  openEditFormModal = () => {
     this.setState({
       editModalIsOpen: true,
       createEditModal: true
     })
   }
 
-  closeEditFormModal() {
+  closeEditFormModal = () => {
     this.setState({
       editModalIsOpen: false
     })
@@ -200,12 +254,9 @@ class SpaceDetail extends Component {
           </div>
         ) : null}
         {state.likesCount ? (
-          <a
-            href="#"
-            onClick={(event) => {
-              event.preventDefault()
-              this.openLikesModal()
-            }}
+          <button
+            type="button"
+            onClick={this.onLikesCounterClick}
             className="space-detail-counter"
             data-action="likes"
           >
@@ -215,7 +266,7 @@ class SpaceDetail extends Component {
             <div className="space-detail-counter-text">
               {inflect(state.likesCount, 'Like')}
             </div>
-          </a>
+          </button>
         ) : null}
         {state.commentsCount ? (
           <a
@@ -259,14 +310,10 @@ class SpaceDetail extends Component {
 
     return state.sharePopupIsCreated ? (
       <SharePopup
-        url={() => (
-          `${window.location.origin}/${get(props.space, 'shortUrl')}/`
-        )}
+        url={this.getShortUrl}
         title="Share this space"
         isOpen={state.sharePopupIsOpen}
-        shareUrl={() => (
-          `${window.location.origin}/${get(props.space, 'detailUrl')}/`
-        )}
+        shareUrl={this.getDetailUrl}
         className="share-popup"
         shareText={(
           `${get(props.space, 'name')} — Designed by ` +
@@ -274,7 +321,7 @@ class SpaceDetail extends Component {
           `featuring ${size(get(props.space, 'products', []))} products.`
         )}
         shareImage={get(props.space, 'image')}
-        onClickClose={::this.closeSharePopup}
+        onClickClose={this.closeSharePopup}
       />
     ) : null
   }
@@ -288,7 +335,7 @@ class SpaceDetail extends Component {
         spaceId={toStringId(props.space)}
         spaceType={toStringId(get(props.space, 'spaceType'))}
         className="redesign-popup"
-        onClickClose={::this.closeRedesignPopup}
+        onClickClose={this.closeRedesignPopup}
       />
     )
   }
@@ -301,7 +348,7 @@ class SpaceDetail extends Component {
         <div className="space-detail-action">
           <button
             type="button"
-            onClick={::this.openRedesignPopup}
+            onClick={this.openRedesignPopup}
             className="button button--primary button--small"
           >
             <MaterialDesignIcon name="redesign" />
@@ -311,15 +358,15 @@ class SpaceDetail extends Component {
         </div>
         <LikeButton
           parent={toStringId(props.space)}
-          onLike={() => this.setState({ likesCount: state.likesCount + 1 })}
-          onUnlike={() => this.setState({ likesCount: state.likesCount - 1 })}
+          onLike={this.onLike}
+          onUnlike={this.onUnlike}
           className="space-detail-action"
           parentType="space"
         />
         <div className="space-detail-action">
           <button
             type="button"
-            onClick={::this.openSharePopup}
+            onClick={this.openSharePopup}
             className="button button--icon button--small"
           >
             <MaterialDesignIcon name="send" />
@@ -328,10 +375,6 @@ class SpaceDetail extends Component {
         </div>
         <a
           href="#comments"
-          onClick={(event) => {
-            event.preventDefault()
-            $('#comments textarea[name="content"]').focus()
-          }}
           className={(
             "space-detail-action button button--icon button--small"
           )}
@@ -353,7 +396,7 @@ class SpaceDetail extends Component {
             <DropdownContent className="dropdown-content">
               <button
                 type="button"
-                onClick={::this.openEditFormModal}
+                onClick={this.openEditFormModal}
                 disabled={state.isDeleting}
                 className="dropdown-link"
               >
@@ -361,7 +404,7 @@ class SpaceDetail extends Component {
               </button>
               <button
                 type="button"
-                onClick={::this.delete}
+                onClick={this.delete}
                 disabled={state.isDeleting}
                 className="dropdown-link"
               >
@@ -411,7 +454,7 @@ class SpaceDetail extends Component {
     return state.createLikesModal ? (
       <LikesModal
         parent={toStringId(props.space)}
-        onClose={::this.closeLikesModal}
+        onClose={this.closeLikesModal}
         isVisible={state.likesModalIsOpen}
         parentType="space"
       />
@@ -419,19 +462,15 @@ class SpaceDetail extends Component {
   }
 
   renderComments() {
-    const { props, state } = this
+    const { props } = this
 
     return (
       <div id="comments">
         <CommentsWidget
           parent={toStringId(props.space)}
           parentType="space"
-          onCommentAdded={() => {
-            this.setState({ commentsCount: state.commentsCount + 1 })
-          }}
-          onCommentRemoved={() => {
-            this.setState({ commentsCount: state.commentsCount - 1 })
-          }}
+          onCommentAdded={this.onCommentAdded}
+          onCommentRemoved={this.onCommentRemoved}
         />
       </div>
     )
@@ -445,7 +484,7 @@ class SpaceDetail extends Component {
         <Notification
           type="success"
           timeout={3500}
-          onClose={() => this.setState({ editSuccessful: false })}
+          onClose={this.onCloseNotification}
           isVisible={state.editSuccessful}
         >
           Space updated successfully
@@ -459,7 +498,7 @@ class SpaceDetail extends Component {
 
         <SpaceFormModal
           space={props.space}
-          onClose={::this.closeEditFormModal}
+          onClose={this.closeEditFormModal}
           onSuccess={space => {
             this.setState({
               name: get(space, 'name'),

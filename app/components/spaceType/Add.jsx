@@ -7,7 +7,7 @@ export default class AddSpaceType extends Component {
   render() {
     return (
       <Layout>
-        <SpaceTypeForm/>
+        <SpaceTypeForm />
       </Layout>
     )
   }

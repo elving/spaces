@@ -1,32 +1,23 @@
 import isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import hasParent from '../../utils/dom/hasParent'
 import { default as $ } from '../../utils/dom/selector'
 
 export default class Popup extends Component {
-  constructor(props) {
-    super(props)
-
-    this.onBodyClick = (event) => {
-      if (!hasParent(event, 'popup')) {
-        props.onClickClose()
-      }
-    }
-  }
-
   static propTypes = {
-    isOpen: Type.bool,
-    className: Type.string,
-    onClickClose: Type.func
-  };
+    isOpen: PropTypes.bool,
+    children: PropTypes.node,
+    className: PropTypes.string,
+    onClickClose: PropTypes.func
+  }
 
   static defaultProps = {
     isOpen: false,
     className: '',
     onClickClose: (() => {})
-  };
+  }
 
   componentDidMount() {
     const $body = $('body')
@@ -48,17 +39,26 @@ export default class Popup extends Component {
     }
   }
 
+  onBodyClick = (event) => {
+    const { props } = this
+
+    if (!hasParent(event, 'popup')) {
+      props.onClickClose()
+    }
+  }
+
   render() {
-    const { isOpen, className } = this.props
+    const { props } = this
 
     return (
       <div
         className={classNames({
-          'popup': true,
-          'popup--is-open': isOpen,
-          [className]: !isEmpty(className)
-        })}>
-        {this.props.children}
+          popup: true,
+          'popup--is-open': props.isOpen,
+          [props.className]: !isEmpty(props.className)
+        })}
+      >
+        {props.children}
       </div>
     )
   }

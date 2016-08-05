@@ -18,7 +18,7 @@ export default class CategoryCard extends Component {
     onUnfollow: PropTypes.func,
     productsCount: PropTypes.number,
     followersCount: PropTypes.number
-  };
+  }
 
   static defaultProps = {
     name: '',
@@ -28,7 +28,7 @@ export default class CategoryCard extends Component {
     onUnfollow: (() => {}),
     productsCount: 0,
     followersCount: 0
-  };
+  }
 
   renderProducts() {
     const { props } = this

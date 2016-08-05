@@ -22,52 +22,39 @@ export default class Search extends Component {
   static propTypes = {
     onSearch: PropTypes.func,
     redirectOnSearch: PropTypes.bool
-  };
+  }
 
   static defaultProps = {
     onSearch: (() => {}),
     redirectOnSearch: true
-  };
+  }
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isSearching: false,
-      searchType: 'spaces',
-      searchTypesAreOpen: false,
-      showColors: false,
-      showCategories: false,
-      showSpaceTypes: false,
-      filtersAreOpen: false,
-      colors: '',
-      spaceTypes: '',
-      categories: '',
-      allColors: [],
-      allSpaceTypes: [],
-      allCategories: []
-    }
-
-    this.form = null
-    this.searchInput = null
-    this.onBodyClick = event => {
-      if (!hasParent(event, 'search')) {
-        this.setState({
-          filtersAreOpen: false,
-          searchTypesAreOpen: false
-        })
-      }
-    }
+  state = {
+    isSearching: false,
+    searchType: 'spaces',
+    searchTypesAreOpen: false,
+    showColors: false,
+    showCategories: false,
+    showSpaceTypes: false,
+    filtersAreOpen: false,
+    colors: '',
+    spaceTypes: '',
+    categories: '',
+    allColors: [],
+    allSpaceTypes: [],
+    allCategories: []
   }
 
   componentDidMount() {
-    axios.get('/ajax/filters/').then(({ data }) => {
-      this.setState({
-        allColors: get(data, 'colors', []),
-        allCategories: get(data, 'categories', []),
-        allSpaceTypes: get(data, 'spaceTypes', [])
+    axios
+      .get('/ajax/filters/')
+      .then(({ data }) => {
+        this.setState({
+          allColors: get(data, 'colors', []),
+          allCategories: get(data, 'categories', []),
+          allSpaceTypes: get(data, 'spaceTypes', [])
+        })
       })
-    })
   }
 
   componentDidUpdate() {
@@ -81,7 +68,67 @@ export default class Search extends Component {
     }
   }
 
-  getFiltersCount() {
+  onBodyClick = (event) => {
+    if (!hasParent(event, 'search')) {
+      this.setState({
+        filtersAreOpen: false,
+        searchTypesAreOpen: false
+      })
+    }
+  }
+
+  onTypeToggleClick = () => {
+    const { state } = this
+
+    this.searchInput.focus()
+
+    this.setState({
+      filtersAreOpen: false,
+      searchTypesAreOpen: !state.searchTypesAreOpen
+    })
+  }
+
+  onFiltersToggleClick = () => {
+    const { state } = this
+
+    this.searchInput.focus()
+
+    this.setState({
+      filtersAreOpen: !state.filtersAreOpen,
+      searchTypesAreOpen: false
+    })
+  }
+
+  onSpaceTypeChange = (spaceTypes) => {
+    this.setState({
+      spaceTypes
+    })
+  }
+
+  onCategoriesChange = (categories) => {
+    this.setState({
+      categories
+    })
+  }
+
+  onColorsChange = (colors) => {
+    this.setState({
+      colors
+    })
+  }
+
+  onCloseFiltersClick = () => {
+    this.setState({
+      filtersAreOpen: false
+    })
+  }
+
+  onSubmit = (event) => {
+    event.preventDefault()
+    this.search()
+  }
+
+  getFiltersCount = () => {
     const { state } = this
 
     return (
@@ -91,6 +138,21 @@ export default class Search extends Component {
     )
   }
 
+  updateSearchType = (searchType) => {
+    this.searchInput.focus()
+
+    this.setState({
+      colors: '',
+      searchType,
+      spaceTypes: '',
+      categories: '',
+      searchTypesAreOpen: false
+    })
+  }
+
+  form = null;
+  searchInput = null;
+
   search() {
     const params = serialize(this.form)
     const { props, state } = this
@@ -98,14 +160,22 @@ export default class Search extends Component {
     if (props.redirectOnSearch) {
       window.location.href = `/search/?${params}`
     } else {
-      this.setState({ isSearhing: true }, () => {
+      this.setState({
+        isSearhing: true
+      }, () => {
         axios
           .get(`/ajax/${state.searchType}/search/?${params}`)
           .then(({ data }) => {
-            this.setState({ isSearhing: false }, () => props.onSearch(data))
+            this.setState({
+              isSearhing: false
+            }, () => {
+              props.onSearch(data)
+            })
           })
           .catch(() => {
-            this.setState({ isSearhing: false })
+            this.setState({
+              isSearhing: false
+            })
           })
       })
     }
@@ -149,13 +219,7 @@ export default class Search extends Component {
     return (
       <button
         type="button"
-        onClick={() => {
-          this.searchInput.focus()
-          this.setState({
-            filtersAreOpen: false,
-            searchTypesAreOpen: !state.searchTypesAreOpen
-          })
-        }}
+        onClick={this.onTypeToggleClick}
         className={classNames({
           'button-unstyled': true,
           'search-type-current': true,
@@ -168,26 +232,15 @@ export default class Search extends Component {
   }
 
   renderSearchTypes() {
-    const types = ['spaces', 'products', 'designers']
     const { state } = this
-    const updateSearchType = searchType => {
-      this.searchInput.focus()
-      this.setState({
-        colors: '',
-        searchType,
-        spaceTypes: '',
-        categories: '',
-        searchTypesAreOpen: false
-      })
-    }
 
     return state.searchTypesAreOpen ? (
       <div className="search-type-list">
-        {map(types, type =>
+        {map(['spaces', 'products', 'designers'], type =>
           <button
             key={type}
             type="button"
-            onClick={() => updateSearchType(type)}
+            onClick={() => this.updateSearchType(type)}
             className={classNames({
               'button-unstyled': true,
               'search-type-item': true,
@@ -223,13 +276,7 @@ export default class Search extends Component {
     return (
       <button
         type="button"
-        onClick={() => {
-          this.searchInput.focus()
-          this.setState({
-            filtersAreOpen: !state.filtersAreOpen,
-            searchTypesAreOpen: false
-          })
-        }}
+        onClick={this.onFiltersToggleClick}
         disabled={state.searchType === 'designers' || state.isSearhing}
         className={classNames({
           'button-unstyled': true,
@@ -260,7 +307,7 @@ export default class Search extends Component {
               value: toStringId(type),
               label: get(type, 'name')
             }))}
-            onChange={spaceTypes => this.setState({ spaceTypes })}
+            onChange={this.onSpaceTypeChange}
             disabled={state.isSearhing}
             className="search-filter-input select select--small"
             placeholder="Filter by room"
@@ -276,7 +323,7 @@ export default class Search extends Component {
               value: toStringId(category),
               label: get(category, 'name')
             }))}
-            onChange={categories => this.setState({ categories })}
+            onChange={this.onCategoriesChange}
             disabled={state.isSearhing}
             className="search-filter-input select select--small"
             placeholder="Filter by category"
@@ -292,7 +339,7 @@ export default class Search extends Component {
               value: toStringId(color),
               label: get(color, 'name')
             }))}
-            onChange={colors => this.setState({ colors })}
+            onChange={this.onColorsChange}
             disabled={state.isSearhing}
             className="search-filter-input select select--small"
             placeholder="Filter by color"
@@ -310,7 +357,7 @@ export default class Search extends Component {
           </button>
           <button
             type="submit"
-            onClick={() => this.setState({ filtersAreOpen: false })}
+            onClick={this.onCloseFiltersClick}
             className="search-filters-button button button--small"
           >
             Close
@@ -323,15 +370,10 @@ export default class Search extends Component {
   render() {
     const { state } = this
 
-    const onSubmit = event => {
-      event.preventDefault()
-      this.search()
-    }
-
     return (
       <form
         ref={form => { this.form = form }}
-        onSubmit={onSubmit}
+        onSubmit={this.onSubmit}
         className={classNames({
           search: true,
           'search--has-filters': this.getFiltersCount()

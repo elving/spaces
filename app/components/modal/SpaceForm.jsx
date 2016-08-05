@@ -27,7 +27,7 @@ export default class SpaceFormModal extends Component {
     onSuccess: PropTypes.func,
     isVisible: PropTypes.bool,
     formMethod: PropTypes.string
-  };
+  }
 
   static defaultProps = {
     space: {},
@@ -35,7 +35,7 @@ export default class SpaceFormModal extends Component {
     onSuccess: (() => {}),
     isVisible: false,
     formMethod: 'POST'
-  };
+  }
 
   render() {
     const { props } = this
@@ -49,7 +49,7 @@ export default class SpaceFormModal extends Component {
       >
         <button
           type="button"
-          onClick={::props.onClose}
+          onClick={props.onClose}
           className={classNames({
             button: true,
             'button--icon': true,
@@ -62,8 +62,8 @@ export default class SpaceFormModal extends Component {
 
         <SpaceForm
           space={props.space}
-          onCancel={::props.onClose}
-          onSuccess={::props.onSuccess}
+          onCancel={props.onClose}
+          onSuccess={props.onSuccess}
           formMethod={props.formMethod}
         />
       </Modal>

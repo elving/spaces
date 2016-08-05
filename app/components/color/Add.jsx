@@ -7,7 +7,7 @@ export default class AddColor extends Component {
   render() {
     return (
       <Layout>
-        <ColorForm/>
+        <ColorForm />
       </Layout>
     )
   }

@@ -13,17 +13,17 @@ import toStringId from '../../api/utils/toStringId'
 export default class BrandForm extends Component {
   static contextTypes = {
     csrf: PropTypes.string
-  };
+  }
 
   static propTypes = {
     brand: PropTypes.object,
     formMethod: PropTypes.string.isRequired
-  };
+  }
 
   static defaultProps = {
     brand: {},
     formMethod: 'POST'
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -41,8 +41,6 @@ export default class BrandForm extends Component {
       savingSuccessful: false,
       deletingSuccessful: false
     }
-
-    this.form = null
   }
 
   componentDidMount() {
@@ -63,7 +61,7 @@ export default class BrandForm extends Component {
     }
   }
 
-  onSubmit(event) {
+  onSubmit = (event) => {
     const { props } = this
 
     const form = this.form
@@ -75,7 +73,10 @@ export default class BrandForm extends Component {
 
     event.preventDefault()
 
-    this.setState({ errors: {}, isSaving: true }, () => {
+    this.setState({
+      errors: {},
+      isSaving: true
+    }, () => {
       axios({
         url: endpoint,
         data: formData,
@@ -110,7 +111,7 @@ export default class BrandForm extends Component {
     })
   }
 
-  onClickDelete() {
+  onClickDelete = () => {
     const { props, context } = this
 
     const deleteMessage = (
@@ -120,7 +121,10 @@ export default class BrandForm extends Component {
     )
 
     if (window.prompt(deleteMessage) === 'DELETE') {
-      this.setState({ errors: {}, isDeleting: true }, () => {
+      this.setState({
+        errors: {},
+        isDeleting: true
+      }, () => {
         axios
           .post(`/ajax/brands/${toStringId(props.brand)}/`, {
             _csrf: context.csrf,
@@ -144,6 +148,26 @@ export default class BrandForm extends Component {
       })
     }
   }
+
+  onNameChange = ({ currentTarget: input }) => {
+    this.setState({
+      name: input.value
+    })
+  }
+
+  onUrlChange = ({ currentTarget: input }) => {
+    this.setState({
+      url: input.value
+    })
+  }
+
+  onDescriptionChange = ({ currentTarget: input }) => {
+    this.setState({
+      description: input.value
+    })
+  }
+
+  form = null;
 
   renderForm() {
     const { props, state, context } = this
@@ -174,9 +198,9 @@ export default class BrandForm extends Component {
 
     return (
       <form
-        ref={(form) => { this.form = form }}
+        ref={form => { this.form = form }}
         method="POST"
-        onSubmit={::this.onSubmit}
+        onSubmit={this.onSubmit}
         className="form brand-form"
       >
         <input type="hidden" name="_csrf" value={context.csrf} />
@@ -191,19 +215,18 @@ export default class BrandForm extends Component {
         </h1>
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="name" className="form-label">
             Name <small>required</small>
           </label>
 
           <input
+            id="name"
             type="text"
             name="name"
             required
             value={state.name}
             disabled={shouldDisable}
-            onChange={({ currentTarget: input }) => {
-              this.setState({ name: input.value })
-            }}
+            onChange={this.onNameChange}
             autoFocus
             className={classNames({
               textfield: true,
@@ -218,18 +241,17 @@ export default class BrandForm extends Component {
         </div>
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="url" className="form-label">
             Url <small>optional</small>
           </label>
 
           <input
+            id="url"
             type="url"
             name="url"
             value={state.url}
             disabled={shouldDisable}
-            onChange={({ currentTarget: input }) => {
-              this.setState({ url: input.value })
-            }}
+            onChange={this.onUrlChange}
             autoFocus
             className={classNames({
               textfield: true,
@@ -244,17 +266,16 @@ export default class BrandForm extends Component {
         </div>
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="description" className="form-label">
             Description <small>optional</small>
           </label>
 
           <textarea
+            id="description"
             name="description"
             value={state.description}
             disabled={shouldDisable}
-            onChange={({ currentTarget: input }) => {
-              this.setState({ description: input.value })
-            }}
+            onChange={this.onDescriptionChange}
             className={classNames({
               textfield: true,
               'textfield--error': hasDescriptionError
@@ -286,7 +307,7 @@ export default class BrandForm extends Component {
             ) : (
               <button
                 type="button"
-                onClick={::this.onClickDelete}
+                onClick={this.onClickDelete}
                 disabled={shouldDisable}
                 className="button button--danger"
               >

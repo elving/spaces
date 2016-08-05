@@ -1,17 +1,23 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Header from './Header'
 import Footer from './Footer'
 
 export default class Layout extends Component {
+  static propTypes = {
+    children: PropTypes.node
+  }
+
   render() {
+    const { props } = this
+
     return (
       <div id="app-container">
-        <Header/>
+        <Header />
         <div className="page-content">
-          {this.props.children}
+          {props.children}
         </div>
-        <Footer/>
+        <Footer />
       </div>
     )
   }

@@ -1,16 +1,16 @@
 import isNumber from 'lodash/isNumber'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { PropTypes, Component } from 'react'
 
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 export default class CardTags extends Component {
   static propTypes = {
-    users: Type.array,
-    likes: Type.number,
-    added: Type.number,
-    comments: Type.number,
-    redesigns: Type.number
-  };
+    users: PropTypes.array,
+    likes: PropTypes.number,
+    added: PropTypes.number,
+    comments: PropTypes.number,
+    redesigns: PropTypes.number
+  }
 
   static defaultProps = {
     users: [],
@@ -18,43 +18,49 @@ export default class CardTags extends Component {
     added: 0,
     comments: 0,
     redesigns: 0
-  };
+  }
 
-  hasActivity() {
-    const { likes, added, comments, redesigns } = this.props
+  hasActivity = () => {
+    const { props } = this
 
     return (
-      (isNumber(likes) && likes > 0) ||
-      (isNumber(added) && added > 0) ||
-      (isNumber(comments) && comments > 0) ||
-      (isNumber(redesigns) && redesigns > 0)
+      (isNumber(props.likes) && props.likes > 0) ||
+      (isNumber(props.added) && props.added > 0) ||
+      (isNumber(props.comments) && props.comments > 0) ||
+      (isNumber(props.redesigns) && props.redesigns > 0)
     )
   }
 
   renderLikes() {
-    const { likes } = this.props
+    const { props } = this
 
-    return isNumber(likes) && likes > 0 ? (
+    return isNumber(props.likes) && props.likes > 0 ? (
       <div data-activity="likes" className="card-activity-count">
         <MaterialDesignIcon
           name="like"
           size={14}
-          className="card-activity-count-icon"/>
-        <span className="card-activity-count-number">{likes}</span>
+          className="card-activity-count-icon"
+        />
+        <span className="card-activity-count-number">
+          {props.likes}
+        </span>
       </div>
     ) : null
   }
 
   renderComments() {
-    const { comments } = this.props
+    const { props } = this
 
-    return isNumber(comments) && comments > 0 ? (
+    return isNumber(props.comments) && props.comments > 0 ? (
       <div data-activity="comments" className="card-activity-count">
         <MaterialDesignIcon
           name="comment"
           size={14}
-          className="card-activity-count-icon"/>
-        <span className="card-activity-count-number">{comments}</span>
+          className="card-activity-count-icon"
+        />
+        <span className="card-activity-count-number">
+          {props.comments}
+        </span>
       </div>
     ) : null
   }

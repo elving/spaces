@@ -19,12 +19,12 @@ export default class Comments extends Component {
     parentType: PropTypes.string.isRequired,
     newComments: PropTypes.array,
     onCommentRemoved: PropTypes.func
-  };
+  }
 
   static defaultProps = {
     newComments: [],
     onCommentRemoved: (() => {})
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -36,13 +36,25 @@ export default class Comments extends Component {
   }
 
   componentDidMount() {
-    this.fetchComments()
+    this.fetch()
   }
 
-  fetchComments() {
+  removeComment = (id) => {
+    const { props, state } = this
+
+    this.setState({
+      comments: reject(state.comments, comment => toStringId(comment) === id)
+    }, () => {
+      props.onCommentRemoved(id)
+    })
+  }
+
+  fetch() {
     const { props } = this
 
-    this.setState({ isFetching: true }, () => {
+    this.setState({
+      isFetching: true
+    }, () => {
       axios
         .get(`/ajax/comments/${props.parentType}/${props.parent}/`)
         .then(({ data }) => {
@@ -57,14 +69,6 @@ export default class Comments extends Component {
           })
         })
     })
-  }
-
-  removeComment(id) {
-    const { props, state } = this
-
-    this.setState({
-      comments: reject(state.comments, comment => toStringId(comment) === id)
-    }, () => props.onCommentRemoved(id))
   }
 
   render() {
@@ -90,7 +94,7 @@ export default class Comments extends Component {
             <Comment
               {...comment}
               key={`comment-${toStringId(comment)}`}
-              onDelete={::this.removeComment}
+              onDelete={this.removeComment}
             />
           ))}
         </div>

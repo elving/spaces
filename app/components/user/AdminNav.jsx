@@ -1,4 +1,4 @@
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Dropdown, {
   DropdownTrigger, DropdownContent
@@ -8,13 +8,13 @@ import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 export default class CurrentUserNav extends Component {
   static contextTypes = {
-    currentUserIsAdmin: Type.func
-  };
+    currentUserIsAdmin: PropTypes.func
+  }
 
   render() {
-    const { currentUserIsAdmin } = this.context
+    const { context } = this
 
-    return currentUserIsAdmin() ? (
+    return context.currentUserIsAdmin() ? (
       <div className="admin-nav">
         <Dropdown className="dropdown">
           <DropdownTrigger

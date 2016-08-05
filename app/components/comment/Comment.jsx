@@ -1,44 +1,41 @@
 import get from 'lodash/get'
 import axios from 'axios'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import MiniProfile from '../user/MiniProfile'
 
 import canModify from '../../utils/user/canModify'
 import formatDate from '../../utils/formatDate'
+import toStringId from '../../api/utils/toStringId'
 
 export default class Comment extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      errors: {},
-      isDeleting: false
-    }
+  static contextTypes = {
+    csrf: PropTypes.string,
+    user: PropTypes.object
   }
 
-  static contextTypes = {
-    csrf: Type.string,
-    user: Type.object
-  };
-
   static propTypes = {
-    id: Type.string,
-    content: Type.string,
-    onDelete: Type.func,
-    createdBy: Type.object,
-    createdAt: Type.string
-  };
+    id: PropTypes.string,
+    content: PropTypes.string,
+    onDelete: PropTypes.func,
+    createdBy: PropTypes.object,
+    createdAt: PropTypes.string
+  }
 
   static defaultProps = {
     content: '',
     onDelete: (() => {}),
     createdBy: {}
-  };
+  }
 
-  onClickDelete() {
-    const { csrf } = this.context
-    const { id, onDelete } = this.props
+  state = {
+    errors: {},
+    isDeleting: false
+  }
+
+  onClickDelete = () => {
+    const { props, context } = this
+    const id = toStringId(props)
 
     const deleteMessage = (
       'Are you sure you want to delete this comment? \n' +
@@ -46,38 +43,44 @@ export default class Comment extends Component {
     )
 
     if (window.confirm(deleteMessage)) {
-      this.setState({ errors: {}, isDeleting: true }, () => {
-        axios({
-          url: `/ajax/comments/${id}/`,
-          data: { _csrf: csrf },
-          method: 'DELETE'
-        }).then(() => {
-          onDelete(id)
-        }).catch(({ response }) => {
-          this.setState({
-            errors: get(response, 'data.err', {}),
-            isDeleting: false
+      this.setState({
+        errors: {},
+        isDeleting: true
+      }, () => {
+        axios
+          .delete(`/ajax/comments/${id}/`, {
+            _csrf: context.csrf
           })
-        })
+          .then(() => {
+            props.onDelete(id)
+          })
+          .catch(({ response }) => {
+            this.setState({
+              errors: get(response, 'data.err', {}),
+              isDeleting: false
+            })
+          })
       })
     }
   }
 
   render() {
-    const { user } = this.context
-    const { content, createdBy, createdAt } = this.props
+    const { props, context } = this
 
     return (
       <div className="comment">
-        <MiniProfile user={createdBy}/>
-        <p className="comment-content">{content}</p>
+        <MiniProfile user={props.createdBy} />
+        <p className="comment-content">{props.content}</p>
         <div className="comment-actions">
-          <small className="comment-date">{formatDate(createdAt)}</small>
-          {canModify(user, createdBy) ? (
+          <small className="comment-date">
+            {formatDate(props.createdAt)}
+          </small>
+          {canModify(context.user, props.createdBy) ? (
             <button
-              onClick={::this.onClickDelete}
+              onClick={this.onClickDelete}
               className="button button--danger button--mini"
-              data-action="deleteComment">
+              data-action="deleteComment"
+            >
               <span className="button-text">Delete</span>
             </button>
           ) : null}

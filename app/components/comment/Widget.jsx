@@ -13,22 +13,18 @@ export default class CommentsWidget extends Component {
     parentType: PropTypes.string,
     onCommentAdded: PropTypes.func,
     onCommentRemoved: PropTypes.func
-  };
+  }
 
   static defaultProps = {
     onCommentAdded: (() => {}),
     onCommentRemoved: (() => {})
-  };
-
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      newComments: []
-    }
   }
 
-  addNewComment(comment) {
+  state = {
+    newComments: []
+  }
+
+  addNewComment = (comment) => {
     const { props, state } = this
 
     this.setState({
@@ -36,7 +32,7 @@ export default class CommentsWidget extends Component {
     }, props.onCommentAdded)
   }
 
-  removeComment(id) {
+  removeComment = (id) => {
     const { props, state } = this
 
     this.setState({
@@ -55,11 +51,11 @@ export default class CommentsWidget extends Component {
           parent={props.parent}
           parentType={props.parentType}
           newComments={state.newComments}
-          onCommentRemoved={::this.removeComment}
+          onCommentRemoved={this.removeComment}
         />
         <CommentForm
           parent={props.parent}
-          onCreate={::this.addNewComment}
+          onCreate={this.addNewComment}
           parentType={props.parentType}
         />
       </div>

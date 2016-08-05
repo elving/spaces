@@ -6,11 +6,11 @@ import Products from './Products'
 export default class ProductsIndex extends Component {
   static propTypes = {
     products: PropTypes.object
-  };
+  }
 
   static defaultProps = {
     products: {}
-  };
+  }
 
   render() {
     const { props } = this

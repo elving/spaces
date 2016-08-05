@@ -11,7 +11,7 @@ const createElement = (Component, props) => {
   const serverProps = window.__REACT_PROPS__ || {}
 
   return (
-    <Component {...props} {...serverProps}/>
+    <Component {...props} {...serverProps} />
   )
 }
 

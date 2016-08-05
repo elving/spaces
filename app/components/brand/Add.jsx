@@ -7,7 +7,7 @@ export default class AddBrand extends Component {
   render() {
     return (
       <Layout>
-        <BrandForm/>
+        <BrandForm />
       </Layout>
     )
   }

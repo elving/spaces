@@ -25,16 +25,16 @@ export default class EditProfile extends Component {
   static contextTypes = {
     csrf: Type.string,
     user: Type.object
-  };
+  }
 
   static propTypes = {
     message: Type.string,
     profile: Type.object.isRequired
-  };
+  }
 
   static defaultProps = {
     profile: {}
-  };
+  }
 
   render() {
     const { csrf, user } = this.context

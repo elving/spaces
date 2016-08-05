@@ -7,7 +7,7 @@ export default class AddCategory extends Component {
   render() {
     return (
       <Layout>
-        <CategoryForm/>
+        <CategoryForm />
       </Layout>
     )
   }

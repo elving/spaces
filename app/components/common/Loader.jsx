@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 
-export default class Icon extends PureComponent {
+export default class Icon extends Component {
   static defaultProps = {
     size: 32,
     color: '#FFCC2F'
-  };
+  }
 
   render() {
     const { props } = this

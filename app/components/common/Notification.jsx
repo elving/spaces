@@ -9,14 +9,14 @@ export default class Notification extends Component {
     onClose: PropTypes.func,
     children: PropTypes.node,
     isVisible: PropTypes.bool
-  };
+  }
 
   static defaultProps = {
     type: 'default',
     timeout: 0,
     onClose: (() => {}),
     isVisible: false
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -27,7 +27,13 @@ export default class Notification extends Component {
     this.setTimeout(nextProps)
   }
 
-  setTimeout(props) {
+  onClick = () => {
+    const { props } = this
+    clearTimeout(this.timeoutId)
+    props.onClose()
+  }
+
+  setTimeout = (props) => {
     if (props.isVisible) {
       this.timeoutId = props.timeout > 0
         ? setTimeout(() => {
@@ -47,10 +53,7 @@ export default class Notification extends Component {
           {props.children}
         </span>
         <button
-          onClick={() => {
-            clearTimeout(this.timeoutId)
-            props.onClose()
-          }}
+          onClick={this.onClick}
           className={(
             'notification-close button button--transparent button--icon'
           )}

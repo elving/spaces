@@ -2,16 +2,36 @@ import get from 'lodash/get'
 import map from 'lodash/map'
 import filter from 'lodash/filter'
 import toLower from 'lodash/toLower'
-import isEqual from 'lodash/isEqual'
+import isEmpty from 'lodash/isEmpty'
 import orderBy from 'lodash/orderBy'
 import includes from 'lodash/includes'
 import endsWith from 'lodash/endsWith'
 import startsWith from 'lodash/startsWith'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
-import Icon from './Icon'
+import MaterialDesignIcon from './MaterialDesignIcon'
 
 export default class AdminTable extends Component {
+  static propTypes = {
+    items: PropTypes.array,
+    count: PropTypes.number,
+    searchPath: PropTypes.string,
+    headerTitle: PropTypes.string,
+    tableHeaders: PropTypes.array,
+    headerCtaLink: PropTypes.string,
+    headerCtaText: PropTypes.string,
+    renderTableRow: PropTypes.func.isRequired,
+    searchPlaceholder: PropTypes.string,
+    defaultSortingOrder: PropTypes.string,
+    defaultSortingProperty: PropTypes.string
+  }
+
+  static defaultProps = {
+    items: [],
+    count: 0,
+    searchPath: 'name'
+  }
+
   constructor(props) {
     super(props)
 
@@ -23,34 +43,23 @@ export default class AdminTable extends Component {
     }
   }
 
-  static propTypes = {
-    items: Type.array,
-    count: Type.number,
-    searchPath: Type.string,
-    headerTitle: Type.string,
-    tableHeaders: Type.array,
-    headerCtaLink: Type.string,
-    headerCtaText: Type.string,
-    renderTableRow: Type.func.isRequired,
-    searchPlaceholder: Type.string,
-    defaultSortingOrder: Type.string,
-    defaultSortingProperty: Type.string
-  };
+  onSearchChange = ({ currentTarget: input }) => {
+    this.searchItems(input.value)
+  }
 
-  static defaultProps = {
-    items: [],
-    count: 0,
-    searchPath: 'name'
-  };
+  onTableHeaderClick = (property) => {
+    this.sortItems(property)
+  }
 
   sortItems(property) {
-    const { items } = this.props
-    const { sortingOrder } = this.state
-    const newSortingOrder = isEqual(sortingOrder, 'desc') ? 'asc' : 'desc'
+    const { props, state } = this
+    const newSortingOrder = props.sortingOrder === 'desc'
+      ? 'asc'
+      : 'desc'
 
     if (property) {
       this.setState({
-        sortedItems: orderBy(items, property, newSortingOrder),
+        sortedItems: orderBy(state.items, property, newSortingOrder),
         sortingOrder: newSortingOrder,
         sortingProperty: property
       })
@@ -58,35 +67,35 @@ export default class AdminTable extends Component {
   }
 
   searchItems(query) {
-    query = query ? toLower(query) : ''
+    const { props, state } = this
+    const queryToLower = query ? toLower(query) : ''
 
-    const { sortedItems } = this.state
-    const { items, searchPath } = this.props
-
-    if (query) {
+    if (!isEmpty(queryToLower)) {
       this.setState({
-        sortedItems: filter(sortedItems, (item) => {
-          const name = toLower(get(item, searchPath, ''))
+        sortedItems: filter(state.sortedItems, (item) => {
+          const name = toLower(get(item, props.searchPath, ''))
 
           return (
-            startsWith(name, query) ||
-            includes(name, query) ||
-            endsWith(name, query)
+            startsWith(name, queryToLower) ||
+            includes(name, queryToLower) ||
+            endsWith(name, queryToLower)
           )
         })
       })
     } else {
-      this.setState({ sortedItems: items })
+      this.setState({
+        sortedItems: props.items
+      })
     }
   }
 
   renderHeader() {
-    const { count, headerTitle } = this.props
+    const { props } = this
 
     return (
       <div className="table-header">
         <h1 className="table-header-title">
-          {headerTitle} <small>({ count })</small>
+          {props.headerTitle} <small>({ props.count })</small>
         </h1>
         {this.renderHeaderActions()}
       </div>
@@ -94,50 +103,52 @@ export default class AdminTable extends Component {
   }
 
   renderHeaderActions() {
-    const { headerCtaText, headerCtaLink, searchPlaceholder } = this.props
+    const { props } = this
 
     return (
       <div className="table-header-actions">
         <input
           type="search"
-          onChange={(event) => this.searchItems(event.target.value)}
+          onChange={this.onSearchChange}
           className="textfield"
-          placeholder={searchPlaceholder}/>
-        <a href={headerCtaLink} className="button">
-          {headerCtaText}
+          placeholder={props.searchPlaceholder}
+        />
+        <a href={props.headerCtaLink} className="button">
+          {props.headerCtaText}
         </a>
       </div>
     )
   }
 
   renderTableHeader() {
-    const { tableHeaders } = this.props
-    const { sortingOrder } = this.state
+    const { props, state } = this
 
     return (
       <thead>
         <tr>
-          {map(tableHeaders, (header) => {
-            const { label, property } = header
-
-            return (
-              <th
-                key={`table-th-${label}`}
-                onClick={() => this.sortItems(property)}
-                data-order={sortingOrder}
-                data-sortable={property ? 'true' : null}>
-                {property ? (
-                  <span className="table-th-sort">
-                    {label}
-                    <Icon
-                      name={isEqual(sortingOrder, 'desc') ? 'down' : 'up'}
-                      width={18}
-                      height={18}/>
-                  </span>
-                ) : label}
-              </th>
-            )
-          })}
+          {map(props.tableHeaders, header =>
+            <th
+              key={`table-th-${header.label}`}
+              onClick={() => this.onTableHeaderClick(header.property)}
+              data-order={state.sortingOrder}
+              data-sortable={header.property ? 'true' : null}
+            >
+              {header.property ? (
+                <span className="table-th-sort">
+                  {header.label}
+                  <MaterialDesignIcon
+                    name={
+                      state.sortingOrder === 'desc'
+                        ? 'caret-down'
+                        : 'caret-up'
+                      }
+                    width={18}
+                    height={18}
+                  />
+                </span>
+              ) : header.label}
+            </th>
+          )}
         </tr>
       </thead>
     )

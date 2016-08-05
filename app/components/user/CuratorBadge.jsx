@@ -7,12 +7,12 @@ export default class CuratorBadge extends Component {
   static propTypes = {
     user: PropTypes.object,
     size: PropTypes.number
-  };
+  }
 
   static defaultProps = {
     user: {},
     size: 18
-  };
+  }
 
   render() {
     const { props } = this

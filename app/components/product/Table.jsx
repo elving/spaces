@@ -2,7 +2,7 @@ import map from 'lodash/map'
 import get from 'lodash/get'
 import join from 'lodash/join'
 import size from 'lodash/size'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Table from '../common/Table'
 import Layout from '../common/Layout'
@@ -10,10 +10,10 @@ import formatDate from '../../utils/formatDate'
 
 export default class ProductsTable extends Component {
   static propTypes = {
-    products: Type.array.isRequired
-  };
+    products: PropTypes.array.isRequired
+  }
 
-  renderRow(product) {
+  renderRow = (product) => {
     const sid = get(product, 'sid', '')
     const name = get(product, 'name', '')
     const image = get(product, 'image', '')
@@ -32,8 +32,13 @@ export default class ProductsTable extends Component {
           {name}
         </td>
         <td className="table-centered">
-          <a href={image} title={name} target="_blank">
-            <img src={image} title={name}/>
+          <a
+            rel="noopener noreferrer"
+            href={image}
+            title={name}
+            target="_blank"
+          >
+            <img src={image} role="presentation" title={name} />
           </a>
         </td>
         <td className="table-centered">
@@ -58,13 +63,13 @@ export default class ProductsTable extends Component {
   }
 
   render() {
-    const { products } = this.props
+    const { props } = this
 
     return (
       <Layout>
         <Table
-          items={products}
-          count={size(products)}
+          items={props.products}
+          count={size(props.products)}
           headerTitle="Products"
           tableHeaders={[{
             label: 'Date Created',
@@ -89,8 +94,9 @@ export default class ProductsTable extends Component {
           searchPath="name"
           headerCtaLink="/products/add/"
           headerCtaText="Add Product"
-          renderTableRow={::this.renderRow}
-          searchPlaceholder="Search products by name"/>
+          renderTableRow={this.renderRow}
+          searchPlaceholder="Search products by name"
+        />
       </Layout>
     )
   }

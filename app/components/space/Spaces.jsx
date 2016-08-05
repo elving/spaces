@@ -17,13 +17,13 @@ export default class Spaces extends Component {
     spaces: PropTypes.object,
     params: PropTypes.object,
     emptyMessage: PropTypes.string
-  };
+  }
 
   static defaultProps = {
     spaces: {},
     params: {},
     emptyMessage: 'No Spaces Found...'
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -50,10 +50,12 @@ export default class Spaces extends Component {
     }
   }
 
-  fetch() {
+  fetch = () => {
     const { props, state } = this
 
-    this.setState({ isFetching: true }, () => {
+    this.setState({
+      isFetching: true
+    }, () => {
       const params = !isEmpty(props.params)
         ? queryString.stringify(props.params)
         : ''
@@ -85,7 +87,7 @@ export default class Spaces extends Component {
     return size(state.results) < state.count ? (
       <div className="grid-pagination">
         <button
-          onClick={::this.fetch}
+          onClick={this.fetch}
           disabled={state.isFetching}
           className="button button--outline"
         >

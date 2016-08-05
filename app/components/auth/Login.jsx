@@ -12,20 +12,14 @@ import SocialIcon from '../common/SocialIcon'
 export default class Login extends Component {
   static contextTypes = {
     csrf: PropTypes.string
-  };
-
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      errors: {},
-      isWaiting: false
-    }
-
-    this.form = null
   }
 
-  onSubmit(event) {
+  state = {
+    errors: {},
+    isWaitingForServer: false
+  }
+
+  onSubmit = (event) => {
     const formData = serialize(this.form, { hash: true })
 
     event.preventDefault()
@@ -35,10 +29,13 @@ export default class Login extends Component {
         errors: {
           password: 'Password must have at least 8 characters.'
         },
-        isWaiting: false
+        isWaitingForServer: false
       })
     } else {
-      this.setState({ errors: {}, isWaiting: true }, () => {
+      this.setState({
+        errors: {},
+        isWaitingForServer: true
+      }, () => {
         axios
           .post('/ajax/login/', formData)
           .then(() => {
@@ -47,12 +44,14 @@ export default class Login extends Component {
           .catch(({ response }) => {
             this.setState({
               errors: get(response, 'data.err', {}),
-              isWaiting: false
+              isWaitingForServer: false
             })
           })
       })
     }
   }
+
+  form = null;
 
   render() {
     const { state, context } = this
@@ -70,7 +69,7 @@ export default class Login extends Component {
           ref={form => { this.form = form }}
           action="/login/"
           method="POST"
-          onSubmit={::this.onSubmit}
+          onSubmit={this.onSubmit}
           className="form auth-form login-form"
         >
           <input type="hidden" name="_csrf" value={context.csrf} />
@@ -82,7 +81,7 @@ export default class Login extends Component {
           <div className="auth-form-social">
             <a
               href="/auth/facebook/"
-              disabled={state.isWaiting}
+              disabled={state.isWaitingForServer}
               className="button button--facebook"
             >
               <SocialIcon name="facebook" />
@@ -90,7 +89,7 @@ export default class Login extends Component {
             </a>
             <a
               href="/auth/twitter/"
-              disabled={state.isWaiting}
+              disabled={state.isWaitingForServer}
               className="button button--twitter"
             >
               <SocialIcon name="twitter" />
@@ -103,7 +102,7 @@ export default class Login extends Component {
               type="text"
               name="emailOrUsername"
               required
-              disabled={state.isWaiting}
+              disabled={state.isWaitingForServer}
               autoFocus
               className={classNames({
                 textfield: true,
@@ -118,7 +117,7 @@ export default class Login extends Component {
               type="password"
               name="password"
               required
-              disabled={state.isWaiting}
+              disabled={state.isWaitingForServer}
               className={classNames({
                 textfield: true,
                 'textfield--error': hasError
@@ -138,16 +137,16 @@ export default class Login extends Component {
           <div className="form-group form-group--inline">
             <button
               type="submit"
-              disabled={state.isWaiting}
+              disabled={state.isWaitingForServer}
               className="button button--primary"
             >
               <span className="button-text">
-                {state.isWaiting ? 'Logging in...' : 'Login'}
+                {state.isWaitingForServer ? 'Logging in...' : 'Login'}
               </span>
             </button>
             <a
               href="/reset-password/"
-              disabled={state.isWaiting}
+              disabled={state.isWaitingForServer}
               className="button button--link"
             >
               I forgot my password

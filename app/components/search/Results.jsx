@@ -24,7 +24,7 @@ class SearchResults extends Component {
     closeAddProductModal: PropTypes.func,
     addProductModalIsOpen: PropTypes.bool,
     createaddProductModal: PropTypes.bool
-  };
+  }
 
   static defaultProps = {
     count: 0,
@@ -33,7 +33,7 @@ class SearchResults extends Component {
     closeAddProductModal: (() => {}),
     addProductModalIsOpen: false,
     createaddProductModal: false
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -50,11 +50,13 @@ class SearchResults extends Component {
     }
   }
 
-  fetch() {
+  fetch = () => {
     const { props, state } = this
     const params = get(props.location, 'search', '?')
 
-    this.setState({ isSearhing: true }, () => {
+    this.setState({
+      isSearhing: true
+    }, () => {
       axios
         .get(`/ajax/products/search/${params}&skip=${state.offset}`)
         .then(({ data }) => {
@@ -68,7 +70,11 @@ class SearchResults extends Component {
             hasSearched: true
           })
         })
-        .catch(() => this.setState({ isSearhing: false }))
+        .catch(() => {
+          this.setState({
+            isSearhing: false
+          })
+        })
     })
   }
 
@@ -83,7 +89,7 @@ class SearchResults extends Component {
     ) ? (
       <div className="grid-pagination">
         <button
-          onClick={::this.fetch}
+          onClick={this.fetch}
           disabled={state.isSearhing}
           className="button button--outline"
         >

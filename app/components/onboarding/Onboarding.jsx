@@ -14,15 +14,15 @@ import toStringId from '../../api/utils/toStringId'
 export default class Onboarding extends Component {
   static contextTypes = {
     user: PropTypes.object
-  };
+  }
 
   static propTypes = {
     interests: PropTypes.array
-  };
+  }
 
   static defaultProps = {
     interests: []
-  };
+  }
 
   constructor(props, context) {
     super(props, context)
@@ -32,20 +32,24 @@ export default class Onboarding extends Component {
     }
   }
 
+  onFollow = () => {
+    const { state } = this
+
+    this.setState({
+      following: state.following + 1
+    })
+  }
+
+  onUnfollow = () => {
+    const { state } = this
+
+    this.setState({
+      following: state.following - 1
+    })
+  }
+
   renderInterests() {
-    const { state, props } = this
-
-    const onFollow = () => {
-      this.setState({
-        following: state.following + 1
-      })
-    }
-
-    const onUnfollow = () => {
-      this.setState({
-        following: state.following - 1
-      })
-    }
+    const { props } = this
 
     return (
       <div className="grid">
@@ -55,8 +59,8 @@ export default class Onboarding extends Component {
               return (
                 <CategoryCard
                   key={toStringId(interest)}
-                  onFollow={onFollow}
-                  onUnfollow={onUnfollow}
+                  onFollow={this.onFollow}
+                  onUnfollow={this.onUnfollow}
                   {...interest}
                 />
               )
@@ -65,8 +69,8 @@ export default class Onboarding extends Component {
             return (
               <SpaceTypeCard
                 key={toStringId(interest)}
-                onFollow={onFollow}
-                onUnfollow={onUnfollow}
+                onFollow={this.onFollow}
+                onUnfollow={this.onUnfollow}
                 {...interest}
               />
             )

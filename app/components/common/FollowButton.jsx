@@ -2,7 +2,7 @@ import get from 'lodash/get'
 import axios from 'axios'
 import isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import MaterialDesignIcon from './MaterialDesignIcon'
 
@@ -11,27 +11,27 @@ import hasFollowed from '../../utils/user/hasFollowed'
 
 export default class FollowButton extends Component {
   static contextTypes = {
-    csrf: Type.string,
-    user: Type.object,
-    userLoggedIn: Type.func
-  };
+    csrf: PropTypes.string,
+    user: PropTypes.object,
+    userLoggedIn: PropTypes.func
+  }
 
   static propTypes = {
-    parent: Type.string,
-    showText: Type.bool,
-    onFollow: Type.func,
-    className: Type.string,
-    parentType: Type.string,
-    onUnfollow: Type.func,
-    hideWhenLoggedOut: Type.bool
-  };
+    parent: PropTypes.string,
+    showText: PropTypes.bool,
+    onFollow: PropTypes.func,
+    className: PropTypes.string,
+    parentType: PropTypes.string,
+    onUnfollow: PropTypes.func,
+    hideWhenLoggedOut: PropTypes.bool
+  }
 
   static defaultProps = {
     showText: true,
     onFollow: (() => {}),
     onUnfollow: (() => {}),
     hideWhenLoggedOut: false
-  };
+  }
 
   constructor(props, context) {
     super(props, context)
@@ -46,7 +46,7 @@ export default class FollowButton extends Component {
     }
   }
 
-  onClick(event) {
+  onClick = (event) => {
     let options = {}
     const { props, state, context } = this
     const createdBy = toStringId(context.user)
@@ -72,7 +72,9 @@ export default class FollowButton extends Component {
       }
     }
 
-    this.setState({ isSaving: true }, () => {
+    this.setState({
+      isSaving: true
+    }, () => {
       axios(options)
         .then(() => {
           this.setState({
@@ -85,7 +87,12 @@ export default class FollowButton extends Component {
               props.onFollow()
             }
           })
-        }).catch(() => this.setState({ isSaving: false }))
+        })
+        .catch(() => {
+          this.setState({
+            isSaving: false
+          })
+        })
     })
   }
 
@@ -111,7 +118,7 @@ export default class FollowButton extends Component {
       return (
         <button
           type="button"
-          onClick={::this.onClick}
+          onClick={this.onClick}
           disabled={state.isSaving}
           className={btnClassName}
         >

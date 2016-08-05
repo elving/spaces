@@ -25,7 +25,7 @@ class CategoryDetail extends Component {
     closeAddProductModal: PropTypes.func,
     addProductModalIsOpen: PropTypes.bool,
     createaddProductModal: PropTypes.bool
-  };
+  }
 
   static defaultProps = {
     category: {},
@@ -34,7 +34,7 @@ class CategoryDetail extends Component {
     closeAddProductModal: (() => {}),
     addProductModalIsOpen: false,
     createaddProductModal: false
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -51,7 +51,7 @@ class CategoryDetail extends Component {
     }
   }
 
-  fetch() {
+  fetch = () => {
     const { props, state } = this
 
     this.setState({ isSearhing: true }, () => {
@@ -79,7 +79,7 @@ class CategoryDetail extends Component {
     return size(state.results) < get(props, 'products.count') ? (
       <div className="grid-pagination">
         <button
-          onClick={::this.fetch}
+          onClick={this.fetch}
           disabled={state.isSearhing}
           className="button button--outline"
         >

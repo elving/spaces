@@ -14,11 +14,6 @@ import {
 } from '../../utils/getShareUrl'
 
 export default class SharePopup extends Component {
-  constructor(props) {
-    super(props)
-    this.urlInput = null
-  }
-
   static propTypes = {
     url: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
     title: PropTypes.string,
@@ -28,26 +23,33 @@ export default class SharePopup extends Component {
     shareText: PropTypes.string,
     shareImage: PropTypes.string,
     onClickClose: PropTypes.func
-  };
+  }
 
   static defaultProps = {
     className: '',
     onClickClose: (() => {})
-  };
+  }
+
+  onShareLinkClick = () => {
+    this.urlInput.select()
+  }
+
+  urlInput = null;
 
   renderUrl() {
     const { props } = this
 
     return (
       <div className="popup-item card-share-link">
-        <MaterialDesignIcon name="link" className="popup-item-icon"/>
+        <MaterialDesignIcon name="link" className="popup-item-icon" />
         <input
-          ref={(input) => this.urlInput = input}
+          ref={input => { this.urlInput = input }}
           type="url"
           value={result(props, 'url', '')}
-          onClick={() => this.urlInput.select()}
+          onClick={this.onShareLinkClick}
           readOnly
-          className="textfield card-share-link-input"/>
+          className="textfield card-share-link-input"
+        />
       </div>
     )
   }
@@ -57,14 +59,17 @@ export default class SharePopup extends Component {
 
     return (
       <a
+        rel="noopener noreferrer"
         href={getFacebookUrl(result(props, 'shareUrl', '#'))}
         target="_blank"
-        className="popup-item popup-item--clickable">
+        className="popup-item popup-item--clickable"
+      >
         <SocialIcon
           name="facebook"
           size={16}
           color="#3A579D"
-          className="popup-item-icon"/>
+          className="popup-item-icon"
+        />
         <span className="popup-item-text">Share via Facebook</span>
       </a>
     )
@@ -76,14 +81,17 @@ export default class SharePopup extends Component {
 
     return (
       <a
+        rel="noopener noreferrer"
         href={getTwitterUrl(url, props.shareText)}
         target="_blank"
-        className="popup-item popup-item--clickable">
+        className="popup-item popup-item--clickable"
+      >
         <SocialIcon
           name="twitter"
           size={16}
           color="#50ABF1"
-          className="popup-item-icon"/>
+          className="popup-item-icon"
+        />
         <span className="popup-item-text">Share via Twitter</span>
       </a>
     )
@@ -95,14 +103,17 @@ export default class SharePopup extends Component {
 
     return (
       <a
+        rel="noopener noreferrer"
         href={getPinterestUrl(url, props.shareImage, props.shareText)}
         target="_blank"
-        className="popup-item popup-item--clickable">
+        className="popup-item popup-item--clickable"
+      >
         <SocialIcon
           name="pinterest"
           size={16}
           color="#CD1B1F"
-          className="popup-item-icon"/>
+          className="popup-item-icon"
+        />
         <span className="popup-item-text">Share via Pinterest</span>
       </a>
     )
@@ -115,10 +126,12 @@ export default class SharePopup extends Component {
     return (
       <a
         href={getEmailUrl(url, props.shareText)}
-        className="popup-item popup-item--clickable">
+        className="popup-item popup-item--clickable"
+      >
         <MaterialDesignIcon
           name="email"
-          className="popup-item-icon"/>
+          className="popup-item-icon"
+        />
         <span className="popup-item-text">Share via Email</span>
       </a>
     )
@@ -131,7 +144,8 @@ export default class SharePopup extends Component {
       <Popup
         isOpen={props.isOpen}
         className={props.className}
-        onClickClose={props.onClickClose}>
+        onClickClose={props.onClickClose}
+      >
         <PopupTitle onClickClose={props.onClickClose}>
           {props.title}
         </PopupTitle>

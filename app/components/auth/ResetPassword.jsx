@@ -1,4 +1,3 @@
-import ga from 'react-ga'
 import get from 'lodash/get'
 import axios from 'axios'
 import isEmpty from 'lodash/isEmpty'
@@ -9,82 +8,65 @@ import React, { Component, PropTypes as Type } from 'react'
 import Layout from '../common/Layout'
 
 export default class ResetPassword extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      errors: {},
-      success: false,
-      isFetching: false
-    }
-  }
-
   static contextTypes = {
     csrf: Type.string
-  };
-
-  onClickSubmit() {
-    ga.event({
-      label: 'Request Password Reset',
-      action: 'Clicked Request Password Reset Button',
-      category: 'Reset Password'
-    })
   }
 
-  onSubmit(event) {
-    const form = get(this.refs, 'form')
-    const formData = serialize(form, { hash: true })
+  state = {
+    errors: {},
+    success: false,
+    isWaitingForServer: false
+  }
+
+  onSubmit = (event) => {
+    const formData = serialize(this.form, { hash: true })
 
     event.preventDefault()
 
-    ga.event({
-      label: 'Reset Password Form',
-      action: 'Submitted Form',
-      category: 'Reset Password'
-    })
-
-    this.setState({ errors: {}, isFetching: true }, () => {
-      axios({
-        url: '/ajax/reset-password/',
-        data: formData,
-        method: 'post'
-      }).then(() => {
-        this.setState({
-          success: true,
-          isFetching: false
-         })
-      }).catch(({ response }) => {
-        this.setState({
-          errors: get(response, 'data.err', {}),
-          isFetching: false
+    this.setState({
+      errors: {},
+      isWaitingForServer: true
+    }, () => {
+      axios
+        .post('/ajax/reset-password/', formData)
+        .then(() => {
+          this.setState({
+            success: true,
+            isWaitingForServer: false
+          })
         })
-      })
+        .catch(({ response }) => {
+          this.setState({
+            errors: get(response, 'data.err', {}),
+            isWaitingForServer: false
+          })
+        })
     })
   }
 
   render() {
-    const { csrf } = this.context
-    const { errors, success, isFetching } = this.state
+    const { state, context } = this
 
-    const genericError = get(errors, 'generic')
+    const genericError = get(state.errors, 'generic')
 
-    const hasError = !isEmpty(errors)
+    const hasError = !isEmpty(state.errors)
     const hasGenericError = !isEmpty(genericError)
 
     return (
       <Layout>
-        {success ? (
+        {state.success ? (
           <h1 className="auth-form-success">
             We sent you an email with instructions to recover your password.
           </h1>
         ) : (
           <form
-            ref="form"
+            ref={form => { this.form = form }}
             action="/ajax/reset-password/"
             method="POST"
-            onSubmit={::this.onSubmit}
-            className="form auth-form reset-password-form">
-            <input type="hidden" name="_csrf" value={csrf}/>
+            onSubmit={this.onSubmit}
+            className="form auth-form reset-password-form"
+          >
+            <input type="hidden" name="_csrf" value={context.csrf} />
 
             <h1 className="form-title">
               Reset Your Password
@@ -99,17 +81,17 @@ export default class ResetPassword extends Component {
 
             <div className="form-group">
               <input
-                ref="emailOrUsername"
                 type="text"
                 name="emailOrUsername"
                 required
-                disabled={isFetching}
+                disabled={state.isWaitingForServer}
                 autoFocus
                 className={classNames({
-                  'textfield': true,
+                  textfield: true,
                   'textfield--error': hasError
                 })}
-                placeholder="username or email"/>
+                placeholder="username or email"
+              />
 
               {hasGenericError ? (
                 <small className="form-error">{genericError}</small>
@@ -119,11 +101,11 @@ export default class ResetPassword extends Component {
             <div className="form-group">
               <button
                 type="submit"
-                onClick={::this.onClickSubmit}
-                disabled={isFetching}
-                className="button button--primary">
+                disabled={state.isWaitingForServer}
+                className="button button--primary"
+              >
                 <span className="button-text">
-                  {isFetching ? (
+                  {state.isWaitingForServer ? (
                     'Sending instructions...'
                   ) : (
                     'Request Password Reset'

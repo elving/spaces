@@ -3,28 +3,10 @@ import React, { Component, PropTypes } from 'react'
 export default class Sticky extends Component {
   static propTypes = {
     children: PropTypes.node
-  };
+  }
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isSticky: false
-    }
-
-    this.sticky = null
-    this.originalOffsetTop = null
-    this.originalOffsetHeight = null
-
-    this.onScroll = () => {
-      if (!this.originalOffsetTop) {
-        return false
-      }
-
-      this.setState({
-        isSticky: window.scrollY >= (this.originalOffsetTop - 5)
-      })
-    }
+  state = {
+    isSticky: false
   }
 
   componentDidMount() {
@@ -34,6 +16,20 @@ export default class Sticky extends Component {
   componentWillUnmount() {
     window.removeEventListener('scroll', this.onScroll)
   }
+
+  onScroll = () => {
+    if (!this.originalOffsetTop) {
+      return false
+    }
+
+    this.setState({
+      isSticky: window.scrollY >= (this.originalOffsetTop - 5)
+    })
+  }
+
+  sticky = null;
+  originalOffsetTop = null;
+  originalOffsetHeight = null;
 
   render() {
     const { props, state } = this

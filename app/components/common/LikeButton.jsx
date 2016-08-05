@@ -13,7 +13,7 @@ export default class LikeButton extends Component {
     csrf: PropTypes.string,
     user: PropTypes.object,
     userLoggedIn: PropTypes.func
-  };
+  }
 
   static propTypes = {
     size: PropTypes.string,
@@ -24,7 +24,7 @@ export default class LikeButton extends Component {
     onUnlike: PropTypes.func,
     className: PropTypes.string,
     parentType: PropTypes.string
-  };
+  }
 
   static defaultProps = {
     size: 'small',
@@ -32,7 +32,7 @@ export default class LikeButton extends Component {
     isWhite: false,
     onUnlike: (() => {}),
     showText: false
-  };
+  }
 
   constructor(props, context) {
     super(props, context)
@@ -43,12 +43,14 @@ export default class LikeButton extends Component {
     }
   }
 
-  onClick() {
+  onClick = () => {
     const root = '/ajax/likes'
     const { props, state, context } = this
     const createdBy = toStringId(context.user)
 
-    this.setState({ isSaving: true }, () => {
+    this.setState({
+      isSaving: true
+    }, () => {
       axios(state.liked ? {
         url: `${root}/${props.parentType}/${props.parent}/${createdBy}/`,
         data: { _csrf: context.csrf },
@@ -75,7 +77,11 @@ export default class LikeButton extends Component {
           }
         })
       })
-      .catch(() => this.setState({ isSaving: false }))
+      .catch(() => {
+        this.setState({
+          isSaving: false
+        })
+      })
     })
   }
 
@@ -97,7 +103,7 @@ export default class LikeButton extends Component {
       context.userLoggedIn() ? (
         <button
           type="button"
-          onClick={::this.onClick}
+          onClick={this.onClick}
           disabled={state.isSaving}
           className={btnClassName}
         >

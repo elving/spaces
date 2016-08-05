@@ -15,7 +15,7 @@ export default class ProductCard extends Component {
   static contextTypes = {
     csrf: PropTypes.string,
     userLoggedIn: PropTypes.func
-  };
+  }
 
   static propTypes = {
     id: PropTypes.string,
@@ -30,7 +30,7 @@ export default class ProductCard extends Component {
     spaceTypes: PropTypes.array,
     forDisplayOnly: PropTypes.bool,
     onAddButtonClick: PropTypes.func
-  };
+  }
 
   static defaultProps = {
     id: '',
@@ -45,48 +45,49 @@ export default class ProductCard extends Component {
     spaceTypes: [],
     forDisplayOnly: false,
     onAddButtonClick: (() => {})
-  };
+  }
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      imageIsLoaded: false,
-      imageIsLoading: true,
-      sharePopupIsOpen: false,
-      sharePopupIsCreated: false
-    }
+  state = {
+    imageIsLoaded: false,
+    imageIsLoading: true,
+    sharePopupIsOpen: false,
+    sharePopupIsCreated: false
   }
 
   componentDidMount() {
     const { props } = this
     const imagePreloader = new Image()
 
-    const onImageLoad = () => {
-      this.setState({
-        imageIsLoaded: true,
-        imageIsLoading: false
-      })
-    }
-
-    imagePreloader.onload = onImageLoad
+    imagePreloader.onload = this.onImageLoad
     imagePreloader.src = props.image
 
     if (imagePreloader.complete) {
-      onImageLoad()
+      this.onImageLoad()
     }
   }
 
-  openSharePopup() {
+  onImageLoad = () => {
     this.setState({
-      sharePopupIsOpen: true,
-      sharePopupIsCreated: true
+      imageIsLoaded: true,
+      imageIsLoading: false
     })
   }
 
-  closeSharePopup() {
+  getProductUrl = () => {
+    const { props } = this
+    return `${window.location.origin}/${props.shortUrl}/`
+  }
+
+  closeSharePopup = () => {
     this.setState({
       sharePopupIsOpen: false
+    })
+  }
+
+  openSharePopup = () => {
+    this.setState({
+      sharePopupIsOpen: true,
+      sharePopupIsCreated: true
     })
   }
 
@@ -100,7 +101,7 @@ export default class ProductCard extends Component {
           'product-card-image-container--loading': state.imageIsLoading
         })}
       >
-        <a href={`/${props.detailUrl}/`} className="card-actions-overlay"></a>
+        <a href={`/${props.detailUrl}/`} className="card-actions-overlay" />
 
         {!props.forDisplayOnly ? (
           this.renderActions()
@@ -148,7 +149,7 @@ export default class ProductCard extends Component {
         <div className="card-actions card-actions--right">
           <button
             type="button"
-            onClick={::this.openSharePopup}
+            onClick={this.openSharePopup}
             className="card-action button button--icon"
             data-action="send"
           >
@@ -164,6 +165,7 @@ export default class ProductCard extends Component {
 
     return (
       <a
+        rel="noopener noreferrer"
         href={props.url}
         target="_blank"
         className={classNames({
@@ -251,11 +253,11 @@ export default class ProductCard extends Component {
 
         {state.sharePopupIsCreated ? (
           <SharePopup
-            url={() => `${window.location.origin}/${props.shortUrl}/`}
+            url={this.getProductUrl}
             title="Share this product"
             isOpen={state.sharePopupIsOpen}
             className="share-popup"
-            onClickClose={::this.closeSharePopup}
+            onClickClose={this.closeSharePopup}
           />
         ) : null}
 

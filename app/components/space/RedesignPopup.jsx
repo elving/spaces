@@ -9,29 +9,16 @@ import Popup from '../common/Popup'
 import PopupTitle from '../common/PopupTitle'
 
 export default class RedesignPopup extends Component {
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      name: '',
-      errors: {},
-      isSaving: false,
-      description: ''
-    }
-
-    this.form = null
-  }
-
   static contextTypes = {
     csrf: PropTypes.string
-  };
+  }
 
   static propPropTypess = {
     isOpen: PropTypes.bool,
     spaceId: PropTypes.string,
     className: PropTypes.string,
     onClickClose: PropTypes.func
-  };
+  }
 
   static defaultProps = {
     isOpen: false,
@@ -39,23 +26,25 @@ export default class RedesignPopup extends Component {
     spaceType: '',
     className: '',
     onClickClose: (() => {})
-  };
-
-  reset(next) {
-    this.setState({
-      name: '',
-      errors: {},
-      description: ''
-    }, next)
   }
 
-  onSubmit(event) {
+  state = {
+    name: '',
+    errors: {},
+    isSaving: false,
+    description: ''
+  }
+
+  onSubmit = (event) => {
     const formData = serialize(this.form, { hash: true })
     const { props } = this
 
     event.preventDefault()
 
-    this.setState({ errors: {}, isSaving: true }, () => {
+    this.setState({
+      errors: {},
+      isSaving: true
+    }, () => {
       axios
         .post(`/ajax/spaces/${props.spaceId}/redesign/`, formData)
         .then(({ data: space }) => {
@@ -70,6 +59,38 @@ export default class RedesignPopup extends Component {
     })
   }
 
+  onNameChange = ({ currentTarget: input }) => {
+    this.setState({
+      name: input.value
+    })
+  }
+
+  onDescriptionChange = ({ currentTarget: input }) => {
+    this.setState({
+      description: input.value
+    })
+  }
+
+  onCancelClick = () => {
+    const { props } = this
+    this.reset(props.onClickClose)
+  }
+
+  closePopup = () => {
+    const { props } = this
+    this.reset(props.onClickClose)
+  }
+
+  form = null
+
+  reset(next) {
+    this.setState({
+      name: '',
+      errors: {},
+      description: ''
+    }, next)
+  }
+
   renderForm() {
     const { props, state, context } = this
 
@@ -81,36 +102,37 @@ export default class RedesignPopup extends Component {
 
     return (
       <form
-        ref={(form) => this.form = form}
+        ref={form => { this.form = form }}
         method="POST"
-        onSubmit={::this.onSubmit}
-        className="form redesign-popup-form">
-        <input type="hidden" name="_csrf" value={context.csrf}/>
-        <input type="hidden" name="_method" value="POST"/>
+        onSubmit={this.onSubmit}
+        className="form redesign-popup-form"
+      >
+        <input type="hidden" name="_csrf" value={context.csrf} />
+        <input type="hidden" name="_method" value="POST" />
 
-        <input type="hidden" name="spaceType" value={props.spaceType}/>
-        <input type="hidden" name="originalSpace" value={props.spaceId}/>
+        <input type="hidden" name="spaceType" value={props.spaceType} />
+        <input type="hidden" name="originalSpace" value={props.spaceId} />
 
         <div className="form-group form-group--small">
-          <label className="form-label">
+          <label htmlFor="name" className="form-label">
             Name <small>required</small>
           </label>
 
           <input
+            id="name"
             type="text"
             name="name"
             required
             value={state.name}
             disabled={state.isSaving}
-            onChange={({ currentTarget: input }) => {
-              this.setState({ name: input.value })
-            }}
+            onChange={this.onNameChange}
             className={classNames({
-              'textfield': true,
+              textfield: true,
               'textfield--small': true,
               'textfield--error': hasNameError
             })}
-            placeholder="E.g. My dream kitchen"/>
+            placeholder="E.g. My dream kitchen"
+          />
 
           {hasNameError ? (
             <small className="form-error">{nameError}</small>
@@ -118,23 +140,23 @@ export default class RedesignPopup extends Component {
         </div>
 
         <div className="form-group form-group--small">
-          <label className="form-label">
+          <label htmlFor="description" className="form-label">
             Description <small>optional</small>
           </label>
 
           <textarea
+            id="description"
             name="description"
             value={state.description}
             disabled={state.isSaving}
-            onChange={({ currentTarget: input }) => {
-              this.setState({ description: input.value })
-            }}
+            onChange={this.onDescriptionChange}
             className={classNames({
-              'textfield': true,
+              textfield: true,
               'textfield--small': true,
               'textfield--error': hasDescriptionError
             })}
-            placeholder="E.g. A modern residential kitchen is typically..."/>
+            placeholder="E.g. A modern residential kitchen is typically..."
+          />
 
           {hasDescriptionError ? (
             <small className="form-error">{descriptionError}</small>
@@ -146,7 +168,8 @@ export default class RedesignPopup extends Component {
             <button
               type="submit"
               disabled={state.isSaving}
-              className="button button--primary button--small">
+              className="button button--primary button--small"
+            >
               <span className="button-text">
                 {state.isSaving ? 'Redesigning...' : 'Redesign'}
               </span>
@@ -154,8 +177,9 @@ export default class RedesignPopup extends Component {
             <button
               type="button"
               disabled={state.isSaving}
-              onClick={() => this.reset(props.onClickClose)}
-              className="button button--link button--small">
+              onClick={this.onCancelClick}
+              className="button button--link button--small"
+            >
               <span className="button-text">
                 Cancel
               </span>
@@ -168,14 +192,14 @@ export default class RedesignPopup extends Component {
 
   render() {
     const { props } = this
-    const closePopup = () => this.reset(props.onClickClose)
 
     return (
       <Popup
         isOpen={props.isOpen}
         className={props.className}
-        onClickClose={closePopup}>
-        <PopupTitle onClickClose={closePopup}>
+        onClickClose={this.closePopup}
+      >
+        <PopupTitle onClickClose={this.closePopup}>
           Redesign this space
         </PopupTitle>
         <div className="popup-content">

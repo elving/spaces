@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 import size from 'lodash/size'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { PropTypes, Component } from 'react'
 
 import Table from '../common/Table'
 import Layout from '../common/Layout'
@@ -8,10 +8,10 @@ import formatDate from '../../utils/formatDate'
 
 export default class BrandsTable extends Component {
   static propTypes = {
-    brands: Type.array.isRequired
-  };
+    brands: PropTypes.array.isRequired
+  }
 
-  renderRow(brand) {
+  renderRow = (brand) => {
     const sid = get(brand, 'sid', '')
     const name = get(brand, 'name', '')
     const createdAt = get(brand, 'createdAt', (new Date()))
@@ -60,8 +60,9 @@ export default class BrandsTable extends Component {
           searchPath="name"
           headerCtaLink="/admin/brands/add/"
           headerCtaText="Add Brand"
-          renderTableRow={::this.renderRow}
-          searchPlaceholder="Search brands by name"/>
+          renderTableRow={this.renderRow}
+          searchPlaceholder="Search brands by name"
+        />
       </Layout>
     )
   }

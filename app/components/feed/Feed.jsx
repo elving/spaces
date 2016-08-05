@@ -16,12 +16,12 @@ class Feed extends Component {
   static propTypes = {
     feed: PropTypes.object,
     location: PropTypes.object
-  };
+  }
 
   static defaultProps = {
     feed: {},
     location: {}
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -29,6 +29,12 @@ class Feed extends Component {
     this.state = {
       onboardingModalIsOpen: get(props.location, 'query.onboarding') === '1'
     }
+  }
+
+  onOnboardingClose = () => {
+    this.setState({
+      onboardingModalIsOpen: false
+    })
   }
 
   renderCards() {
@@ -67,7 +73,7 @@ class Feed extends Component {
     return (
       <Layout>
         <OnboardingModal
-          onClose={() => this.setState({ onboardingModalIsOpen: false })}
+          onClose={this.onOnboardingClose}
           isVisible={state.onboardingModalIsOpen}
         />
 

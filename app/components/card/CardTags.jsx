@@ -11,13 +11,13 @@ export default class CardTags extends Component {
     model: PropTypes.object,
     className: PropTypes.string,
     forDisplayOnly: PropTypes.bool
-  };
+  }
 
   static defaultProps = {
     model: {},
     className: '',
     forDisplayOnly: false
-  };
+  }
 
   render() {
     const { props } = this

@@ -6,11 +6,11 @@ import Spaces from './Spaces'
 export default class SpacesIndex extends Component {
   static propTypes = {
     spaces: PropTypes.object
-  };
+  }
 
   static defaultProps = {
     spaces: {}
-  };
+  }
 
   render() {
     const { props } = this

@@ -11,6 +11,16 @@ import CategoryCard from './Card'
 import toStringId from '../../api/utils/toStringId'
 
 export default class CategoriesIndex extends Component {
+  static propTypes = {
+    count: Type.number,
+    results: Type.array
+  }
+
+  static defaultProps = {
+    count: 0,
+    results: []
+  }
+
   constructor(props) {
     super(props)
 
@@ -25,20 +35,12 @@ export default class CategoriesIndex extends Component {
     }
   }
 
-  static propTypes = {
-    count: Type.number,
-    results: Type.array
-  };
-
-  static defaultProps = {
-    count: 0,
-    results: []
-  };
-
-  fetch() {
+  fetch = () => {
     const { state } = this
 
-    this.setState({ isSearhing: true }, () => {
+    this.setState({
+      isSearhing: true
+    }, () => {
       axios
         .get(`/ajax/categories/search/?skip=${state.offset}`)
         .then(({ data }) => {
@@ -63,9 +65,10 @@ export default class CategoriesIndex extends Component {
     return size(state.results) < props.count ? (
       <div className="grid-pagination">
         <button
-          onClick={::this.fetch}
+          onClick={this.fetch}
           disabled={state.isSearhing}
-          className="button button--outline">
+          className="button button--outline"
+        >
           {state.isSearhing ? 'Loading More...' : 'Load More'}
         </button>
       </div>
@@ -79,7 +82,7 @@ export default class CategoriesIndex extends Component {
       <div className="grid">
         <div className="grid-items grid-items--3-cards">
           {map(state.results, category =>
-            <CategoryCard key={toStringId(category)} {...category}/>
+            <CategoryCard key={toStringId(category)} {...category} />
           )}
         </div>
       </div>

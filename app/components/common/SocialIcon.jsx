@@ -7,14 +7,14 @@ export default class MaterialDesignIcon extends Component {
     size: PropTypes.number,
     fill: PropTypes.string,
     className: PropTypes.string
-  };
+  }
 
   static defaultProps = {
     name: '',
     size: 20,
     fill: '#999999',
     className: ''
-  };
+  }
 
   renderIcon() {
     const { props } = this

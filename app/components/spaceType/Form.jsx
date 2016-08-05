@@ -13,17 +13,17 @@ import toStringId from '../../api/utils/toStringId'
 export default class SpaceTypeForm extends Component {
   static contextTypes = {
     csrf: PropTypes.string
-  };
+  }
 
   static propTypes = {
     spaceType: PropTypes.object,
     formMethod: PropTypes.string
-  };
+  }
 
   static defaultProps = {
     spaceType: {},
     formMethod: 'POST'
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -59,7 +59,7 @@ export default class SpaceTypeForm extends Component {
     }
   }
 
-  onSubmit(event) {
+  onSubmit = (event) => {
     const { props } = this
 
     const form = this.form
@@ -71,7 +71,10 @@ export default class SpaceTypeForm extends Component {
 
     event.preventDefault()
 
-    this.setState({ errors: {}, isSaving: true }, () => {
+    this.setState({
+      errors: {},
+      isSaving: true
+    }, () => {
       axios({
         url: endpoint,
         data: formData,
@@ -105,7 +108,7 @@ export default class SpaceTypeForm extends Component {
     })
   }
 
-  onClickDelete() {
+  onClickDelete = () => {
     const { props, context } = this.context
 
     const deleteMessage = (
@@ -115,7 +118,10 @@ export default class SpaceTypeForm extends Component {
     )
 
     if (window.prompt(deleteMessage) === 'DELETE') {
-      this.setState({ errors: {}, isDeleting: true }, () => {
+      this.setState({
+        errors: {},
+        isDeleting: true
+      }, () => {
         axios
           .post(`/ajax/space-types/${toStringId(props.spaceType)}/`, {
             _csrf: context.csrf,
@@ -138,6 +144,39 @@ export default class SpaceTypeForm extends Component {
           })
       })
     }
+  }
+
+  onNameChange = ({ currentTarget: input }) => {
+    this.setState({
+      name: input.value
+    })
+  }
+
+  onDescriptionChange = ({ currentTarget: input }) => {
+    this.setState({
+      description: input.value
+    })
+  }
+
+  onNotificationClose = () => {
+    const { state } = this
+
+    if (state.deletingSuccessful) {
+      window.location.href = '/admin/space-types/'
+    } else {
+      this.setState({
+        hasSaved: false,
+        spaceType: {},
+        savingSuccessful: false
+      })
+    }
+  }
+
+  onErrorNotificationClose = () => {
+    this.setState({
+      errors: {},
+      savingSuccessful: false
+    })
   }
 
   renderForm() {
@@ -169,7 +208,7 @@ export default class SpaceTypeForm extends Component {
       <form
         ref={(form) => { this.form = form }}
         method="POST"
-        onSubmit={::this.onSubmit}
+        onSubmit={this.onSubmit}
         className="form spaceType-form"
       >
         <input type="hidden" name="_csrf" value={context.csrf} />
@@ -184,19 +223,18 @@ export default class SpaceTypeForm extends Component {
         </h1>
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="name" className="form-label">
             Name <small>required</small>
           </label>
 
           <input
+            id="name"
             type="text"
             name="name"
             value={state.name}
             required
             disabled={shouldDisable}
-            onChange={({ currentTarget: input }) => {
-              this.setState({ name: input.value })
-            }}
+            onChange={this.onNameChange}
             autoFocus
             className={classNames({
               textfield: true,
@@ -211,17 +249,16 @@ export default class SpaceTypeForm extends Component {
         </div>
 
         <div className="form-group">
-          <label className="form-label">
+          <label htmlFor="description" className="form-label">
             Description <small>optional</small>
           </label>
 
           <textarea
+            id="description"
             name="description"
             value={state.description}
             disabled={shouldDisable}
-            onChange={({ currentTarget: input }) => {
-              this.setState({ description: input.value })
-            }}
+            onChange={this.onDescriptionChange}
             autoFocus
             className={classNames({
               textfield: true,
@@ -254,7 +291,7 @@ export default class SpaceTypeForm extends Component {
             ) : (
               <button
                 type="button"
-                onClick={::this.onClickDelete}
+                onClick={this.onClickDelete}
                 disabled={shouldDisable}
                 className="button button--danger"
               >
@@ -280,24 +317,12 @@ export default class SpaceTypeForm extends Component {
     const genericError = get(state.errors, 'generic')
     const hasGenericError = !isEmpty(genericError)
 
-    const onClose = () => {
-      if (state.deletingSuccessful) {
-        window.location.href = '/admin/space-types/'
-      } else {
-        this.setState({
-          hasSaved: false,
-          spaceType: {},
-          savingSuccessful: false
-        })
-      }
-    }
-
     if (state.savingSuccessful) {
       return (
         <Notification
           type="success"
           timeout={3500}
-          onClose={onClose}
+          onClose={this.onNotificationClose}
           isVisible
         >
           {props.formMethod === 'POST' ? (
@@ -317,7 +342,7 @@ export default class SpaceTypeForm extends Component {
         <Notification
           type="success"
           timeout={3500}
-          onClose={onClose}
+          onClose={this.onNotificationClose}
           isVisible
         >
           "{name}" was deleted successfully. Redirecting...
@@ -328,12 +353,7 @@ export default class SpaceTypeForm extends Component {
         <Notification
           type="error"
           timeout={3500}
-          onClose={() => {
-            this.setState({
-              errors: {},
-              savingSuccessful: false
-            })
-          }}
+          onClose={this.onErrorNotificationClose}
           isVisible
         >
           {genericError}

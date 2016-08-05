@@ -7,11 +7,11 @@ import toStringId from '../../api/utils/toStringId'
 export default class ProfileSpaces extends Component {
   static propTypes = {
     profile: PropTypes.object
-  };
+  }
 
   static defaultProps = {
     profile: {}
-  };
+  }
 
   render() {
     const { props } = this

@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 import size from 'lodash/size'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Table from '../common/Table'
 import Layout from '../common/Layout'
@@ -8,10 +8,10 @@ import formatDate from '../../utils/formatDate'
 
 export default class SpaceTypesTable extends Component {
   static propTypes = {
-    spaceTypes: Type.array.isRequired
-  };
+    spaceTypes: PropTypes.array.isRequired
+  }
 
-  renderRow(spaceType) {
+  renderRow = (spaceType) => {
     const sid = get(spaceType, 'sid', '')
     const name = get(spaceType, 'name', '')
     const createdAt = get(spaceType, 'createdAt', (new Date()))
@@ -38,13 +38,13 @@ export default class SpaceTypesTable extends Component {
   }
 
   render() {
-    const { spaceTypes } = this.props
+    const { props } = this
 
     return (
       <Layout>
         <Table
-          items={spaceTypes}
-          count={size(spaceTypes)}
+          items={props.spaceTypes}
+          count={size(props.spaceTypes)}
           headerTitle="SpaceTypes"
           tableHeaders={[{
             label: 'Date Created',
@@ -60,8 +60,9 @@ export default class SpaceTypesTable extends Component {
           searchPath="name"
           headerCtaLink="/admin/space-types/add/"
           headerCtaText="Add SpaceType"
-          renderTableRow={::this.renderRow}
-          searchPlaceholder="Search spaceTypes by name"/>
+          renderTableRow={this.renderRow}
+          searchPlaceholder="Search spaceTypes by name"
+        />
       </Layout>
     )
   }

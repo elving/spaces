@@ -6,14 +6,14 @@ import CategoryForm from './Form'
 export default class UpdateCategory extends Component {
   static propTypes = {
     category: Type.object
-  };
+  }
 
   render() {
     const { category } = this.props
 
     return (
       <Layout>
-        <CategoryForm category={category} formMethod="PUT"/>
+        <CategoryForm category={category} formMethod="PUT" />
       </Layout>
     )
   }

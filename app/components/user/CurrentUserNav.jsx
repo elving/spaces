@@ -1,5 +1,5 @@
 import get from 'lodash/get'
-import React, { Component, PropTypes as Type } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Dropdown, {
   DropdownTrigger,
@@ -11,23 +11,25 @@ import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 export default class CurrentUserNav extends Component {
   static contextTypes = {
-    user: Type.object,
-    userLoggedIn: Type.func
-  };
+    user: PropTypes.object,
+    userLoggedIn: PropTypes.func
+  }
 
   render() {
-    const { user, userLoggedIn } = this.context
-    const username = get(user, 'username')
+    const { context } = this
 
     return (
       <div className="current-user-nav">
-        {userLoggedIn() ? (
+        {context.userLoggedIn() ? (
           <Dropdown className="dropdown">
             <DropdownTrigger className="dropdown-trigger">
               <CurrentUserAvatar />
             </DropdownTrigger>
             <DropdownContent className="dropdown-content">
-              <a href={`/users/${username}/`} className="dropdown-link">
+              <a
+                href={`/users/${get(context.user, 'username')}/`}
+                className="dropdown-link"
+              >
                 Profile <MaterialDesignIcon name="profile" />
               </a>
               <a href="/logout/" className="dropdown-link">

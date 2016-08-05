@@ -20,17 +20,17 @@ export default class ChangePassword extends Component {
 
   static contextTypes = {
     csrf: Type.string
-  };
+  }
 
   static propTypes = {
     fields: Type.object,
     errors: Type.object,
     profile: Type.object.isRequired
-  };
+  }
 
   static defaultProps = {
     profile: {}
-  };
+  }
 
   validate(event) {
     const password = get(this.refs, 'password.value')

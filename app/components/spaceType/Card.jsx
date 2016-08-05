@@ -20,7 +20,7 @@ export default class SpaceTypeCard extends Component {
     spacesCount: PropTypes.number,
     productsCount: PropTypes.number,
     followersCount: PropTypes.number
-  };
+  }
 
   static defaultProps = {
     id: '',
@@ -32,7 +32,7 @@ export default class SpaceTypeCard extends Component {
     spacesCount: 0,
     productsCount: 0,
     followersCount: 0
-  };
+  }
 
   renderProducts() {
     const { props } = this

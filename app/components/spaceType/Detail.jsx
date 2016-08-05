@@ -28,7 +28,7 @@ class SpaceTypeDetail extends Component {
     closeAddProductModal: PropTypes.func,
     addProductModalIsOpen: PropTypes.bool,
     createaddProductModal: PropTypes.bool
-  };
+  }
 
   static defaultProps = {
     spaces: {},
@@ -38,7 +38,7 @@ class SpaceTypeDetail extends Component {
     closeAddProductModal: (() => {}),
     addProductModalIsOpen: false,
     createaddProductModal: false
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -60,10 +60,24 @@ class SpaceTypeDetail extends Component {
     }
   }
 
-  fetchSpaces() {
+  getShortUrl = () => {
+    const { props } = this
+    const spaceTypeShortUrl = get(props.spaceType, 'shortUrl')
+    return `${window.location.origin}/${spaceTypeShortUrl}/`
+  }
+
+  getDetailUrl = () => {
+    const { props } = this
+    const spaceTypeDetailUrl = get(props.spaceType, 'detailUrl')
+    return `${window.location.origin}/${spaceTypeDetailUrl}/`
+  }
+
+  fetchSpaces = () => {
     const { props, state } = this
 
-    this.setState({ isSearhingSpaces: true }, () => {
+    this.setState({
+      isSearhingSpaces: true
+    }, () => {
       axios
         .get(`/ajax/spaces/search/?skip=${state.spacesOffset}`, {
           params: { spaceType: toStringId(props.spaceType) }
@@ -82,10 +96,12 @@ class SpaceTypeDetail extends Component {
     })
   }
 
-  fetchProducts() {
+  fetchProducts = () => {
     const { props, state } = this
 
-    this.setState({ isSearhingProducts: true }, () => {
+    this.setState({
+      isSearhingProducts: true
+    }, () => {
       axios
         .get(`/ajax/products/search/?skip=${state.productsOffset}`, {
           params: { spaceTypes: toStringId(props.spaceType) }
@@ -164,8 +180,6 @@ class SpaceTypeDetail extends Component {
     const { props } = this
     const spaceTypeName = get(props.spaceType, 'name')
     const spaceTypeImage = get(props.spaceType, 'image')
-    const spaceTypeShortUrl = get(props.spaceType, 'shortUrl')
-    const spaceTypeDetailUrl = get(props.spaceType, 'detailUrl')
     const spaceTypeProductsCount = get(props.spaceType, 'productsCount')
 
     return (
@@ -187,12 +201,10 @@ class SpaceTypeDetail extends Component {
           </button>
           {props.sharePopupIsCreated ? (
             <SharePopup
-              url={() => `${window.location.origin}/${spaceTypeShortUrl}/`}
+              url={this.getShortUrl}
               title="Share this spaceType"
               isOpen={props.sharePopupIsOpen}
-              shareUrl={() => (
-                `${window.location.origin}/${spaceTypeDetailUrl}/`
-              )}
+              shareUrl={this.getDetailUrl}
               className="share-popup"
               shareText={(
                 `${spaceTypeName} — ` +
@@ -257,7 +269,7 @@ class SpaceTypeDetail extends Component {
     return size(state.spacesResults) < get(props, 'spaces.count') ? (
       <div className="grid-pagination">
         <button
-          onClick={::this.fetchSpaces}
+          onClick={this.fetchSpaces}
           disabled={state.isSearhingSpaces}
           className="button button--outline"
         >
@@ -277,7 +289,7 @@ class SpaceTypeDetail extends Component {
     return size(state.productsResults) < get(props, 'products.count') ? (
       <div className="grid-pagination">
         <button
-          onClick={::this.fetchProducts}
+          onClick={this.fetchProducts}
           disabled={state.isSearhingProducts}
           className="button button--outline"
         >

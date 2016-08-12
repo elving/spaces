@@ -66,6 +66,18 @@ export default class ProductCard extends Component {
     }
   }
 
+  onMouseEnter = () => {
+    this.setState({
+      isHovering: true
+    })
+  }
+
+  onMouseLeave = () => {
+    this.setState({
+      isHovering: false
+    })
+  }
+
   onImageLoad = () => {
     this.setState({
       imageIsLoaded: true,
@@ -194,13 +206,14 @@ export default class ProductCard extends Component {
   }
 
   renderTags() {
-    const { props } = this
+    const { state, props } = this
 
     return (
       <CardTags
         model={props}
-        forDisplayOnly={props.forDisplayOnly}
         className="product-tags"
+        autoScroll={state.isHovering}
+        forDisplayOnly={props.forDisplayOnly}
       />
     )
   }
@@ -248,6 +261,8 @@ export default class ProductCard extends Component {
           'product-card--popup-open': state.sharePopupIsOpen,
           'product-card--display-only': props.forDisplayOnly
         })}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
       >
         <div className="product-card-overlay" />
 

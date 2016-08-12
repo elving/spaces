@@ -49,6 +49,7 @@ export default class SpaceCard extends Component {
 
     this.state = {
       images: [],
+      isHovering: false,
       likesCount: get(props, 'likesCount', 0),
       redesignsCount: get(props, 'redesignsCount', 0),
       imagesAreLoaded: false,
@@ -73,6 +74,18 @@ export default class SpaceCard extends Component {
         imagesAreLoaded: true,
         imagesAreLoading: false
       })
+    })
+  }
+
+  onMouseEnter = () => {
+    this.setState({
+      isHovering: true
+    })
+  }
+
+  onMouseLeave = () => {
+    this.setState({
+      isHovering: false
     })
   }
 
@@ -243,10 +256,14 @@ export default class SpaceCard extends Component {
   }
 
   renderTags() {
-    const { props } = this
+    const { props, state } = this
 
     return (
-      <CardTags model={props} className="space-tags" />
+      <CardTags
+        model={props}
+        className="space-tags"
+        autoScroll={state.isHovering}
+      />
     )
   }
 
@@ -324,6 +341,8 @@ export default class SpaceCard extends Component {
             state.redesignPopupIsOpen
           )
         })}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
       >
         <div className="space-card-overlay" />
 

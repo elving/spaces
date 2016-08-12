@@ -2,9 +2,13 @@
   width: 100%;
   padding: 10px;
   display: flex;
-  overflow-x: scroll;
+  overflow-x: hidden;
   align-items: center;
   justify-content: flex-start;
+}
+
+.card-tags:hover {
+  overflow-x: scroll;
 }
 
 .card-tags::after {

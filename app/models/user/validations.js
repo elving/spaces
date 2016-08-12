@@ -1,16 +1,12 @@
 import size from 'lodash/size'
 import isEmpty from 'lodash/isEmpty'
-import includes from 'lodash/includes'
-import endsWith from 'lodash/endsWith'
 import mongoose from 'mongoose'
 
-import { USERNAMES_BLACKLISTED } from '../../constants/usernames'
+import isNew from '../utils/isNew'
+import isEmail from '../../utils/isEmail'
+import isModified from '../utils/isModified'
 
-export default (schema) => {
-  const isValidEmail = (str) => (
-    /^[\+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(str)
-  )
-
+export default schema => {
   schema
     .path('email')
     .required(true, 'An email is required to have an account')
@@ -18,25 +14,13 @@ export default (schema) => {
   schema
     .path('email')
     .validate(function(email) {
-      return isValidEmail(email)
+      return isEmail(email)
     }, 'Email is not valid')
 
   schema
     .path('email')
-    .validate(function(email) {
-      if (!this.isNew || !this.isModified('email')) {
-        return true
-      }
-
-      if (endsWith(email, '@joinspaces.co')) {
-        return false
-      }
-    }, 'This email is already taken')
-
-  schema
-    .path('email')
     .validate(function(email, next) {
-      if (this.isNew || this.isModified('email')) {
+      if (isNew(this) || isModified(this, 'email')) {
         mongoose
           .model('User')
           .findOne({ email })
@@ -55,9 +39,9 @@ export default (schema) => {
         return true
       } else if (!isEmpty(value) && size(value) <= 254) {
         return true
-      } else {
-        return false
       }
+
+      return false
     }, 'Maximum 254 characters')
 
   schema
@@ -66,18 +50,8 @@ export default (schema) => {
 
   schema
     .path('username')
-    .validate(function(username) {
-      if (!this.isNew || !this.isModified('username')) {
-        return true
-      }
-
-      return !includes(USERNAMES_BLACKLISTED, username)
-    }, 'This username is already taken')
-
-  schema
-    .path('username')
     .validate(function(username, next) {
-      if (this.isNew || this.isModified('username')) {
+      if (isNew(this) || isModified(this, 'username')) {
         mongoose
           .model('User')
           .findOne({ username })
@@ -92,11 +66,11 @@ export default (schema) => {
   schema
     .path('username')
     .validate(function(username) {
-      if (this.isNew || this.isModified('username')) {
+      if (isNew(this) || isModified(this, 'username')) {
         return !(/\W+/gim).test(username)
-      } else {
-        return true
       }
+
+      return true
     }, 'This username contains invalid characters')
 
   schema
@@ -126,7 +100,7 @@ export default (schema) => {
   schema
     .path('hashedPassword')
     .validate(function() {
-      if (!this.isNew || !this.isModified('hashedPassword')) {
+      if (!isNew(this) || !isModified(this, 'hashedPassword')) {
         return true
       }
 

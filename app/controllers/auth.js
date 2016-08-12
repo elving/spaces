@@ -5,6 +5,8 @@ import { default as queryString } from 'query-string'
 
 import sendMail from '../utils/sendMail'
 import metadata from '../constants/metadata'
+import setProps from '../utils/middlewares/setProps'
+import setMetadata from '../utils/middlewares/setMetadata'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import { default as findUser } from '../api/user/find'
@@ -32,16 +34,16 @@ export const renderJoin = (req, res, next) => {
     return res.redirect(`/users/${req.user.username}/`)
   }
 
-  res.locals.metadata = {
+  setMetadata(res, {
     title: 'Join | Spaces',
     bodyId: 'join',
     bodyClass: 'page page-auth page-join'
-  }
+  })
 
   if (!isEmpty(req.query)) {
-    res.locals.props = {
+    setProps(res, {
       fields: req.query
-    }
+    })
   }
 
   next()
@@ -73,11 +75,11 @@ export const renderLogin = (req, res, next) => {
     return res.redirect(`/users/${req.user.username}/`)
   }
 
-  res.locals.metadata = {
+  setMetadata(res, {
     title: 'Login | Spaces',
     bodyId: 'login',
     bodyClass: 'page page-auth page-login'
-  }
+  })
 
   next()
 }
@@ -96,8 +98,8 @@ export const login = (req, res, next) => {
       })
     }
 
-    req.logIn(user, (err) => {
-      if (err) {
+    req.logIn(user, (loginErr) => {
+      if (loginErr) {
         return res.status(500).json({
           err: { generic: 'There was an error while trying to login.' }
         })
@@ -134,11 +136,11 @@ export const renderResetPassword = (req, res, next) => {
     return res.redirect(`/users/${req.user.username}/`)
   }
 
-  res.locals.metadata = {
+  setMetadata(res, {
     title: 'Reset Password | Spaces',
     bodyId: 'reset-password',
     bodyClass: 'page page-auth page-reset-password'
-  }
+  })
 
   next()
 }
@@ -167,7 +169,7 @@ export const requestPasswordReset = async (req, res) => {
           text: (
             'You previously requested to reset your password. \n' +
             'Use this link to set a new password for your account: \n\n' +
-            passwordResetUrl
+            `${passwordResetUrl}`
           ),
           html: (
             '<h1>You previously requested to reset your password.</h1>' +
@@ -213,16 +215,16 @@ export const renderSetPassword = async (req, res, next) => {
   try {
     const request = await validatePasswordResetRequest(code)
 
-    res.locals.metadata = {
+    setMetadata(res, {
       title: 'Set Password | Spaces',
       bodyId: 'set-password',
       bodyClass: 'page page-auth page-set-password'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       code,
       email: get(request, 'email')
-    }
+    })
 
     next()
   } catch (err) {
@@ -248,8 +250,8 @@ export const setPassword = async (req, res) => {
         Reflect.deleteProperty(req.session, 'returnTo')
         res.status(200).json({ success: true })
       })
-    } catch(err) {
-      res.status(500).json({ err })
+    } catch (passwordRequestErr) {
+      res.status(500).json({ err: passwordRequestErr })
     }
   } catch (err) {
     res.status(500).json({ err })

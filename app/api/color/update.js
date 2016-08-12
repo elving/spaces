@@ -4,10 +4,13 @@ import sanitize from './sanitize'
 import parseError from '../utils/parseError'
 import { invalidateFromCache } from '../cache'
 
-export default (_id, props) => {
-  return new Promise(async (resolve, reject) => {
+export default (_id, props) => (
+  new Promise((resolve, reject) => {
     const updates = sanitize(props, false)
-    const options = { new: true }
+    const options = {
+      new: true,
+      runValidators: true
+    }
 
     mongoose
       .model('Color')
@@ -20,4 +23,4 @@ export default (_id, props) => {
         resolve(color)
       })
   })
-}
+)

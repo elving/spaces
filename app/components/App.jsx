@@ -9,7 +9,8 @@ import initAnalytics from '../utils/initAnalytics'
 export default class App extends Component {
   static propTypes = {
     csrf: PropTypes.string,
-    user: PropTypes.object
+    user: PropTypes.object,
+    children: PropTypes.node
   }
 
   static defaultProps = {

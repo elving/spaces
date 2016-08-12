@@ -1,0 +1,101 @@
+.edit-profile-form {
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  width: 100%;
+  margin: 35px auto;
+  padding: 35px;
+  max-width: 620px;
+}
+
+.edit-profile-avatar-wrapper {
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.edit-profile-avatar-wrapper .user-avatar {
+  border: 1px solid #e5e5e5;
+  border-radius: 50%;
+  width: 82px;
+  height: 82px;
+  margin-bottom: 35px;
+}
+
+.edit-profile-avatar-wrapper .user-avatar-image {
+  width: 82px;
+  height: 82px;
+}
+
+.edit-profile-avatar-wrapper input[type="file"] {
+  top: -9999px;
+  left: -9999px;
+  height: 100%;
+  z-index: 5;
+  position: absolute;
+}
+
+.edit-profile-avatar-actions {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-profile-avatar-actions .button {
+  width: 100%;
+}
+
+[data-action="removeAvatar"] {
+  margin-left: 15px;
+}
+
+.edit-profile-action {
+  width: 100%;
+}
+
+.edit-profile-form-bio-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (max-width: 736px) {
+  .edit-profile-header {
+    padding: 15px;
+  }
+
+  .edit-profile-header-title {
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .edit-profile-form {
+    margin: 15px auto;
+    padding: 15px;
+  }
+
+  .edit-profile-avatar-actions {
+    flex-direction: column;
+  }
+
+  .edit-profile-avatar-actions .ui-button {
+    width: 100%;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .edit-profile-avatar-actions [data-action="removeAvatar"] {
+    margin-top: 15px;
+  }
+
+  .edit-profile-action,
+  [data-action="updatePassword"] {
+    width: 100%;
+    display: block;
+  }
+}

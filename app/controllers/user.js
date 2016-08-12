@@ -1,8 +1,12 @@
 import get from 'lodash/get'
+import update from '../api/user/update'
 import search from '../api/user/search'
+import getEmail from '../api/user/getEmail'
 import setProps from '../utils/middlewares/setProps'
+import toStringId from '../api/utils/toStringId'
 import setMetadata from '../utils/middlewares/setMetadata'
 import findByUsername from '../api/user/findByUsername'
+import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 export const renderIndex = async (req, res, next) => {
   try {
@@ -41,5 +45,67 @@ export const renderProfile = async (req, res, next) => {
     next()
   } catch (err) {
     next(err)
+  }
+}
+
+export const renderProfileForm = async (req, res, next) => {
+  const username = get(req, 'params.username')
+
+  try {
+    if (!isAuthenticatedUser(req.user)) {
+      return res.redirect('/404/')
+    }
+
+    if (get(req, 'user.username') !== username) {
+      return res.redirect('/404/')
+    }
+
+    const email = await getEmail(username)
+
+    setMetadata(res, {
+      title: 'Edit Your Profile | Spaces',
+      bodyId: 'user-profile',
+      bodyClass: 'page page-user-edit-profile'
+    })
+
+    setProps(res, { email })
+
+    next()
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const updateUser = async (req, res, next) => {
+  const id = get(req, 'params.id')
+
+  try {
+    if (!isAuthenticatedUser(req.user)) {
+      res.status(500).json({
+        err: {
+          generic: 'Not authorized'
+        }
+      })
+    }
+
+    if (toStringId(req.user) !== id) {
+      res.status(500).json({
+        err: {
+          generic: 'Not authorized'
+        }
+      })
+    }
+
+    const user = await update(toStringId(req.user), req.body)
+
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err)
+      }
+
+      res.status(200).json(user)
+    })
+  } catch (err) {
+    res.status(500).json({ err })
   }
 }

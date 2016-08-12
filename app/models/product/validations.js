@@ -2,7 +2,10 @@ import size from 'lodash/size'
 import isEmpty from 'lodash/isEmpty'
 import mongoose from 'mongoose'
 
-export default (schema) => {
+import isNew from '../utils/isNew'
+import isModified from '../utils/isModified'
+
+export default schema => {
   schema
     .path('url')
     .required(true, 'A url is required to add a product')
@@ -10,7 +13,7 @@ export default (schema) => {
   schema
     .path('url')
     .validate(function(url, next) {
-      if (this.isNew || this.isModified('url')) {
+      if (isNew(this) || isModified(this, 'url')) {
         mongoose
           .model('Product')
           .findOne({ url })
@@ -29,7 +32,7 @@ export default (schema) => {
   schema
     .path('name')
     .validate(function(name, next) {
-      if (this.isNew || this.isModified('name')) {
+      if (isNew(this) || isModified(this, 'name')) {
         mongoose
           .model('Product')
           .findOne({ name })

@@ -2,7 +2,10 @@ import isEmpty from 'lodash/isEmpty'
 import mongoose from 'mongoose'
 import kebabCase from 'lodash/kebabCase'
 
-export default (schema) => {
+import isNew from '../utils/isNew'
+import isModified from '../utils/isModified'
+
+export default schema => {
   schema
     .path('hex')
     .required(true, 'A hex code is required to add a color')
@@ -14,7 +17,7 @@ export default (schema) => {
   schema
     .path('name')
     .validate(function(name, next) {
-      if (this.isNew || this.isModified('name')) {
+      if (isNew(this) || isModified(this, 'name')) {
         mongoose
           .model('Color')
           .findOne({ slug: kebabCase(name) })

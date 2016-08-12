@@ -7,7 +7,10 @@ import { invalidateFromCache } from '../cache'
 export default (_id, props) => (
   new Promise((resolve, reject) => {
     const updates = sanitize(props)
-    const options = { new: true }
+    const options = {
+      new: true,
+      runValidators: true
+    }
 
     mongoose
       .model('SpaceType')

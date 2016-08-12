@@ -27,7 +27,7 @@ export default class CurrentUserNav extends Component {
             </DropdownTrigger>
             <DropdownContent className="dropdown-content">
               <a
-                href={`/users/${get(context.user, 'username')}/`}
+                href={`/designers/${get(context.user, 'username')}/`}
                 className="dropdown-link"
               >
                 Profile <MaterialDesignIcon name="profile" />

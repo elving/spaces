@@ -1,7 +1,7 @@
 import size from 'lodash/size'
 import isEmpty from 'lodash/isEmpty'
 
-export default (schema) => {
+export default schema => {
   schema
     .path('name')
     .required(true, 'A name is required to create a space')
@@ -13,9 +13,9 @@ export default (schema) => {
         return true
       } else if (!isEmpty(value) && size(value) <= 120) {
         return true
-      } else {
-        return false
       }
+
+      return false
     }, 'The space\'s description can\'t be longer than 120 characters')
 
   schema
@@ -29,8 +29,8 @@ export default (schema) => {
         return true
       } else if (!isEmpty(value) && size(value) <= 250) {
         return true
-      } else {
-        return false
       }
+
+      return false
     }, 'The space\'s description can\'t be longer than 250 characters')
 }

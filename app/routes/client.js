@@ -43,6 +43,7 @@ import SpaceDetail from '../components/space/Detail'
 
 import UsersIndex from '../components/user/Index'
 import UserProfile from '../components/user/Profile'
+import EditProfile from '../components/user/EditProfile'
 import ProfileLikes from '../components/user/ProfileLikes'
 import ProfileSpaces from '../components/user/ProfileSpaces'
 import ProfileProducts from '../components/user/ProfileProducts'
@@ -77,6 +78,8 @@ const routes = (
       <Route path="spaces" component={ProfileSpaces} />
       <Route path="products" component={ProfileProducts} />
     </Route>
+
+    <Route path="designers/:username/edit" component={EditProfile} />
 
     <Route path="categories" component={CategoriesIndex} />
     <Route path="categories/:slug" component={CategoryDetail} />

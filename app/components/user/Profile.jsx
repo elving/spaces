@@ -71,7 +71,7 @@ export default class UserProfile extends PureComponent {
           {this.isProfileOwner() ? (
             <div className="user-profile-header-actions">
               <a
-                href={`/users/${username}/edit/`}
+                href={`/designers/${username}/edit/`}
                 className="button button--small button--primary-alt"
               >
                 Edit

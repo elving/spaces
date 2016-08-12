@@ -19,7 +19,10 @@ export default (_id, props) => (
       let updates = sanitize(props)
       let products = []
       let shouldUpdateImage = false
-      const options = { new: true }
+      const options = {
+        new: true,
+        runValidators: true
+      }
 
       if (has(updates, 'products')) {
         try {

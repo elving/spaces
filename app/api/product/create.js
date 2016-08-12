@@ -18,12 +18,12 @@ import { default as getOrCreateBrand } from '../brand/getOrCreate'
 import { default as getOrCreateCategory } from '../category/getOrCreate'
 import { default as findSpaceTypeByName } from '../spaceType/findByName'
 
-export default (props) => {
-  return new Promise(async (resolve, reject) => {
+export default (props) => (
+  new Promise(async (resolve, reject) => {
     let brand = null
-    let colors = []
-    let categories = []
-    let spaceTypes = []
+    const colors = []
+    const categories = []
+    const spaceTypes = []
 
     const sanitizedProps = sanitize(props)
     const Product = mongoose.model('Product')
@@ -39,14 +39,14 @@ export default (props) => {
     } catch (err) {
       if (has(err, 'name')) {
         return reject({ brand: get(err, 'name') })
-      } else {
-        return reject({
-          generic: (
-            'There was an error while trying to create this product. ' +
-            'Please try again.'
-          )
-        })
       }
+
+      return reject({
+        generic: (
+          'There was an error while trying to create this product. ' +
+          'Please try again.'
+        )
+      })
     }
 
     try {
@@ -62,14 +62,14 @@ export default (props) => {
     } catch (err) {
       if (has(err, 'name')) {
         return reject({ categories: get(err, 'name') })
-      } else {
-        return reject({
-          generic: (
-            'There was an error while trying to create this product. ' +
-            'Please try again.'
-          )
-        })
       }
+
+      return reject({
+        generic: (
+          'There was an error while trying to create this product. ' +
+          'Please try again.'
+        )
+      })
     }
 
     try {
@@ -85,14 +85,14 @@ export default (props) => {
     } catch (err) {
       if (has(err, 'name')) {
         return reject({ colors: get(err, 'name') })
-      } else {
-        return reject({
-          generic: (
-            'There was an error while trying to create this product. ' +
-            'Please try again.'
-          )
-        })
       }
+
+      return reject({
+        generic: (
+          'There was an error while trying to create this product. ' +
+          'Please try again.'
+        )
+      })
     }
 
     try {
@@ -108,14 +108,14 @@ export default (props) => {
     } catch (err) {
       if (has(err, 'name')) {
         return reject({ spaceTypes: get(err, 'name') })
-      } else {
-        return reject({
-          generic: (
-            'There was an error while trying to create this product. ' +
-            'Please try again.'
-          )
-        })
       }
+
+      return reject({
+        generic: (
+          'There was an error while trying to create this product. ' +
+          'Please try again.'
+        )
+      })
     }
 
     const product = new Product(sanitizedProps)
@@ -155,4 +155,4 @@ export default (props) => {
       })
     }
   })
-}
+)

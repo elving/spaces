@@ -14,7 +14,7 @@ export default (err) => {
     return join(err, '\n')
   } else if (isError(err)) {
     return err
-  } else {
-    return toString(err)
   }
+
+  return toString(err)
 }

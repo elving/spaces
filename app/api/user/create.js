@@ -4,8 +4,8 @@ import mongoose from 'mongoose'
 import sanitize from './sanitize'
 import parseError from '../utils/parseError'
 
-export default (props) => {
-  return new Promise((resolve, reject) => {
+export default (props) => (
+  new Promise((resolve, reject) => {
     const User = mongoose.model('User')
     const user = new User(sanitize(props))
     const errors = user.validateSync()
@@ -22,4 +22,4 @@ export default (props) => {
       resolve(user)
     })
   })
-}
+)

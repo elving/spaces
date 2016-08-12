@@ -1,293 +1,407 @@
-import ga from 'react-ga'
+import set from 'lodash/set'
 import get from 'lodash/get'
 import size from 'lodash/size'
+import axios from 'axios'
+import assign from 'lodash/assign'
+import reduce from 'lodash/reduce'
 import isEmpty from 'lodash/isEmpty'
-import React, { Component, PropTypes as Type } from 'react'
+import classNames from 'classnames'
+import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
 import Avatar from './Avatar'
+import Notification from '../common/Notification'
+
+import toStringId from '../../api/utils/toStringId'
 
 export default class EditProfile extends Component {
-  constructor(props) {
-    super(props)
-
-    const bio = get(props, 'profile.bio', '')
-    const bioLength = size(bio)
-
-    this.state = {
-      bioCharsLeft: 165 - bioLength,
-      avatarPreview: null,
-      removedAvatar: false,
-      hasBioCharsError: bioLength > 165,
-    }
-  }
-
   static contextTypes = {
-    csrf: Type.string,
-    user: Type.object
+    csrf: PropTypes.string,
+    user: PropTypes.object
   }
 
   static propTypes = {
-    message: Type.string,
-    profile: Type.object.isRequired
+    email: PropTypes.string
   }
 
   static defaultProps = {
-    profile: {}
+    email: ''
+  }
+
+  constructor(props, context) {
+    super(props, context)
+
+    const bio = get(context.user, 'bio', '')
+    const bioLength = size(bio)
+
+    this.state = {
+      bio,
+      email: get(props, 'email', ''),
+      errors: {},
+      avatar: get(context.user, 'avatar', ''),
+      fullname: get(context.user, 'fullname', ''),
+      username: get(context.user, 'username', ''),
+      isWaiting: false,
+      bioCharsLeft: 165 - bioLength,
+      hasBioCharsError: bioLength > 165,
+      savingSuccessful: false
+    }
+  }
+
+  onSubmit = (event) => {
+    event.preventDefault()
+
+    const { context } = this
+    const formData = assign({ _csrf: context.csrf }, this.getFormData())
+
+    this.setState({
+      errors: {},
+      isWaiting: true
+    }, () => {
+      axios
+      .put(`/ajax/designers/${toStringId(context.user)}/`, formData)
+      .then(({ data: user }) => {
+        const username = get(user, 'username')
+
+        if (username !== get(context.user, 'username')) {
+          window.location.href = `/designers/${username}/edit/`
+        } else {
+          this.setState({
+            bio: get(user, 'bio', ''),
+            errors: {},
+            avatar: get(user, 'avatar', ''),
+            fullname: get(user, 'fullname', ''),
+            username,
+            isWaiting: false,
+            savingSuccessful: true
+          })
+        }
+      })
+      .catch(({ response }) => {
+        this.setState({
+          errors: get(response, 'data.err', {}),
+          isWaiting: false,
+          savingSuccessful: false
+        })
+      })
+    })
+  }
+
+  onImageChange = ({ currentTarget: input }) => {
+    const file = input.files[0]
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      this.setState({
+        avatar: reader.result
+      })
+    }
+
+    if (file) {
+      reader.readAsDataURL(file)
+    }
+  }
+
+  onFullNameChange = ({ currentTarget: input }) => {
+    this.setState({
+      fullname: input.value
+    })
+  }
+
+  onEmailChange = ({ currentTarget: input }) => {
+    this.setState({
+      email: input.value
+    })
+  }
+
+  onUsernameChange = ({ currentTarget: input }) => {
+    this.setState({
+      username: input.value
+    })
+  }
+
+  onBioChange = ({ currentTarget: input }) => {
+    const bioCharsLeft = 165 - size(input.value)
+
+    this.setState({
+      bio: input.value,
+      bioCharsLeft,
+      hasBioCharsError: bioCharsLeft < 0
+    })
+  }
+
+  onNotificationClose = () => {
+    this.setState({
+      savingSuccessful: false
+    })
+  }
+
+  getFormData() {
+    const { props, state, context } = this
+
+    return reduce([
+      'bio',
+      'email',
+      'avatar',
+      'fullname',
+      'username'
+    ], (formData, field) => {
+      const oldValue = field === 'email'
+        ? get(props, field)
+        : get(context.user, field)
+
+      const fieldValue = get(state, field)
+
+      if (oldValue !== fieldValue) {
+        set(formData, field, fieldValue)
+      }
+
+      return formData
+    }, {})
+  }
+
+  getImageUrl() {
+    const { state, context } = this
+    return state.avatar || get(context.user, 'avatar')
+  }
+
+  triggerAvatarInput = () => {
+    this.avatarInput.click()
+  }
+
+  renderNotification() {
+    const { state } = this
+    const genericError = get(state.errors, 'generic')
+    const hasGenericError = !isEmpty(genericError)
+
+    if (state.savingSuccessful) {
+      return (
+        <Notification
+          type="success"
+          timeout={3500}
+          onClose={this.onNotificationClose}
+          isVisible
+        >
+          Profile updated successfully!
+        </Notification>
+      )
+    } else if (hasGenericError) {
+      return (
+        <Notification
+          type="error"
+          timeout={3500}
+          onClose={this.onNotificationClose}
+          isVisible
+        >
+          {genericError}
+        </Notification>
+      )
+    }
+
+    return null
   }
 
   render() {
-    const { csrf, user } = this.context
-    const { errors, message, profile } = this.props
+    const { props, state, context } = this
 
-    const {
-      bioCharsLeft,
-      removeAvatar,
-      avatarPreview,
-      hasBioCharsError
-    } = this.state
+    const username = get(context.user, 'username', '')
 
-    const bio = get(profile, 'bio', '')
-    const name = get(profile, 'name', '')
-    const email = get(profile, 'email', '')
-    const username = get(profile, 'username', '')
-    const initials = get(profile, 'initials', '')
-    const avatarUrl = get(profile, 'avatarUrl', '')
+    const bioError = get(state.errors, 'bio')
+    const hasBioError = !isEmpty(bioError)
 
-    const formAction = `/users/${get(user, 'username')}/edit/`
+    const emailError = get(state.errors, 'email')
+    const hasEmailError = !isEmpty(emailError)
 
-    const hasBioError = !isEmpty(errors) && errors.bio
-    const hasNameError = !isEmpty(errors) && errors.name
-    const hasEmailError = !isEmpty(errors) && errors.email
-    const hasAvatarError = !isEmpty(errors) && errors.avatar
-    const hasUsernameError = !isEmpty(errors) && errors.username
+    const nameError = get(state.errors, 'name')
+    const hasNameError = !isEmpty(nameError)
 
-    const bioCharsColor = hasBioError
-      ? '#ED4542'
-      : '#999999'
+    const avatarError = get(state.errors, 'avatar')
+    const hasAvatarError = !isEmpty(avatarError)
+
+    const usernameError = get(state.errors, 'username')
+    const hasUsernameError = !isEmpty(usernameError)
 
     return (
       <Layout>
-        <div className="edit-profile">
-          <div className="edit-profile-header">
-            <h1 className="edit-profile-header-title">Edit your profile</h1>
-          </div>
-          {!isEmpty(errors) ? (
-            <div className="ui-banner" data-state="error">
-              There was an error while trying to edit your profile
-            </div>
-          ) : null}
-          {!isEmpty(message) ? (
-            <div className="ui-banner" data-state="success">
-              {message}
-            </div>
-          ) : null}
-          <form
-            method="POST"
-            action={formAction}
-            encType="multipart/form-data"
-            onClick={() => {
-              ga.event({
-                label: username,
-                action: 'Submitted Form',
-                category: 'Edit Profile'
-              })
-            }}
-            className="edit-profile-form"
-            data-form="profile">
-            <input type="hidden" name="_csrf" value={csrf} />
-            <input type="hidden" name="_method" value="PUT" />
+        {this.renderNotification()}
 
-            <div className="ui-form-group">
-              <div className="edit-profile-avatar-wrapper">
-                <Avatar
-                  width={82}
-                  height={82}
-                  imageUrl={removeAvatar ? null : (avatarPreview || avatarUrl)}
-                  initials={initials}
-                />
+        <h1 className="page-title">Edit Your Profile</h1>
 
-                <div className="edit-profile-avatar-actions">
-                  <button
-                    type="button"
-                    className="ui-button"
-                    onClick={() => {
-                      const action = isEmpty(avatarUrl)
-                        ? 'Clicked Upload Avatar Button'
-                        : 'Clicked Change Avatar Button'
+        <form
+          ref={form => { this.form = form }}
+          method="POST"
+          action={`/users/${username}/edit/`}
+          encType="multipart/form-data"
+          onSubmit={this.onSubmit}
+          className="edit-profile-form"
+          data-form="profile"
+        >
+          <input type="hidden" name="_csrf" value={context.csrf} />
+          <input type="hidden" name="_method" value="PUT" />
 
-                      ga.event({
-                        label: username,
-                        action,
-                        category: 'Edit Profile'
-                      })
+          <div className="form-group">
+            <div className="edit-profile-avatar-wrapper">
+              <Avatar
+                width={82}
+                height={82}
+                imageUrl={this.getImageUrl()}
+                initials={get(context.user, 'initials', '')}
+              />
 
-                      this.refs.avatarInput.click()
-                    }}
-                    data-action="addAvatar">
-                    {isEmpty(avatarUrl) ? 'Upload avatar' : 'Change avatar'}
-                  </button>
-
-                  {!isEmpty(avatarUrl) && !removeAvatar ? (
-                    <button
-                      type="button"
-                      className="ui-button"
-                      data-action="removeAvatar"
-                      onClick={() => {
-                        ga.event({
-                          label: username,
-                          action: 'Clicked Remove Avatar Button',
-                          category: 'Edit Profile'
-                        })
-
-                        this.setState({
-                          removeAvatar: true
-                        }, () => {
-                          this.refs.avatarInput.value = null
-                        })
-                      }}>
-                      Remove avatar
-                    </button>
-                  ) : null}
-                </div>
-
-                <input
-                  id="image"
-                  ref="avatarInput"
-                  type="file"
-                  name="image"
-                  accept="image/gif, image/png, image/jpg, image/jpeg"
-                  multiple={false}
-                  className="ui-textfield"
-                  data-state={hasAvatarError ? 'error' : null}
-                  onChange={(event) => {
-                    var file = event.target.files[0]
-                    var reader = new FileReader()
-
-                    reader.onload = () => {
-                      this.setState({
-                        avatarPreview: reader.result
-                      })
-                    }
-
-                    if (file) {
-                      reader.readAsDataURL(file)
-                    }
-                  }}/>
+              <div className="edit-profile-avatar-actions">
+                <button
+                  type="button"
+                  onClick={this.triggerAvatarInput}
+                  className="button"
+                >
+                  {isEmpty(get(context.user, 'avatar'))
+                    ? 'Upload avatar'
+                    : 'Change avatar'
+                  }
+                </button>
               </div>
 
-              {hasAvatarError ? (
-                <span className="ui-form-error">{errors.avatar}</span>
-              ) : null}
+              <input
+                id="image"
+                ref={avatarInput => { this.avatarInput = avatarInput }}
+                type="file"
+                name="image"
+                accept="image/gif, image/png, image/jpg, image/jpeg"
+                multiple={false}
+                onChange={this.onImageChange}
+                className={classNames({
+                  textfield: true,
+                  'textfield--error': hasAvatarError
+                })}
+              />
+            </div>
 
+            {hasAvatarError ? (
+              <small className="form-error">{avatarError}</small>
+            ) : null}
+
+            {!isEmpty(state.avatar) ? (
               <input
                 type="hidden"
-                name="removeAvatar"
-                value={removeAvatar ? true : false}/>
-            </div>
+                name="avatar"
+                value={state.avatar}
+              />
+            ) : null}
+          </div>
 
-            <div className="ui-form-group">
-              <label htmlFor="name" className="ui-label">Name</label>
-              <input
-                id="name"
-                type="text"
-                name="name"
-                className="ui-textfield"
-                data-state={hasNameError ? 'error' : null}
-                placeholder="Your Name"
-                defaultValue={name}/>
-              {hasNameError ? (
-                <span className="ui-form-error">{errors.name}</span>
-              ) : null}
-            </div>
+          <div className="form-group">
+            <label htmlFor="fullname" className="form-label">Name</label>
 
-            <div className="ui-form-group">
-              <label htmlFor="username" className="ui-label">Username</label>
-              <input
-                id="username"
-                type="text"
-                name="username"
-                required
-                className="ui-textfield"
-                data-state={hasUsernameError ? 'error' : null}
-                placeholder="Your Username"
-                defaultValue={username}/>
-              {hasUsernameError ? (
-                <span className="ui-form-error">{errors.username}</span>
-              ) : null}
-            </div>
+            <input
+              id="fullname"
+              type="text"
+              name="fullname"
+              onChange={this.onFullNameChange}
+              className={classNames({
+                textfield: true,
+                'textfield--error': hasNameError
+              })}
+              placeholder="Your Name"
+              defaultValue={get(context.user, 'fullname')}
+            />
 
-            <div className="ui-form-group">
-              <label htmlFor="email" className="ui-label">Email</label>
-              <input
-                id="email"
-                type="email"
-                name="email"
-                required
-                className="ui-textfield"
-                data-state={hasEmailError ? 'error' : null}
-                placeholder="Your Email"
-                defaultValue={email}/>
-              {hasEmailError ? (
-                <span className="ui-form-error">{errors.email}</span>
-              ) : null}
-            </div>
+            {hasNameError ? (
+              <small className="form-error">{nameError}</small>
+            ) : null}
+          </div>
 
-            <div className="ui-form-group">
-              <label className="ui-label">Password</label>
-              <a href={`/users/${username}/password/`} className="ui-button">
-                Change Password
-              </a>
-            </div>
+          <div className="form-group">
+            <label htmlFor="username" className="form-label">Username</label>
 
-            <div className="ui-form-group">
-              <div className="edit-profile-form-bio-label">
-                <label htmlFor="bio" className="ui-label">
-                  Bio
-                </label>
-                <small style={{ color: bioCharsColor }}>
-                  {bioCharsLeft}
+            <input
+              id="username"
+              type="text"
+              name="username"
+              required
+              onChange={this.onUsernameChange}
+              className={classNames({
+                textfield: true,
+                'textfield--error': hasUsernameError
+              })}
+              placeholder="Your Username"
+              defaultValue={username}
+            />
+
+            {hasUsernameError ? (
+              <small className="form-error">{usernameError}</small>
+            ) : null}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">Email</label>
+
+            <input
+              id="email"
+              type="email"
+              name="email"
+              required
+              onChange={this.onEmailChange}
+              className={classNames({
+                textfield: true,
+                'textfield--error': hasEmailError
+              })}
+              placeholder="Your Email"
+              defaultValue={props.email}
+            />
+
+            {hasEmailError ? (
+              <small className="form-error">{emailError}</small>
+            ) : null}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">Password</label>
+
+            <a
+              id="password"
+              href={`/users/${username}/password/`}
+              className="button"
+            >
+              Change Password
+            </a>
+          </div>
+
+          <div className="form-group">
+            <div className="edit-profile-form-bio-label">
+              <label htmlFor="bio" className="form-label">
+                Bio
+                <small style={{ color: hasBioError ? '#ED4542' : '#999999' }}>
+                  {state.bioCharsLeft}
                 </small>
-              </div>
-              <textarea
-                id="bio"
-                type="text"
-                name="bio"
-                onChange={(event) => {
-                  const bioCharsLeft = 165 - size(event.target.value)
-
-                  this.setState({
-                    bioCharsLeft,
-                    hasBioCharsError: bioCharsLeft < 0
-                  })
-                }}
-                className="ui-textfield"
-                data-state={
-                  hasBioError || hasBioCharsError ? 'error' : null
-                }
-                placeholder="Your Awesome Bio"
-                defaultValue={bio}/>
-              {hasBioError ? (
-                <span className="ui-form-error">{errors.bio}</span>
-              ) : null}
+              </label>
             </div>
 
-            <button
-              type="submit"
-              onClick={() => {
-                ga.event({
-                  label: username,
-                  action: 'Clicked Save Button',
-                  category: 'Edit Profile'
-                })
-              }}
-              disabled={hasBioCharsError}
-              data-type="primary"
-              className="ui-button edit-profile-action">
-              Save
-            </button>
-          </form>
-        </div>
+            <textarea
+              id="bio"
+              type="text"
+              name="bio"
+              onChange={this.onBioChange}
+              className={classNames({
+                textfield: true,
+                'textfield--error': hasBioError || state.hasBioCharsError
+              })}
+              placeholder="Your Awesome Bio"
+              defaultValue={get(context.user, 'bio')}
+            />
+
+            {hasBioError ? (
+              <small className="form-error">{bioError}</small>
+            ) : null}
+          </div>
+
+          <button
+            type="submit"
+            disabled={state.hasBioCharsError}
+            className="button button--primary edit-profile-action"
+          >
+            {state.isWaiting ? 'Updating...' : 'Update'}
+          </button>
+        </form>
       </Layout>
     )
   }

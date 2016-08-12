@@ -9,7 +9,9 @@ export default (err) => {
 
   if (!isEmpty(errors)) {
     forEach(keys(errors), field => {
-      const fieldName = field === 'hashedPassword' ? 'password' : field
+      const fieldName = field === 'hashedPassword'
+        ? 'password'
+        : field
 
       fieldErrors[fieldName] = get(
         errors[field], 'message', 'Something went wrong...'
@@ -17,7 +19,7 @@ export default (err) => {
     })
 
     return fieldErrors
-  } else {
-    return err
   }
+
+  return err
 }

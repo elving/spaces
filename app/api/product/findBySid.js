@@ -22,6 +22,7 @@ export default (sid, returnDocument = false) => (
         .findOne({ sid })
         .populate('brand')
         .populate('colors')
+        .populate('createdBy')
         .populate('categories')
         .populate('spaceTypes')
         .exec(async (err, product = {}) => {

@@ -52,7 +52,7 @@
 .product-detail-image {
   background-color: #fafafa;
   width: 100%;
-  height: 100%;
+  height: auto;
   z-index: 1;
   position: relative;
   max-width: 100%;
@@ -113,11 +113,12 @@
 }
 
 .product-detail-url,
-.product-detail-likes,
+.product-detail-curator,
 .product-detail-description {
   margin: 30px 0 0;
 }
 
+.product-detail-likes,
 .product-detail-actions,
 .product-detail-comments {
   margin: 15px 0 0;
@@ -129,6 +130,7 @@
 .product-detail-brand,
 .product-detail-likes,
 .product-detail-actions,
+.product-detail-curator,
 .product-detail-comments,
 .product-detail-description {
   width: 100%;
@@ -137,6 +139,18 @@
 .product-detail-description {
   font-size: 16px;
   line-height: 24px;
+}
+
+.product-detail-curator {
+  text-decoration: none;
+}
+
+.product-detail-curator:hover {
+  text-decoration: none;
+}
+
+.product-detail-curator:hover .card-avatars-count {
+  text-decoration: underline;
 }
 
 .product-detail-actions {

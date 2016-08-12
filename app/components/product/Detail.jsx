@@ -5,9 +5,10 @@ import isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
-import Layout from '../common/Layout'
-import Loader from '../common/Loader'
 import Space from '../space/Card'
+import Layout from '../common/Layout'
+import Avatar from '../user/Avatar'
+import Loader from '../common/Loader'
 import Product from './Card'
 import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
@@ -165,6 +166,29 @@ class ProductDetail extends Component {
     ) : null
   }
 
+  renderCurator() {
+    const { props } = this
+
+    return (
+      <a
+        href={`/${get(props.product, 'createdBy.detailUrl')}/`}
+        className="product-detail-curator"
+      >
+        <div className="card-avatars">
+          <Avatar
+            user={get(props.product, 'createdBy')}
+            width={34}
+            height={34}
+            className="card-avatars-icon"
+          />
+          <div className="card-avatars-count">
+            Curated by {get(props.product, 'createdBy.name')}
+          </div>
+        </div>
+      </a>
+    )
+  }
+
   renderLikesCount() {
     const { props } = this
     const lastLikes = get(props.product, 'lastLikes')
@@ -307,6 +331,7 @@ class ProductDetail extends Component {
         {this.renderName()}
         {this.renderBrand()}
         {this.renderDescription()}
+        {this.renderCurator()}
         {this.renderLikesCount()}
         {this.renderCommentsCount()}
         {this.renderTags()}

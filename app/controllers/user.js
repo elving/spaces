@@ -3,6 +3,7 @@ import update from '../api/user/update'
 import search from '../api/user/search'
 import getEmail from '../api/user/getEmail'
 import setProps from '../utils/middlewares/setProps'
+import setOgTags from '../utils/middlewares/setOgTags'
 import toStringId from '../api/utils/toStringId'
 import setMetadata from '../utils/middlewares/setMetadata'
 import findByUsername from '../api/user/findByUsername'
@@ -77,6 +78,64 @@ export const renderProfileForm = async (req, res, next) => {
 }
 
 export const updateUser = async (req, res, next) => {
+  const id = get(req, 'params.id')
+
+  try {
+    if (!isAuthenticatedUser(req.user)) {
+      res.status(500).json({
+        err: {
+          generic: 'Not authorized'
+        }
+      })
+    }
+
+    if (toStringId(req.user) !== id) {
+      res.status(500).json({
+        err: {
+          generic: 'Not authorized'
+        }
+      })
+    }
+
+    const user = await update(toStringId(req.user), req.body)
+
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err)
+      }
+
+      res.status(200).json(user)
+    })
+  } catch (err) {
+    res.status(500).json({ err })
+  }
+}
+
+export const showPassword = (req, res, next) => {
+  const username = get(req, 'params.username')
+
+  if (!isAuthenticatedUser(req.user)) {
+    return res.redirect('/404/')
+  }
+
+  if (get(req, 'user.username') !== username) {
+    return res.redirect('/404/')
+  }
+
+  setProps(res, {
+    profile: req.profile
+  })
+
+  setMetadata(res, {
+    title: 'Change Password | Spaces',
+    bodyId: 'user-profile',
+    bodyClass: 'page page-user-change-password'
+  })
+
+  next()
+}
+
+export const updatePassword = async (req, res, next) => {
   const id = get(req, 'params.id')
 
   try {

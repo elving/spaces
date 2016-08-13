@@ -230,7 +230,7 @@ export default class EditProfile extends Component {
         <form
           ref={form => { this.form = form }}
           method="POST"
-          action={`/users/${username}/edit/`}
+          action={`/designers/${username}/edit/`}
           encType="multipart/form-data"
           onSubmit={this.onSubmit}
           className="edit-profile-form"
@@ -296,6 +296,7 @@ export default class EditProfile extends Component {
               id="fullname"
               type="text"
               name="fullname"
+              disabled={state.isWaiting}
               onChange={this.onFullNameChange}
               className={classNames({
                 textfield: true,
@@ -318,6 +319,7 @@ export default class EditProfile extends Component {
               type="text"
               name="username"
               required
+              disabled={state.isWaiting}
               onChange={this.onUsernameChange}
               className={classNames({
                 textfield: true,
@@ -340,6 +342,7 @@ export default class EditProfile extends Component {
               type="email"
               name="email"
               required
+              disabled={state.isWaiting}
               onChange={this.onEmailChange}
               className={classNames({
                 textfield: true,
@@ -359,7 +362,7 @@ export default class EditProfile extends Component {
 
             <a
               id="password"
-              href={`/users/${username}/password/`}
+              href={`/designers/${username}/password/`}
               className="button"
             >
               Change Password
@@ -380,6 +383,7 @@ export default class EditProfile extends Component {
               id="bio"
               type="text"
               name="bio"
+              disabled={state.isWaiting}
               onChange={this.onBioChange}
               className={classNames({
                 textfield: true,
@@ -396,7 +400,7 @@ export default class EditProfile extends Component {
 
           <button
             type="submit"
-            disabled={state.hasBioCharsError}
+            disabled={state.isWaiting || state.hasBioCharsError}
             className="button button--primary edit-profile-action"
           >
             {state.isWaiting ? 'Updating...' : 'Update'}

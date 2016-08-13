@@ -1,187 +1,214 @@
-import ga from 'react-ga'
 import get from 'lodash/get'
+import axios from 'axios'
 import isEmpty from 'lodash/isEmpty'
-import isEqual from 'lodash/isEqual'
-import React, { Component, PropTypes as Type } from 'react'
+import serialize from 'form-serialize'
+import classNames from 'classnames'
+import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
+import toStringId from '../../api/utils/toStringId'
 
 export default class ChangePassword extends Component {
+  static contextTypes = {
+    csrf: PropTypes.string,
+    user: PropTypes.object
+  }
+
   constructor(props) {
     super(props)
 
-    const passwordError = get(props, 'errors.password')
-
     this.state = {
-      passwordError,
-      hasPasswordError: !isEmpty(passwordError)
+      errors: {},
+      isWaiting: false,
+      savingSuccessful: false
     }
   }
 
-  static contextTypes = {
-    csrf: Type.string
-  }
+  onSubmit = (event) => {
+    const { context } = this
+    const formData = serialize(this.form, { hash: true })
+    const password = this.password.value
+    const newPassword = this.newPassword.value
+    const confirmPassword = this.confirmPassword.value
 
-  static propTypes = {
-    fields: Type.object,
-    errors: Type.object,
-    profile: Type.object.isRequired
-  }
-
-  static defaultProps = {
-    profile: {}
-  }
-
-  validate(event) {
-    const password = get(this.refs, 'password.value')
-    const newPassword = get(this.refs, 'newPassword.value')
-    const confirmPassword = get(this.refs, 'confirmPassword.value')
-
-    ga.event({
-      label: 'Join Form',
-      action: 'Submitted Form',
-      category: 'Join'
-    })
+    event.preventDefault()
 
     if (isEmpty(newPassword) || isEmpty(confirmPassword)) {
-      event.preventDefault()
-
-      this.setState({
-        passwordError: 'Please choose a valid password.',
-        hasPasswordError: true
+      return this.setState({
+        password: 'Please choose a valid password.'
       })
-    } else if (!isEqual(newPassword, confirmPassword)) {
-      event.preventDefault()
-
-      this.setState({
-        passwordError: 'Please check that your passwords match and try again.',
-        hasPasswordError: true
+    } else if (newPassword !== confirmPassword) {
+      return this.setState({
+        password: 'Please check that your passwords match and try again.'
       })
-    } else if (isEqual(password, newPassword)) {
-      event.preventDefault()
-
-      this.setState({
-        passwordError: (
+    } else if (password === newPassword) {
+      return this.setState({
+        password: (
           'Your new password must be different from your current password.'
-        ),
-        hasPasswordError: true
+        )
       })
     }
+
+    this.setState({
+      errors: {},
+      isWaiting: true
+    }, () => {
+      axios
+      .put(`/ajax/designers/${toStringId(context.user)}/password/`, formData)
+      .then(() => {
+        this.setState({
+          errors: {},
+          isWaiting: false,
+          savingSuccessful: true
+        })
+      })
+      .catch(({ response }) => {
+        this.setState({
+          errors: get(response, 'data.err', {}),
+          isWaiting: false,
+          savingSuccessful: false
+        })
+      })
+    })
+  }
+
+  onNotificationClose = () => {
+    this.setState({
+      savingSuccessful: false
+    })
+  }
+
+  renderNotification() {
+    const { state } = this
+    const genericError = get(state.errors, 'generic')
+    const hasGenericError = !isEmpty(genericError)
+
+    if (state.savingSuccessful) {
+      return (
+        <Notification
+          type="success"
+          timeout={3500}
+          onClose={this.onNotificationClose}
+          isVisible
+        >
+          Password updated successfully!
+        </Notification>
+      )
+    } else if (hasGenericError) {
+      return (
+        <Notification
+          type="error"
+          timeout={3500}
+          onClose={this.onNotificationClose}
+          isVisible
+        >
+          {genericError}
+        </Notification>
+      )
+    }
+
+    return null
   }
 
   render() {
-    const { csrf } = this.context
-    const { passwordError, hasPasswordError } = this.state
-    const { fields, profile, errors, message } = this.props
+    const { state, context } = this
 
-    const username = get(profile, 'username')
-    const password = get(fields, 'password')
-    const newPassword = get(fields, 'newPassword')
-    const confirmPassword = get(fields, 'confirmPassword')
-
-    const formAction = `/users/${username}/password/`
+    const passwordError = get(state.errors, 'password')
+    const hasPasswordError = !isEmpty(passwordError)
 
     return (
       <Layout>
-        <div className="edit-profile">
-          <div className="edit-profile-header">
-            <h1 className="edit-profile-header-title">
-              Change Your Password
-            </h1>
+        {this.renderNotification()}
+
+        <h1 className="page-title">Change Your Password</h1>
+
+        <form
+          ref={form => { this.form = form }}
+          method="POST"
+          onSubmit={this.onSubmit}
+          className="edit-profile-form"
+          data-form="password"
+        >
+          <input type="hidden" name="_csrf" value={context.csrf} />
+          <input type="hidden" name="_method" value="PUT" />
+
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">
+              Current Password
+            </label>
+
+            <input
+              id="password"
+              ref={password => { this.password = password }}
+              type="password"
+              name="password"
+              required
+              disabled={state.isWaiting}
+              className={classNames({
+                textfield: true,
+                'textfield--error': hasPasswordError
+              })}
+              placeholder="••••••••"
+            />
           </div>
-          {!isEmpty(errors) ? (
-            <div className="ui-banner" data-state="error">
-              There was an error while trying to change your password
-            </div>
-          ) : null}
-          {!isEmpty(message) ? (
-            <div className="ui-banner" data-state="success">
-              {message}
-            </div>
-          ) : null}
-          <form
-            method="POST"
-            action={formAction}
-            onSubmit={::this.validate}
-            onClick={() => {
-              ga.event({
-                label: username,
-                action: 'Submitted Form',
-                category: 'Change Password'
-              })
-            }}
-            className="edit-profile-form"
-            data-form="profile">
-            <input type="hidden" name="_csrf" value={csrf}/>
-            <input type="hidden" name="_method" value="PUT"/>
 
-            <div className="ui-form-group">
-              <label htmlFor="password" className="ui-label">
-                Current Password
-              </label>
-              <input
-                id="password"
-                ref="password"
-                type="password"
-                name="password"
-                required
-                className="ui-textfield"
-                data-state={hasPasswordError ? 'error' : null}
-                placeholder="••••••••"
-                defaultValue={password}/>
-            </div>
+          <div className="form-group">
+            <label htmlFor="newPassword" className="form-label">
+              New Password
+            </label>
 
-            <div className="ui-form-group">
-              <label htmlFor="newPassword" className="ui-label">
-                New Password
-              </label>
-              <input
-                id="newPassword"
-                ref="newPassword"
-                type="password"
-                name="newPassword"
-                required
-                className="ui-textfield"
-                data-state={hasPasswordError ? 'error' : null}
-                placeholder="••••••••"
-                defaultValue={newPassword}/>
-            </div>
+            <input
+              id="newPassword"
+              ref={newPassword => { this.newPassword = newPassword }}
+              type="password"
+              name="newPassword"
+              required
+              disabled={state.isWaiting}
+              className={classNames({
+                textfield: true,
+                'textfield--error': hasPasswordError
+              })}
+              placeholder="••••••••"
+            />
+          </div>
 
-            <div className="ui-form-group">
-              <label htmlFor="confirmPassword" className="ui-label">
-                Confirm New Password
-              </label>
-              <input
-                id="confirmPassword"
-                ref="confirmPassword"
-                type="password"
-                name="confirmPassword"
-                required
-                className="ui-textfield"
-                data-state={hasPasswordError ? 'error' : null}
-                placeholder="••••••••"
-                defaultValue={confirmPassword}/>
-                {hasPasswordError ? (
-                  <span className="ui-form-error">{passwordError}</span>
-                ) : null}
-            </div>
+          <div className="form-group">
+            <label htmlFor="confirmPassword" className="form-label">
+              Confirm New Password
+            </label>
 
-            <button
-              type="submit"
-              onClick={() => {
-                ga.event({
-                  label: username,
-                  action: 'Clicked Change Password Button',
-                  category: 'Change Password'
-                })
+            <input
+              id="confirmPassword"
+              ref={confirmPassword => {
+                this.confirmPassword = confirmPassword
               }}
-              className="ui-button"
-              data-type="primary"
-              data-action="updatePassword">
-              <span className="button-text">Update Password</span>
-            </button>
-          </form>
-        </div>
+              type="password"
+              name="confirmPassword"
+              required
+              disabled={state.isWaiting}
+              className={classNames({
+                textfield: true,
+                'textfield--error': hasPasswordError
+              })}
+              placeholder="••••••••"
+            />
+
+            {hasPasswordError ? (
+              <span className="form-error">{passwordError}</span>
+            ) : null}
+          </div>
+
+          <button
+            type="submit"
+            disabled={state.isWaiting}
+            className="button button--primary"
+            data-action="updatePassword"
+          >
+            <span className="button-text">
+              {state.isWaiting ? 'Updating Password...' : 'Update Password'}
+            </span>
+          </button>
+        </form>
       </Layout>
     )
   }

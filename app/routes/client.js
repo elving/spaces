@@ -46,6 +46,7 @@ import UserProfile from '../components/user/Profile'
 import EditProfile from '../components/user/EditProfile'
 import ProfileLikes from '../components/user/ProfileLikes'
 import ProfileSpaces from '../components/user/ProfileSpaces'
+import ChangePassword from '../components/user/ChangePassword'
 import ProfileProducts from '../components/user/ProfileProducts'
 
 import SearchResults from '../components/search/Results'
@@ -80,6 +81,7 @@ const routes = (
     </Route>
 
     <Route path="designers/:username/edit" component={EditProfile} />
+    <Route path="designers/:username/password" component={ChangePassword} />
 
     <Route path="categories" component={CategoriesIndex} />
     <Route path="categories/:slug" component={CategoryDetail} />

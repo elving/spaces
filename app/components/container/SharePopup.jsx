@@ -13,7 +13,7 @@ const sharePopupContainer = Composed => class extends Component {
     })
   }
 
-  closeSharePopup() {
+  closeSharePopup = () => {
     this.setState({
       sharePopupIsOpen: false
     })

@@ -29,8 +29,17 @@
   margin: 0 15px;
 }
 
+button.space-detail-counter {
+  cursor: pointer;
+}
+
 .space-detail-counter:hover {
   text-decoration: none;
+}
+
+.space-detail-counter:hover .space-detail-counter-text,
+.space-detail-counter:hover .space-detail-counter-number {
+  color: #555555;
 }
 
 .space-detail-counter-number {

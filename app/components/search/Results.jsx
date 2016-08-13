@@ -23,7 +23,7 @@ class SearchResults extends Component {
     openAddProductModal: PropTypes.func,
     closeAddProductModal: PropTypes.func,
     addProductModalIsOpen: PropTypes.bool,
-    createaddProductModal: PropTypes.bool
+    createAddProductModal: PropTypes.bool
   }
 
   static defaultProps = {
@@ -32,7 +32,7 @@ class SearchResults extends Component {
     openAddProductModal: (() => {}),
     closeAddProductModal: (() => {}),
     addProductModalIsOpen: false,
-    createaddProductModal: false
+    createAddProductModal: false
   }
 
   constructor(props) {

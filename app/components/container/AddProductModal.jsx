@@ -3,14 +3,14 @@ import React, { Component } from 'react'
 const addProductModalContainer = Composed => class extends Component {
   state = {
     addProductModalIsOpen: false,
-    createaddProductModal: false,
+    createAddProductModal: false,
     addProductModalCurrent: {}
   }
 
   openAddProductModal = (product) => {
     this.setState({
       addProductModalIsOpen: true,
-      createaddProductModal: true,
+      createAddProductModal: true,
       addProductModalCurrent: product
     })
   }

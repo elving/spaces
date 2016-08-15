@@ -6,6 +6,7 @@ import setProps from '../utils/middlewares/setProps'
 import setOgTags from '../utils/middlewares/setOgTags'
 import toStringId from '../api/utils/toStringId'
 import setMetadata from '../utils/middlewares/setMetadata'
+import updatePassword from '../api/user/updatePassword'
 import findByUsername from '../api/user/findByUsername'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
@@ -135,7 +136,7 @@ export const showPassword = (req, res, next) => {
   next()
 }
 
-export const updatePassword = async (req, res, next) => {
+export const changePassword = async (req, res, next) => {
   const id = get(req, 'params.id')
 
   try {
@@ -155,7 +156,7 @@ export const updatePassword = async (req, res, next) => {
       })
     }
 
-    const user = await update(toStringId(req.user), req.body)
+    const user = await updatePassword(toStringId(req.user), req.body)
 
     req.logIn(user, (err) => {
       if (err) {

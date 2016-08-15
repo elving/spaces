@@ -6,6 +6,8 @@ import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
+import Notification from '../common/Notification'
+
 import toStringId from '../../api/utils/toStringId'
 
 export default class ChangePassword extends Component {
@@ -25,8 +27,6 @@ export default class ChangePassword extends Component {
   }
 
   onSubmit = (event) => {
-    const { context } = this
-    const formData = serialize(this.form, { hash: true })
     const password = this.password.value
     const newPassword = this.newPassword.value
     const confirmPassword = this.confirmPassword.value
@@ -35,19 +35,28 @@ export default class ChangePassword extends Component {
 
     if (isEmpty(newPassword) || isEmpty(confirmPassword)) {
       return this.setState({
-        password: 'Please choose a valid password.'
+        errors: {
+          password: 'Please choose a valid password.'
+        }
       })
     } else if (newPassword !== confirmPassword) {
       return this.setState({
-        password: 'Please check that your passwords match and try again.'
+        errors: {
+          password: 'Please check that your passwords match and try again.'
+        }
       })
     } else if (password === newPassword) {
       return this.setState({
-        password: (
-          'Your new password must be different from your current password.'
-        )
+        errors: {
+          password: (
+            'Your new password must be different from your current password.'
+          )
+        }
       })
     }
+
+    const formData = serialize(this.form, { hash: true })
+    const { context } = this
 
     this.setState({
       errors: {},

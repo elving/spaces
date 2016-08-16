@@ -63,10 +63,10 @@ const routes = (
     <Route path="/onboarding" component={Onboarding} />
 
     <Route path="products" component={ProductsIndex} />
-    <Route path="p/:sid" component={ProductDetail} />
-    <Route path="products/:sid/:name" component={ProductDetail} />
     <Route path="products/add" component={AddProduct} />
     <Route path="products/:id/update" component={UpdateProduct} />
+    <Route path="products/:sid/:name" component={ProductDetail} />
+    <Route path="p/:sid" component={ProductDetail} />
 
     <Route path="spaces" component={SpacesIndex} />
     <Route path="s/:sid" component={SpaceDetail} />

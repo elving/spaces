@@ -6,10 +6,10 @@ const router = express.Router()
 const ajaxRoot = '/ajax/products'
 
 router.get('/products/', controller.renderIndex)
-router.get('/p/:sid/', controller.renderDetail)
-router.get('/products/:sid/:name/', controller.renderDetail)
 router.get('/products/add/', controller.renderAddProduct)
 router.get('/products/:sid/update/', controller.renderUpdateProduct)
+router.get('/p/:sid/', controller.renderDetail)
+router.get('/products/:sid/:name/', controller.renderDetail)
 
 router.get('/admin/products/', isAdmin, controller.renderAdminProducts)
 

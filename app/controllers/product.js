@@ -47,6 +47,10 @@ export const renderIndex = async (req, res, next) => {
 }
 
 export const renderDetail = async (req, res, next) => {
+  if (get(req, 'params.name') === 'update') {
+    return next()
+  }
+
   const sid = get(req, 'params.sid')
 
   try {

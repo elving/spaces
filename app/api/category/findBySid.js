@@ -23,7 +23,7 @@ export default (sid, returnDocument = false) => {
             await saveToCache(key, toJSON(category), toIds(category))
             resolve(category)
           } else {
-            resolve()
+            resolve({})
           }
         })
     }

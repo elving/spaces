@@ -6,7 +6,7 @@ export default (category, limit = 3) => {
   return new Promise(async (resolve, reject) => {
     mongoose
       .model('Product')
-      .where({ categories: { $in: [category] }})
+      .where({ categories: { $in: [category] } })
       .limit(limit)
       .exec((err, products = []) => {
         if (err) {

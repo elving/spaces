@@ -16,7 +16,7 @@ export default () => {
         .model('SpaceType')
         .find()
         .sort({ name: 'asc' })
-        .exec(async (err, spaceTypes) => {
+        .exec(async (err, spaceTypes = []) => {
           if (err) {
             return reject(parseError(err))
           }
@@ -25,7 +25,7 @@ export default () => {
             await saveToCache(cacheKey, toJSON(spaceTypes), toIds(spaceTypes))
             resolve(spaceTypes)
           } else {
-            resolve()
+            resolve([])
           }
         })
     }, resolve)

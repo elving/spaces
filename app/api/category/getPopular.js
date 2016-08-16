@@ -25,7 +25,7 @@ export default (limit = 8) => {
           }
 
           if (!isEmpty(categories)) {
-            for (let category of categories) {
+            for (const category of categories) {
               const products = await getProducts(toStringId(category))
               category.set('products', products)
             }

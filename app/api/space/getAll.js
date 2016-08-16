@@ -25,7 +25,7 @@ export default () => {
             await saveToCache(cacheKey, toJSON(spaces), toIds(spaces))
             resolve(spaces)
           } else {
-            resolve()
+            resolve([])
           }
         })
     }, resolve)

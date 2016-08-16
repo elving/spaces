@@ -26,7 +26,7 @@ export default (name, returnDocument = false) => {
             await saveToCache(key, toJSON(category), toIds(category))
             resolve(category)
           } else {
-            resolve()
+            resolve({})
           }
         })
     }

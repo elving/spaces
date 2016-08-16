@@ -1,6 +1,6 @@
 {
   "name": "Spaces-Next",
-  "version": "0.0.79",
+  "version": "0.0.80",
   "description": "A visual shopping guide for your home.",
   "license": "ISC",
   "author": "",
@@ -100,7 +100,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "imports-loader": "^0.6.5",
     "nodemon": "^1.10.0",
-    "postcss-loader": "^0.9.1",
+    "postcss-loader": "^0.10.0",
     "react-transform-catch-errors": "^1.0.2",
     "react-transform-hmr": "^1.0.4",
     "redbox-react": "^1.3.0",

@@ -7,12 +7,12 @@ export default (_id) => {
     mongoose
       .model('Brand')
       .findOne({ _id })
-      .exec((err, space) => {
+      .exec((err, brand) => {
         if (err) {
           return reject(parseError(err))
         }
 
-        resolve(space)
+        resolve(brand || {})
       })
   })
 }

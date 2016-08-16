@@ -22,7 +22,7 @@ export default () => {
         .populate('categories')
         .populate('spaceTypes')
         .sort('-createdAt')
-        .exec(async (err, products) => {
+        .exec(async (err, products = []) => {
           if (err) {
             return reject(parseError(err))
           }
@@ -38,7 +38,7 @@ export default () => {
 
             resolve(products)
           } else {
-            resolve()
+            resolve([])
           }
         })
     }, resolve)

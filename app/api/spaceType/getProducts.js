@@ -6,7 +6,7 @@ export default (spaceType, limit = 3) => {
   return new Promise(async (resolve, reject) => {
     mongoose
       .model('Product')
-      .where({ spaceTypes: { $in: [spaceType] }})
+      .where({ spaceTypes: { $in: [spaceType] } })
       .limit(limit)
       .exec((err, products = []) => {
         if (err) {

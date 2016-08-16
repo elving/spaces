@@ -37,7 +37,7 @@ const getProducts = category => (
         if (!isEmpty(product)) {
           resolve(product)
         } else {
-          resolve()
+          resolve({})
         }
       })
   })
@@ -53,7 +53,7 @@ export default (params = {}) => (
       .skip(parseInt(get(params, 'skip', 0)))
       .limit(parseInt(get(params, 'limit', 40)))
       .sort('name')
-      .exec(async (err, categories) => {
+      .exec(async (err, categories = []) => {
         if (err) {
           return reject(parseError(err))
         }

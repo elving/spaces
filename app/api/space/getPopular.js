@@ -24,7 +24,7 @@ export default (limit = 8) => {
         .populate('categories')
         .populate('originalSpace')
         .sort('-likesCount -productsCount -updatedAt')
-        .exec(async (err, spaces) => {
+        .exec(async (err, spaces = []) => {
           if (err) {
             return reject(parseError(err))
           }

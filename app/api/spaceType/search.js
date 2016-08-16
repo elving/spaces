@@ -27,9 +27,9 @@ const getProducts = (spaceType) => {
   return new Promise(async (resolve, reject) => {
     mongoose
       .model('Product')
-      .where({ spaceTypes: { $in: [spaceType] }})
+      .where({ spaceTypes: { $in: [spaceType] } })
       .limit(3)
-      .exec((err, product) => {
+      .exec((err, product = {}) => {
         if (err) {
           return reject(parseError(err))
         }
@@ -37,7 +37,7 @@ const getProducts = (spaceType) => {
         if (!isEmpty(product)) {
           resolve(product)
         } else {
-          resolve()
+          resolve({})
         }
       })
   })
@@ -53,14 +53,14 @@ export default (params = {}) => {
       .skip(parseInt(get(params, 'skip', 0)))
       .limit(parseInt(get(params, 'limit', 40)))
       .sort('name')
-      .exec(async (err, spaceTypes) => {
+      .exec(async (err, spaceTypes = []) => {
         if (err) {
           return reject(parseError(err))
         }
 
         const count = await getCount(searchParams)
 
-        for (let spaceType of spaceTypes) {
+        for (const spaceType of spaceTypes) {
           const products = await getProducts(toStringId(spaceType))
           spaceType.set('products', products)
         }

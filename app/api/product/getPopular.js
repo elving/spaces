@@ -23,7 +23,7 @@ export default (limit = 8) => {
         .populate('categories')
         .populate('spaceTypes')
         .sort('-likesCount -updatedAt')
-        .exec(async (err, products) => {
+        .exec(async (err, products = []) => {
           if (err) {
             return reject(parseError(err))
           }

@@ -17,7 +17,7 @@ export default (name, returnDocument = false) => {
       mongoose
         .model('SpaceType')
         .findOne({ name: reverseKebabCase(name) })
-        .exec(async (err, spaceType) => {
+        .exec(async (err, spaceType = {}) => {
           if (err) {
             return reject(parseError(err))
           }
@@ -26,7 +26,7 @@ export default (name, returnDocument = false) => {
             await saveToCache(key, toJSON(spaceType), toIds(spaceType))
             resolve(spaceType)
           } else {
-            resolve()
+            resolve({})
           }
         })
     }

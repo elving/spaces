@@ -7,12 +7,12 @@ export default (_id) => {
     mongoose
       .model('Category')
       .findOne({ _id })
-      .exec((err, space) => {
+      .exec((err, category) => {
         if (err) {
           return reject(parseError(err))
         }
 
-        resolve(space)
+        resolve(category || {})
       })
   })
 }

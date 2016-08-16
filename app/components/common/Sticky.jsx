@@ -1,3 +1,5 @@
+import get from 'lodash/get'
+import { default as $ } from '../../utils/dom/selector'
 import React, { Component, PropTypes } from 'react'
 
 export default class Sticky extends Component {
@@ -27,9 +29,9 @@ export default class Sticky extends Component {
     })
   }
 
-  sticky = null;
-  originalOffsetTop = null;
-  originalOffsetHeight = null;
+  sticky = null
+  originalOffsetTop = null
+  originalOffsetHeight = null
 
   render() {
     const { props, state } = this
@@ -39,7 +41,7 @@ export default class Sticky extends Component {
         ref={sticky => {
           this.sticky = sticky
 
-          if (sticky && sticky.offsetTop && sticky.offsetHeight) {
+          if (sticky) {
             this.originalOffsetTop = sticky.offsetTop
             this.originalOffsetHeight = sticky.offsetHeight
           }

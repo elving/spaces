@@ -16,7 +16,7 @@ export default (name, returnDocument = false) => {
       mongoose
         .model('Produt')
         .findOne({ name })
-        .exec(async (err, product) => {
+        .exec(async (err, product = {}) => {
           if (err) {
             return reject(parseError(err))
           }
@@ -32,7 +32,7 @@ export default (name, returnDocument = false) => {
 
             resolve(product)
           } else {
-            resolve()
+            resolve({})
           }
         })
     }

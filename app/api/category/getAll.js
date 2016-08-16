@@ -25,7 +25,7 @@ export default () => {
             await saveToCache(cacheKey, toJSON(categories), toIds(categories))
             resolve(categories)
           } else {
-            resolve()
+            resolve([])
           }
         })
     }, resolve)

@@ -52,7 +52,7 @@ export default (params = {}, operation = 'where') => (
       .populate('categories')
       .populate('spaceType')
       .populate('originalSpace')
-      .exec(async (err, spaces) => {
+      .exec(async (err, spaces = []) => {
         if (err) {
           return reject(parseError(err))
         }
@@ -61,7 +61,7 @@ export default (params = {}, operation = 'where') => (
 
         resolve({
           count: count || size(spaces),
-          results: spaces
+          results: spaces || []
         })
       })
   })

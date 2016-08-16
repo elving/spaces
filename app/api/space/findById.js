@@ -7,7 +7,7 @@ export default (_id) => {
     mongoose
       .model('Space')
       .findOne({ _id })
-      .exec((err, space) => {
+      .exec((err, space = {}) => {
         if (err) {
           return reject(parseError(err))
         }

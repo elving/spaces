@@ -19,13 +19,13 @@ export default (limit = 8) => {
         .find()
         .limit(limit)
         .sort('-followersCount -spacesCount -productsCount -updatedAt')
-        .exec(async (err, spaceTypes) => {
+        .exec(async (err, spaceTypes = []) => {
           if (err) {
             return reject(parseError(err))
           }
 
           if (!isEmpty(spaceTypes)) {
-            for (let spaceType of spaceTypes) {
+            for (const spaceType of spaceTypes) {
               const products = await getProducts(toStringId(spaceType))
               spaceType.set('products', products)
             }

@@ -16,7 +16,7 @@ export default () => {
         .model('Color')
         .find()
         .sort({ name: 'asc' })
-        .exec(async (err, colors) => {
+        .exec(async (err, colors = []) => {
           if (err) {
             return reject(parseError(err))
           }
@@ -25,7 +25,7 @@ export default () => {
             await saveToCache(key, toJSON(colors), toIds(colors))
             resolve(colors)
           } else {
-            resolve()
+            resolve([])
           }
         })
     }, resolve)

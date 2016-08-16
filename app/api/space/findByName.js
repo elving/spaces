@@ -15,7 +15,7 @@ export default (name, returnDocument = false) => {
       mongoose
         .model('Space')
         .findOne({ name })
-        .exec(async (err, space) => {
+        .exec(async (err, space = {}) => {
           if (err) {
             return reject(parseError(err))
           }
@@ -24,7 +24,7 @@ export default (name, returnDocument = false) => {
             await saveToCache(key, toJSON(space), toIds(space))
             resolve(space)
           } else {
-            resolve()
+            resolve({})
           }
         })
     }

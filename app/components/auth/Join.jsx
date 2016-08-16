@@ -59,7 +59,7 @@ export default class Join extends Component {
         axios
           .post('/ajax/join/', formData)
           .then(() => {
-            window.location.href = '/'
+            window.location.href = '/onboarding/'
           })
           .catch(({ response }) => {
             this.setState({

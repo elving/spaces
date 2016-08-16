@@ -14,7 +14,7 @@ export default (sid, returnDocument = false) => {
       mongoose
         .model('Color')
         .findOne({ sid })
-        .exec(async (err, color) => {
+        .exec(async (err, color = {}) => {
           if (err) {
             return reject(parseError(err))
           }
@@ -23,7 +23,7 @@ export default (sid, returnDocument = false) => {
             await saveToCache(key, toJSON(color), toIds(color))
             resolve(color)
           } else {
-            resolve()
+            resolve({})
           }
         })
     }

@@ -25,7 +25,7 @@ export default (sid, returnDocument = false) => {
         .populate('spaceType')
         .populate('createdBy')
         .populate('originalSpace')
-        .exec(async (err, space) => {
+        .exec(async (err, space = {}) => {
           if (err) {
             return reject(parseError(err))
           }
@@ -42,7 +42,7 @@ export default (sid, returnDocument = false) => {
 
             resolve(space)
           } else {
-            resolve()
+            resolve({})
           }
         })
     }

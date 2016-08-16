@@ -12,7 +12,7 @@ router.get('/designers/:username/spaces/', controller.renderProfile)
 router.get('/designers/:username/products/', controller.renderProfile)
 router.get('/designers/:username/password/', controller.showPassword)
 
-router.put('/ajax/designers/:id/', controller.updateUser)
-router.put('/ajax/designers/:id/password/', controller.changePassword)
+router.put(`${ajaxRoot}/:id/`, controller.updateUser)
+router.put(`${ajaxRoot}/:id/password/`, controller.changePassword)
 
 export default router

@@ -20,7 +20,7 @@ export default (url, returnDocument = false) => (
         .populate('colors')
         .populate('categories')
         .populate('spaceTypes')
-        .exec(async (err, product) => {
+        .exec(async (err, product = {}) => {
           if (err) {
             return reject(parseError(err))
           }
@@ -36,7 +36,7 @@ export default (url, returnDocument = false) => (
 
             resolve(product)
           } else {
-            resolve()
+            resolve({})
           }
         })
     }

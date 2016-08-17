@@ -92,16 +92,16 @@ export default class Onboarding extends Component {
         <Sticky>
           <div className="onboarding-header">
             <h2 className="onboarding-header-title">
-              Follow at least 3 interests to build your personal feed.
+              Follow at least 5 interests to build your personal feed.
             </h2>
 
             <div className="onboarding-header-count">
               <span className="onboarding-header-count-left">
-                {state.following} / 3
+                {state.following} / 5
               </span>
               <a
                 href="/feed/?onboarding=1"
-                disabled={state.following < 3}
+                disabled={state.following < 5}
                 className="onboarding-header-button button button--primary-alt"
               >
                 Continue

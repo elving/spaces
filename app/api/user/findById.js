@@ -21,7 +21,7 @@ export default (_id) => (
         .populate('products')
         .populate('comments')
         .populate('following')
-        .exec(async (err, user) => {
+        .exec(async (err, user = {}) => {
           if (err) {
             return reject(parseError(err))
           }
@@ -38,7 +38,7 @@ export default (_id) => (
 
             resolve(user)
           } else {
-            resolve()
+            resolve({})
           }
         })
     }

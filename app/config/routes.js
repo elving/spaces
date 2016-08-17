@@ -1,3 +1,4 @@
+import logError from '../utils/logError'
 import getVersion from '../utils/getVersion'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
@@ -60,6 +61,10 @@ const configRoutes = (server) => {
   })
 
   server.use((err, req, res, next) => {
+    if (process.env.NODE_ENV !== 'production') {
+      logError(err)
+    }
+
     res.render('500', {
       err,
       env: process.env.NODE_ENV || 'development',

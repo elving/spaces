@@ -1,0 +1,14 @@
+.feed-empty {
+  width: 620px;
+  margin: 70px auto 35px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.feed-empty-title {
+  font-size: 28px;
+  text-align: center;
+  margin: 0 auto 35px;
+}

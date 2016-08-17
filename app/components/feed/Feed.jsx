@@ -71,28 +71,45 @@ class Feed extends Component {
     const { props, state } = this
 
     return (
-      <Layout>
-        <OnboardingModal
-          onClose={this.onOnboardingClose}
-          isVisible={state.onboardingModalIsOpen}
-        />
+      !isEmpty(get(props.feed, 'results', [])) ? (
+        <Layout>
+          <OnboardingModal
+            onClose={this.onOnboardingClose}
+            isVisible={state.onboardingModalIsOpen}
+          />
 
-        <AddProductModal
-          product={props.addProductModalCurrent}
-          onClose={props.closeAddProductModal}
-          isVisible={props.addProductModalIsOpen}
-        />
+          <AddProductModal
+            product={props.addProductModalCurrent}
+            onClose={props.closeAddProductModal}
+            isVisible={props.addProductModalIsOpen}
+          />
 
-        <h1 className="page-title">Your Feed</h1>
+          <h1 className="page-title">Your Feed</h1>
 
-        <div className="grids">
-          {!isEmpty(get(props.feed, 'results', [])) ? (
+          <div className="grids">
             <div className="grid-container">
               {this.renderCards()}
             </div>
-          ) : null}
-        </div>
-      </Layout>
+          </div>
+        </Layout>
+      ) : (
+        <Layout>
+          <h1 className="page-title">Your Feed</h1>
+
+          <div className="feed-empty">
+            <h2 className="feed-empty-title">
+              It looks like you don't have enough interests to generate
+              your personal feed.
+            </h2>
+            <a
+              href="/onboarding/"
+              className="feed-empty-btn button button--primary-alt"
+            >
+              Follow More Interests
+            </a>
+          </div>
+        </Layout>
+      )
     )
   }
 }

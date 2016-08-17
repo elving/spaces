@@ -1,3 +1,5 @@
+import isEmpty from 'lodash/isEmpty'
+import isString from 'lodash/isString'
 import passport from 'passport'
 
 import local from './passport/local'
@@ -9,10 +11,15 @@ import toStringId from '../api/utils/toStringId'
 
 const configPassport = () => {
   passport.serializeUser((user, done) => {
-    done(null, toStringId(user))
+    const id = toStringId(user)
+    done(null, isEmpty(id) ? user : id)
   })
 
   passport.deserializeUser(async (id, done) => {
+    if (!isString(id)) {
+      return done(null, id)
+    }
+
     try {
       done(null, await findById(id))
     } catch (err) {

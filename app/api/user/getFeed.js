@@ -4,6 +4,7 @@ import concat from 'lodash/concat'
 import assign from 'lodash/assign'
 import reduce from 'lodash/reduce'
 import compact from 'lodash/compact'
+import isEmpty from 'lodash/isEmpty'
 
 import { default as searchSpaces } from '../space/search'
 import { default as searchProducts } from '../product/search'
@@ -13,6 +14,13 @@ export default (user) => (
   new Promise(async (resolve, reject) => {
     try {
       const follows = await getFollowsByUser(user)
+
+      if (isEmpty(follows)) {
+        return resolve({
+          count: 0,
+          results: []
+        })
+      }
 
       const searchParams = reduce(follows, (params, follow) => {
         let key = ''

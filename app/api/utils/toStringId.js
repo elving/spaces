@@ -12,7 +12,11 @@ export default (model, path = 'id') => {
     ? get(model, path, model)
     : get(model, `${path}.id`, model)
 
-  return isString(id)
+  const idToString = isString(id)
     ? id
     : result(id, 'toString', constant(id))
+
+  return idToString === '[object Object]'
+    ? null
+    : idToString
 }

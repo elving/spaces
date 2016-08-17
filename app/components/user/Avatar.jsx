@@ -1,4 +1,6 @@
 import get from 'lodash/get'
+import find from 'lodash/find'
+import first from 'lodash/first'
 import isEmpty from 'lodash/isEmpty'
 import React, { Component, PropTypes } from 'react'
 
@@ -21,6 +23,33 @@ export default class Avatar extends Component {
     imageUrl: '',
     initials: '?',
     className: ''
+  }
+
+  getInitials() {
+    const { props } = this
+    return get(props.user, 'initials', props.initials || '')
+  }
+
+  getBackgroundColor() {
+    const { props } = this
+
+    const colors = {
+      abcde: '#1abc9c',
+      fgh: '#2ecc71',
+      ij: '#3498db',
+      klmn: '#9b59b6',
+      op: '#34495e',
+      qrs: '#f1c40f',
+      tuv: '#e67e22',
+      uvwx: '#e74c3c',
+      wxyz: '#7f8c8d'
+    }
+
+    const initial = first(this.getInitials())
+
+    return find(colors, (color, letters) => (
+      !isEmpty(initial.match(new RegExp(`[${letters}]`)))
+    )) || '#8d8f92'
   }
 
   render() {
@@ -50,11 +79,12 @@ export default class Avatar extends Component {
               width: props.width,
               height: props.height,
               fontSize,
-              lineHeight
+              lineHeight,
+              backgroundColor: this.getBackgroundColor()
             }}
             className="user-avatar-initials"
           >
-            {get(props.user, 'initials', props.initials)}
+            {this.getInitials()}
           </span>
         )}
       </div>

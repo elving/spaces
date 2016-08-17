@@ -52,11 +52,11 @@ export default class CardTags extends Component {
 
     this.setState({
       isHovering: false
-    }, () => {
-      if (props.autoScroll) {
-        this.setInterval()
-      }
     })
+
+    if (props.autoScroll) {
+      this.setInterval()
+    }
   }
 
   setInterval = () => {

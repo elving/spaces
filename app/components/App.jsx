@@ -44,7 +44,11 @@ export default class App extends Component {
 
   componentDidMount() {
     const { props } = this
-    initAnalytics(toStringId(props.user), get(props.location, 'pathname'))
+
+    initAnalytics(
+      toStringId(props.user),
+      get(props.location, 'pathname', '/')
+    )
   }
 
   render() {

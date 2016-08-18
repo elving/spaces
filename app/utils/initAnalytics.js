@@ -1,16 +1,24 @@
-import ga from 'react-ga'
+import ReactGA from 'react-ga'
 import isEmpty from 'lodash/isEmpty'
 
 import metadata from '../constants/metadata'
 
-export default (user, page) => {
-  if (!isEmpty(user)) {
-    ga.initialize(metadata.googleAnalyticsUA, {
-      gaOptions: { user, cookieDomain: 'auto' }
-    })
-  } else {
-    ga.initialize(metadata.googleAnalyticsUA)
+export default (userId, page) => {
+  const config = {
+    titleCase: false
   }
 
-  ga.pageview(page)
+  if (!isEmpty(userId)) {
+    config.userId = userId
+  }
+
+  ReactGA.initialize(metadata.googleAnalyticsUA, {
+    titleCase: false,
+    gaOptions: {
+      userId,
+      cookieDomain: 'auto'
+    }
+  })
+
+  ReactGA.pageview(page)
 }

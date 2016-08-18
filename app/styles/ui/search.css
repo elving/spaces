@@ -1,7 +1,7 @@
 .search {
   border-radius: 4px;
   background-color: #ffffff;
-  width: 320px;
+  width: 380px;
   z-index: 100;
   display: flex;
   position: relative;
@@ -138,7 +138,6 @@
   z-index: 1;
   padding: 15px;
   position: absolute;
-  max-width: 350px;
 }
 
 .search-filter-input {

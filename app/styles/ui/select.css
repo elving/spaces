@@ -20,7 +20,7 @@
 
 .select--small .Select-control {
   font-size: 16px;
-  padding: 5px 10px;
+  padding: 0 10px 10px;
   min-height: 40px;
 }
 
@@ -52,10 +52,6 @@
   margin-top: 9px;
 }
 
-.select--small .Select-input {
-  margin-top: 0;
-}
-
 .select .Select-input,
 .select .Select-input > input,
 .select .Select-arrow-zone,
@@ -71,6 +67,10 @@
   left: 0;
   padding: 0 10px;
   transform: translateY(-55%);
+}
+
+.select .Select-item {
+  overflow: hidden;
 }
 
 .select.Select--multi .Select-item,
@@ -100,7 +100,6 @@
   border-radius: 3px 0 0 3px;
   font-size: 18px;
   border-color: #c0c0c0;
-  /*transition: color 0.15s linear;*/
   padding: 0 8px;
 }
 
@@ -130,7 +129,6 @@
 }
 
 .select .Select-clear-zone {
-  /*transition: color 0.15s linear;*/
   right: 30px;
 }
 
@@ -141,7 +139,6 @@
 .select .Select-arrow {
   border-color: #c0c0c0 transparent transparent;
   border-width: 7px 6px 3px;
-  /*transition: opacity 0.15s linear, border-color 0.15s linear, background-color 0.15s linear;*/
 }
 
 .select--small .Select-arrow {
@@ -163,7 +160,6 @@
 .Select-option {
   color: #555555;
   font-size: 16px;
-  /*transition: opacity 0.15s linear, border-color 0.15s linear, background-color 0.15s linear;*/
   padding: 8px 10px;
 }
 
@@ -207,4 +203,15 @@
   height: 8px;
   display: flex;
   margin-right: 5px;
+}
+
+.select.select--small .Select-item-icon {
+  font-size: 16px;
+  padding: 0 6px;
+  margin-top: -1px;
+}
+
+.select.select--small .Select-value-icon {
+  font-size: 13px;
+  padding: 0 6px;
 }

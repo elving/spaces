@@ -2,6 +2,10 @@ import get from 'lodash/get'
 import omit from 'lodash/omit'
 import isEqual from 'lodash/isEqual'
 
+import setProps from '../utils/middlewares/setProps'
+import setOgTags from '../utils/middlewares/setOgTags'
+import setMetadata from '../utils/middlewares/setMetadata'
+
 import { default as searchAllUsers } from '../api/user/search'
 import { default as searchAllSpaces } from '../api/space/search'
 import { default as searchAllProducts } from '../api/product/search'
@@ -14,12 +18,6 @@ export const renderSearchResults = async (req, res, next) => {
   const searchType = get(params, 'type')
   const searchParams = omit(params, ['type'])
 
-  res.locals.metadata = {
-    title: 'Search Results | Spaces',
-    bodyId: 'search-results',
-    bodyClass: 'page page-search-results'
-  }
-
   try {
     if (isEqual(searchType, 'products')) {
       results = await searchAllProducts(searchParams)
@@ -29,7 +27,20 @@ export const renderSearchResults = async (req, res, next) => {
       results = await searchAllUsers(searchParams)
     }
 
-    res.locals.props = results
+    const count = get(results, 'count', 'Some')
+
+    setOgTags(req, res, {
+      ogTitle: `${count} of the best ${searchType} on Spaces.`
+    })
+
+    setMetadata(res, {
+      title: 'Search Results | Spaces',
+      bodyId: 'search-results',
+      bodyClass: 'page page-search-results'
+    })
+
+    setProps(res, results)
+
     next()
   } catch (err) {
     next(err)

@@ -8,8 +8,8 @@ import { RouterContext, match } from 'react-router'
 
 import routes from '../../routes/client'
 import metadata from '../../constants/metadata'
+import setOgTags from '../middlewares/setOgTags'
 import getVersion from '../getVersion'
-import getFullUrl from '../getFullUrl'
 import isAuthenticatedUser from '../user/isAuthenticatedUser'
 
 export default (req, res) => {
@@ -74,33 +74,7 @@ export default (req, res) => {
       }
 
       if (isEmpty(res.locals.og)) {
-        res.locals.og = {
-          ogUrl: getFullUrl(req),
-          ogTitle: metadata.title,
-          ogImage: metadata.image,
-          ogSiteName: metadata.siteName,
-          ogDescription: metadata.description
-        }
-      }
-
-      if (isEmpty(res.locals.og.ogUrl)) {
-        res.locals.og.ogUrl = getFullUrl(req)
-      }
-
-      if (isEmpty(res.locals.og.ogTitle)) {
-        res.locals.og.ogTitle = metadata.title
-      }
-
-      if (isEmpty(res.locals.og.ogImage)) {
-        res.locals.og.ogImage = metadata.image
-      }
-
-      if (isEmpty(res.locals.og.ogSiteName)) {
-        res.locals.og.ogSiteName = metadata.siteName
-      }
-
-      if (isEmpty(res.locals.og.ogDescription)) {
-        res.locals.og.ogDescription = metadata.description
+        setOgTags(req, res)
       }
 
       res.render('index', {

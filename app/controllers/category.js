@@ -4,7 +4,10 @@ import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 
 import toJSON from '../api/utils/toJSON'
+import setProps from '../utils/middlewares/setProps'
+import setOgTags from '../utils/middlewares/setOgTags'
 import toStringId from '../api/utils/toStringId'
+import setMetadata from '../utils/middlewares/setMetadata'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import search from '../api/category/search'
@@ -18,13 +21,17 @@ import { default as searchProducts } from '../api/product/search'
 
 export const renderIndex = async (req, res, next) => {
   try {
-    res.locals.metadata = {
+    setOgTags(req, res, {
+      ogTitle: 'Discover spaces by categories'
+    })
+
+    setMetadata(res, {
       title: 'Discover Categories | Spaces',
       bodyId: 'all-categories',
       bodyClass: 'page page-all-categories'
-    }
+    })
 
-    res.locals.props = await search({ limit: 1000 })
+    setProps(res, await search({ limit: 1000 }))
 
     next()
   } catch (err) {
@@ -41,16 +48,21 @@ export const renderDetail = async (req, res, next) => {
       categories: toStringId(category)
     })
 
-    res.locals.metadata = {
+    setOgTags(req, res, {
+      ogTitle: `Browse beautiful spaces featuring ${get(category, 'name')}.`,
+      ogImage: get(category, 'image')
+    })
+
+    setMetadata(res, {
       title: `${get(category, 'name')} | Spaces`,
       bodyId: 'page-category-detail',
       bodyClass: 'page page-category-detail'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       category: toJSON(category),
       products: toJSON(products)
-    }
+    })
 
     next()
   } catch (err) {
@@ -62,15 +74,15 @@ export const renderAllCategories = async (req, res, next) => {
   try {
     const categories = await getAll()
 
-    res.locals.metadata = {
+    setMetadata(res, {
       title: 'All Categories | Spaces',
       bodyId: 'all-categories',
       bodyClass: 'page page-all-categories page-admin-table'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       categories: toJSON(categories)
-    }
+    })
 
     next()
   } catch (err) {
@@ -83,11 +95,11 @@ export const renderAddCategory = (req, res, next) => {
     return res.redirect('/404/')
   }
 
-  res.locals.metadata = {
+  setMetadata(res, {
     title: 'Add Category | Spaces',
     bodyId: 'add-category',
     bodyClass: 'page page-add-category page-crud-category'
-  }
+  })
 
   next()
 }
@@ -125,15 +137,15 @@ export const renderUpdateCategory = async (req, res, next) => {
   try {
     const category = await findBySid(sid)
 
-    res.locals.metadata = {
+    setMetadata(res, {
       title: 'Update Category | Spaces',
       bodyId: 'update-category',
       bodyClass: 'page page-update-category page-crud-category'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       category: toJSON(category)
-    }
+    })
 
     if (isEmpty(category)) {
       res.redirect('/404/')
@@ -149,7 +161,11 @@ export const updateCategory = async (req, res) => {
   const id = get(req, 'params.id')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {
@@ -164,7 +180,11 @@ export const destroyCategory = async (req, res) => {
   const id = get(req, 'params.id')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {

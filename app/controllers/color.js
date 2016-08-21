@@ -4,6 +4,8 @@ import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 
 import toJSON from '../api/utils/toJSON'
+import setProps from '../utils/middlewares/setProps'
+import setMetadata from '../utils/middlewares/setMetadata'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import getAll from '../api/color/getAll'
@@ -16,15 +18,15 @@ export const renderAllColors = async (req, res, next) => {
   try {
     const colors = await getAll()
 
-    res.locals.metadata = {
+    setMetadata(res, {
       title: 'All Colors | Spaces',
       bodyId: 'all-colors',
       bodyClass: 'page page-all-colors page-admin-table'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       colors: toJSON(colors)
-    }
+    })
 
     next()
   } catch (err) {
@@ -37,18 +39,22 @@ export const renderAddColor = (req, res, next) => {
     return res.redirect('/404/')
   }
 
-  res.locals.metadata = {
+  setMetadata(res, {
     title: 'Add Color | Spaces',
     bodyId: 'add-color',
     bodyClass: 'page page-add-color page-crud-color'
-  }
+  })
 
   next()
 }
 
 export const addColor = async (req, res) => {
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {
@@ -79,15 +85,15 @@ export const renderUpdateColor = async (req, res, next) => {
   try {
     const color = await findBySid(sid)
 
-    res.locals.metadata = {
+    setMetadata(res, {
       title: 'Update Color | Spaces',
       bodyId: 'update-color',
       bodyClass: 'page page-update-color page-crud-color'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       color: toJSON(color)
-    }
+    })
 
     if (isEmpty(color)) {
       res.redirect('/404/')
@@ -103,7 +109,11 @@ export const updateColor = async (req, res) => {
   const sid = get(req, 'params.sid')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {
@@ -118,7 +128,11 @@ export const destroyColor = async (req, res) => {
   const sid = get(req, 'params.sid')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {

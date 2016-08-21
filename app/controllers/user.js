@@ -14,6 +14,10 @@ export const renderIndex = async (req, res, next) => {
   try {
     const results = await search()
 
+    setOgTags(req, res, {
+      ogTitle: 'Discover awesome designers on Spaces'
+    })
+
     setMetadata(res, {
       title: 'Discover Designers | Spaces',
       bodyId: 'all-users',
@@ -21,6 +25,7 @@ export const renderIndex = async (req, res, next) => {
     })
 
     setProps(res, results)
+
     next()
   } catch (err) {
     next(err)
@@ -33,17 +38,21 @@ export const redirectToProfileSpaces = (req, res) => {
 
 export const renderProfile = async (req, res, next) => {
   try {
-    const profile = await findByUsername(
-      get(req, 'params.username')
-    )
+    const profile = await findByUsername(get(req, 'params.username'))
+    const username = get(profile, 'username', 'user')
+
+    setOgTags(req, res, {
+      ogTitle: `@${username}'s profile on Spaces`
+    })
 
     setMetadata(res, {
-      title: `${get(profile, 'username', 'user')}'s Profile | Spaces`,
+      title: `${username}'s Profile | Spaces`,
       bodyId: 'user-profile',
       bodyClass: 'page page-user-profile'
     })
 
     setProps(res, { profile })
+
     next()
   } catch (err) {
     next(err)

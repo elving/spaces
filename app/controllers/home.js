@@ -1,4 +1,8 @@
 import toJSON from '../api/utils/toJSON'
+import setProps from '../utils/middlewares/setProps'
+import setOgTags from '../utils/middlewares/setOgTags'
+import setMetadata from '../utils/middlewares/setMetadata'
+
 import { default as getUsers } from '../api/user/getPopular'
 import { default as getRooms } from '../api/spaceType/getPopular'
 import { default as getSpaces } from '../api/space/getPopular'
@@ -13,19 +17,23 @@ export const renderHome = async (req, res, next) => {
     const products = await getProducts(8)
     const categories = await getCategories(6)
 
-    res.locals.metadata = {
+    setOgTags(req, res, {
+      ogTitle: 'What\'s trending on Spaces'
+    })
+
+    setMetadata(res, {
       title: 'Home | Spaces',
       bodyId: 'home',
       bodyClass: 'page page-home'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       users: toJSON(users),
       rooms: toJSON(rooms),
       spaces: toJSON(spaces),
       products: toJSON(products),
       categories: toJSON(categories)
-    }
+    })
 
     next()
   } catch (err) {

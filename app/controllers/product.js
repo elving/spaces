@@ -6,6 +6,7 @@ import isEmpty from 'lodash/isEmpty'
 import isAdmin from '../utils/user/isAdmin'
 import isOwner from '../utils/user/isOwner'
 import setProps from '../utils/middlewares/setProps'
+import setOgTags from '../utils/middlewares/setOgTags'
 import setMetadata from '../utils/middlewares/setMetadata'
 import userCanAddProducts from '../utils/userCanAddProducts'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
@@ -30,6 +31,13 @@ import { default as getAllSpaceTypes } from '../api/spaceType/getAll'
 export const renderIndex = async (req, res, next) => {
   try {
     const products = await search()
+
+    setOgTags(req, res, {
+      ogTitle: (
+        'Shop and design spaces with the most beautiful ' +
+        'products on the web.'
+      )
+    })
 
     setMetadata(res, {
       title: 'Discover Products | Spaces',
@@ -57,6 +65,19 @@ export const renderDetail = async (req, res, next) => {
     const product = await findBySid(sid)
     const relatedSpaces = await getRelatedSpaces(toStringId(product))
     const relatedProducts = await getRelated(product)
+
+    const url = get(product, 'url')
+    const name = get(product, 'name')
+    const brand = get(product, 'brand.name')
+    const price = get(product, 'price')
+    const image = get(product, 'image')
+    const description = get(product, 'description')
+
+    setOgTags(req, res, {
+      ogTitle: `${name} by ${brand} — $${price} on Spaces.`,
+      ogImage: image,
+      ogDescription: `${description}. ${url}`
+    })
 
     setMetadata(res, {
       title: `${get(product, 'name', '')} | Spaces`,

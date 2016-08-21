@@ -4,6 +4,8 @@ import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 
 import toJSON from '../api/utils/toJSON'
+import setProps from '../utils/middlewares/setProps'
+import setMetadata from '../utils/middlewares/setMetadata'
 import toStringId from '../api/utils/toStringId'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
@@ -19,13 +21,15 @@ import { default as searchProducts } from '../api/product/search'
 
 export const renderIndex = async (req, res, next) => {
   try {
-    res.locals.metadata = {
+    const results = await search({ limit: 1000 })
+
+    setMetadata(res, {
       title: 'Discover Rooms | Spaces',
       bodyId: 'all-rooms',
       bodyClass: 'page page-all-rooms'
-    }
+    })
 
-    res.locals.props = await search({ limit: 1000 })
+    setProps(res, results)
 
     next()
   } catch (err) {
@@ -47,17 +51,17 @@ export const renderDetail = async (req, res, next) => {
       spaceTypes: toStringId(spaceType)
     })
 
-    res.locals.metadata = {
+    setMetadata(res, {
       title: `${get(spaceType, 'name')} | Spaces`,
       bodyId: 'page-spaceType-detail',
       bodyClass: 'page page-spaceType-detail'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       spaces: toJSON(spaces),
       products: toJSON(products),
       spaceType: toJSON(spaceType)
-    }
+    })
 
     next()
   } catch (err) {
@@ -69,15 +73,15 @@ export const renderAllSpaceTypes = async (req, res, next) => {
   try {
     const spaceTypes = await getAll()
 
-    res.locals.metadata = {
+    setMetadata(res, {
       title: 'All SapceTypes | Spaces',
       bodyId: 'all-spaceTypes',
       bodyClass: 'page page-all-spaceTypes page-admin-table'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       spaceTypes: toJSON(spaceTypes)
-    }
+    })
 
     next()
   } catch (err) {
@@ -90,18 +94,22 @@ export const renderAddSpaceType = (req, res, next) => {
     return res.redirect('/404/')
   }
 
-  res.locals.metadata = {
+  setMetadata(res, {
     title: 'Add SpaceType | Spaces',
     bodyId: 'add-spaceType',
     bodyClass: 'page page-add-spaceType page-crud-spaceType'
-  }
+  })
 
   next()
 }
 
 export const addSpaceType = async (req, res) => {
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {
@@ -132,15 +140,15 @@ export const renderUpdateSpaceType = async (req, res, next) => {
   try {
     const spaceType = await findBySid(sid)
 
-    res.locals.metadata = {
+    setMetadata(res, {
       title: 'Update SpaceType | Spaces',
       bodyId: 'update-spaceType',
       bodyClass: 'page page-update-spaceType page-crud-spaceType'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       spaceType: toJSON(spaceType)
-    }
+    })
 
     if (isEmpty(spaceType)) {
       res.redirect('/404/')
@@ -156,7 +164,11 @@ export const updateSpaceType = async (req, res) => {
   const sid = get(req, 'params.sid')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {
@@ -171,7 +183,11 @@ export const destroySpaceType = async (req, res) => {
   const sid = get(req, 'params.sid')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {

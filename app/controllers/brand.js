@@ -4,6 +4,8 @@ import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 
 import toJSON from '../api/utils/toJSON'
+import setProps from '../utils/middlewares/setProps'
+import setMetadata from '../utils/middlewares/setMetadata'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import getAll from '../api/brand/getAll'
@@ -16,15 +18,15 @@ export const renderAllBrands = async (req, res, next) => {
   try {
     const brands = await getAll()
 
-    res.locals.metadata = {
+    setMetadata(res, {
       title: 'All Brands | Spaces',
       bodyId: 'all-brands',
       bodyClass: 'page page-all-brands page-admin-table'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       brands: toJSON(brands)
-    }
+    })
 
     next()
   } catch (err) {
@@ -37,18 +39,22 @@ export const renderAddBrand = (req, res, next) => {
     return res.redirect('/404/')
   }
 
-  res.locals.metadata = {
+  setMetadata({
     title: 'Add Brand | Spaces',
     bodyId: 'add-brand',
     bodyClass: 'page page-add-brand page-crud-brand'
-  }
+  })
 
   next()
 }
 
 export const addBrand = async (req, res) => {
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {
@@ -79,15 +85,15 @@ export const renderUpdateBrand = async (req, res, next) => {
   try {
     const brand = await findBySid(sid)
 
-    res.locals.metadata = {
+    setMetadata(res, {
       title: 'Update Brand | Spaces',
       bodyId: 'update-brand',
       bodyClass: 'page page-update-brand page-crud-brand'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       brand: toJSON(brand)
-    }
+    })
 
     if (isEmpty(brand)) {
       res.redirect('/404/')
@@ -103,7 +109,11 @@ export const updateBrand = async (req, res) => {
   const sid = get(req, 'params.sid')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {
@@ -118,7 +128,11 @@ export const destroyBrand = async (req, res) => {
   const sid = get(req, 'params.sid')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {

@@ -1,7 +1,12 @@
 import get from 'lodash/get'
+import size from 'lodash/size'
 import merge from 'lodash/merge'
+import toLower from 'lodash/toLower'
 
 import isAdmin from '../utils/user/isAdmin'
+import setProps from '../utils/middlewares/setProps'
+import setOgTags from '../utils/middlewares/setOgTags'
+import setMetadata from '../utils/middlewares/setMetadata'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import search from '../api/space/search'
@@ -20,15 +25,22 @@ export const renderIndex = async (req, res, next) => {
   try {
     const spaces = await search()
 
-    res.locals.metadata = {
+    setOgTags(req, res, {
+      ogTitle: (
+        'Get inspired by the most beautiful spaces, ' +
+        'designed by our curators.'
+      )
+    })
+
+    setMetadata(res, {
       title: 'Discover Spaces | Spaces',
       bodyId: 'all-spaces',
       bodyClass: 'page page-all-spaces'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       spaces: toJSON(spaces)
-    }
+    })
 
     next()
   } catch (err) {
@@ -42,15 +54,31 @@ export const renderDetail = async (req, res, next) => {
   try {
     const space = await findBySid(sid)
 
-    res.locals.metadata = {
+    const name = get(space, 'name')
+    const image = get(space, 'image')
+    const username = get(space, 'createdBy.username')
+    const products = size(get(space, 'products', [])) || ''
+    const spaceType = get(space, 'spaceType.name')
+    const description = get(space, 'description')
+
+    setOgTags(req, res, {
+      ogTitle: (
+        `${name} — A space featuring ${products} beautiful ` +
+        `products for your ${toLower(spaceType)}`
+      ),
+      ogImage: image,
+      ogDescription: description || `Designed by @${username}`
+    })
+
+    setMetadata(res, {
       title: `${get(space, 'name', '')} | Spaces`,
       bodyId: 'space-detail',
       bodyClass: 'page page-space-detail'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       space: toJSON(space)
-    }
+    })
 
     next()
   } catch (err) {
@@ -62,7 +90,11 @@ export const getUserSpaces = async (req, res) => {
   const id = get(req, 'params.id')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {
@@ -77,7 +109,11 @@ export const createSpace = async (req, res) => {
   const userId = get(req, 'user.id')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {
@@ -103,11 +139,11 @@ export const renderCreateSpace = async (req, res, next) => {
     return res.redirect('/404/')
   }
 
-  res.locals.metadata = {
+  setMetadata(res, {
     title: 'Create Space | Spaces',
     bodyId: 'create-space',
     bodyClass: 'page page-create-space'
-  }
+  })
 
   next()
 }
@@ -141,7 +177,9 @@ export const redesignSpace = async (req, res) => {
 
   if (!isAuthenticatedUser(req.user)) {
     res.status(500).json({
-      err: { genereic: 'Not authorized' }
+      err: {
+        genereic: 'Not authorized'
+      }
     })
   }
 
@@ -177,13 +215,22 @@ export const destroySpace = async (req, res) => {
   const id = get(req, 'params.id')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {
     await destroy(id)
-    res.status(200).json({ success: true })
+
+    res.status(200).json({
+      success: true
+    })
   } catch (err) {
-    res.status(500).json({ err })
+    res.status(500).json({
+      err
+    })
   }
 }

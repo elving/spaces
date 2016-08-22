@@ -101,15 +101,15 @@ export const renderAdminProducts = async (req, res, next) => {
   try {
     const products = await getAll()
 
-    res.locals.metadata = {
+    setMetadata(res, {
       title: 'All Products | Spaces',
       bodyId: 'all-products',
       bodyClass: 'page page-all-products page-admin-table'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       products: toJSON(products)
-    }
+    })
 
     next()
   } catch (err) {
@@ -170,18 +170,18 @@ export const renderAddProduct = async (req, res, next) => {
     const categories = await getAllCategories()
     const spaceTypes = await getAllSpaceTypes()
 
-    res.locals.metadata = {
+    setMetadata(res, {
       title: 'Add Product | Spaces',
       bodyId: 'add-product',
       bodyClass: 'page page-add-product'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       brands: toJSON(brands),
       colors: toJSON(colors),
       categories: toJSON(categories),
       spaceTypes: toJSON(spaceTypes)
-    }
+    })
 
     next()
   } catch (err) {
@@ -191,7 +191,11 @@ export const renderAddProduct = async (req, res, next) => {
 
 export const addProduct = async (req, res) => {
   if (!isAuthenticatedUser(req.user) || !userCanAddProducts(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {
@@ -231,19 +235,19 @@ export const renderUpdateProduct = async (req, res, next) => {
     const categories = await getAllCategories()
     const spaceTypes = await getAllSpaceTypes()
 
-    res.locals.metadata = {
+    setMetadata(res, {
       title: 'Update Product | Spaces',
       bodyId: 'update-product',
       bodyClass: 'page page-update-product page-crud-product'
-    }
+    })
 
-    res.locals.props = {
+    setProps(res, {
       brands: toJSON(brands),
       colors: toJSON(colors),
       product: toJSON(product),
       categories: toJSON(categories),
       spaceTypes: toJSON(spaceTypes)
-    }
+    })
 
     if (isEmpty(product)) {
       res.redirect('/404/')
@@ -259,7 +263,11 @@ export const updateProduct = async (req, res) => {
   const id = get(req, 'params.id')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {
@@ -278,7 +286,11 @@ export const destroyProduct = async (req, res) => {
   const id = get(req, 'params.id')
 
   if (!isAuthenticatedUser(req.user)) {
-    res.status(500).json({ err: { generic: 'Not authorized' }})
+    res.status(500).json({
+      err: {
+        generic: 'Not authorized'
+      }
+    })
   }
 
   try {

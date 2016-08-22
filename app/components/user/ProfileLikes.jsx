@@ -93,7 +93,7 @@ export default class ProfileLikes extends Component {
         <div className="grid-items">
           {hasNoResults ? (
             <p className="grid-items-empty">
-              {props.emptyMessage}
+              {`Nothing liked by ${get(props.profile, 'name')} yet...`}
             </p>
           ) : (
             map(state.results, like => {

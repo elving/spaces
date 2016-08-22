@@ -35,6 +35,7 @@
   width: 100%;
   padding: 10px 0;
   display: flex;
+  min-height: 122px;
   align-items: center;
   justify-content: center;
 }

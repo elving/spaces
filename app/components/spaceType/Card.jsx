@@ -1,13 +1,18 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
+import slice from 'lodash/slice'
+import reverse from 'lodash/reverse'
 import isEmpty from 'lodash/isEmpty'
+import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
+import Loader from '../common/Loader'
 import FollowButton from '../common/FollowButton'
 
 import inflect from '../../utils/inflect'
 import toStringId from '../../api/utils/toStringId'
+import preloadImages from '../../utils/preloadImages'
 
 export default class SpaceTypeCard extends Component {
   static propTypes = {
@@ -34,21 +39,53 @@ export default class SpaceTypeCard extends Component {
     followersCount: 0
   }
 
-  renderProducts() {
+  state = {
+    images: [],
+    imagesAreLoaded: false,
+    imagesAreLoading: true
+  }
+
+  componentDidMount() {
     const { props } = this
+
+    const images = map(
+      slice(reverse(props.products), 0, 4),
+      product => get(product, 'image', '')
+    )
+
+    preloadImages(images).then(() => {
+      this.setState({
+        images,
+        imagesAreLoaded: true,
+        imagesAreLoading: false
+      })
+    })
+  }
+
+  renderProducts() {
+    const { props, state } = this
 
     return !isEmpty(props.products) ? (
       <div
-        className="space-type-card-products"
+        className={classNames({
+          'space-type-card-products': true,
+          'space-type-card-products--loading': state.imagesAreLoading
+        })}
         data-products={size(props.products)}
       >
-        {map(props.products, product =>
-          <div
-            key={`${toStringId(props)}-${toStringId(product)}`}
-            style={{ backgroundImage: `url(${get(product, 'image')})` }}
-            className="space-type-card-product"
-          />
-        )}
+        {state.imagesAreLoading ? (
+          <Loader size={50} />
+        ) : null}
+
+        {state.imagesAreLoaded ? (
+          map(props.products, product =>
+            <div
+              key={`${toStringId(props)}-${toStringId(product)}`}
+              style={{ backgroundImage: `url(${get(product, 'image')})` }}
+              className="space-type-card-product"
+            />
+          )
+        ) : null}
       </div>
     ) : null
   }
@@ -89,7 +126,7 @@ export default class SpaceTypeCard extends Component {
   render() {
     const { props } = this
 
-    return (
+    return !isEmpty(props.products) ? (
       <a href={`/${props.detailUrl}/`} className="card space-type-card">
         <div className="space-type-card-name-container">
           <div className="space-type-card-name">
@@ -108,6 +145,6 @@ export default class SpaceTypeCard extends Component {
         {this.renderProducts()}
         {this.renderCounters()}
       </a>
-    )
+    ) : null
   }
 }

@@ -500,9 +500,9 @@ export default class ProductForm extends Component {
                 }
               </span>
             </button>
-            <button onClick={this.reset} className="button">
+            <a href="/products/" className="button">
               <span className="button-text">Cancel</span>
-            </button>
+            </a>
           </div>
         </div>
       </form>

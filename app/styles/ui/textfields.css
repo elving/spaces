@@ -1,7 +1,7 @@
 input:-webkit-autofill {
   border-color: #dadada;
   -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
-  /*transition: unset;*/
+  transition: unset;
 }
 
 .textfield {
@@ -9,7 +9,6 @@ input:-webkit-autofill {
   border: 1px solid #dadada;
   border-radius: 4px;
   background-color: #ffffff;
-  /*transition: opacity 0.15s linear, border-color 0.15s linear, background-color 0.15s linear, box-shadow 0.15s linear;*/
   padding: 10px;
   min-height: 47px;
 }

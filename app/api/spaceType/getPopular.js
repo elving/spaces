@@ -9,8 +9,8 @@ import getProducts from './getProducts'
 import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default (limit = 8) => {
-  return new Promise(async (resolve, reject) => {
+export default (limit = 8) => (
+  new Promise(async (resolve, reject) => {
     const cacheKey = `spaceType-popular-${limit}`
 
     getFromCacheOrQuery(cacheKey, () => {
@@ -18,6 +18,7 @@ export default (limit = 8) => {
         .model('SpaceType')
         .find()
         .limit(limit)
+        .populate('categories')
         .sort('-followersCount -spacesCount -productsCount -updatedAt')
         .exec(async (err, spaceTypes = []) => {
           if (err) {
@@ -38,4 +39,4 @@ export default (limit = 8) => {
         })
     }, resolve)
   })
-}
+)

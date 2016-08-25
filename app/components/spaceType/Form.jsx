@@ -1,5 +1,7 @@
 import get from 'lodash/get'
+import map from 'lodash/map'
 import axios from 'axios'
+import Select from 'react-select'
 import isEmpty from 'lodash/isEmpty'
 import serialize from 'form-serialize'
 import classNames from 'classnames'
@@ -17,11 +19,13 @@ export default class SpaceTypeForm extends Component {
 
   static propTypes = {
     spaceType: PropTypes.object,
+    categories: PropTypes.array,
     formMethod: PropTypes.string
   }
 
   static defaultProps = {
     spaceType: {},
+    categories: [],
     formMethod: 'POST'
   }
 
@@ -35,6 +39,7 @@ export default class SpaceTypeForm extends Component {
       hasSaved: false,
       spaceType: {},
       isDeleting: false,
+      categories: map(get(props.spaceType, 'categories', []), 'name'),
       description: get(props.spaceType, 'description', ''),
       savingSuccessful: false,
       deletingSuccessful: false
@@ -51,7 +56,7 @@ export default class SpaceTypeForm extends Component {
 
       if (state.isSaving) {
         return (
-          `You are in the process of ${action} a spaceType. ` +
+          `You are in the process of ${action} a room. ` +
           'Are you sure you want to navigate away from this page and ' +
           'loose your progress?'
         )
@@ -87,7 +92,6 @@ export default class SpaceTypeForm extends Component {
         } : {}
 
         this.setState({
-          name: '',
           errors: {},
           isSaving: false,
           hasSaved: true,
@@ -112,7 +116,7 @@ export default class SpaceTypeForm extends Component {
     const { props, context } = this.context
 
     const deleteMessage = (
-      'Are you sure you want to delete this spaceType? \n' +
+      'Are you sure you want to delete this room? \n' +
       'This action cannot be undone. ' +
       'Type the word "DELETE" to confirm.'
     )
@@ -158,6 +162,12 @@ export default class SpaceTypeForm extends Component {
     })
   }
 
+  onCategoriesChange = (categories) => {
+    this.setState({
+      categories
+    })
+  }
+
   onNotificationClose = () => {
     const { state } = this
 
@@ -196,12 +206,15 @@ export default class SpaceTypeForm extends Component {
     const descriptionError = get(state.errors, 'description')
     const hasDescriptionError = !isEmpty(descriptionError)
 
+    const categoriesError = get(state.errors, 'categories')
+    const hasCategoriesError = !isEmpty(categoriesError)
+
     let btnText = ''
 
     if (isPOST) {
-      btnText = state.isSaving ? 'Adding Space Type...' : 'Add Space Type'
+      btnText = state.isSaving ? 'Adding Room...' : 'Add Room'
     } else {
-      btnText = state.isSaving ? 'Updating Space Type...' : 'Update Space Type'
+      btnText = state.isSaving ? 'Updating Room...' : 'Update Room'
     }
 
     return (
@@ -215,10 +228,10 @@ export default class SpaceTypeForm extends Component {
         <input type="hidden" name="_method" value={props.formMethod} />
 
         <h1 className="form-title">
-          {isPOST ? 'Add SpaceType' : 'Update SpaceType'}
+          {isPOST ? 'Add Room' : 'Update Room'}
           <a href="/admin/space-types/" className="form-title-link">
             <MaterialDesignIcon name="list" size={18} />
-            All SpaceTypes
+            All Rooms
           </a>
         </h1>
 
@@ -259,7 +272,6 @@ export default class SpaceTypeForm extends Component {
             value={state.description}
             disabled={shouldDisable}
             onChange={this.onDescriptionChange}
-            autoFocus
             className={classNames({
               textfield: true,
               'textfield--error': hasDescriptionError
@@ -269,6 +281,34 @@ export default class SpaceTypeForm extends Component {
 
           {hasDescriptionError ? (
             <small className="form-error">{descriptionError}</small>
+          ) : null}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="categories" className="form-label">
+            Related Categories <small>optional</small>
+          </label>
+
+          <Select
+            id="categories"
+            name="categories"
+            multi
+            value={state.categories}
+            options={map(props.categories, category => ({
+              value: toStringId(category),
+              label: get(category, 'name')
+            }))}
+            onChange={this.onCategoriesChange}
+            disabled={shouldDisable}
+            className={classNames({
+              select: true,
+              'select--error': hasCategoriesError
+            })}
+            placeholder="E.g. Pattern, Minimal"
+          />
+
+          {hasCategoriesError ? (
+            <small className="form-error">{categoriesError}</small>
           ) : null}
         </div>
 
@@ -310,9 +350,9 @@ export default class SpaceTypeForm extends Component {
   renderNotification() {
     const { props, state } = this
 
-    const sid = get(state.spaceType, 'sid', '')
+    const sid = get(props.spaceType, 'sid', '')
     const url = !isEmpty(sid) ? `/admin/space-types/${sid}/update/` : '#'
-    const name = get(state.spaceType, 'name', 'SpaceType')
+    const name = get(state, 'name', 'SpaceType')
 
     const genericError = get(state.errors, 'generic')
     const hasGenericError = !isEmpty(genericError)

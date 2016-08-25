@@ -22,7 +22,7 @@
 
 .header-nav {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
 }
 
@@ -30,7 +30,9 @@
   font-size: 16px;
   text-decoration: none;
   display: flex;
+  align-items: center;
   margin-right: 25px;
+  justify-content: center;
 }
 
 .header-link:hover {
@@ -44,6 +46,11 @@
 
 .header-nav > .header-link:last-child {
   margin-right: 0;
+}
+
+.header-link-divider {
+  border-left: 1px solid #e5e5e5;
+  margin-right: 25px;
 }
 
 .header-container-right .admin-nav,

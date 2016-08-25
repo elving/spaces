@@ -1,7 +1,7 @@
 import map from 'lodash/map'
 import React, { Component, PropTypes } from 'react'
 
-import MaterialDesignIcon from '../common/MaterialDesignIcon'
+import Tag from '../common/Tag'
 
 import getTags from '../../utils/getTags'
 import toStringId from '../../api/utils/toStringId'
@@ -106,26 +106,16 @@ export default class CardTags extends Component {
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
       >
-        {map(getTags(props.model), tag => (
-          props.forDisplayOnly ? (
-            <span
-              key={`${toStringId(props.model)}-${tag.id}`}
-              className="card-tag"
-            >
-              <MaterialDesignIcon name={tag.type} size={12} />
-              {tag.name}
-            </span>
-          ) : (
-            <a
-              key={`${toStringId(props.model)}-${tag.id}`}
-              href={tag.url}
-              className="card-tag"
-            >
-              <MaterialDesignIcon name={tag.type} size={12} />
-              {tag.name}
-            </a>
-          )
-        ))}
+        {map(getTags(props.model), tag =>
+          <Tag
+            key={`${toStringId(props.model)}-${tag.id}`}
+            url={!props.forDisplayOnly ? tag.url : null}
+            type={tag.type}
+            name={tag.name}
+            size="small"
+            className="card-tag"
+          />
+        )}
       </div>
     )
   }

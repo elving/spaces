@@ -85,31 +85,7 @@
 }
 
 .product-detail-tag {
-  border: 1px solid #e0e0e0;
-  border-radius: 3px;
-  background-color: #eaeaea;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 14px;
-  text-decoration: none;
-  /*transition: color 0.15s linear, background-color 0.15s linear;*/
   margin: 10px 10px 0 0;
-  display: flex;
-  padding: 6px 8px;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-}
-
-.product-detail-tag:hover,
-.product-detail-tag:active {
-  color: #333333;
-  background-color: #e0e0e0;
-  text-decoration: none;
-}
-
-.product-detail-tag .icon {
-  margin-right: 4px;
 }
 
 .product-detail-url,

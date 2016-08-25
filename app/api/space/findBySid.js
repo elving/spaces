@@ -8,8 +8,8 @@ import toIdsFromPath from '../utils/toIdsFromPath'
 import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default (sid, returnDocument = false) => {
-  return new Promise((resolve, reject) => {
+export default (sid, returnDocument = false) => (
+  new Promise((resolve, reject) => {
     const key = `space-${sid}`
     const query = () => {
       mongoose
@@ -21,9 +21,15 @@ export default (sid, returnDocument = false) => {
             populate: 'brand colors createdBy categories spaceTypes'
           }
         })
+        .populate({
+          path: 'spaceType',
+          options: {
+            populate: 'categories'
+          }
+        })
         .populate('redesigns')
-        .populate('spaceType')
         .populate('createdBy')
+        .populate('categories')
         .populate('originalSpace')
         .exec(async (err, space = {}) => {
           if (err) {
@@ -53,4 +59,4 @@ export default (sid, returnDocument = false) => {
       getFromCacheOrQuery(key, query, resolve)
     }
   })
-}
+)

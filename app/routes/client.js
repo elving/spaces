@@ -11,6 +11,7 @@ import ResetPassword from '../components/auth/ResetPassword'
 import Home from '../components/home/Home'
 import Feed from '../components/feed/Feed'
 import Onboarding from '../components/onboarding/Onboarding'
+import Suggestions from '../components/suggestions/Suggestions'
 
 import AddProduct from '../components/product/Add'
 import ProductDetail from '../components/product/Detail'
@@ -61,6 +62,7 @@ const routes = (
     <Route path="/" component={Home} />
     <Route path="/feed" component={Feed} />
     <Route path="/onboarding" component={Onboarding} />
+    <Route path="/suggestions" component={Suggestions} />
 
     <Route path="products" component={ProductsIndex} />
     <Route path="products/add" component={AddProduct} />

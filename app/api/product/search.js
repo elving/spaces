@@ -42,12 +42,12 @@ export default (params = {}, operation = 'where') => (
     query
       .skip(parseInt(get(params, 'skip', 0)))
       .limit(parseInt(get(params, 'limit', 40)))
+      .sort(get(params, 'sort', '-createdAt'))
       .populate('brand')
       .populate('colors')
       .populate('createdBy')
       .populate('categories')
       .populate('spaceTypes')
-      .sort('-createdAt')
       .exec(async (err, products = []) => {
         if (err) {
           return reject(parseError(err))

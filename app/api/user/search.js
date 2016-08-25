@@ -30,7 +30,7 @@ export default (params = {}) => {
       .where(searchParams)
       .skip(parseInt(get(params, 'skip', 0)))
       .limit(parseInt(get(params, 'limit', 30)))
-      .sort('-createdAt')
+      .sort(get(params, 'sort', '-createdAt'))
       .exec(async (err, users) => {
         if (err) {
           return reject(parseError(err))

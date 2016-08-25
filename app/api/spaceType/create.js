@@ -5,8 +5,8 @@ import sanitize from './sanitize'
 import parseError from '../utils/parseError'
 import { removeFromCache } from '../cache'
 
-export default (props) => {
-  return new Promise(async (resolve, reject) => {
+export default (props) => (
+  new Promise(async (resolve, reject) => {
     const SpaceType = mongoose.model('SpaceType')
     const spaceType = new SpaceType(sanitize(props))
     const errors = spaceType.validateSync()
@@ -24,4 +24,4 @@ export default (props) => {
       resolve(spaceType)
     })
   })
-}
+)

@@ -3,7 +3,7 @@
 }
 
 .grids > .grid-container:nth-child(even) {
-  background-color: #fefefe;
+  background-color: #fcfcfc;
 }
 
 .grids > .loader {
@@ -17,6 +17,12 @@
   padding: 35px 0 0;
 }
 
+.grid-title-top-subtitle {
+  color: #999999;
+  font-size: 16px;
+  display: block;
+}
+
 .grid-title {
   font-size: 26px;
   width: 100%;
@@ -26,6 +32,11 @@
   flex-wrap: wrap;
   align-items: stretch;
   justify-content: flex-start;
+}
+
+.has-subtitle {
+  align-items: stretch;
+  flex-direction: column;
 }
 
 .grid-title-container {

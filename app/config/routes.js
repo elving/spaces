@@ -18,6 +18,7 @@ import { default as productRouter } from '../routes/product'
 import { default as categoryRouter } from '../routes/category'
 import { default as spaceTypeRouter } from '../routes/spaceType'
 import { default as onboardingRouter } from '../routes/onboarding'
+import { default as suggestionsRouter } from '../routes/suggestions'
 
 const configRoutes = (server) => {
   server.use(ajaxRouter)
@@ -36,6 +37,7 @@ const configRoutes = (server) => {
   server.use(categoryRouter)
   server.use(spaceTypeRouter)
   server.use(onboardingRouter)
+  server.use(suggestionsRouter)
 
   // Misc
   server.get('/400/', (req, res) => {

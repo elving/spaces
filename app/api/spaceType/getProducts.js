@@ -2,8 +2,8 @@ import mongoose from 'mongoose'
 
 import parseError from '../utils/parseError'
 
-export default (spaceType, limit = 3) => {
-  return new Promise(async (resolve, reject) => {
+export default (spaceType, limit = 3) => (
+  new Promise(async (resolve, reject) => {
     mongoose
       .model('Product')
       .where({ spaceTypes: { $in: [spaceType] } })
@@ -16,4 +16,4 @@ export default (spaceType, limit = 3) => {
         resolve(products)
       })
   })
-}
+)

@@ -17,6 +17,8 @@ const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost'
 const server = express()
 const redisConfig = getRedisConfig()
 
+mongoose.Promise = global.Promise
+
 mongoose.connect(process.env.MONGO_URL, {
   server: { socketOptions: { keepAlive: 1 } }
 }, err => {

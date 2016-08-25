@@ -5,7 +5,7 @@ import split from 'lodash/split'
 import isEmpty from 'lodash/isEmpty'
 import accounting from 'accounting'
 
-export default (props) => {
+export default props => {
   const price = get(props, 'price', '')
   const colors = get(props, 'colors', '')
   const categories = get(props, 'categories', '')

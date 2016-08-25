@@ -7,13 +7,14 @@ import parseError from '../utils/parseError'
 import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default (sid, returnDocument = false) => {
-  return new Promise((resolve, reject) => {
+export default (sid, returnDocument = false) => (
+  new Promise((resolve, reject) => {
     const key = `spaceType-${sid}`
     const query = () => {
       mongoose
         .model('SpaceType')
         .findOne({ sid })
+        .populate('categories')
         .exec(async (err, spaceType = {}) => {
           if (err) {
             return reject(parseError(err))
@@ -34,4 +35,4 @@ export default (sid, returnDocument = false) => {
       getFromCacheOrQuery(key, query, resolve)
     }
   })
-}
+)

@@ -52,7 +52,7 @@ export default (params = {}) => (
       .where(searchParams)
       .skip(parseInt(get(params, 'skip', 0)))
       .limit(parseInt(get(params, 'limit', 40)))
-      .sort('name')
+      .sort(get(params, 'sort', 'name'))
       .exec(async (err, categories = []) => {
         if (err) {
           return reject(parseError(err))

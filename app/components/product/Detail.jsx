@@ -5,6 +5,7 @@ import isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
+import Tag from '../common/Tag'
 import Space from '../space/Card'
 import Layout from '../common/Layout'
 import Avatar from '../user/Avatar'
@@ -235,14 +236,14 @@ class ProductDetail extends Component {
     return (
       <div className="product-detail-tags">
         {map(getTags(props.product), tag =>
-          <a
-            key={`tag-${toStringId(tag.id)}`}
-            href={tag.url}
+          <Tag
+            key={`tag-${toStringId(tag)}`}
+            url={tag.url}
+            type={tag.type}
+            name={tag.name}
+            size="medium"
             className="product-detail-tag"
-          >
-            <MaterialDesignIcon name={tag.type} size={14} />
-            {tag.name}
-          </a>
+          />
         )}
       </div>
     )

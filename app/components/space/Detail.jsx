@@ -4,6 +4,7 @@ import map from 'lodash/map'
 import size from 'lodash/size'
 import axios from 'axios'
 import isEmpty from 'lodash/isEmpty'
+import toLower from 'lodash/toLower'
 import React, { Component, PropTypes } from 'react'
 
 import Dropdown, {
@@ -11,6 +12,7 @@ import Dropdown, {
   DropdownContent
 } from 'react-simple-dropdown'
 
+import Tag from '../common/Tag'
 import Layout from '../common/Layout'
 import Product from '../product/Card'
 import LikesModal from '../modal/Likes'
@@ -19,6 +21,7 @@ import LikeButton from '../common/LikeButton'
 import MiniProfile from '../user/MiniProfile'
 import Notification from '../common/Notification'
 import RedesignPopup from './RedesignPopup'
+import AddProductCard from '../product/AddCard'
 import CommentsWidget from '../comment/Widget'
 import SpaceFormModal from '../modal/SpaceForm'
 import AddProductModal from '../modal/AddProduct'
@@ -28,6 +31,7 @@ import addProductModalContainer from '../container/AddProductModal'
 import inflect from '../../utils/inflect'
 import canModify from '../../utils/user/canModify'
 import toStringId from '../../api/utils/toStringId'
+import getSuggestions from '../../utils/space/getSuggestions'
 
 class SpaceDetail extends Component {
   static contextTypes = {
@@ -381,7 +385,7 @@ class SpaceDetail extends Component {
         >
           <MaterialDesignIcon name="comment" />
         </a>
-        {canModify(context.user, toStringId(props.space)) ? (
+        {canModify(context.user, props.space) ? (
           <Dropdown className="dropdown space-detail-action">
             <DropdownTrigger
               className="dropdown-trigger dropdown-trigger--no-caret"
@@ -430,12 +434,50 @@ class SpaceDetail extends Component {
     ) : null
   }
 
+  renderSuggestions() {
+    const { props, context } = this
+
+    const spaceType = toLower(get(props.space, 'spaceType.name', 'space'))
+    const suggestions = getSuggestions(props.space)
+
+    return canModify(context.user, props.space) && !isEmpty(suggestions) ? (
+      <div className="space-detail-suggestion">
+        <h3 className="space-detail-suggestion-title">
+          Here are some suggestions for your {spaceType}.
+        </h3>
+        <div className="space-detail-suggestions">
+          {map(suggestions, suggestion =>
+            <Tag
+              key={`suggestion-${toStringId(suggestion)}`}
+              url={`/${suggestion.detailUrl}/`}
+              type={suggestion.type}
+              name={suggestion.name}
+              size="big"
+              className="product-detail-tag"
+            />
+          )}
+        </div>
+      </div>
+    ) : null
+  }
+
   renderProducts() {
-    const { props } = this
+    const { props, context } = this
+    const spaceType = toLower(get(props.space, 'spaceType.name', 'space'))
+    const suggestions = get(props.space, 'spaceType.categories', [])
 
     return (
       <div className="grid">
         <div id="products" className="grid-items">
+          {canModify(context.user, props.space) ? (
+            <AddProductCard
+              message={
+                `Make your ${spaceType} more complete with these products.`
+              }
+              categories={suggestions}
+            />
+          ) : null}
+
           {map(get(props.space, 'products', []), product =>
             <Product
               {...product}
@@ -515,6 +557,7 @@ class SpaceDetail extends Component {
           {this.renderHeader()}
           {this.renderSubHeader()}
           {this.renderDescription()}
+          {this.renderSuggestions()}
           {this.renderProducts()}
           {this.renderLikesModal()}
           {this.renderComments()}

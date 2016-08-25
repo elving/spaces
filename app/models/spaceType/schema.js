@@ -11,6 +11,7 @@ const SpaceTypeSchema = new mongoose.Schema({
   description: { type: String, trim: true, default: '' },
   createdBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
   updatedBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
+  categories: [{ type: mongoose.Schema.ObjectId, ref: 'Category' }],
   spacesCount: { type: Number, default: 0 },
   productsCount: { type: Number, default: 0 },
   followersCount: { type: Number, default: 0 }

@@ -16,8 +16,10 @@ import update from '../api/spaceType/update'
 import destroy from '../api/spaceType/destroy'
 import findBySid from '../api/spaceType/findBySid'
 import findByName from '../api/spaceType/findByName'
+
 import { default as searchSpaces } from '../api/space/search'
 import { default as searchProducts } from '../api/product/search'
+import { default as getAllCategories } from '../api/category/getAll'
 
 export const renderIndex = async (req, res, next) => {
   try {
@@ -89,18 +91,28 @@ export const renderAllSpaceTypes = async (req, res, next) => {
   }
 }
 
-export const renderAddSpaceType = (req, res, next) => {
-  if (!isAuthenticatedUser(req.user)) {
-    return res.redirect('/404/')
+export const renderAddSpaceType = async (req, res, next) => {
+  try {
+    const categories = await getAllCategories()
+
+    if (!isAuthenticatedUser(req.user)) {
+      return res.redirect('/404/')
+    }
+
+    setMetadata(res, {
+      title: 'Add SpaceType | Spaces',
+      bodyId: 'add-spaceType',
+      bodyClass: 'page page-add-spaceType page-crud-spaceType'
+    })
+
+    setProps(res, {
+      categories: toJSON(categories)
+    })
+
+    next()
+  } catch (err) {
+    next(err)
   }
-
-  setMetadata(res, {
-    title: 'Add SpaceType | Spaces',
-    bodyId: 'add-spaceType',
-    bodyClass: 'page page-add-spaceType page-crud-spaceType'
-  })
-
-  next()
 }
 
 export const addSpaceType = async (req, res) => {
@@ -139,6 +151,7 @@ export const renderUpdateSpaceType = async (req, res, next) => {
 
   try {
     const spaceType = await findBySid(sid)
+    const categories = await getAllCategories()
 
     setMetadata(res, {
       title: 'Update SpaceType | Spaces',
@@ -147,7 +160,8 @@ export const renderUpdateSpaceType = async (req, res, next) => {
     })
 
     setProps(res, {
-      spaceType: toJSON(spaceType)
+      spaceType: toJSON(spaceType),
+      categories: toJSON(categories)
     })
 
     if (isEmpty(spaceType)) {

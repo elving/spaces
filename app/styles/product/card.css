@@ -47,7 +47,8 @@
   position: absolute;
 }
 
-.product-card-image-container {
+.product-card-image-container,
+.product-card-add-icon-container {
   border-radius: 4px 4px 0 0;
   flex: 1;
   width: 100%;
@@ -109,7 +110,7 @@
   font-size: 16px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;  
+  justify-content: flex-start;
 }
 
 .product-card-designer-link {
@@ -122,4 +123,70 @@
 
 .product-card-designer-link .user-curator-badge {
   margin-left: 2px;
+}
+
+.product-card-add,
+.product-card-add:hover {
+  text-decoration: none;
+}
+
+.product-card-add:hover .icon-fill {
+  fill: #2ecc71;
+}
+
+.product-card-add-icon-container {
+  align-items: center;
+  flex-direction: column;
+}
+
+.product-card-add-icon {
+  margin-bottom: 15px;
+}
+
+.product-card-add-message {
+  font-size: 20px;
+  text-align: center;
+}
+
+.card-subtitle--placeholder {
+  background-color: #e5e5e5;
+  width: 25%;
+  height: 13px;
+  margin-bottom: 5px;
+}
+
+.card-title--placeholder::after,
+.card-title--placeholder::before {
+  content: "";
+  background-color: #e5e5e5;
+  width: 95%;
+  height: 13px;
+  display: block;
+}
+
+.card-title--placeholder::before {
+  margin-bottom: 5px;
+}
+
+.card-title--placeholder::after {
+  width: 55%;
+}
+
+.card-tag--placeholder {
+  border-color: #e5e5e5;
+  background-color: #e5e5e5;
+  width: 65px;
+  height: 20px;
+}
+
+.product-card-designer-avatar--placeholder {
+  width: 26px;
+  height: 26px;
+  background-color: #e5e5e5;
+}
+
+.product-card-designer-name--placeholder {
+  background-color: #e5e5e5;
+  width: 75%;
+  height: 13px;
 }

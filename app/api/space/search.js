@@ -45,7 +45,7 @@ export default (params = {}, operation = 'where') => (
     query
       .skip(parseInt(get(params, 'skip', 0)))
       .limit(parseInt(get(params, 'limit', 40)))
-      .sort('-createdAt')
+      .sort(get(params, 'sort', '-createdAt'))
       .populate('colors')
       .populate('products')
       .populate('createdBy')

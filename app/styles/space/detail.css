@@ -125,6 +125,27 @@ button.space-detail-counter {
   z-index: 2;
 }
 
+.space-detail-suggestion {
+  display: flex;
+  padding: 35px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.space-detail-suggestion-title {
+  font-size: 26px;
+  margin: 0 auto 15px;
+}
+
+.space-detail-suggestions {
+  width: 100%;
+  display: flex;
+  max-width: 960px;
+  align-items: center;
+  justify-content: center;
+}
+
 .page-space-detail #products {
   margin-top: 15px;
 }

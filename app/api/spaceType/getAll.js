@@ -7,8 +7,8 @@ import parseError from '../utils/parseError'
 import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default () => {
-  return new Promise(async (resolve, reject) => {
+export default () => (
+  new Promise(async (resolve, reject) => {
     const cacheKey = 'spaceType-all'
 
     getFromCacheOrQuery(cacheKey, () => {
@@ -16,6 +16,7 @@ export default () => {
         .model('SpaceType')
         .find()
         .sort({ name: 'asc' })
+        .populate('categories')
         .exec(async (err, spaceTypes = []) => {
           if (err) {
             return reject(parseError(err))
@@ -30,4 +31,4 @@ export default () => {
         })
     }, resolve)
   })
-}
+)

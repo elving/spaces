@@ -9,14 +9,15 @@ import { saveToCache } from '../cache'
 import reverseKebabCase from '../../utils/reverseKebabCase'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default (name, returnDocument = false) => {
-  return new Promise((resolve, reject) => {
+export default (name, returnDocument = false) => (
+  new Promise((resolve, reject) => {
     const key = `spaceType-${kebabCase(name)}`
 
     const query = () => {
       mongoose
         .model('SpaceType')
         .findOne({ name: reverseKebabCase(name) })
+        .populate('categories')
         .exec(async (err, spaceType = {}) => {
           if (err) {
             return reject(parseError(err))
@@ -37,4 +38,4 @@ export default (name, returnDocument = false) => {
       getFromCacheOrQuery(key, query, resolve)
     }
   })
-}
+)

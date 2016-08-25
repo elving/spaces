@@ -3,8 +3,8 @@ import mongoose from 'mongoose'
 
 import parseError from '../utils/parseError'
 
-export default (_id) => {
-  return new Promise((resolve, reject) => {
+export default _id => (
+  new Promise((resolve, reject) => {
     mongoose
       .model('User')
       .findOne({ _id })
@@ -18,4 +18,4 @@ export default (_id) => {
       }
     )
   })
-}
+)

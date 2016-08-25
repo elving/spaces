@@ -5,7 +5,13 @@ import SpaceTypeForm from './Form'
 
 export default class UpdateSpaceType extends Component {
   static propTypes = {
-    spaceType: PropTypes.object
+    spaceType: PropTypes.object,
+    categories: PropTypes.array
+  }
+
+  static defaultProps = {
+    spaceType: {},
+    categories: []
   }
 
   render() {
@@ -13,7 +19,11 @@ export default class UpdateSpaceType extends Component {
 
     return (
       <Layout>
-        <SpaceTypeForm spaceType={props.spaceType} formMethod="PUT" />
+        <SpaceTypeForm
+          spaceType={props.spaceType}
+          categories={props.categories}
+          formMethod="PUT"
+        />
       </Layout>
     )
   }

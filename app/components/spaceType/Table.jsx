@@ -45,7 +45,7 @@ export default class SpaceTypesTable extends Component {
         <Table
           items={props.spaceTypes}
           count={size(props.spaceTypes)}
-          headerTitle="SpaceTypes"
+          headerTitle="Rooms"
           tableHeaders={[{
             label: 'Date Created',
             property: 'createdAt'
@@ -59,9 +59,9 @@ export default class SpaceTypesTable extends Component {
           }]}
           searchPath="name"
           headerCtaLink="/admin/space-types/add/"
-          headerCtaText="Add SpaceType"
+          headerCtaText="Add Room"
           renderTableRow={this.renderRow}
-          searchPlaceholder="Search spaceTypes by name"
+          searchPlaceholder="Search rooms by name"
         />
       </Layout>
     )

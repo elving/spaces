@@ -1,0 +1,66 @@
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.grid-container > .tags-container {
+  padding: 0 15px;
+  margin: -15px 0 35px;
+}
+
+.tags-container > .tag {
+  margin-top: 10px;
+}
+
+.tag {
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  font-weight: 500;
+  text-decoration: none;
+  display: flex;
+  padding: 4px 8px;
+  flex-shrink: 0;
+  align-items: center;
+  margin-right: 10px;
+  justify-content: center;
+}
+
+.tag--small {
+  font-size: 12px;
+  line-height: 12px;
+  padding: 4px 8px;
+}
+
+.tag--medium {
+  font-size: 14px;
+  line-height: 14px;
+  padding: 6px 8px;
+}
+
+.tag--big {
+  font-size: 16px;
+  line-height: 16px;
+  padding: 8px 12px;
+}
+
+a.tag:hover,
+a.tag:active {
+  color: #555555;
+  background-color: #e5e5e5;
+  text-decoration: none;
+}
+
+span.tag {
+  cursor: default;
+}
+
+.tag--small .icon {
+  margin-right: 2px;
+}
+
+.tag--big .icon,
+.tag--medium .icon {
+  margin-right: 4px;
+}

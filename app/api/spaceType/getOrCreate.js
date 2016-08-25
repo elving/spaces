@@ -18,7 +18,7 @@ export default (name, returnDocument = false) => {
           return reject(err)
         }
       }
-    } catch(err) {
+    } catch (err) {
       return reject(err)
     }
   })

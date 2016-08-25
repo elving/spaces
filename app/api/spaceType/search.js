@@ -8,8 +8,8 @@ import toStringId from '../utils/toStringId'
 import parseError from '../utils/parseError'
 import makeSearchQuery from '../utils/makeSearchQuery'
 
-const getCount = (params) => {
-  return new Promise((resolve, reject) => {
+const getCount = (params) => (
+  new Promise((resolve, reject) => {
     mongoose
       .model('SpaceType')
       .where(params)
@@ -21,10 +21,10 @@ const getCount = (params) => {
         resolve(count)
       })
   })
-}
+)
 
-const getProducts = (spaceType) => {
-  return new Promise(async (resolve, reject) => {
+const getProducts = (spaceType) => (
+  new Promise(async (resolve, reject) => {
     mongoose
       .model('Product')
       .where({ spaceTypes: { $in: [spaceType] } })
@@ -41,10 +41,10 @@ const getProducts = (spaceType) => {
         }
       })
   })
-}
+)
 
-export default (params = {}) => {
-  return new Promise((resolve, reject) => {
+export default (params = {}) => (
+  new Promise((resolve, reject) => {
     const searchParams = makeSearchQuery(params)
 
     mongoose
@@ -52,7 +52,8 @@ export default (params = {}) => {
       .where(searchParams)
       .skip(parseInt(get(params, 'skip', 0)))
       .limit(parseInt(get(params, 'limit', 40)))
-      .sort('name')
+      .sort(get(params, 'sort', 'name'))
+      .populate('categories')
       .exec(async (err, spaceTypes = []) => {
         if (err) {
           return reject(parseError(err))
@@ -71,4 +72,4 @@ export default (params = {}) => {
         })
       })
   })
-}
+)

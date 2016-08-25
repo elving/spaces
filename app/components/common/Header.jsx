@@ -25,14 +25,6 @@ export default class Header extends Component {
           Trending
         </Link>
         <Link
-          to={{ pathname: '/feed/' }}
-          onClick={fullReload}
-          className="header-link"
-          activeClassName="is-active"
-        >
-          Your Feed
-        </Link>
-        <Link
           to={{ pathname: '/spaces/' }}
           onClick={fullReload}
           className="header-link"
@@ -47,6 +39,23 @@ export default class Header extends Component {
           activeClassName="is-active"
         >
           Products
+        </Link>
+        <div className="header-link-divider" />
+        <Link
+          to={{ pathname: '/feed/' }}
+          onClick={fullReload}
+          className="header-link"
+          activeClassName="is-active"
+        >
+          Your Feed
+        </Link>
+        <Link
+          to={{ pathname: '/suggestions/' }}
+          onClick={fullReload}
+          className="header-link"
+          activeClassName="is-active"
+        >
+          Your Suggestions
         </Link>
       </nav>
     )

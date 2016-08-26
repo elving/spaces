@@ -315,7 +315,7 @@ class ProductDetail extends Component {
           <button
             type="button"
             onClick={this.openSharePopup}
-            className="button button--outline"
+            className="button share-button"
           >
             <MaterialDesignIcon name="send" />
             Share

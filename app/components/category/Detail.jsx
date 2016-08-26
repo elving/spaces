@@ -153,7 +153,7 @@ class CategoryDetail extends Component {
           <button
             type="button"
             onClick={props.openSharePopup}
-            className="button button--icon button--small"
+            className="button share-button button--icon button--small"
           >
             <MaterialDesignIcon name="send" />
           </button>

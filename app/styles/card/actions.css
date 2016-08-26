@@ -54,25 +54,19 @@
   min-height: 40px;
 }
 
-.card-action:not(.like-button) {
+.card--default,
+.card-action[data-action="add"],
+.card-action[data-action="redesign"] {
   border-color: #dadada;
   background-color: #ffffff;
 }
 
-.card-action:not(.like-button):hover {
+.card--default:hover {
   border-color: #c0c0c0;
   background-color: #ffffff;
 }
 
-.card-action:not(.like-button):hover .icon-fill {
-  fill: #888888;
-}
-
-.card-action[data-action="share"].button--active {
-  border-color: #c0c0c0;
-}
-
-.card-action[data-action="share"].button--active .icon-fill {
+.card--default:hover .icon-fill {
   fill: #888888;
 }
 

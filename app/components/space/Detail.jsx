@@ -372,6 +372,7 @@ class SpaceDetail extends Component {
             type="button"
             onClick={this.openSharePopup}
             className="button button--icon button--small"
+            data-action="share"
           >
             <MaterialDesignIcon name="send" />
           </button>

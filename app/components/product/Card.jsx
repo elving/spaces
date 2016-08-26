@@ -162,7 +162,7 @@ export default class ProductCard extends Component {
           <button
             type="button"
             onClick={this.openSharePopup}
-            className="card-action button button--icon"
+            className="card-action share-button button button--icon"
             data-action="send"
           >
             <MaterialDesignIcon name="send" />

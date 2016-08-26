@@ -217,6 +217,7 @@ export default class SpaceCard extends Component {
             className={classNames({
               button: true,
               'card-action': true,
+              'share-button': true,
               'button--icon': true,
               'button--active': state.sharePopupIsOpen
             })}

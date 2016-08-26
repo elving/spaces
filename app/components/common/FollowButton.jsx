@@ -104,7 +104,7 @@ export default class FollowButton extends Component {
       'button--icon': !props.showText,
       'button--small': true,
       'follow-button': true,
-      'button--primary': true,
+      'button--primary-outline': true,
       'follow-button--show-text': props.showText,
       'follow-button--following': state.following,
       [props.className]: !isEmpty(props.className)

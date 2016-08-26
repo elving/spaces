@@ -146,40 +146,44 @@
 }
 
 .button--primary,
-.button--primary:active {
+.button--primary:active,
+.follow-button--following,
+.follow-button--following:active {
   color: #ffffff;
   border-color: #2ecc71;
   background-color: #2ecc71;
 }
 
-.button--primary:hover {
+.button--primary:hover,
+.follow-button--following:hover {
   color: #ffffff;
   border-color: #27bf67;
   background-color: #27bf67;
 }
 
-.button--primary .icon-fill {
+.button--primary .icon-fill,
+.follow-button--following .icon-fill {
   fill: #ffffff;
 }
 
-.button--primary-outline,
-.button--primary-outline:active {
+.button--primary-outline:not(.follow-button--following),
+.button--primary-outline:not(.follow-button--following):active {
   color: #2ecc71;
   border-color: #2ecc71;
   background-color: transparent;
 }
 
-.button--primary-outline:hover {
+.button--primary-outline:not(.follow-button--following):hover {
   color: #ffffff;
   border-color: #2ecc71;
   background-color: #2ecc71;
 }
 
-.button--primary-outline .icon-fill {
+.button--primary-outline:not(.follow-button--following) .icon-fill {
   fill: #2ecc71;
 }
 
-.button--primary-outline:hover .icon-fill {
+.button--primary-outline:not(.follow-button--following):hover .icon-fill {
   fill: #ffffff;
 }
 

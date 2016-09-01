@@ -489,9 +489,7 @@ class SpaceDetail extends Component {
         <div id="products" className="grid-items">
           {canModify(context.user, props.space) ? (
             <AddProductCard
-              message={
-                `Make your ${spaceType} more complete with these products.`
-              }
+              message={`Add the perfect products for this ${spaceType}.`}
               categories={suggestions}
             />
           ) : null}

@@ -29,37 +29,12 @@ export default class AddProductCard extends Component {
         <div className="product-card-add-icon-container">
           <MaterialDesignIcon
             name="add-alt"
-            size={140}
+            size={110}
             className="product-card-add-icon"
           />
           <span className="product-card-add-message">
             {props.message}
           </span>
-        </div>
-        <div className="product-title card-title-container">
-          <div className="card-subtitle card-subtitle--placeholder" />
-          <div className="card-title card-title--placeholder" />
-        </div>
-        <div className="product-tags card-tags">
-          <span className="tag tag--small card-tag card-tag--placeholder" />
-          <span className="tag tag--small card-tag card-tag--placeholder" />
-          <span className="tag tag--small card-tag card-tag--placeholder" />
-          <span className="tag tag--small card-tag card-tag--placeholder" />
-        </div>
-        <div className="product-card-designer">
-          <div
-            className={classNames({
-              'user-avatar': true,
-              'product-card-designer-avatar': true,
-              'product-card-designer-avatar--placeholder': true
-            })}
-          />
-          <span
-            className={classNames({
-              'product-card-designer-name': true,
-              'product-card-designer-name--placeholder': true
-            })}
-          />
         </div>
       </a>
     )

@@ -138,8 +138,14 @@
   text-decoration: none;
 }
 
+.product-card-add:hover {
+  color: #ffffff;
+  border-color: #27bf67;
+  background-color: #2ecc71;
+}
+
 .product-card-add:hover .icon-fill {
-  fill: #2ecc71;
+  fill: #ffffff;
 }
 
 .product-card-add-icon-container {

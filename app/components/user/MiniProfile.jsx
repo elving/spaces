@@ -5,7 +5,7 @@ import React, { Component, PropTypes } from 'react'
 
 import Avatar from './Avatar'
 import CuratorBadge from './CuratorBadge'
-import MaterialDesignIcon from '../common/MaterialDesignIcon'
+import FollowButton from '../common/FollowButton'
 
 import inflect from '../../utils/inflect'
 import toStringId from '../../api/utils/toStringId'
@@ -65,15 +65,12 @@ export default class MiniProfile extends Component {
               )}
             </div>
             {userId !== currentUserId ? (
-              <button
-                type="button"
-                onClick={this.onToggleFollowClick}
-                className="button button--primary button--mini"
-                data-action="follow-user"
-              >
-                <MaterialDesignIcon name="follow-user" size={14} />
-                Follow
-              </button>
+              <FollowButton
+                parent={userId}
+                className="button--mini"
+                parentType="user"
+                hideWhenLoggedOut
+              />
             ) : null}
           </div>
           <div className="user-mini-profile-stats">

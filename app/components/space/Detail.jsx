@@ -226,11 +226,14 @@ class SpaceDetail extends Component {
   }
 
   renderHeader() {
-    const { state } = this
+    const { props, state } = this
 
     return (
       <div className="space-detail-header">
         <h1 className="space-detail-header-title">
+          <small className="space-detail-header-pre-title">
+            {get(props.space, 'spaceType.name', 'Space')}
+          </small>
           {state.name}
         </h1>
         {this.renderCounters()}
@@ -388,7 +391,7 @@ class SpaceDetail extends Component {
             className="button button--icon button--small"
             data-action="share"
           >
-            <MaterialDesignIcon name="send" />
+            <MaterialDesignIcon name="send" fill="#439fe0" />
           </button>
           {this.renderSharePopup()}
         </div>

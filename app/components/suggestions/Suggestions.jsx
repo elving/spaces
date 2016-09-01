@@ -56,7 +56,10 @@ class Suggestions extends Component {
 
           <div className="grids">
             {map(props.spaces, space =>
-              <div className="grid-container">
+              <div
+                key={`space-${toStringId(space)}`}
+                className="grid-container"
+              >
                 <div className="grid-title-container">
                   <h3 className="grid-title has-subtitle">
                     <small className="grid-title-top-subtitle">

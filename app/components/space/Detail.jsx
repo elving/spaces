@@ -25,6 +25,7 @@ import AddProductCard from '../product/AddCard'
 import CommentsWidget from '../comment/Widget'
 import SpaceFormModal from '../modal/SpaceForm'
 import AddProductModal from '../modal/AddProduct'
+import OnboardingModal from '../modal/Onboarding'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import addProductModalContainer from '../container/AddProductModal'
 
@@ -41,6 +42,7 @@ class SpaceDetail extends Component {
 
   static propTypes = {
     space: PropTypes.object,
+    location: PropTypes.object,
     openAddProductModal: PropTypes.func,
     closeAddProductModal: PropTypes.func,
     addProductModalIsOpen: PropTypes.bool,
@@ -49,6 +51,7 @@ class SpaceDetail extends Component {
 
   static defaultProps = {
     space: {},
+    location: {},
     openAddProductModal: (() => {}),
     closeAddProductModal: (() => {}),
     addProductModalIsOpen: false,
@@ -72,8 +75,19 @@ class SpaceDetail extends Component {
       createLikesModal: false,
       sharePopupIsOpen: false,
       sharePopupIsCreated: false,
-      redesignPopupIsOpen: false
+      redesignPopupIsOpen: false,
+      onboardingModalIsOpen: get(props.location, 'query.onboarding') === '1'
     }
+  }
+
+  onModalOpen = () => {
+    document.body.classList.add('ReactModal__Body--open')
+  }
+
+  onOnboardingClose = () => {
+    this.setState({
+      onboardingModalIsOpen: false
+    })
   }
 
   onLikesCounterClick = (event) => {
@@ -533,10 +547,19 @@ class SpaceDetail extends Component {
           Space updated successfully
         </Notification>
 
+        <OnboardingModal
+          room={get(props.space, 'spaceType.name', 'space')}
+          onClose={this.onOnboardingClose}
+          isVisible={state.onboardingModalIsOpen}
+          categories={get(props.space, 'categories', [])}
+          onAfterOpen={this.onModalOpen}
+        />
+
         <AddProductModal
           product={props.addProductModalCurrent}
           onClose={props.closeAddProductModal}
           isVisible={props.addProductModalIsOpen}
+          onAfterOpen={this.onModalOpen}
         />
 
         <SpaceFormModal
@@ -552,6 +575,7 @@ class SpaceDetail extends Component {
           }}
           isVisible={state.editModalIsOpen}
           formMethod="PUT"
+          onAfterOpen={this.onModalOpen}
         />
 
         <div className="space-detail">

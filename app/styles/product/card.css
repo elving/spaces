@@ -18,12 +18,20 @@
   border-bottom: 0 none;
 }
 
+.user-is-onboarding .card-actions .like-button,
+.user-is-onboarding .card-actions .share-button {
+  display: none;
+}
+
 .product-card:not(.product-card--display-only):hover .card-actions-overlay {
   display: block;
 }
 
+.user-is-onboarding .card-actions,
+.product-card--popup-open .card-actions,
 .product-card:not(.product-card--display-only):hover .card-actions,
-.product-card--popup-open .card-actions {
+.user-is-onboarding .product-card:not(.product-card--display-only):hover .card-actions .like-button,
+.user-is-onboarding .product-card:not(.product-card--display-only):hover .card-actions .share-button {
   display: flex;
 }
 

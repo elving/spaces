@@ -14,7 +14,8 @@ import MaterialDesignIcon from '../common/MaterialDesignIcon'
 export default class ProductCard extends Component {
   static contextTypes = {
     csrf: PropTypes.string,
-    userLoggedIn: PropTypes.func
+    userLoggedIn: PropTypes.func,
+    currentUserIsOnboarding: PropTypes.func
   }
 
   static propTypes = {
@@ -206,13 +207,13 @@ export default class ProductCard extends Component {
   }
 
   renderTags() {
-    const { state, props } = this
+    const { props, state, context } = this
 
     return (
       <CardTags
         model={props}
         className="product-tags"
-        autoScroll={state.isHovering}
+        autoScroll={state.isHovering && !context.currentUserIsOnboarding()}
         forDisplayOnly={props.forDisplayOnly}
       />
     )

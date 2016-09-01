@@ -22,9 +22,9 @@ export default (id, props) => {
   return new Promise(async (resolve, reject) => {
     try {
       let brand = null
-      let colors = []
-      let categories = []
-      let spaceTypes = []
+      const colors = []
+      const categories = []
+      const spaceTypes = []
 
       const product = await findById(id)
       const sanitizedProps = sanitize(props)
@@ -61,14 +61,14 @@ export default (id, props) => {
         } catch (err) {
           if (has(err, 'name')) {
             return reject({ categories: get(err, 'name') })
-          } else {
-            return reject({
-              generic: (
-                'There was an error while trying to create this product. ' +
-                'Please try again.'
-              )
-            })
           }
+
+          return reject({
+            generic: (
+              'There was an error while trying to create this product. ' +
+              'Please try again.'
+            )
+          })
         }
       }
 
@@ -86,14 +86,14 @@ export default (id, props) => {
         } catch (err) {
           if (has(err, 'name')) {
             return reject({ colors: get(err, 'name') })
-          } else {
-            return reject({
-              generic: (
-                'There was an error while trying to create this product. ' +
-                'Please try again.'
-              )
-            })
           }
+
+          return reject({
+            generic: (
+              'There was an error while trying to create this product. ' +
+              'Please try again.'
+            )
+          })
         }
       }
 
@@ -111,14 +111,14 @@ export default (id, props) => {
         } catch (err) {
           if (has(err, 'name')) {
             return reject({ spaceTypes: get(err, 'name') })
-          } else {
-            return reject({
-              generic: (
-                'There was an error while trying to create this product. ' +
-                'Please try again.'
-              )
-            })
           }
+
+          return reject({
+            generic: (
+              'There was an error while trying to create this product. ' +
+              'Please try again.'
+            )
+          })
         }
       }
 

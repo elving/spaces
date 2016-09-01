@@ -1,7 +1,9 @@
 import Modal from 'react-modal'
+import toLower from 'lodash/toLower'
 import React, { Component, PropTypes } from 'react'
 
 import cdnUrl from '../../utils/cdnUrl'
+import getSuggestionsUrl from '../../utils/space/getSuggestionsUrl'
 
 const resetModalStyles = {
   overlay: {
@@ -23,13 +25,17 @@ const resetModalStyles = {
 
 export default class OnboardingModal extends Component {
   static propTypes = {
+    room: PropTypes.string,
     onClose: PropTypes.func,
-    isVisible: PropTypes.bool
+    isVisible: PropTypes.bool,
+    categories: PropTypes.array
   }
 
   static defaultProps = {
+    room: 'space',
     onClose: (() => {}),
-    isVisible: false
+    isVisible: false,
+    categories: []
   }
 
   onClose = () => {
@@ -49,100 +55,53 @@ export default class OnboardingModal extends Component {
         onRequestClose={this.onClose}
       >
         <h1 className="onboarding-modal-title">
-          What's Next?
+          Way to go!
         </h1>
         <div className="onboarding-modal-content">
           <div className="onboarding-modal-content-row">
-            <img
-              src={cdnUrl('/static/onboarding/1.png')}
-              role="presentation"
-              className="onboarding-modal-content-media"
-            />
             <h3 className="onboarding-modal-content-title">
-              Become a designer
+              So what's next?
             </h3>
             <p className="onboarding-modal-content-text">
-              Design your own spaces featuring products curated by
-              a community with good taste.
+              Now that you've designed your first space, take
+              a look at some product suggestions for
+              your <strong>{toLower(props.room)}</strong>.
             </p>
+            <div className="onboarding-modal-actions">
+              <a
+                href={getSuggestionsUrl(props.categories)}
+                className="onboarding-modal-action button button--primary-alt"
+              >
+                Product Suggestions
+              </a>
+            </div>
           </div>
           <div className="onboarding-modal-content-row">
-            <img
-              src={cdnUrl('/static/onboarding/2.png')}
-              role="presentation"
-              className="onboarding-modal-content-media"
-            />
             <h3 className="onboarding-modal-content-title">
-              Redesign your favorite spaces
+              Share, discuss and curate.
             </h3>
             <p className="onboarding-modal-content-text">
-              Design your own spaces featuring products curated by
-              a community with good taste.
-            </p>
-          </div>
-          <div className="onboarding-modal-content-row">
-            <img
-              src={cdnUrl('/static/onboarding/3.png')}
-              role="presentation"
-              className="onboarding-modal-content-media"
-            />
-            <h3 className="onboarding-modal-content-title">
-              Show your love
-            </h3>
-            <p className="onboarding-modal-content-text">
-              Design your own spaces featuring products curated by
-              a community with good taste.
-            </p>
-          </div>
-          <div className="onboarding-modal-content-row">
-            <img
-              src={cdnUrl('/static/onboarding/4.png')}
-              role="presentation"
-              className="onboarding-modal-content-media"
-            />
-            <h3 className="onboarding-modal-content-title">
-              Share with your friends
-            </h3>
-            <p className="onboarding-modal-content-text">
-              Design your own spaces featuring products curated by
-              a community with good taste.
-            </p>
-          </div>
-          <div className="onboarding-modal-content-row">
-            <img
-              src={cdnUrl('/static/onboarding/5.png')}
-              role="presentation"
-              className="onboarding-modal-content-media"
-            />
-            <h3 className="onboarding-modal-content-title">
-              Follow your favorite designers
-            </h3>
-            <p className="onboarding-modal-content-text">
-              Design your own spaces featuring products curated by
-              a community with good taste.
-            </p>
-          </div>
-          <div className="onboarding-modal-content-row">
-            <img
-              src={cdnUrl('/static/onboarding/6.png')}
-              role="presentation"
-              className="onboarding-modal-content-media"
-            />
-            <h3 className="onboarding-modal-content-title">
-              Become a curator
-            </h3>
-            <p className="onboarding-modal-content-text">
-              Design your own spaces featuring products curated by
-              a community with good taste.
+              Share this <strong>{toLower(props.room)}</strong> with your
+              friends to start a discussion. Get followers and gain influence
+              to become a curator. Curators can add products that other
+              designers can use to design their spaces.
             </p>
           </div>
         </div>
-        <div className="onboarding-modal-actions">
+        <div
+          className="onboarding-modal-actions onboarding-modal-actions--main"
+        >
+          <a
+            href="#"
+            className="onboarding-modal-action button button--primary"
+          >
+            Learn More
+          </a>
           <button
             onClick={this.onClose}
-            className="onboarding-modal-action button button--primary-alt"
+            className="onboarding-modal-action button"
           >
-            Ok, got it!
+            Close
           </button>
         </div>
       </Modal>

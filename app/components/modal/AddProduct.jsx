@@ -37,7 +37,8 @@ const overrideDefaultStyles = {
 export default class AddProductModal extends Component {
   static contextTypes = {
     user: PropTypes.object,
-    csrf: PropTypes.string
+    csrf: PropTypes.string,
+    currentUserIsOnboarding: PropTypes.func
   }
 
   static propTypes = {
@@ -52,17 +53,21 @@ export default class AddProductModal extends Component {
     isVisible: false
   }
 
-  state = {
-    spaces: [],
-    filteredSpaces: [],
-    spacesHashTable: {},
-    hasFetchedSpaces: false,
-    isFetchingSpaces: true,
-    isTogglingProduct: false,
-    formIsVisible: false,
-    spaceTypes: [],
-    hasFetchedSpaceTypes: false,
-    isFetchingSpaceTypes: true
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      spaces: [],
+      filteredSpaces: [],
+      spacesHashTable: {},
+      hasFetchedSpaces: false,
+      isFetchingSpaces: true,
+      isTogglingProduct: false,
+      formIsVisible: context.currentUserIsOnboarding(),
+      spaceTypes: [],
+      hasFetchedSpaceTypes: false,
+      isFetchingSpaceTypes: true
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -367,12 +372,13 @@ export default class AddProductModal extends Component {
   }
 
   renderForm() {
-    const { state } = this
+    const { props, state } = this
 
     return (
       <SpaceForm
-        onSuccess={this.onFormSuccess}
+        products={[props.product]}
         onCancel={this.hideForm}
+        onSuccess={this.onFormSuccess}
         spaceTypes={state.spaceTypes}
       />
     )

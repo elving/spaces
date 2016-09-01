@@ -14,7 +14,8 @@ import withoutAnyType from '../../utils/spaceType/withoutAnyType'
 export default class SpaceForm extends Component {
   static contextTypes = {
     user: PropTypes.object,
-    csrf: PropTypes.string
+    csrf: PropTypes.string,
+    currentUserIsOnboarding: PropTypes.func
   }
 
   static propTypes = {
@@ -106,7 +107,7 @@ export default class SpaceForm extends Component {
   onSubmit = (event) => {
     event.preventDefault()
 
-    const { props } = this
+    const { props, context } = this
 
     const isPOST = props.formMethod === 'POST'
 
@@ -139,7 +140,13 @@ export default class SpaceForm extends Component {
           errors: {},
           isWaiting: false,
           ...resetData
-        }, () => props.onSuccess(space))
+        }, () => {
+          if (context.currentUserIsOnboarding()) {
+            window.location.href = `/${get(space, 'detailUrl')}/?onboarded=1`
+          } else {
+            props.onSuccess(space)
+          }
+        })
       })
       .catch(({ response }) => {
         const errors = get(response, 'data.err', {})
@@ -181,9 +188,9 @@ export default class SpaceForm extends Component {
     let btnText = ''
 
     if (isPOST) {
-      btnText = state.isWaiting ? 'Creating Space...' : 'Create Space'
+      btnText = state.isWaiting ? 'Creating...' : 'Create Space'
     } else {
-      btnText = state.isWaiting ? 'Updating Space...' : 'Update Space'
+      btnText = state.isWaiting ? 'Updating...' : 'Update Space'
     }
 
     return (

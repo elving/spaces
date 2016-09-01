@@ -1,12 +1,14 @@
 import get from 'lodash/get'
 import size from 'lodash/size'
 import merge from 'lodash/merge'
+import isEmpty from 'lodash/isEmpty'
 import toLower from 'lodash/toLower'
 
 import isAdmin from '../utils/user/isAdmin'
 import setProps from '../utils/middlewares/setProps'
 import setOgTags from '../utils/middlewares/setOgTags'
 import setMetadata from '../utils/middlewares/setMetadata'
+import updateSettings from '../utils/user/updateSettings'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import search from '../api/space/search'
@@ -117,6 +119,8 @@ export const createSpace = async (req, res) => {
   }
 
   try {
+    let user
+
     const space = await create(
       merge(req.body, {
         createdBy: userId,
@@ -124,9 +128,18 @@ export const createSpace = async (req, res) => {
       })
     )
 
-    const user = await updateUser(userId, {
-      $addToSet: { spaces: toObjectId(space) }
-    })
+    if (isEmpty(get(req.user, 'spaces', []))) {
+      user = await updateUser(userId, {
+        $set: {
+          settings: updateSettings(req.user, { onboarding: false })
+        },
+        $addToSet: { spaces: toObjectId(space) }
+      })
+    } else {
+      user = await updateUser(userId, {
+        $addToSet: { spaces: toObjectId(space) }
+      })
+    }
 
     req.logIn(user, () => res.status(200).json(space))
   } catch (err) {

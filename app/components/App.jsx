@@ -24,7 +24,8 @@ export default class App extends Component {
     userLoggedIn: PropTypes.func,
     currentUserIsOwner: PropTypes.func,
     currentUserIsAdmin: PropTypes.func,
-    currentUserIsCurator: PropTypes.func
+    currentUserIsCurator: PropTypes.func,
+    currentUserIsOnboarding: PropTypes.func
   }
 
   getChildContext() {
@@ -38,6 +39,9 @@ export default class App extends Component {
       currentUserIsOwner: id => isEqual(toStringId(props.user), id),
       currentUserIsCurator: () => (
         get(props.user, 'isCurator') || get(props.user, 'isAdmin')
+      ),
+      currentUserIsOnboarding: () => (
+        get(props.user, 'settings.onboarding', false)
       )
     }
   }

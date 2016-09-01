@@ -5,6 +5,8 @@ import React, { Component, PropTypes } from 'react'
 
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
+import getSuggestionsUrl from '../../utils/space/getSuggestionsUrl'
+
 export default class AddProductCard extends Component {
   static propTypes = {
     message: PropTypes.string,
@@ -16,19 +18,12 @@ export default class AddProductCard extends Component {
     categories: []
   }
 
-  getSearchUrl() {
-    const { props } = this
-    const categories = join(map(props.categories, 'id'), '%2C')
-
-    return `/search/?type=products&categories=${categories}`
-  }
-
   render() {
     const { props } = this
 
     return (
       <a
-        href={this.getSearchUrl()}
+        href={getSuggestionsUrl(props.categories)}
         className="card product product-card product-card-add"
       >
         <div className="product-card-add-icon-container">

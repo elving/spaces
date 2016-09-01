@@ -24,7 +24,7 @@
 }
 
 .onboarding-header-count-left {
-  margin-right: 15px;
+  margin-right: 25px;
 }
 
 .onboarding-modal {
@@ -34,7 +34,7 @@
   margin: 60px auto;
   display: flex;
   position: relative;
-  max-width: 520px;
+  max-width: 620px;
   min-height: 250px;
   align-items: center;
   flex-direction: column;
@@ -97,6 +97,48 @@
   justify-content: center;
 }
 
+.onboarding-modal-actions--main {
+  justify-content: space-between;
+}
+
 .onboarding-modal-action {
+  width: 50%;
+}
+
+.onboarding-modal-actions--main .onboarding-modal-action {
+  width: calc(50% - 15px);
+}
+
+.onboarding-message {
+  color: #ffffff;
+  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.05);
+  background-color: #2ECC71;
+  top: 0;
+  left: 0;
   width: 100%;
+  z-index: 100001;
+  padding: 15px;
+  display: flex;
+  position: fixed;
+  min-height: 70px;
+  align-items: center;
+  justify-content: center;
+}
+
+.onboarding-message > a {
+  color: #ffffff;
+}
+
+.onboarding-message .button {
+  border-color: #ffffff;
+  margin-right: 15px;
+  pointer-events: none;
+}
+
+.onboarding-modal-content-row .onboarding-modal-actions {
+  padding: 35px 15px 0;
+}
+
+.ReactModal__Body--open .user-is-onboarding .onboarding-message {
+  display: none;
 }

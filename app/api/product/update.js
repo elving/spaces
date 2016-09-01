@@ -18,8 +18,8 @@ import { default as getOrCreateBrand } from '../brand/getOrCreate'
 import { default as getOrCreateCategory } from '../category/getOrCreate'
 import { default as findSpaceTypeByName } from '../spaceType/findByName'
 
-export default (id, props) => {
-  return new Promise(async (resolve, reject) => {
+export default (id, props) => (
+  new Promise(async (resolve, reject) => {
     try {
       let brand = null
       const colors = []
@@ -36,14 +36,14 @@ export default (id, props) => {
         } catch (err) {
           if (has(err, 'name')) {
             return reject({ brand: get(err, 'name') })
-          } else {
-            return reject({
-              generic: (
-                'There was an error while trying to create this product. ' +
-                'Please try again.'
-              )
-            })
           }
+
+          return reject({
+            generic: (
+              'There was an error while trying to create this product. ' +
+              'Please try again.'
+            )
+          })
         }
       }
 
@@ -176,4 +176,4 @@ export default (id, props) => {
       reject(err)
     }
   })
-}
+)

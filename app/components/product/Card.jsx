@@ -29,8 +29,10 @@ export default class ProductCard extends Component {
     createdBy: PropTypes.object,
     categories: PropTypes.array,
     spaceTypes: PropTypes.array,
+    mainAction: PropTypes.string,
     forDisplayOnly: PropTypes.bool,
-    onAddButtonClick: PropTypes.func
+    onAddButtonClick: PropTypes.func,
+    onRemoveButtonClick: PropTypes.func
   }
 
   static defaultProps = {
@@ -44,8 +46,10 @@ export default class ProductCard extends Component {
     createdBy: {},
     categories: [],
     spaceTypes: [],
+    mainAction: 'add',
     forDisplayOnly: false,
-    onAddButtonClick: (() => {})
+    onAddButtonClick: (() => {}),
+    onRemoveButtonClick: (() => {})
   }
 
   state = {
@@ -143,14 +147,26 @@ export default class ProductCard extends Component {
     return (
       <div className="product-card-actions card-actions-container">
         <div className="card-actions card-actions--left">
-          <button
-            type="button"
-            onClick={props.onAddButtonClick}
-            className="card-action button button--icon"
-            data-action="add"
-          >
-            <MaterialDesignIcon name="add" fill="#2ECC71" />
-          </button>
+          {props.mainAction === 'add' ? (
+            <button
+              type="button"
+              onClick={props.onAddButtonClick}
+              className="card-action button button--icon"
+              data-action="add"
+            >
+              <MaterialDesignIcon name="add" fill="#2ECC71" />
+            </button>
+          ) : null}
+          {props.mainAction === 'remove' ? (
+            <button
+              type="button"
+              onClick={props.onRemoveButtonClick}
+              className="card-action button button--icon"
+              data-action="remove"
+            >
+              <MaterialDesignIcon name="remove" fill="#e74c3c" />
+            </button>
+          ) : null}
           <LikeButton
             parent={props.id}
             isWhite
@@ -259,6 +275,7 @@ export default class ProductCard extends Component {
         className={classNames({
           product: true,
           'product-card card': true,
+          'product-card--can-remove': props.mainAction === 'remove',
           'product-card--popup-open': state.sharePopupIsOpen,
           'product-card--display-only': props.forDisplayOnly
         })}

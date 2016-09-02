@@ -3,6 +3,8 @@ import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
 import axios from 'axios'
+import filter from 'lodash/filter'
+import without from 'lodash/without'
 import isEmpty from 'lodash/isEmpty'
 import toLower from 'lodash/toLower'
 import React, { Component, PropTypes } from 'react'
@@ -63,6 +65,7 @@ class SpaceDetail extends Component {
 
     this.state = {
       name: get(props.space, 'name', ''),
+      products: get(props.space, 'products', []),
       isDeleting: false,
       likesCount: get(props.space, 'likesCount', 0),
       description: get(props.space, 'description', ''),
@@ -141,6 +144,31 @@ class SpaceDetail extends Component {
   getDetailUrl = () => {
     const { props } = this
     return `${window.location.origin}/${props.detailUrl}/`
+  }
+
+  removeProduct(productToRemove) {
+    const { props, state, context } = this
+
+    const productId = toStringId(productToRemove)
+    const productIds = map(state.products, product => toStringId(product))
+
+    const removeMessage = (
+      'Are you sure you want to remove this product? \n' +
+      'This action cannot be undone. '
+    )
+
+    if (window.confirm(removeMessage)) {
+      this.setState({
+        products: filter(state.products, product =>
+          toStringId(product) !== productId
+        )
+      })
+
+      axios.put(`/ajax/spaces/${toStringId(props.space)}/`, {
+        _csrf: context.csrf,
+        products: without(productIds, productId)
+      })
+    }
   }
 
   delete = () => {
@@ -480,25 +508,29 @@ class SpaceDetail extends Component {
   }
 
   renderProducts() {
-    const { props, context } = this
+    const { props, state, context } = this
+
+    const isOwner = canModify(context.user, props.space)
     const spaceType = toLower(get(props.space, 'spaceType.name', 'space'))
     const suggestions = get(props.space, 'spaceType.categories', [])
 
     return (
       <div className="grid">
         <div id="products" className="grid-items">
-          {canModify(context.user, props.space) ? (
+          {isOwner ? (
             <AddProductCard
               message={`Add the perfect products for this ${spaceType}.`}
               categories={suggestions}
             />
           ) : null}
 
-          {map(get(props.space, 'products', []), product =>
+          {map(state.products, product =>
             <Product
               {...product}
               key={toStringId(product)}
+              mainAction={isOwner ? 'remove' : 'add'}
               onAddButtonClick={() => props.openAddProductModal(product)}
+              onRemoveButtonClick={() => this.removeProduct(product)}
             />
           )}
         </div>

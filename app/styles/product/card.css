@@ -30,6 +30,7 @@
 .user-is-onboarding .card-actions,
 .product-card--popup-open .card-actions,
 .product-card:not(.product-card--display-only):hover .card-actions,
+.product-card.product-card--can-remove:not(.product-card--display-only):hover .like-button,
 .user-is-onboarding .product-card:not(.product-card--display-only):hover .card-actions .like-button,
 .user-is-onboarding .product-card:not(.product-card--display-only):hover .card-actions .share-button {
   display: flex;
@@ -41,6 +42,14 @@
 
 .product-card--popup-open:hover .card-actions-overlay {
   opacity: 0;
+}
+
+.product-card--can-remove .card-actions--left {
+  display: flex;
+}
+
+.product-card--can-remove .like-button {
+  display: none;
 }
 
 .product-card-overlay {

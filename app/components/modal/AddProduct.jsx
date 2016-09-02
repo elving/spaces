@@ -322,6 +322,9 @@ export default class AddProductModal extends Component {
         })}
       >
         <span className="add-product-modal-space-name">
+          <small className="add-product-modal-space-room">
+            {get(space, 'spaceType.name')}
+          </small>
           {get(space, 'name')}
         </span>
         {hasProduct ? (

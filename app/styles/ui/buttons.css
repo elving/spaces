@@ -334,8 +334,8 @@
 
 .follow-button.follow-button--following:hover {
   color: #ffffff;
-  border-color: #fb5465;
-  background-color: #fb5465;
+  border-color: #e74c3c;
+  background-color: #e74c3c;
 }
 
 .follow-button--show-text::after {

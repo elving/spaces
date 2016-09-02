@@ -56,6 +56,7 @@
 
 .card--default,
 .card-action[data-action="add"],
+.card-action[data-action="remove"],
 .card-action[data-action="redesign"] {
   border-color: #dadada;
   background-color: #ffffff;
@@ -78,10 +79,22 @@
   background-color: #2ECC71;
 }
 
+.card-action[data-action="remove"] .icon-fill {
+  fill: #e74c3c;
+}
+
+.card-action[data-action="remove"]:hover,
+.card-action[data-action="remove"].button--active {
+  border-color: #e74c3c;
+  background-color: #e74c3c;
+}
+
 .card-action[data-action="add"]:hover .icon-fill,
 .card-action[data-action="add"].button--active .icon-fill,
 .card-action[data-action="redesign"]:hover .icon-fill,
-.card-action[data-action="redesign"].button--active .icon-fill {
+.card-action[data-action="redesign"].button--active .icon-fill,
+.card-action[data-action="remove"]:hover .icon-fill,
+.card-action[data-action="remove"].button--active .icon-fill {
   fill: #FFFFFF;
 }
 

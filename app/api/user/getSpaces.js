@@ -8,7 +8,12 @@ export default _id => (
     mongoose
       .model('User')
       .findOne({ _id })
-      .populate('spaces')
+      .populate({
+        path: 'spaces',
+        options: {
+          populate: 'spaceType'
+        }
+      })
       .exec((err, user) => {
         if (err) {
           return reject(parseError(err))

@@ -27,10 +27,10 @@ export default schema => {
     .validate((value) => {
       if (isEmpty(value)) {
         return true
-      } else if (!isEmpty(value) && size(value) <= 250) {
+      } else if (!isEmpty(value) && size(value) <= 140) {
         return true
       }
 
       return false
-    }, 'The space\'s description can\'t be longer than 250 characters')
+    }, 'The space\'s description can\'t be longer than 140 characters')
 }

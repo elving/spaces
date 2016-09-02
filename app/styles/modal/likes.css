@@ -30,9 +30,6 @@
 }
 
 .likes-modal-inner--has-likes .likes-modal-title {
-  font-size: 26px;
-  text-align: center;
-  margin: 0 auto 30px;
   transform: translateY(0);
 }
 

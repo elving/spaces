@@ -1,6 +1,6 @@
 .space-detail-header {
   border-bottom: 1px solid #e5e5e5;
-  background-color: #fcfcfc;
+  background-color: #fdfdfd;
   padding: 30px;
 }
 
@@ -23,6 +23,13 @@
   margin-bottom: 5px;
 }
 
+.space-detail-description {
+  color: #999999;
+  text-align: center;
+  margin: 15px auto;
+  max-width: 620px;
+}
+
 .space-detail-counters {
   width: 100%;
   margin: 15px auto 0;
@@ -38,6 +45,7 @@
   text-align: center;
   text-decoration: none;
   margin: 0 15px;
+  padding: 0;
 }
 
 button.space-detail-counter {
@@ -101,39 +109,6 @@ button.space-detail-counter {
 .space-detail-action .popup:before {
   left: auto;
   right: 25px;
-}
-
-.space-detail-description-container {
-  border-bottom: 1px solid #e5e5e5;
-  background-color: #fcfcfc;
-}
-
-.space-detail-description {
-  white-space: pre-wrap;
-  line-height: 30px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 15px;
-  position: relative;
-  max-width: 960px;
-}
-
-.space-detail-description:after,
-.space-detail-description:before {
-  content: "";
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid #dadada;
-  top: -11px;
-  left: 30px;
-  z-index: 1;
-  position: absolute;
-}
-
-.space-detail-description:before {
-  border-bottom-color: #fcfcfc;
-  top: -9.7px;
-  z-index: 2;
 }
 
 .space-detail-suggestion {

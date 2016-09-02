@@ -23,6 +23,7 @@ import LikeButton from '../common/LikeButton'
 import MiniProfile from '../user/MiniProfile'
 import Notification from '../common/Notification'
 import RedesignPopup from './RedesignPopup'
+import RedesignsModal from '../modal/Redesigns'
 import AddProductCard from '../product/AddCard'
 import CommentsWidget from '../comment/Widget'
 import SpaceFormModal from '../modal/SpaceForm'
@@ -79,6 +80,8 @@ class SpaceDetail extends Component {
       sharePopupIsOpen: false,
       sharePopupIsCreated: false,
       redesignPopupIsOpen: false,
+      redesignsModalIsOpen: false,
+      createRedesignsModal: false,
       onboardingModalIsOpen: get(props.location, 'query.onboarding') === '1'
     }
   }
@@ -112,6 +115,11 @@ class SpaceDetail extends Component {
     this.setState({
       likesCount: state.likesCount - 1
     })
+  }
+
+  onRedesignsCounterClick = (event) => {
+    event.preventDefault()
+    this.openRedesignsModal()
   }
 
   onCommentAdded = () => {
@@ -240,6 +248,19 @@ class SpaceDetail extends Component {
     })
   }
 
+  openRedesignsModal = () => {
+    this.setState({
+      redesignsModalIsOpen: true,
+      createRedesignsModal: true
+    })
+  }
+
+  closeRedesignsModal = () => {
+    this.setState({
+      redesignsModalIsOpen: false
+    })
+  }
+
   openEditFormModal = () => {
     this.setState({
       editModalIsOpen: true,
@@ -264,6 +285,11 @@ class SpaceDetail extends Component {
           </small>
           {state.name}
         </h1>
+        {!isEmpty(state.description) ? (
+          <p className="space-detail-description">
+            {state.description}
+          </p>
+        ) : null}
         {this.renderCounters()}
       </div>
     )
@@ -290,7 +316,9 @@ class SpaceDetail extends Component {
           </a>
         ) : null}
         {state.redesignsCount ? (
-          <div
+          <button
+            type="button"
+            onClick={this.onRedesignsCounterClick}
             className="space-detail-counter"
             data-action="redesigns"
           >
@@ -300,7 +328,7 @@ class SpaceDetail extends Component {
             <div className="space-detail-counter-text">
               {inflect(state.redesignsCount, 'Redesign')}
             </div>
-          </div>
+          </button>
         ) : null}
         {state.likesCount ? (
           <button
@@ -468,18 +496,6 @@ class SpaceDetail extends Component {
     )
   }
 
-  renderDescription() {
-    const { state } = this
-
-    return !isEmpty(state.description) ? (
-      <div className="space-detail-description-container">
-        <p className="space-detail-description">
-          {state.description}
-        </p>
-      </div>
-    ) : null
-  }
-
   renderSuggestions() {
     const { props, context } = this
 
@@ -551,6 +567,18 @@ class SpaceDetail extends Component {
     ) : null
   }
 
+  renderRedesignsModal() {
+    const { props, state } = this
+
+    return state.createRedesignsModal ? (
+      <RedesignsModal
+        parent={toStringId(props.space)}
+        onClose={this.closeRedesignsModal}
+        isVisible={state.redesignsModalIsOpen}
+      />
+    ) : null
+  }
+
   renderComments() {
     const { props } = this
 
@@ -614,10 +642,10 @@ class SpaceDetail extends Component {
         <div className="space-detail">
           {this.renderHeader()}
           {this.renderSubHeader()}
-          {this.renderDescription()}
           {this.renderSuggestions()}
           {this.renderProducts()}
           {this.renderLikesModal()}
+          {this.renderRedesignsModal()}
           {this.renderComments()}
         </div>
       </Layout>

@@ -90,10 +90,10 @@ export default class UserProfile extends PureComponent {
     const username = get(props.profile, 'username')
 
     return (
-      <div className="user-profile-navigation">
+      <nav className="navbar">
         <Link
           to={{ pathname: `/designers/${username}/spaces` }}
-          className="user-profile-navigation-link"
+          className="navbar-link"
           activeClassName="is-active"
         >
           Spaces
@@ -101,7 +101,7 @@ export default class UserProfile extends PureComponent {
         {isCurator(props.profile) ? (
           <Link
             to={{ pathname: `/designers/${username}/products` }}
-            className="user-profile-navigation-link"
+            className="navbar-link"
             activeClassName="is-active"
           >
             Products
@@ -109,12 +109,12 @@ export default class UserProfile extends PureComponent {
         ) : null}
         <Link
           to={{ pathname: `/designers/${username}/likes` }}
-          className="user-profile-navigation-link"
+          className="navbar-link"
           activeClassName="is-active"
         >
           Likes
         </Link>
-      </div>
+      </nav>
     )
   }
 

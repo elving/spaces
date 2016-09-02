@@ -84,7 +84,7 @@ export default class CardTags extends Component {
       }
 
       this.container.scrollLeft = this.lastScrollLeft
-    }, 25)
+    }, 35)
   }
 
   clearInterval = () => {

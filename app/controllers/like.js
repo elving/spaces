@@ -138,3 +138,24 @@ export const getSpaceLikes = async (req, res) => {
     })
   }
 }
+
+export const getProductLikes = async (req, res) => {
+  const product = get(req.params, 'product', '')
+
+  if (isEmpty(product)) {
+    return res.status(200).json({ likes: [] })
+  }
+
+  try {
+    const likes = await getAll(product)
+    res.status(200).json({ likes })
+  } catch (err) {
+    res.status(500).json({
+      err: {
+        genereic: (
+          'There was an error while trying to fetch likes from this product.'
+        )
+      }
+    })
+  }
+}

@@ -8,17 +8,22 @@ import toIdsFromPath from '../utils/toIdsFromPath'
 import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default (parent) => (
+export default originalSpace => (
   new Promise((resolve, reject) => {
-    const key = `like-all-${parent}`
+    const key = `redesigns-all-${originalSpace}`
 
     getFromCacheOrQuery(key, () => {
       mongoose
-        .model('Like')
-        .where({ parent })
-        .populate('createdBy')
+        .model('Space')
+        .where({ originalSpace })
         .sort('createdAt')
-        .exec(async (err, likes) => {
+        .populate('colors')
+        .populate('products')
+        .populate('createdBy')
+        .populate('categories')
+        .populate('spaceType')
+        .populate('originalSpace')
+        .exec(async (err, spaces = []) => {
           if (err) {
             return reject(parseError(err))
           }

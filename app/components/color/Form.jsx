@@ -48,9 +48,17 @@ export default class ColorForm extends Component {
     const { props, state } = this.state
 
     window.onbeforeunload = () => {
-      const action = props.formMethod === 'POST' ? 'adding' : 'updating'
+      let action
 
-      if (state.isSaving) {
+      if (state.isDeleting) {
+        action = 'deleting'
+      } else if (state.isSaving && props.formMethod === 'POST') {
+        action = 'adding'
+      } else if (state.isSaving && props.formMethod === 'PUT') {
+        action = 'updating'
+      }
+
+      if (state.isDeleting || state.isSaving) {
         return (
           `You are in the process of ${action} a color. ` +
           'Are you sure you want to navigate away from this page and ' +

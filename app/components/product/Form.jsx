@@ -16,6 +16,7 @@ import Notification from '../common/Notification'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
+import focusOnFirstError from '../../utils/dom/focusOnFirstError'
 import getValidProductImages from '../../utils/getValidProductImages'
 
 export default class ProductForm extends Component {
@@ -31,15 +32,13 @@ export default class ProductForm extends Component {
     onAdded: PropTypes.func,
     categories: PropTypes.array,
     spaceTypes: PropTypes.array,
-    formMethod: PropTypes.string,
-    isPOSTForSpace: PropTypes.bool
+    formMethod: PropTypes.string
   }
 
   static defaultProps = {
     product: {},
     onAdded: (() => {}),
-    formMethod: 'POST',
-    isPOSTForSpace: false
+    formMethod: 'POST'
   }
 
   constructor(props) {
@@ -76,24 +75,34 @@ export default class ProductForm extends Component {
   }
 
   componentDidMount() {
-    const { state } = this
+    const { props, state } = this
+
+    let action
+
+    if (state.isDeleting) {
+      action = 'deleting'
+    } else if (state.isSaving && props.formMethod === 'POST') {
+      action = 'adding'
+    } else if (state.isSaving && props.formMethod === 'PUT') {
+      action = 'updating'
+    }
 
     window.onbeforeunload = () => {
-      if (state.hasSaved) {
-        return
-      }
-
-      const formData = omit(
-        serialize(this.form, { hash: true }), ['_csrf', '_method']
-      )
-
-      if (state.isSaving || (!isEmpty(formData) && !state.savingSuccessful)) {
+      if (state.isSaving || state.isDeleting) {
         return (
-          'You are in the process of adding a product. ' +
+          `You are in the process of ${action} a product. ` +
           'Are you sure you want to navigate away from this page and ' +
           'loose your progress?'
         )
       }
+    }
+  }
+
+  componentDidUpdate() {
+    const { state } = this
+
+    if (!isEmpty(state.errors)) {
+      focusOnFirstError()
     }
   }
 
@@ -107,7 +116,7 @@ export default class ProductForm extends Component {
       isScraping: true
     }, () => {
       axios
-        .get(`/ajax/products/fetch/?url=${formData.url}`)
+        .get(`/ajax/products/fetch/?url=${encodeURIComponent(formData.url)}`)
         .then(({ data: product }) => {
           const productImages = get(product, 'images', [])
 
@@ -235,7 +244,7 @@ export default class ProductForm extends Component {
   }
 
   onClickDelete = () => {
-    const { props, context } = this.context
+    const { props, context } = this
 
     const deleteMessage = (
       'Are you sure you want to delete this product? \n' +
@@ -352,9 +361,9 @@ export default class ProductForm extends Component {
 
   onNotificationClose = () => {
     const { props, state } = this
-    const isPUT = props.formMethod === 'PUT'
+    const isPOST = props.formMethod === 'POST'
 
-    if (state.deletingSuccessful || (!props.isPOSTForSpace && !isPUT)) {
+    if (state.deletingSuccessful || (isPOST && !state.productAlreadyExists)) {
       window.onbeforeunload = null
       window.location.href = '/products/add/'
     } else {
@@ -715,34 +724,30 @@ export default class ProductForm extends Component {
           {isPOST ? 'Add Product' : 'Update Product'}
         </h1>
 
-        {!isPOST ? (
-          <div className="form-group">
-            <label htmlFor="url" className="form-label">
-              Url <small>required</small>
-            </label>
+        <div className="form-group">
+          <label htmlFor="url" className="form-label">
+            Url <small>required</small>
+          </label>
 
-            <input
-              id="url"
-              type="text"
-              name="url"
-              value={state.url}
-              required
-              onChange={this.onUrlChange}
-              disabled={state.isSaving}
-              className={classNames({
-                textfield: true,
-                'textfield--error': hasUrlError
-              })}
-              placeholder="Name"
-            />
+          <input
+            id="url"
+            type="text"
+            name="url"
+            value={state.url}
+            required
+            onChange={this.onUrlChange}
+            disabled={state.isSaving}
+            className={classNames({
+              textfield: true,
+              'textfield--error': hasUrlError
+            })}
+            placeholder="Url"
+          />
 
-            {hasUrlError ? (
-              <small className="form-error">{urlError}</small>
-            ) : null}
-          </div>
-        ) : (
-          <input type="hidden" name="url" value={state.url} />
-        )}
+          {hasUrlError ? (
+            <small className="form-error">{urlError}</small>
+          ) : null}
+        </div>
 
         <div className="form-group">
           <label htmlFor="image" className="form-label">
@@ -1035,7 +1040,9 @@ export default class ProductForm extends Component {
           onClose={this.onNotificationClose}
           isVisible
         >
-          This product aleary exists. <a href={`/products/${sid}/`}>{name}</a>.
+          This product aleary exists.
+          {'\u00A0'}
+          <a href={`/products/${sid}/`}>{name}</a>.
         </Notification>
       )
     } else if (state.savingSuccessful) {
@@ -1047,7 +1054,10 @@ export default class ProductForm extends Component {
           isVisible
         >
           "{name}" was added successfully.
-          Click <a href={`/products/${sid}/update/`}>here</a> to edit.
+          {'\u00A0'}
+          Click <a href={`/products/${sid}/update/`}>here</a>
+          {'\u00A0'}
+          to edit.
         </Notification>
       ) : (
         <Notification

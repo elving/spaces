@@ -38,6 +38,7 @@
 }
 
 .notification--error a,
+.notification--default a,
 .notification--success a {
   color: #ffffff;
 }

@@ -14,6 +14,7 @@ import cheerio from 'cheerio'
 import parseInt from 'lodash/parseInt'
 import { parse as parseUrl } from 'url'
 
+import toJSON from '../utils/toJSON'
 import logError from '../../utils/logError'
 import findByUrl from './findByUrl'
 
@@ -23,7 +24,7 @@ export default url => (
       const product = await findByUrl(url)
 
       if (!isEmpty(product)) {
-        return resolve(product)
+        return resolve(toJSON(product))
       }
     } catch (err) {
       return reject({

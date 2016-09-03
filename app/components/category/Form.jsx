@@ -46,11 +46,17 @@ export default class CategoryForm extends Component {
     const { props, state } = this.state
 
     window.onbeforeunload = () => {
-      const action = props.formMethod === 'POST'
-        ? 'adding'
-        : 'updating'
+      let action
 
-      if (state.isSaving) {
+      if (state.isDeleting) {
+        action = 'deleting'
+      } else if (state.isSaving && props.formMethod === 'POST') {
+        action = 'adding'
+      } else if (state.isSaving && props.formMethod === 'PUT') {
+        action = 'updating'
+      }
+
+      if (state.isSaving || state.isDeleting) {
         return (
           `You are in the process of ${action} a category. ` +
           'Are you sure you want to navigate away from this page and ' +

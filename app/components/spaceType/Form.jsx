@@ -52,9 +52,17 @@ export default class SpaceTypeForm extends Component {
     const { props, state } = this
 
     window.onbeforeunload = () => {
-      const action = props.formMethod === 'POST' ? 'adding' : 'updating'
+      let action
 
-      if (state.isSaving) {
+      if (state.isDeleting) {
+        action = 'deleting'
+      } else if (state.isSaving && props.formMethod === 'POST') {
+        action = 'adding'
+      } else if (state.isSaving && props.formMethod === 'PUT') {
+        action = 'updating'
+      }
+
+      if (state.isDeleting || state.isSaving) {
         return (
           `You are in the process of ${action} a room. ` +
           'Are you sure you want to navigate away from this page and ' +
@@ -113,7 +121,7 @@ export default class SpaceTypeForm extends Component {
   }
 
   onClickDelete = () => {
-    const { props, context } = this.context
+    const { props, context } = this
 
     const deleteMessage = (
       'Are you sure you want to delete this room? \n' +

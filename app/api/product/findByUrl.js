@@ -16,10 +16,6 @@ export default (url, returnDocument = false) => (
       mongoose
         .model('Product')
         .findOne({ url })
-        .populate('brand')
-        .populate('colors')
-        .populate('categories')
-        .populate('spaceTypes')
         .exec(async (err, product = {}) => {
           if (err) {
             return reject(parseError(err))

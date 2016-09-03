@@ -13,6 +13,7 @@ import Avatar from './Avatar'
 import Notification from '../common/Notification'
 
 import toStringId from '../../api/utils/toStringId'
+import focusOnFirstError from '../../utils/dom/focusOnFirstError'
 
 export default class EditProfile extends Component {
   static contextTypes = {
@@ -45,6 +46,14 @@ export default class EditProfile extends Component {
       bioCharsLeft: 165 - bioLength,
       hasBioCharsError: bioLength > 165,
       savingSuccessful: false
+    }
+  }
+
+  componentDidUpdate() {
+    const { state } = this
+
+    if (!isEmpty(state.errors)) {
+      focusOnFirstError()
     }
   }
 

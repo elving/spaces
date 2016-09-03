@@ -100,7 +100,7 @@ export default class Onboarding extends Component {
                 {state.following} / 5
               </span>
               <a
-                href="/feed/?onboarding=1"
+                href="/feed/"
                 disabled={state.following < 5}
                 className="onboarding-header-button button button--primary-alt"
               >

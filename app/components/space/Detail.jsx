@@ -7,6 +7,7 @@ import filter from 'lodash/filter'
 import without from 'lodash/without'
 import isEmpty from 'lodash/isEmpty'
 import toLower from 'lodash/toLower'
+import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import Dropdown, {
@@ -29,6 +30,7 @@ import CommentsWidget from '../comment/Widget'
 import SpaceFormModal from '../modal/SpaceForm'
 import AddProductModal from '../modal/AddProduct'
 import OnboardingModal from '../modal/Onboarding'
+import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import addProductModalContainer from '../container/AddProductModal'
 
@@ -40,7 +42,8 @@ import getSuggestions from '../../utils/space/getSuggestions'
 class SpaceDetail extends Component {
   static contextTypes = {
     user: PropTypes.object,
-    csrf: PropTypes.string
+    csrf: PropTypes.string,
+    currentUserIsOnboarding: PropTypes.func
   }
 
   static propTypes = {
@@ -595,10 +598,18 @@ class SpaceDetail extends Component {
   }
 
   render() {
-    const { props, state } = this
+    const { props, state, context } = this
 
     return (
-      <Layout>
+      <Layout
+        className={classNames({
+          'user-is-onboarding': context.currentUserIsOnboarding()
+        })}
+      >
+        {context.currentUserIsOnboarding() ? (
+          <CreateSpaceBanner />
+        ) : null}
+
         <Notification
           type="success"
           timeout={3500}

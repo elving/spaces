@@ -50,12 +50,13 @@ export const follow = async (req, res) => {
         await updateSpaceType(parent, {
           $inc: { followersCount: 1 }
         })
+      } else if (parentType === 'user') {
+        await updateUser(parent, {
+          $inc: { followersCount: 1 }
+        })
       }
 
-      const user = await updateUser(userId, parentType === 'user' ? {
-        $inc: { followersCount: 1 },
-        $addToSet: { following: toObjectId(newFollow) }
-      } : {
+      const user = await updateUser(userId, {
         $addToSet: { following: toObjectId(newFollow) }
       })
 
@@ -101,12 +102,13 @@ export const unfollow = async (req, res) => {
       await updateSpaceType(parent, {
         $inc: { followersCount: -1 }
       })
+    } else if (parentType === 'user') {
+      await updateUser(parent, {
+        $inc: { followersCount: -1 }
+      })
     }
 
-    const user = await updateUser(userId, parentType === 'user' ? {
-      $inc: { followersCount: -1 },
-      $pull: { following: toObjectId(deletedFollow) }
-    } : {
+    const user = await updateUser(userId, {
       $pull: { following: toObjectId(deletedFollow) }
     })
 

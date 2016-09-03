@@ -1,5 +1,6 @@
 import map from 'lodash/map'
 import isEmpty from 'lodash/isEmpty'
+import classNames from 'classnames'
 import { Link } from 'react-router'
 import React, { Component, PropTypes } from 'react'
 
@@ -10,6 +11,7 @@ import ProfileCard from '../user/Card'
 import CategoryCard from '../category/Card'
 import SpaceTypeCard from '../spaceType/Card'
 import AddProductModal from '../modal/AddProduct'
+import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
 import addProductModalContainer from '../container/AddProductModal'
 
 import fullReload from '../../utils/fullReload'
@@ -38,6 +40,10 @@ class Home extends Component {
     closeAddProductModal: (() => {}),
     addProductModalIsOpen: false,
     createAddProductModal: false
+  }
+
+  static contextTypes = {
+    currentUserIsOnboarding: PropTypes.func
   }
 
   renderSpaces() {
@@ -115,10 +121,18 @@ class Home extends Component {
   }
 
   render() {
-    const { props } = this
+    const { props, context } = this
 
     return (
-      <Layout>
+      <Layout
+        className={classNames({
+          'user-is-onboarding': context.currentUserIsOnboarding()
+        })}
+      >
+        {context.currentUserIsOnboarding() ? (
+          <CreateSpaceBanner />
+        ) : null}
+
         <AddProductModal
           product={props.addProductModalCurrent}
           onClose={props.closeAddProductModal}

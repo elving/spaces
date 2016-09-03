@@ -4,6 +4,7 @@ import size from 'lodash/size'
 import axios from 'axios'
 import concat from 'lodash/concat'
 import isEmpty from 'lodash/isEmpty'
+import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import Space from '../space/Card'
@@ -12,6 +13,7 @@ import Product from '../product/Card'
 import SharePopup from '../common/SharePopup'
 import FollowButton from '../common/FollowButton'
 import AddProductModal from '../modal/AddProduct'
+import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import sharePopupContainer from '../container/SharePopup'
 import addProductModalContainer from '../container/AddProductModal'
@@ -38,6 +40,10 @@ class SpaceTypeDetail extends Component {
     closeAddProductModal: (() => {}),
     addProductModalIsOpen: false,
     createAddProductModal: false
+  }
+
+  static contextTypes = {
+    currentUserIsOnboarding: PropTypes.func
   }
 
   constructor(props) {
@@ -304,10 +310,18 @@ class SpaceTypeDetail extends Component {
   }
 
   render() {
-    const { props } = this
+    const { props, context } = this
 
     return (
-      <Layout>
+      <Layout
+        className={classNames({
+          'user-is-onboarding': context.currentUserIsOnboarding()
+        })}
+      >
+        {context.currentUserIsOnboarding() ? (
+          <CreateSpaceBanner />
+        ) : null}
+
         <AddProductModal
           product={props.addProductModalCurrent}
           onClose={props.closeAddProductModal}

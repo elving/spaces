@@ -122,7 +122,8 @@ export const authCallback = (req, res) => {
   if (!isEmpty(req.user) && !isAuthenticatedUser(req.user)) {
     return res.redirect(`/join/?${queryString.stringify({
       ...req.user,
-      socialNetwork
+      socialNetwork,
+      settings: { onboarding: true }
     })}`)
   }
 

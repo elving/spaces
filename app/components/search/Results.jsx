@@ -3,6 +3,7 @@ import map from 'lodash/map'
 import size from 'lodash/size'
 import axios from 'axios'
 import concat from 'lodash/concat'
+import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
@@ -10,6 +11,7 @@ import SpaceCard from '../space/Card'
 import ProductCard from '../product/Card'
 import ProfileCard from '../user/Card'
 import AddProductModal from '../modal/AddProduct'
+import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
 import addProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
@@ -33,6 +35,10 @@ class SearchResults extends Component {
     closeAddProductModal: (() => {}),
     addProductModalIsOpen: false,
     createAddProductModal: false
+  }
+
+  static contextTypes = {
+    currentUserIsOnboarding: PropTypes.func
   }
 
   constructor(props) {
@@ -129,12 +135,21 @@ class SearchResults extends Component {
   }
 
   render() {
-    const { props } = this
+    const { props, context } = this
+
     const type = get(props.location, 'query.type', '')
     const searchType = type.substring(0, size(type) - 1)
 
     return (
-      <Layout>
+      <Layout
+        className={classNames({
+          'user-is-onboarding': context.currentUserIsOnboarding()
+        })}
+      >
+        {context.currentUserIsOnboarding() && searchType === 'products' ? (
+          <CreateSpaceBanner />
+        ) : null}
+
         <AddProductModal
           product={props.addProductModalCurrent}
           onClose={props.closeAddProductModal}

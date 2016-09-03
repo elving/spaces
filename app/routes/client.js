@@ -49,6 +49,7 @@ import ProfileLikes from '../components/user/ProfileLikes'
 import ProfileSpaces from '../components/user/ProfileSpaces'
 import ChangePassword from '../components/user/ChangePassword'
 import ProfileProducts from '../components/user/ProfileProducts'
+import ProfileFollowers from '../components/user/ProfileFollowers'
 
 import SearchResults from '../components/search/Results'
 
@@ -80,6 +81,7 @@ const routes = (
       <Route path="likes" component={ProfileLikes} />
       <Route path="spaces" component={ProfileSpaces} />
       <Route path="products" component={ProfileProducts} />
+      <Route path="followers" component={ProfileFollowers} />
     </Route>
 
     <Route path="designers/:username/edit" component={EditProfile} />

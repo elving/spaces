@@ -8,6 +8,7 @@ import setMetadata from '../utils/middlewares/setMetadata'
 
 import { default as searchAllUsers } from '../api/user/search'
 import { default as searchAllSpaces } from '../api/space/search'
+import { default as searchAllFollows } from '../api/follow/search'
 import { default as searchAllProducts } from '../api/product/search'
 import { default as searchAllCategories } from '../api/category/search'
 import { default as searchAllSpaceTypes } from '../api/spaceType/search'
@@ -74,6 +75,17 @@ export const searchSpaces = async (req, res) => {
 
   try {
     const results = await searchAllSpaces(params)
+    res.status(200).json(results)
+  } catch (err) {
+    res.status(500).json({ err })
+  }
+}
+
+export const searchFollows = async (req, res) => {
+  const params = get(req, 'query', {})
+
+  try {
+    const results = await searchAllFollows(params)
     res.status(200).json(results)
   } catch (err) {
     res.status(500).json({ err })

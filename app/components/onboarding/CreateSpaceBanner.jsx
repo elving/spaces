@@ -1,6 +1,4 @@
-import get from 'lodash/get'
 import axios from 'axios'
-import assign from 'lodash/assign'
 import React, { Component, PropTypes } from 'react'
 
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
@@ -8,7 +6,7 @@ import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import toStringId from '../../api/utils/toStringId'
 import updateSettings from '../../utils/user/updateSettings'
 
-export default class Onboarding extends Component {
+export default class CreateSpaceBanner extends Component {
   static contextTypes = {
     csrf: PropTypes.string,
     user: PropTypes.object

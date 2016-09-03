@@ -1,12 +1,14 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import isEmpty from 'lodash/isEmpty'
+import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import Tag from '../common/Tag'
 import Layout from '../common/Layout'
 import ProductCard from '../product/Card'
 import AddProductModal from '../modal/AddProduct'
+import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
 import addProductModalContainer from '../container/AddProductModal'
 
 import toStringId from '../../api/utils/toStringId'
@@ -20,6 +22,10 @@ class Suggestions extends Component {
   static defaultProps = {
     spaces: [],
     hasSpaces: false
+  }
+
+  static contextTypes = {
+    currentUserIsOnboarding: PropTypes.func
   }
 
   renderProducts(space) {
@@ -41,11 +47,19 @@ class Suggestions extends Component {
   }
 
   render() {
-    const { props } = this
+    const { props, context } = this
 
     if (!isEmpty(props.spaces)) {
       return (
-        <Layout>
+        <Layout
+          className={classNames({
+            'user-is-onboarding': context.currentUserIsOnboarding()
+          })}
+        >
+          {context.currentUserIsOnboarding() ? (
+            <CreateSpaceBanner />
+          ) : null}
+
           <AddProductModal
             product={props.addProductModalCurrent}
             onClose={props.closeAddProductModal}

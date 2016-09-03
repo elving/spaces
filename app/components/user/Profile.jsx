@@ -1,12 +1,15 @@
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
+import classNames from 'classnames'
 import { Link } from 'react-router'
 import React, { PropTypes, PureComponent } from 'react'
 
 import Layout from '../common/Layout'
 import Avatar from './Avatar'
 import CuratorBadge from './CuratorBadge'
+import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
 
+import inflect from '../../utils/inflect'
 import isCurator from '../../utils/user/isCurator'
 import toStringId from '../../api/utils/toStringId'
 import addTwitterLinks from '../../utils/addTwitterLinks'
@@ -14,15 +17,18 @@ import addTwitterLinks from '../../utils/addTwitterLinks'
 export default class UserProfile extends PureComponent {
   static propTypes = {
     profile: PropTypes.object,
+    counters: PropTypes.object,
     children: PropTypes.node
   }
 
   static defaultProps = {
-    profile: {}
+    profile: {},
+    counters: {}
   }
 
   static contextTypes = {
-    user: PropTypes.object
+    user: PropTypes.object,
+    currentUserIsOnboarding: PropTypes.func
   }
 
   isProfileOwner() {
@@ -87,7 +93,12 @@ export default class UserProfile extends PureComponent {
 
   renderNavigation() {
     const { props } = this
+
     const username = get(props.profile, 'username')
+    const likesCount = get(props.counters, 'likes', 0)
+    const spacesCount = get(props.counters, 'spaces', 0)
+    const productsCount = get(props.counters, 'products', 0)
+    const followersCount = get(props.counters, 'followers', 0)
 
     return (
       <nav className="navbar">
@@ -96,7 +107,7 @@ export default class UserProfile extends PureComponent {
           className="navbar-link"
           activeClassName="is-active"
         >
-          Spaces
+          {`${spacesCount || ''} ${inflect(spacesCount, 'Space')}`}
         </Link>
         {isCurator(props.profile) ? (
           <Link
@@ -104,7 +115,7 @@ export default class UserProfile extends PureComponent {
             className="navbar-link"
             activeClassName="is-active"
           >
-            Products
+            {`${productsCount || ''} ${inflect(productsCount, 'Product')}`}
           </Link>
         ) : null}
         <Link
@@ -112,17 +123,34 @@ export default class UserProfile extends PureComponent {
           className="navbar-link"
           activeClassName="is-active"
         >
-          Likes
+          {`${likesCount || ''} ${inflect(likesCount, 'Like')}`}
+        </Link>
+        <Link
+          to={{ pathname: `/designers/${username}/followers` }}
+          className="navbar-link"
+          activeClassName="is-active"
+        >
+          {`${followersCount || ''} ${inflect(followersCount, 'Follower')}`}
         </Link>
       </nav>
     )
   }
 
   render() {
-    const { props } = this
+    const { props, context } = this
+
+    const productsCount = get(props.counters, 'products', 0)
 
     return (
-      <Layout>
+      <Layout
+        className={classNames({
+          'user-is-onboarding': context.currentUserIsOnboarding()
+        })}
+      >
+        {context.currentUserIsOnboarding() && productsCount ? (
+          <CreateSpaceBanner />
+        ) : null}
+
         <div className="user-profile">
           {this.renderHeader()}
           <div className="user-profile-content">

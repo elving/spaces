@@ -16,6 +16,7 @@ import LikeButton from '../common/LikeButton'
 import CardAvatars from '../card/CardAvatars'
 import CommentsWidget from '../comment/Widget'
 import AddProductModal from '../modal/AddProduct'
+import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import {
@@ -29,7 +30,8 @@ import toStringId from '../../api/utils/toStringId'
 class ProductDetail extends Component {
   static contextTypes = {
     csrf: PropTypes.string,
-    userLoggedIn: PropTypes.func
+    userLoggedIn: PropTypes.func,
+    currentUserIsOnboarding: PropTypes.func
   }
 
   static propTypes = {
@@ -405,10 +407,18 @@ class ProductDetail extends Component {
   }
 
   render() {
-    const { props } = this
+    const { props, context } = this
 
     return (
-      <Layout>
+      <Layout
+        className={classNames({
+          'user-is-onboarding': context.currentUserIsOnboarding()
+        })}
+      >
+        {context.currentUserIsOnboarding() ? (
+          <CreateSpaceBanner />
+        ) : null}
+
         <AddProductModal
           product={props.addProductModalCurrent}
           onClose={props.closeAddProductModal}

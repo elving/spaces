@@ -1,4 +1,5 @@
 import get from 'lodash/get'
+
 import update from '../api/user/update'
 import search from '../api/user/search'
 import getEmail from '../api/user/getEmail'
@@ -8,6 +9,7 @@ import toStringId from '../api/utils/toStringId'
 import setMetadata from '../utils/middlewares/setMetadata'
 import updatePassword from '../api/user/updatePassword'
 import findByUsername from '../api/user/findByUsername'
+import getProfileCounts from '../api/user/getProfileCounts'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 export const renderIndex = async (req, res, next) => {
@@ -39,6 +41,7 @@ export const redirectToProfileSpaces = (req, res) => {
 export const renderProfile = async (req, res, next) => {
   try {
     const profile = await findByUsername(get(req, 'params.username'))
+    const counters = await getProfileCounts(toStringId(profile))
     const username = get(profile, 'username', 'user')
 
     setOgTags(req, res, {
@@ -51,7 +54,7 @@ export const renderProfile = async (req, res, next) => {
       bodyClass: 'page page-user-profile'
     })
 
-    setProps(res, { profile })
+    setProps(res, { profile, counters })
 
     next()
   } catch (err) {

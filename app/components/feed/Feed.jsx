@@ -1,12 +1,14 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import isEmpty from 'lodash/isEmpty'
+import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
 import SpaceCard from '../space/Card'
 import ProductCard from '../product/Card'
 import AddProductModal from '../modal/AddProduct'
+import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
 import addProductModalContainer from '../container/AddProductModal'
 
 import toStringId from '../../api/utils/toStringId'
@@ -20,6 +22,10 @@ class Feed extends Component {
   static defaultProps = {
     feed: {},
     location: {}
+  }
+
+  static contextTypes = {
+    currentUserIsOnboarding: PropTypes.func
   }
 
   renderCards() {
@@ -53,11 +59,19 @@ class Feed extends Component {
   }
 
   render() {
-    const { props } = this
+    const { props, context } = this
 
     return (
       !isEmpty(get(props.feed, 'results', [])) ? (
-        <Layout>
+        <Layout
+          className={classNames({
+            'user-is-onboarding': context.currentUserIsOnboarding()
+          })}
+        >
+          {context.currentUserIsOnboarding() ? (
+            <CreateSpaceBanner />
+          ) : null}
+
           <AddProductModal
             product={props.addProductModalCurrent}
             onClose={props.closeAddProductModal}
@@ -74,6 +88,10 @@ class Feed extends Component {
         </Layout>
       ) : (
         <Layout>
+          {context.currentUserIsOnboarding() ? (
+            <CreateSpaceBanner />
+          ) : null}
+
           <h1 className="page-title">Your Feed</h1>
 
           <div className="feed-empty">

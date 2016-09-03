@@ -66,6 +66,10 @@ export default (params = {}) => {
     query.originalSpace = params.originalSpace
   }
 
+  if (has(params, 'parent')) {
+    query.parent = params.parent
+  }
+
   if (has(params, 'createdBy')) {
     if (isArray(params.createdBy)) {
       query.createdBy = { $in: params.createdBy }

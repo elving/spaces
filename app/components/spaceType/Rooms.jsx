@@ -7,36 +7,37 @@ import isEmpty from 'lodash/isEmpty'
 import { default as queryString } from 'query-string'
 import React, { Component, PropTypes } from 'react'
 
+import Room from './Card'
 import Loader from '../common/Loader'
-import Designer from '../user/Card'
 
 import toStringId from '../../api/utils/toStringId'
+import hasEmptyIdParam from '../../utils/hasEmptyIdParam'
 
-export default class Followers extends Component {
+export default class Rooms extends Component {
   static propTypes = {
+    rooms: PropTypes.object,
     params: PropTypes.object,
-    followers: PropTypes.object,
     emptyMessage: PropTypes.string
   }
 
   static defaultProps = {
+    rooms: {},
     params: {},
-    followers: {},
-    emptyMessage: 'No Followers Found...'
+    emptyMessage: 'No Rooms Found...'
   }
 
   constructor(props) {
     super(props)
 
-    const count = get(props.followers, 'count', 0)
-    const results = get(props.followers, 'results', [])
+    const count = get(props.rooms, 'count', 0)
+    const results = get(props.rooms, 'results', [])
 
     this.state = {
       skip: 40,
       count,
       offset: size(results),
       results,
-      isFetching: isEmpty(results),
+      isFetching: isEmpty(results) && !hasEmptyIdParam(props.params),
       hasFetched: !isEmpty(results),
       lastResults: results
     }
@@ -45,7 +46,7 @@ export default class Followers extends Component {
   componentDidMount() {
     const { props } = this
 
-    if (isEmpty(props.followers)) {
+    if (isEmpty(props.rooms) && !hasEmptyIdParam(props.params)) {
       this.fetch()
     }
   }
@@ -59,7 +60,7 @@ export default class Followers extends Component {
         : ''
 
       axios
-        .get(`/ajax/follows/search/?skip=${state.offset}&${params}`)
+        .get(`/ajax/rooms/search/?skip=${state.offset}&${params}`)
         .then(({ data }) => {
           const results = get(data, 'results', [])
 
@@ -90,23 +91,19 @@ export default class Followers extends Component {
           disabled={state.isFetching}
           className="button button--outline"
         >
-          {state.isFetching ? (
-            'Loading More Followers...'
-          ) : (
-            'Load More Followers'
-          )}
+          {state.isFetching ? 'Loading More Rooms...' : 'Load More Rooms'}
         </button>
       </div>
     ) : null
   }
 
-  renderFollowers() {
+  renderRooms() {
     const { props, state } = this
 
     const hasNoResults = (
       !state.isFetching &&
       isEmpty(state.results) &&
-      isEmpty(get(props.followers, 'results', []))
+      isEmpty(get(props.rooms, 'results', []))
     )
 
     return (
@@ -117,11 +114,8 @@ export default class Followers extends Component {
               {props.emptyMessage}
             </p>
           ) : (
-            map(state.results, follow =>
-              <Designer
-                key={toStringId(follow.createdBy)}
-                user={follow.createdBy}
-              />
+            map(state.results, room =>
+              <Room {...room} key={toStringId(room)} />
             )
           )}
         </div>
@@ -138,7 +132,7 @@ export default class Followers extends Component {
       </div>
     ) : (
       <div className="grids">
-        {this.renderFollowers()}
+        {this.renderRooms()}
         {this.renderPagination()}
       </div>
     )

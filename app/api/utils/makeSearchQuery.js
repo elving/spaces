@@ -78,5 +78,13 @@ export default (params = {}) => {
     }
   }
 
+  if (has(params, 'id')) {
+    if (isArray(params.id)) {
+      query._id = { $in: params.id }
+    } else {
+      query._id = params.id
+    }
+  }
+
   return query
 }

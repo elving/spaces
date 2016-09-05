@@ -87,6 +87,24 @@
   margin-bottom: 0;
 }
 
+.user-profile-content-following {
+  width: 100%;
+  display: flex;
+  min-height: 250px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.user-profile-content-following .navpills {
+  width: 450px;
+  margin: 0 auto 35px;
+}
+
+.user-profile-content-following .grids {
+  width: 100%;
+}
+
 @media (max-width: 736px) {
   .user-profile-header {
     padding: 35px 0 0;

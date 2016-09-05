@@ -1,0 +1,39 @@
+.navpills {
+  border-radius: 4px;
+  background-color: #eeeeee;
+  display: flex;
+  padding: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.navpills-link {
+  color: #888888;
+  cursor: pointer;
+  border: 0 none;
+  border-radius: 4px;
+  background-color: #eeeeee;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  padding: 15px;
+  max-width: 145px;
+  margin-right: 4px;
+}
+
+.navpills .navpills-link:last-child {
+  margin-right: 0;
+}
+
+.navpills-link:hover,
+.navpills-link:active,
+.navpills-link--active {
+  color: #444444;
+  background-color: #ffffff;
+  text-decoration: none;
+}
+
+.navpills-link--active {
+  cursor: default;
+}

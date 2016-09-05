@@ -5,6 +5,7 @@ import search from '../api/user/search'
 import getEmail from '../api/user/getEmail'
 import setProps from '../utils/middlewares/setProps'
 import setOgTags from '../utils/middlewares/setOgTags'
+import getFollows from '../api/user/getFollows'
 import toStringId from '../api/utils/toStringId'
 import setMetadata from '../utils/middlewares/setMetadata'
 import updatePassword from '../api/user/updatePassword'
@@ -177,6 +178,18 @@ export const changePassword = async (req, res, next) => {
 
       res.status(200).json(user)
     })
+  } catch (err) {
+    res.status(500).json({ err })
+  }
+}
+
+export const getUserFollows = async (req, res) => {
+  const id = get(req, 'params.id')
+
+  try {
+    const user = await getFollows(id)
+
+    res.status(200).json(get(user, 'following', []))
   } catch (err) {
     res.status(500).json({ err })
   }

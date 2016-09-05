@@ -12,7 +12,9 @@ router.get('/designers/:username/spaces/', controller.renderProfile)
 router.get('/designers/:username/products/', controller.renderProfile)
 router.get('/designers/:username/password/', controller.showPassword)
 router.get('/designers/:username/followers/', controller.renderProfile)
+router.get('/designers/:username/following/', controller.renderProfile)
 
+router.get(`${ajaxRoot}/:id/following/`, controller.getUserFollows)
 router.put(`${ajaxRoot}/:id/`, controller.updateUser)
 router.put(`${ajaxRoot}/:id/password/`, controller.changePassword)
 

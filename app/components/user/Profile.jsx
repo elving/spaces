@@ -99,6 +99,7 @@ export default class UserProfile extends PureComponent {
     const spacesCount = get(props.counters, 'spaces', 0)
     const productsCount = get(props.counters, 'products', 0)
     const followersCount = get(props.counters, 'followers', 0)
+    const followingCount = get(props.counters, 'following', 0)
 
     return (
       <nav className="navbar">
@@ -132,6 +133,13 @@ export default class UserProfile extends PureComponent {
         >
           {`${followersCount || ''} ${inflect(followersCount, 'Follower')}`}
         </Link>
+        <Link
+          to={{ pathname: `/designers/${username}/following` }}
+          className="navbar-link"
+          activeClassName="is-active"
+        >
+          {`${followingCount || ''} Following`}
+        </Link>
       </nav>
     )
   }
@@ -144,7 +152,10 @@ export default class UserProfile extends PureComponent {
     return (
       <Layout
         className={classNames({
-          'user-is-onboarding': context.currentUserIsOnboarding()
+          'user-is-onboarding': (
+            context.currentUserIsOnboarding() &&
+            productsCount
+          )
         })}
       >
         {context.currentUserIsOnboarding() && productsCount ? (

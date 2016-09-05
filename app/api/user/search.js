@@ -6,8 +6,8 @@ import mongoose from 'mongoose'
 import parseError from '../utils/parseError'
 import makeSearchQuery from '../utils/makeSearchQuery'
 
-const getCount = (params) => {
-  return new Promise((resolve, reject) => {
+const getCount = (params) => (
+  new Promise((resolve, reject) => {
     mongoose
       .model('User')
       .where(params)
@@ -19,10 +19,10 @@ const getCount = (params) => {
         resolve(count)
       })
   })
-}
+)
 
-export default (params = {}) => {
-  return new Promise((resolve, reject) => {
+export default (params = {}) => (
+  new Promise((resolve, reject) => {
     const searchParams = makeSearchQuery(params)
 
     mongoose
@@ -44,4 +44,4 @@ export default (params = {}) => {
         })
       })
   })
-}
+)

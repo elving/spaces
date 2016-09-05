@@ -8,35 +8,36 @@ import { default as queryString } from 'query-string'
 import React, { Component, PropTypes } from 'react'
 
 import Loader from '../common/Loader'
-import Designer from '../user/Card'
+import Category from './Card'
 
 import toStringId from '../../api/utils/toStringId'
+import hasEmptyIdParam from '../../utils/hasEmptyIdParam'
 
-export default class Followers extends Component {
+export default class Categories extends Component {
   static propTypes = {
     params: PropTypes.object,
-    followers: PropTypes.object,
+    categories: PropTypes.object,
     emptyMessage: PropTypes.string
   }
 
   static defaultProps = {
     params: {},
-    followers: {},
-    emptyMessage: 'No Followers Found...'
+    categories: {},
+    emptyMessage: 'No Categories Found...'
   }
 
   constructor(props) {
     super(props)
 
-    const count = get(props.followers, 'count', 0)
-    const results = get(props.followers, 'results', [])
+    const count = get(props.categories, 'count', 0)
+    const results = get(props.categories, 'results', [])
 
     this.state = {
       skip: 40,
       count,
       offset: size(results),
       results,
-      isFetching: isEmpty(results),
+      isFetching: isEmpty(results) && !hasEmptyIdParam(props.params),
       hasFetched: !isEmpty(results),
       lastResults: results
     }
@@ -45,7 +46,7 @@ export default class Followers extends Component {
   componentDidMount() {
     const { props } = this
 
-    if (isEmpty(props.followers)) {
+    if (isEmpty(props.categories) && !hasEmptyIdParam(props.params)) {
       this.fetch()
     }
   }
@@ -59,7 +60,7 @@ export default class Followers extends Component {
         : ''
 
       axios
-        .get(`/ajax/follows/search/?skip=${state.offset}&${params}`)
+        .get(`/ajax/categories/search/?skip=${state.offset}&${params}`)
         .then(({ data }) => {
           const results = get(data, 'results', [])
 
@@ -91,22 +92,22 @@ export default class Followers extends Component {
           className="button button--outline"
         >
           {state.isFetching ? (
-            'Loading More Followers...'
+            'Loading More Categories...'
           ) : (
-            'Load More Followers'
+            'Load More Categories'
           )}
         </button>
       </div>
     ) : null
   }
 
-  renderFollowers() {
+  renderCategories() {
     const { props, state } = this
 
     const hasNoResults = (
       !state.isFetching &&
       isEmpty(state.results) &&
-      isEmpty(get(props.followers, 'results', []))
+      isEmpty(get(props.categories, 'results', []))
     )
 
     return (
@@ -117,11 +118,8 @@ export default class Followers extends Component {
               {props.emptyMessage}
             </p>
           ) : (
-            map(state.results, follow =>
-              <Designer
-                key={toStringId(follow.createdBy)}
-                user={follow.createdBy}
-              />
+            map(state.results, category =>
+              <Category {...category} key={toStringId(category)} />
             )
           )}
         </div>
@@ -138,7 +136,7 @@ export default class Followers extends Component {
       </div>
     ) : (
       <div className="grids">
-        {this.renderFollowers()}
+        {this.renderCategories()}
         {this.renderPagination()}
       </div>
     )

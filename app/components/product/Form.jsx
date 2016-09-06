@@ -1066,7 +1066,9 @@ export default class ProductForm extends Component {
         >
           "{name}" was added successfully.
           {'\u00A0'}
-          Click <a href={`/products/${sid}/update/`}>here</a>
+          Click
+          {'\u00A0'}
+          <a href={`/products/${sid}/update/`}>here</a>
           {'\u00A0'}
           to edit.
         </Notification>

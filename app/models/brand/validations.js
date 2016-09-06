@@ -1,6 +1,5 @@
 import isEmpty from 'lodash/isEmpty'
 import mongoose from 'mongoose'
-import kebabCase from 'lodash/kebabCase'
 
 import isNew from '../utils/isNew'
 import isModified from '../utils/isModified'
@@ -16,14 +15,14 @@ export default schema => {
       if (isNew(this) || isModified(this, 'name')) {
         mongoose
           .model('Brand')
-          .findOne({ slug: kebabCase(name) })
+          .findOne({ name })
           .exec((err, brand) => {
             next(isEmpty(err) && isEmpty(brand))
           })
       } else {
         next(true)
       }
-    }, 'The brand "{VALUE}" already exists')
+    }, 'A brand with the name "{VALUE}" already exists')
 
   return schema
 }

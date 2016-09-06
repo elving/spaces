@@ -35,7 +35,6 @@ import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import addProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
-import canModify from '../../utils/user/canModify'
 import toStringId from '../../api/utils/toStringId'
 import getSuggestions from '../../utils/space/getSuggestions'
 
@@ -43,6 +42,7 @@ class SpaceDetail extends Component {
   static contextTypes = {
     user: PropTypes.object,
     csrf: PropTypes.string,
+    currentUserIsOwner: PropTypes.func,
     currentUserIsOnboarding: PropTypes.func
   }
 
@@ -462,7 +462,7 @@ class SpaceDetail extends Component {
         >
           <MaterialDesignIcon name="comment" />
         </a>
-        {canModify(context.user, props.space) ? (
+        {context.currentUserIsOwner(props.space) ? (
           <Dropdown className="dropdown space-detail-action">
             <DropdownTrigger
               className="dropdown-trigger dropdown-trigger--no-caret"
@@ -505,7 +505,7 @@ class SpaceDetail extends Component {
     const spaceType = toLower(get(props.space, 'spaceType.name', 'space'))
     const suggestions = getSuggestions(props.space)
 
-    return canModify(context.user, props.space) && !isEmpty(suggestions) ? (
+    return context.currentUserIsOwner(props.space) && !isEmpty(suggestions) ? (
       <div className="space-detail-suggestion">
         <h3 className="space-detail-suggestion-title">
           Here are some suggestions for your {spaceType}.
@@ -529,14 +529,13 @@ class SpaceDetail extends Component {
   renderProducts() {
     const { props, state, context } = this
 
-    const isOwner = canModify(context.user, props.space)
     const spaceType = toLower(get(props.space, 'spaceType.name', 'space'))
     const suggestions = get(props.space, 'spaceType.categories', [])
 
     return (
       <div className="grid">
         <div id="products" className="grid-items">
-          {isOwner ? (
+          {context.currentUserIsOwner(props.space) ? (
             <AddProductCard
               message={`Add the perfect products for this ${spaceType}.`}
               categories={suggestions}
@@ -547,7 +546,9 @@ class SpaceDetail extends Component {
             <Product
               {...product}
               key={toStringId(product)}
-              mainAction={isOwner ? 'remove' : 'add'}
+              mainAction={
+                context.currentUserIsOwner(props.space) ? 'remove' : 'add'
+              }
               onAddButtonClick={() => props.openAddProductModal(product)}
               onRemoveButtonClick={() => this.removeProduct(product)}
             />

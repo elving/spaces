@@ -1,8 +1,10 @@
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import isEqual from 'lodash/isEqual'
 import React, { Component, PropTypes } from 'react'
 
+import isAdmin from '../utils/user/isAdmin'
+import canModify from '../utils/user/canModify'
+import isCurator from '../utils/user/isCurator'
 import toStringId from '../api/utils/toStringId'
 import initAnalytics from '../utils/initAnalytics'
 
@@ -35,11 +37,9 @@ export default class App extends Component {
       csrf: props.csrf,
       user: props.user,
       userLoggedIn: () => !isEmpty(props.user),
-      currentUserIsAdmin: () => get(props.user, 'isAdmin'),
-      currentUserIsOwner: id => isEqual(toStringId(props.user), id),
-      currentUserIsCurator: () => (
-        get(props.user, 'isCurator') || get(props.user, 'isAdmin')
-      ),
+      currentUserIsAdmin: () => isAdmin(props.user),
+      currentUserIsOwner: model => canModify(props.user, model),
+      currentUserIsCurator: () => isCurator(props.user),
       currentUserIsOnboarding: () => (
         get(props.user, 'settings.onboarding', false)
       )

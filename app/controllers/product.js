@@ -5,10 +5,10 @@ import isEmpty from 'lodash/isEmpty'
 
 import isAdmin from '../utils/user/isAdmin'
 import isOwner from '../utils/user/isOwner'
+import isCurator from '../utils/user/isCurator'
 import setProps from '../utils/middlewares/setProps'
 import setOgTags from '../utils/middlewares/setOgTags'
 import setMetadata from '../utils/middlewares/setMetadata'
-import userCanAddProducts from '../utils/userCanAddProducts'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import search from '../api/product/search'
@@ -99,16 +99,10 @@ export const renderDetail = async (req, res, next) => {
 
 export const renderAdminProducts = async (req, res, next) => {
   try {
-    const products = await getAll()
-
     setMetadata(res, {
       title: 'All Products | Spaces',
       bodyId: 'all-products',
       bodyClass: 'page page-all-products page-admin-table'
-    })
-
-    setProps(res, {
-      products: toJSON(products)
     })
 
     next()
@@ -160,7 +154,7 @@ export const fetchProductInfo = async (req, res) => {
 }
 
 export const renderAddProduct = async (req, res, next) => {
-  if (!isAuthenticatedUser(req.user) || !userCanAddProducts(req.user)) {
+  if (!isAuthenticatedUser(req.user) || !isCurator(req.user)) {
     return res.redirect('/404/')
   }
 
@@ -190,7 +184,7 @@ export const renderAddProduct = async (req, res, next) => {
 }
 
 export const addProduct = async (req, res) => {
-  if (!isAuthenticatedUser(req.user) || !userCanAddProducts(req.user)) {
+  if (!isAuthenticatedUser(req.user) || !isCurator(req.user)) {
     res.status(500).json({
       err: {
         generic: 'Not authorized'
@@ -215,7 +209,7 @@ export const addProduct = async (req, res) => {
 export const renderUpdateProduct = async (req, res, next) => {
   const sid = get(req, 'params.sid')
 
-  if (!isAuthenticatedUser(req.user) || !userCanAddProducts(req.user)) {
+  if (!isAuthenticatedUser(req.user) || !isCurator(req.user)) {
     return res.redirect('/404/')
   }
 

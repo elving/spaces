@@ -1,6 +1,5 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
-import omit from 'lodash/omit'
 import head from 'lodash/head'
 import size from 'lodash/size'
 import axios from 'axios'
@@ -471,6 +470,13 @@ export default class ProductForm extends Component {
 
         <h1 className="form-title">
           {props.formMethod === 'POST' ? 'Add Product' : 'Update Product'}
+
+          {context.currentUserIsAdmin() ? (
+            <a href="/admin/products/" className="form-title-link">
+              <MaterialDesignIcon name="list" size={18} />
+              All Products
+            </a>
+          ) : null}
         </h1>
 
         <div className="form-group">
@@ -488,7 +494,6 @@ export default class ProductForm extends Component {
               required
               onChange={this.onProductUrlChange}
               disabled={state.isScraping}
-              autoFocus
               className="textfield"
               placeholder="E.g. https://example.com/abc-123"
             />
@@ -577,7 +582,6 @@ export default class ProductForm extends Component {
               ref={input => { this.imageUrlInput = input }}
               type="url"
               disabled={shouldDisable}
-              autoFocus
               className="textfield image-picker-url-form-input"
               placeholder="E.g. https://amzn.com/ABC123"
               defaultValue={state.image}
@@ -722,6 +726,13 @@ export default class ProductForm extends Component {
 
         <h1 className="form-title">
           {isPOST ? 'Add Product' : 'Update Product'}
+
+          {context.currentUserIsAdmin() ? (
+            <a href="/admin/products/" className="form-title-link">
+              <MaterialDesignIcon name="list" size={18} />
+              All Products
+            </a>
+          ) : null}
         </h1>
 
         <div className="form-group">

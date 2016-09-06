@@ -44,9 +44,22 @@
 
 .product-detail-image-container {
   width: 50%;
+  position: relative;
   min-height: 350px;
   align-items: center;
   justify-content: center;
+}
+
+[data-action="editProduct"] {
+  top: 0;
+  left: 0;
+  opacity: 0.45;
+  z-index: 10;
+  position: absolute;
+}
+
+[data-action="editProduct"]:hover {
+  opacity: 1;
 }
 
 .product-detail-image {

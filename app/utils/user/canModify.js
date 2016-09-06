@@ -1,7 +1,6 @@
-import get from 'lodash/get'
-
+import isAdmin from './isAdmin'
 import isOwner from './isOwner'
 
 export default (user, model) => (
-  get(user, 'isAdmin', false) || isOwner(user, model)
+  isAdmin(user) || isOwner(user, model)
 )

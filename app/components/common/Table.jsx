@@ -43,6 +43,14 @@ export default class AdminTable extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!isEmpty(nextProps.items)) {
+      this.setState({
+        sortedItems: nextProps.items
+      })
+    }
+  }
+
   onSearchChange = ({ currentTarget: input }) => {
     this.searchItems(input.value)
   }
@@ -59,7 +67,7 @@ export default class AdminTable extends Component {
 
     if (property) {
       this.setState({
-        sortedItems: orderBy(state.items, property, newSortingOrder),
+        sortedItems: orderBy(state.sortedItems, property, newSortingOrder),
         sortingOrder: newSortingOrder,
         sortingProperty: property
       })

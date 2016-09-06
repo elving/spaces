@@ -1,6 +1,5 @@
 import get from 'lodash/get'
 
-export default (user = {}) => (
-  get(user, 'isAdmin', false) ||
-  get(user, 'isCurator', false)
-)
+import isAdmin from './isAdmin'
+
+export default (user = {}) => isAdmin(user) || get(user, 'isCurator', false)

@@ -2,15 +2,69 @@ import map from 'lodash/map'
 import get from 'lodash/get'
 import join from 'lodash/join'
 import size from 'lodash/size'
-import React, { Component, PropTypes } from 'react'
+import axios from 'axios'
+import concat from 'lodash/concat'
+import React, { Component } from 'react'
 
 import Table from '../common/Table'
+import Loader from '../common/Loader'
 import Layout from '../common/Layout'
 import formatDate from '../../utils/formatDate'
 
 export default class ProductsTable extends Component {
-  static propTypes = {
-    products: PropTypes.array.isRequired
+  state = {
+    count: 0,
+    offset: 0,
+    results: [],
+    isFetching: true,
+    hasFetched: false,
+    lastResults: []
+  }
+
+  componentDidMount() {
+    this.fetch()
+  }
+
+  fetch = () => {
+    const { state } = this
+
+    this.setState({ isFetching: true }, () => {
+      axios
+        .get(`/ajax/products/search/?skip=${state.offset}&limit=150`)
+        .then(({ data }) => {
+          const results = get(data, 'results', [])
+
+          this.setState({
+            count: get(data, 'count', 0),
+            offset: state.offset + size(results),
+            results: concat(state.results, results),
+            isFetching: false,
+            hasFetched: true,
+            lastResults: results
+          })
+        })
+        .catch(() => {
+          this.setState({
+            isFetching: false
+          })
+        })
+    })
+  }
+
+  renderPagination() {
+    const { state } = this
+
+    return size(state.results) < state.count ? (
+      <div className="grid-pagination">
+        <button
+          onClick={this.fetch}
+          disabled={state.isFetching}
+          className="button button--outline"
+        >
+          {state.isFetching ? 'Loading More Products...' : 'Load More Products'}
+        </button>
+      </div>
+    ) : null
   }
 
   renderRow = (product) => {
@@ -63,40 +117,49 @@ export default class ProductsTable extends Component {
   }
 
   render() {
-    const { props } = this
+    const { state } = this
 
     return (
       <Layout>
-        <Table
-          items={props.products}
-          count={size(props.products)}
-          headerTitle="Products"
-          tableHeaders={[{
-            label: 'Date Created',
-            property: 'createdAt'
-          }, {
-            label: 'Name',
-            property: 'name'
-          }, {
-            label: 'Image'
-          }, {
-            label: 'Brand',
-            property: 'brand.name'
-          }, {
-            label: 'Colors'
-          }, {
-            label: 'Categories'
-          }, {
-            label: 'Rooms'
-          }, {
-            label: 'Actions'
-          }]}
-          searchPath="name"
-          headerCtaLink="/products/add/"
-          headerCtaText="Add Product"
-          renderTableRow={this.renderRow}
-          searchPlaceholder="Search products by name"
-        />
+        {state.isFetching && !state.hasFetched ? (
+          <div className="admin-products">
+            <Loader size="52" />
+          </div>
+        ) : (
+          <div className="admin-products">
+            <Table
+              items={state.results}
+              count={state.count}
+              headerTitle="Products"
+              tableHeaders={[{
+                label: 'Date Created',
+                property: 'createdAt'
+              }, {
+                label: 'Name',
+                property: 'name'
+              }, {
+                label: 'Image'
+              }, {
+                label: 'Brand',
+                property: 'brand.name'
+              }, {
+                label: 'Colors'
+              }, {
+                label: 'Categories'
+              }, {
+                label: 'Rooms'
+              }, {
+                label: 'Actions'
+              }]}
+              searchPath="name"
+              headerCtaLink="/products/add/"
+              headerCtaText="Add Product"
+              renderTableRow={this.renderRow}
+              searchPlaceholder="Search products by name"
+            />
+            {this.renderPagination()}
+          </div>
+        )}
       </Layout>
     )
   }

@@ -84,7 +84,7 @@ class ProductsIndex extends Component {
         })
         .catch(() => {
           this.setState({
-            isWaiting: false
+            isFetching: false
           })
         })
     })

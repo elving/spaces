@@ -29,8 +29,10 @@ import toStringId from '../../api/utils/toStringId'
 
 class ProductDetail extends Component {
   static contextTypes = {
+    user: PropTypes.object,
     csrf: PropTypes.string,
     userLoggedIn: PropTypes.func,
+    currentUserIsOwner: PropTypes.func,
     currentUserIsOnboarding: PropTypes.func
   }
 
@@ -109,7 +111,7 @@ class ProductDetail extends Component {
   }
 
   renderImage() {
-    const { props, state } = this
+    const { props, state, context } = this
     const maxWidth = state.imageWidth
     const maxHeight = state.imageHeight
 
@@ -121,6 +123,17 @@ class ProductDetail extends Component {
           'product-detail-image-container--loading': state.imageIsLoading
         })}
       >
+        {context.currentUserIsOwner(props.product) ? (
+          <a
+            href={`/products/${get(props.product, 'sid')}/update/`}
+            className="button button--primary"
+            data-action="editProduct"
+          >
+            <MaterialDesignIcon name="edit" />
+            Edit Product
+          </a>
+        ) : null}
+
         {state.imageIsLoading ? (
           <Loader size={50} />
         ) : null}

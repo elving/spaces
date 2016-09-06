@@ -1,1 +1,10 @@
+.admin-products {
+  width: 100%;
+  display: flex;
+  min-height: 200px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
 @import './table.css';

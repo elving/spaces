@@ -1,4 +1,5 @@
 import isEmpty from 'lodash/isEmpty'
+import truncate from 'lodash/truncate'
 import React, { Component, PropTypes } from 'react'
 
 export default class CardTitle extends Component {
@@ -23,7 +24,9 @@ export default class CardTitle extends Component {
     return !isEmpty(url) ? (
       <a href={url} className={`${className} card-title-container`}>
         <div className="card-subtitle">{subTitle}</div>
-        <div className="card-title">{title}</div>
+        <div className="card-title" title={title}>
+          {truncate(title, { length: 65 })}
+        </div>
         {this.props.children}
       </a>
     ) : (

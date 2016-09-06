@@ -4,14 +4,14 @@ import React, { Component, PropTypes } from 'react'
 
 import MiniProfile from '../user/MiniProfile'
 
-import canModify from '../../utils/user/canModify'
 import formatDate from '../../utils/formatDate'
 import toStringId from '../../api/utils/toStringId'
 
 export default class Comment extends Component {
   static contextTypes = {
     csrf: PropTypes.string,
-    user: PropTypes.object
+    user: PropTypes.object,
+    currentUserIsOwner: PropTypes.func
   }
 
   static propTypes = {
@@ -75,7 +75,7 @@ export default class Comment extends Component {
           <small className="comment-date">
             {formatDate(props.createdAt)}
           </small>
-          {canModify(context.user, props.createdBy) ? (
+          {context.currentUserIsOwner(props.createdBy) ? (
             <button
               onClick={this.onClickDelete}
               className="button button--danger button--mini"

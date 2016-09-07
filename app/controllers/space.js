@@ -56,6 +56,11 @@ export const renderDetail = async (req, res, next) => {
 
   try {
     const space = await findBySid(sid)
+
+    if (isEmpty(space)) {
+      return res.redirect('/404/')
+    }
+
     const otherSpacesInRoom = await search({
       id: { $nin: [toStringId(space)] },
       limit: 8,
@@ -220,7 +225,8 @@ export const redesignSpace = async (req, res) => {
     )
 
     await update(spaceId, {
-      $inc: { redesignsCount: 1 }
+      $inc: { redesignsCount: 1 },
+      $addToSet: { redesigns: toObjectId(space) }
     })
 
     const user = await updateUser(userId, {

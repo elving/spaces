@@ -194,7 +194,7 @@ class SpaceDetail extends Component {
       'Type the word "DELETE" to confirm.'
     )
 
-    if (window.prompt(deleteMessage) === 'DELETE') {
+    if (window.confirm(deleteMessage)) {
       this.setState({
         isDeleting: true
       }, () => {

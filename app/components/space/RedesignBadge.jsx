@@ -25,7 +25,7 @@ export default class MiniProfile extends Component {
         }
       >
         <a
-          href={`/${get(props.space, 'detailUrl', '')}/`}
+          href={`/${get(props.space, 'originalSpace.detailUrl', '')}/`}
           className="redesign-badge-link"
         >
           <Avatar

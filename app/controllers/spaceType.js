@@ -45,6 +45,10 @@ export const renderDetail = async (req, res, next) => {
   try {
     const spaceType = await findByName(slug)
 
+    if (isEmpty(spaceType)) {
+      return res.redirect('/404/')
+    }
+
     const spaces = await searchSpaces({
       spaceType: toStringId(spaceType)
     })

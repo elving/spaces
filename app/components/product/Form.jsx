@@ -1002,11 +1002,14 @@ export default class ProductForm extends Component {
                 {btnText}
               </span>
             </button>
+
             {isPOST ? (
               <button type="button" onClick={this.reset} className="button">
                 <span className="button-text">Cancel</span>
               </button>
-            ) : (
+            ) : null}
+
+            {!isPOST && context.currentUserIsAdmin() ? (
               <button
                 type="button"
                 onClick={this.onClickDelete}
@@ -1018,7 +1021,7 @@ export default class ProductForm extends Component {
                   {state.isDeleting ? 'Deleting...' : 'Delete'}
                 </span>
               </button>
-            )}
+            ) : null}
           </div>
         </div>
       </form>

@@ -63,6 +63,11 @@ export const renderDetail = async (req, res, next) => {
 
   try {
     const product = await findBySid(sid)
+
+    if (isEmpty(product)) {
+      return res.redirect('/404/')
+    }
+
     const relatedSpaces = await getRelatedSpaces(toStringId(product))
     const relatedProducts = await getRelated(product)
 

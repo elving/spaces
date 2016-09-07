@@ -44,6 +44,11 @@ export const renderDetail = async (req, res, next) => {
 
   try {
     const category = await findByName(slug)
+
+    if (isEmpty(category)) {
+      return res.redirect('/404/')
+    }
+
     const products = await searchProducts({
       categories: toStringId(category)
     })

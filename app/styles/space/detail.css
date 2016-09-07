@@ -136,6 +136,10 @@ button.space-detail-counter {
   margin-top: 15px;
 }
 
+.page-space-detail #otherSpaces {
+  border-top: 1px solid #e5e5e5;
+}
+
 .page-space-detail #comments {
   border-top: 1px solid #e5e5e5;
   width: 100%;

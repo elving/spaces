@@ -16,6 +16,7 @@ import Dropdown, {
 } from 'react-simple-dropdown'
 
 import Tag from '../common/Tag'
+import Space from '../space/Card'
 import Layout from '../common/Layout'
 import Product from '../product/Card'
 import LikesModal from '../modal/Likes'
@@ -49,6 +50,7 @@ class SpaceDetail extends Component {
   static propTypes = {
     space: PropTypes.object,
     location: PropTypes.object,
+    otherSpacesInRoom: PropTypes.array,
     openAddProductModal: PropTypes.func,
     closeAddProductModal: PropTypes.func,
     addProductModalIsOpen: PropTypes.bool,
@@ -58,6 +60,7 @@ class SpaceDetail extends Component {
   static defaultProps = {
     space: {},
     location: {},
+    otherSpacesInRoom: [],
     openAddProductModal: (() => {}),
     closeAddProductModal: (() => {}),
     addProductModalIsOpen: false,
@@ -558,6 +561,34 @@ class SpaceDetail extends Component {
     )
   }
 
+  renderOtherSpacesInRoom() {
+    const { props } = this
+    const spaceType = `${get(props.space, 'spaceType.name')}s`
+
+    return !isEmpty(props.otherSpacesInRoom) ? (
+      <div id="otherSpaces" className="grids">
+        <div className="grid-container">
+          <div className="grid-title-container">
+            <h3 className="grid-title">
+              More in {spaceType}
+            </h3>
+            <a
+              href={`/${get(props.space, 'spaceType.detailUrl')}/`}
+              className="button button--small button--outline"
+            >
+              See All {spaceType}
+            </a>
+          </div>
+          <div className="grid-items">
+            {map(props.otherSpacesInRoom, space =>
+              <Space key={toStringId(space)} {...space} />
+            )}
+          </div>
+        </div>
+      </div>
+    ) : null
+  }
+
   renderLikesModal() {
     const { props, state } = this
 
@@ -658,6 +689,7 @@ class SpaceDetail extends Component {
           {this.renderProducts()}
           {this.renderLikesModal()}
           {this.renderRedesignsModal()}
+          {this.renderOtherSpacesInRoom()}
           {this.renderComments()}
         </div>
       </Layout>

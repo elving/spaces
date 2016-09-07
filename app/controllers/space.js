@@ -20,6 +20,7 @@ import findBySid from '../api/space/findBySid'
 import updateUser from '../api/user/update'
 
 import toJSON from '../api/utils/toJSON'
+import toStringId from '../api/utils/toStringId'
 import toObjectId from '../api/utils/toObjectId'
 import { default as getAllUserSpaces } from '../api/user/getSpaces'
 
@@ -55,6 +56,11 @@ export const renderDetail = async (req, res, next) => {
 
   try {
     const space = await findBySid(sid)
+    const otherSpacesInRoom = await search({
+      id: { $nin: [toStringId(space)] },
+      limit: 8,
+      spaceType: toStringId(get(space, 'spaceType'))
+    })
 
     const name = get(space, 'name')
     const image = get(space, 'image')
@@ -79,7 +85,10 @@ export const renderDetail = async (req, res, next) => {
     })
 
     setProps(res, {
-      space: toJSON(space)
+      space: toJSON(space),
+      otherSpacesInRoom: toJSON(
+        get(otherSpacesInRoom, 'results', [])
+      )
     })
 
     next()

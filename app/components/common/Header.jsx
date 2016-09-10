@@ -1,15 +1,20 @@
 import { Link } from 'react-router'
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import Logo from './Logo'
 import Search from './Search'
 import AdminNav from '../user/AdminNav'
 import CurrentUserNav from '../user/CurrentUserNav'
 import AddProductButton from './AddProductButton'
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import fullReload from '../../utils/fullReload'
 
 export default class Header extends Component {
+  static contextTypes = {
+    toggleMobileNav: PropTypes.func
+  }
+
   renderNav() {
     return (
       <nav className="header-nav">
@@ -62,6 +67,8 @@ export default class Header extends Component {
   }
 
   render() {
+    const { context } = this
+
     return (
       <header className="header">
         <div className="header-container">
@@ -70,6 +77,13 @@ export default class Header extends Component {
           </div>
           <div className="header-container-right">
             <Search />
+            <button
+              onClick={context.toggleMobileNav}
+              className="button button--icon button--outline"
+              data-action="toggleMobileNav"
+            >
+              <MaterialDesignIcon name="menu" size={26} />
+            </button>
             <AddProductButton />
             <AdminNav />
             <CurrentUserNav />

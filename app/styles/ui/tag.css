@@ -64,3 +64,10 @@ span.tag {
 .tag--medium .icon {
   margin-right: 4px;
 }
+
+@media (max-width: 768px) {
+  .grid-container > .tags-container {
+    padding: 0 15px;
+    margin: -15px 0 15px;
+  }
+}

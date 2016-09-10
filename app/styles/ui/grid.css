@@ -95,6 +95,7 @@
 .grid-pagination {
   width: 100%;
   margin: 15px auto 35px;
+  padding: 0 15px;
   display: flex;
   max-width: 520px;
   align-items: center;
@@ -120,5 +121,40 @@
 @media (max-width: 620px) {
   .grid-items > .card {
     width: calc(100% - 15px);
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .grids > .loader {
+    margin: 15px auto 0;
+  }
+
+  .grid-container {
+    padding: 15px 0 0;
+  }
+
+  .grid-title {
+    font-size: 22px;
+    margin: 0 0 15px;
+  }
+
+  .grid-title-container {
+    margin: 0 0 15px;
+    padding: 0 15px;
+  }
+
+  .grid-items {
+    padding-left: 15px;
+    padding-bottom: 0;
+  }
+
+  .grid-items-empty {
+    font-size: 28px;
+    margin: 15px auto;
+  }
+
+  .grid-pagination {
+    margin: 15px auto 15px;
   }
 }

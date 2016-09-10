@@ -40,6 +40,11 @@
   margin: 0 15px;
 }
 
+.spaceType-detail-counters .spaceType-detail-counter:first-child {
+  margin-left: 0;
+}
+
+
 .spaceType-detail-counter:hover {
   text-decoration: none;
 }
@@ -76,4 +81,16 @@
 .spaceType-detail-action .popup:before {
   left: auto;
   right: 25px;
+}
+
+@media (max-width: 768px) {
+  .spaceType-detail-header {
+    padding: 25px;
+  }
+
+  .spaceType-detail-header-title {
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 26px;
+  }
 }

@@ -69,3 +69,76 @@
 .header-container-right .add-product-button {
   width: 47px;
 }
+
+@media (max-width: 768px) {
+  .header .search,
+  .header .admin-nav,
+  .header .header-link,
+  .header .header-link-divider {
+    display: none;
+  }
+
+  .header-nav > .header-link:first-child {
+    display: flex;
+  }
+
+  .header .add-product-button {
+    width: 40px;
+    height: 35px;
+    margin: 0 0 0 15px;
+    padding: 0;
+    min-height: 35px;
+  }
+
+  .header .header-container-right {
+    flex-direction: row-reverse;
+  }
+
+  .header .current-user-nav {
+    border-left: 0 none;
+    padding-left: 0;
+  }
+}
+
+.header [data-action="toggleMobileNav"],
+.mobile-nav [data-action="toggleMobileNav"] {
+  width: 40px;
+  height: 35px;
+  padding: 0;
+  min-height: 35px;
+  margin-left: 15px;
+}
+
+.mobile-nav {
+  background-color: #ffffff;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  position: fixed;
+}
+
+.mobile-nav-top {
+  border-bottom: 1px solid #e5e5e5;
+  width: 100%;
+  display: flex;
+  padding: 15px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-nav-link {
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 20px;
+  text-decoration: none;
+  width: 100%;
+  display: flex;
+  padding: 25px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.mobile-nav-link--active {
+  background-color: #f8f8f8;
+}

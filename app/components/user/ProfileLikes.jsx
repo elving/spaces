@@ -79,7 +79,7 @@ export default class ProfileLikes extends Component {
     ) : null
   }
 
-  renderSpaces() {
+  renderLikes() {
     const { props, state } = this
 
     const hasNoResults = (
@@ -98,6 +98,10 @@ export default class ProfileLikes extends Component {
           ) : (
             map(state.results, like => {
               const parent = get(like, 'parent', {})
+
+              if (isEmpty(parent)) {
+                return null
+              }
 
               return like.parentType === 'space' ? (
                 <Space key={toStringId(parent)} {...parent} />
@@ -120,7 +124,7 @@ export default class ProfileLikes extends Component {
       </div>
     ) : (
       <div className="grids">
-        {this.renderSpaces()}
+        {this.renderLikes()}
         {this.renderPagination()}
       </div>
     )

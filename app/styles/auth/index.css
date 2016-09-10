@@ -72,3 +72,40 @@
   margin: 30px auto;
   max-width: 235px;
 }
+
+@media (max-width: 768px) {
+  .auth-form {
+    border-radius: 0;
+    margin: 15px auto;
+  }
+
+  .auth-form-social {
+    width: 100%;
+    display: flex;
+    padding: 0 15px 15px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .auth-form-social .button {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .auth-form-social .button:last-child {
+    margin-bottom: 0;
+  }
+
+  .auth-form > .form-group {
+    padding: 0 15px 15px;
+  }
+
+  .auth-form-user-info {
+    margin: 15px auto;
+  }
+
+  .auth-form-success-cta {
+    margin: 15px auto;
+  }
+}

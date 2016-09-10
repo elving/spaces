@@ -157,7 +157,7 @@ class SearchResults extends Component {
         />
 
         <h1 className="page-title page-title--has-margin">
-          {`${props.count} ${inflect(props.count, searchType)} found.`}
+          {`${props.count} ${inflect(props.count, searchType)} found`}
         </h1>
 
         <div className="grids">

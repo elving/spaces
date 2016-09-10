@@ -9,9 +9,21 @@
   letter-spacing: 2px;
   width: 100%;
   margin: 0 auto;
-  padding: 35px 0;
+  padding: 35px;
 }
 
 .page-title--has-margin {
   margin-bottom: 35px;
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 26px;
+    font-weight: 400;
+    padding: 25px 15px;
+  }
+
+  .page-title--has-margin {
+    margin-bottom: 15px;
+  }
 }

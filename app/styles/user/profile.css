@@ -107,38 +107,45 @@
 
 @media (max-width: 736px) {
   .user-profile-header {
-    padding: 35px 0 0;
+    padding: 25px 0 0;
   }
 
   .user-profile-header-info {
-    padding: 0 35px;
+    padding: 0 15px;
   }
 
   .user-profile-header-username {
-    font-size: 20px;
+    font-size: 26px;
     font-weight: 400;
   }
 
-  .user-profile-header-bio {
-    font-size: 14px;
-  }
-
   .user-profile-header-actions {
-    right: 35px;
+    right: 15px;
   }
 
-  .user-profile-header-actions .ui-button {
-    font-size: 14px;
-    padding: 8px 10px;
+  .user-profile-header .navbar {
+    width: 100%;
+    margin: 15px auto 0;
+    flex-wrap: wrap;
   }
 
-  .user-profile-navigation {
-    margin-top: 35px;
-  }
-
-  .user-profile-navigation-link {
-    font-size: 14px;
+  .user-profile-header .navbar-link {
+    border-left: 0 none;
+    border-bottom: 1px solid #e5e5e5;
+    width: 100%;
     max-width: 100%;
-    padding: 35px;
+  }
+
+  .user-profile-header .navbar > .navbar-link:last-child {
+    border-bottom: 0 none;
+  }
+
+  .user-profile-content-following .navpills {
+    width: calc(100% - 30px);
+    margin: 0 auto 15px;
+  }
+
+  .user-profile-content {
+    padding: 15px 0 0;
   }
 }

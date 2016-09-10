@@ -126,3 +126,55 @@
 .image-picker-url-form > .button:last-child {
   margin-right: 0;
 }
+
+@media (max-width: 768px) {
+  .page-add-product .page-content {
+    align-items: flex-start;
+  }
+
+  .product-form-container {
+    width: 100%;
+  }
+
+  .product-form-scrape {
+    margin: 15px auto;
+  }
+
+  .product-form {
+    margin: 15px auto;
+  }
+
+  .product-form > .form-group,
+  .product-form-scrape > .form-group {
+    margin: 0 auto;
+    padding: 0 15px 15px;
+  }
+
+  .image-picker-actions,
+  .image-picker-url-form {
+    flex-direction: column;
+  }
+
+  .image-picker-actions-left {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .image-picker-actions-right {
+    width: 100%;
+  }
+
+  .image-picker-actions-left > .button,
+  .image-picker-actions-right > .button {
+    width: 100%;
+  }
+
+  .image-picker-url-form > * {
+    width: 100%;
+    margin:  15px 0 0;
+  }
+
+  .image-picker-url-form-input {
+    margin-top: 0;
+  }
+}

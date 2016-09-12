@@ -176,9 +176,12 @@ class ProductDetail extends Component {
     const description = get(props.product, 'description')
 
     return !isEmpty(description) ? (
-      <p className="product-detail-description">
-        {description}
-      </p>
+      <div className="product-detail-description-container">
+        <h3 className="product-detail-description-title">About this product</h3>
+        <p className="product-detail-description">
+          {description}
+        </p>
+      </div>
     ) : null
   }
 
@@ -346,7 +349,6 @@ class ProductDetail extends Component {
       <div className="product-detail-content">
         {this.renderName()}
         {this.renderBrand()}
-        {this.renderDescription()}
         {this.renderCurator()}
         {this.renderLikesCount()}
         {this.renderCommentsCount()}
@@ -439,6 +441,7 @@ class ProductDetail extends Component {
         />
 
         {this.renderProduct()}
+        {this.renderDescription()}
 
         <div className="grids">
           {!isEmpty(props.relatedProducts)

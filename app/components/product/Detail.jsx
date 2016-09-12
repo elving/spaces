@@ -177,7 +177,7 @@ class ProductDetail extends Component {
 
     return !isEmpty(description) ? (
       <p className="product-detail-description">
-        {get(props.product, 'name')}
+        {description}
       </p>
     ) : null
   }

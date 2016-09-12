@@ -251,14 +251,16 @@ export default class ProductForm extends Component {
       'Type the word "DELETE" to confirm.'
     )
 
-    if (window.prompt(deleteMessage === 'DELETE')) {
+    if (window.prompt(deleteMessage)) {
       this.setState({
         errors: {},
         isDeleting: true
       }, () => {
         axios
           .delete(`/ajax/products/${toStringId(props.product)}/`, {
-            _csrf: context.csrf
+            params: {
+              _csrf: context.csrf
+            }
           })
           .then(() => {
             this.setState({
@@ -1042,7 +1044,7 @@ export default class ProductForm extends Component {
     const { props, state } = this
 
     const sid = get(state.product, 'sid', '')
-    const name = get(state.product, 'name', 'Color')
+    const name = get(state.product, 'name', 'Product')
 
     const genericError = get(state.errors, 'generic')
     const hasGenericError = !isEmpty(genericError)

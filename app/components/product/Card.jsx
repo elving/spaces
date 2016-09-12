@@ -8,6 +8,7 @@ import CardTags from '../card/CardTags'
 import CardTitle from '../card/CardTitle'
 import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
+import CardActivity from '../card/CardActivity'
 import CuratorBadge from '../user/CuratorBadge'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
@@ -30,6 +31,7 @@ export default class ProductCard extends Component {
     categories: PropTypes.array,
     spaceTypes: PropTypes.array,
     mainAction: PropTypes.string,
+    likesCount: PropTypes.number,
     forDisplayOnly: PropTypes.bool,
     onAddButtonClick: PropTypes.func,
     onRemoveButtonClick: PropTypes.func
@@ -52,11 +54,16 @@ export default class ProductCard extends Component {
     onRemoveButtonClick: (() => {})
   }
 
-  state = {
-    imageIsLoaded: false,
-    imageIsLoading: true,
-    sharePopupIsOpen: false,
-    sharePopupIsCreated: false
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      likesCount: get(props, 'likesCount', 0),
+      imageIsLoaded: false,
+      imageIsLoading: true,
+      sharePopupIsOpen: false,
+      sharePopupIsCreated: false
+    }
   }
 
   componentDidMount() {
@@ -87,6 +94,22 @@ export default class ProductCard extends Component {
     this.setState({
       imageIsLoaded: true,
       imageIsLoading: false
+    })
+  }
+
+  onLike = () => {
+    const { state } = this
+
+    this.setState({
+      likesCount: state.likesCount + 1
+    })
+  }
+
+  onUnlike = () => {
+    const { state } = this
+
+    this.setState({
+      likesCount: state.likesCount - 1
     })
   }
 
@@ -169,7 +192,9 @@ export default class ProductCard extends Component {
           ) : null}
           <LikeButton
             parent={props.id}
+            onLike={this.onLike}
             isWhite
+            onUnlike={this.onUnlike}
             className="card-action"
             parentType="product"
           />
@@ -218,6 +243,19 @@ export default class ProductCard extends Component {
         title={props.name}
         subTitle={get(props.brand, 'name')}
         className="product-title"
+      >
+        {this.renderActivity()}
+      </CardTitle>
+    )
+  }
+
+  renderActivity() {
+    const { props, state } = this
+
+    return (
+      <CardActivity
+        likes={state.likesCount}
+        comments={props.commentsCount}
       />
     )
   }

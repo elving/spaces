@@ -53,13 +53,8 @@
 [data-action="editProduct"] {
   top: 0;
   left: 0;
-  opacity: 0.45;
   z-index: 10;
   position: absolute;
-}
-
-[data-action="editProduct"]:hover {
-  opacity: 1;
 }
 
 .product-detail-image {
@@ -209,5 +204,9 @@
 
   .product-detail-action .icon {
     margin-right: 5px;
+  }
+
+  [data-action="editProduct"] {
+    display: none;
   }
 }

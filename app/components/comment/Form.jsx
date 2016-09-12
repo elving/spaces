@@ -54,7 +54,7 @@ export default class CommentForm extends Component {
               contentCharsLeft: 500,
               hasContentCharsError: false
             }, () => {
-              context.onCreate(merge({}, comment, { createdBy: props.user }))
+              props.onCreate(merge({}, comment, { createdBy: context.user }))
             })
           })
           .catch(({ response }) => {
@@ -85,7 +85,7 @@ export default class CommentForm extends Component {
     const contentError = get(state.errors, 'content')
     const hasContentError = !isEmpty(contentError)
 
-    return (
+    return context.userLoggedIn() ? (
       <form
         ref={form => { this.form = form }}
         className="form comment-form"
@@ -143,6 +143,24 @@ export default class CommentForm extends Component {
           </div>
         </div>
       </form>
+    ) : (
+      <div
+        style={{
+          marginTop: 15,
+          marginBottom: 0
+        }}
+        className="comments-list"
+      >
+        <h4 className="comments-title" style={{ marginBottom: 15 }}>
+          <a href="/join/">Join</a>
+          {'\u00A0'}
+          or
+          {'\u00A0'}
+          <a href="/login/">Log in</a>
+          {'\u00A0'}
+          to Spaces to comment on this {props.parentType}
+        </h4>
+      </div>
     )
   }
 }

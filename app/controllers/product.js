@@ -12,7 +12,6 @@ import setMetadata from '../utils/middlewares/setMetadata'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import search from '../api/product/search'
-import getAll from '../api/product/getAll'
 import create from '../api/product/create'
 import update from '../api/product/update'
 import destroy from '../api/product/destroy'
@@ -275,6 +274,7 @@ export const updateProduct = async (req, res) => {
         updatedBy: get(req, 'user.id')
       })
     )
+
     res.status(200).json(product)
   } catch (err) {
     res.status(500).json({ err })

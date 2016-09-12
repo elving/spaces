@@ -19,6 +19,7 @@ const ProductSchema = new mongoose.Schema({
   spaceTypes: [{ type: mongoose.Schema.ObjectId, ref: 'SpaceType' }],
   description: { type: String, trim: true, default: '' },
   likesCount: { type: Number, default: 0 },
+  commentsCount: { type: Number, default: 0 },
   followersCount: { type: Number, default: 0 }
 }, { timestamps: true })
 

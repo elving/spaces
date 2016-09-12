@@ -35,10 +35,15 @@ export default class CategoryCard extends Component {
     followersCount: 0
   }
 
-  state = {
-    images: [],
-    imagesAreLoaded: false,
-    imagesAreLoading: true
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      images: [],
+      followersCount: get(props, 'followersCount', 0),
+      imagesAreLoaded: false,
+      imagesAreLoading: true
+    }
   }
 
   componentDidMount() {
@@ -55,6 +60,26 @@ export default class CategoryCard extends Component {
         imagesAreLoaded: true,
         imagesAreLoading: false
       })
+    })
+  }
+
+  onFollow = () => {
+    const { props, state } = this
+
+    this.setState({
+      followersCount: state.followersCount + 1
+    }, () => {
+      props.onFollow()
+    })
+  }
+
+  onUnfollow = () => {
+    const { props, state } = this
+
+    this.setState({
+      followersCount: state.followersCount - 1
+    }, () => {
+      props.onUnfollow()
     })
   }
 
@@ -87,16 +112,16 @@ export default class CategoryCard extends Component {
   }
 
   renderCounters() {
-    const { props } = this
+    const { props, state } = this
 
     return (
       <div className="category-card-stats">
         <div className="category-card-stat">
           <div className="category-card-stat-number">
-            {props.followersCount}
+            {state.followersCount}
           </div>
           <div className="category-card-stat-text">
-            {inflect(props.followersCount, 'Follower')}
+            {inflect(state.followersCount, 'Follower')}
           </div>
         </div>
         <div className="category-card-stat">
@@ -122,9 +147,9 @@ export default class CategoryCard extends Component {
           </div>
           <FollowButton
             parent={toStringId(props)}
-            onFollow={props.onFollow}
+            onFollow={this.onFollow}
             className="category-card-follow button--tiny"
-            onUnfollow={props.onUnfollow}
+            onUnfollow={this.onUnfollow}
             parentType="category"
             hideWhenLoggedOut
           />

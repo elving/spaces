@@ -15,7 +15,5 @@
 }
 
 .comments-list > .comment:last-child {
-  border-bottom: 0 none;
   margin-bottom: 0;
-  padding-bottom: 0;
 }

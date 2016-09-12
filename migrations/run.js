@@ -56,4 +56,4 @@ process.on('SIGINT', () => {
   })
 })
 
-// NODE_ENV=development ./node_modules/.bin/babel-node ./migrations/runAll.js
+// NODE_ENV=development ./node_modules/.bin/babel-node ./migrations/run.js

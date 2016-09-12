@@ -14,6 +14,10 @@ import inflect from '../../utils/inflect'
 import toStringId from '../../api/utils/toStringId'
 
 export default class Comments extends Component {
+  static contextTypes = {
+    userLoggedIn: PropTypes.func
+  }
+
   static propTypes = {
     parent: PropTypes.string.isRequired,
     parentType: PropTypes.string.isRequired,
@@ -72,7 +76,7 @@ export default class Comments extends Component {
   }
 
   render() {
-    const { props, state } = this
+    const { props, state, context } = this
     const allComments = concat([], state.comments, props.newComments)
     const count = size(allComments)
 
@@ -101,10 +105,10 @@ export default class Comments extends Component {
       )
     }
 
-    return (
+    return context.userLoggedIn() ? (
       <h4 className="comments-title">
         Be the first to comment!
       </h4>
-    )
+    ) : null
   }
 }

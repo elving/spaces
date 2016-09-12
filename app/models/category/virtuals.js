@@ -24,6 +24,11 @@ export default (schema) => {
     })
 
   schema
+    .virtual('spaces')
+    .get(function() { return this.__spaces })
+    .set(function(spaces = []) { this.__spaces = spaces })
+
+  schema
     .virtual('products')
     .get(function() { return this.__products })
     .set(function(products = []) { this.__products = products })

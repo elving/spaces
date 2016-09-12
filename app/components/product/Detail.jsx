@@ -126,11 +126,11 @@ class ProductDetail extends Component {
         {context.currentUserIsOwner(props.product) ? (
           <a
             href={`/products/${get(props.product, 'sid')}/update/`}
-            className="button button--primary"
+            className="button button--primary button--small"
             data-action="editProduct"
           >
             <MaterialDesignIcon name="edit" />
-            Edit Product
+            Edit
           </a>
         ) : null}
 

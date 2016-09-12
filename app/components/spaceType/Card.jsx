@@ -39,10 +39,15 @@ export default class SpaceTypeCard extends Component {
     followersCount: 0
   }
 
-  state = {
-    images: [],
-    imagesAreLoaded: false,
-    imagesAreLoading: true
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      images: [],
+      followersCount: get(props, 'followersCount', 0),
+      imagesAreLoaded: false,
+      imagesAreLoading: true
+    }
   }
 
   componentDidMount() {
@@ -59,6 +64,26 @@ export default class SpaceTypeCard extends Component {
         imagesAreLoaded: true,
         imagesAreLoading: false
       })
+    })
+  }
+
+  onFollow = () => {
+    const { props, state } = this
+
+    this.setState({
+      followersCount: state.followersCount + 1
+    }, () => {
+      props.onFollow()
+    })
+  }
+
+  onUnfollow = () => {
+    const { props, state } = this
+
+    this.setState({
+      followersCount: state.followersCount - 1
+    }, () => {
+      props.onUnfollow()
     })
   }
 
@@ -91,16 +116,16 @@ export default class SpaceTypeCard extends Component {
   }
 
   renderCounters() {
-    const { props } = this
+    const { props, state } = this
 
     return (
       <div className="space-type-card-stats">
         <div className="space-type-card-stat">
           <div className="space-type-card-stat-number">
-            {props.followersCount}
+            {state.followersCount}
           </div>
           <div className="space-type-card-stat-text">
-            {inflect(props.followersCount, 'Follower')}
+            {inflect(state.followersCount, 'Follower')}
           </div>
         </div>
         <div className="space-type-card-stat">
@@ -134,9 +159,9 @@ export default class SpaceTypeCard extends Component {
           </div>
           <FollowButton
             parent={toStringId(props)}
-            onFollow={props.onFollow}
+            onFollow={this.onFollow}
             className="space-type-card-follow button--tiny"
-            onUnfollow={props.onUnfollow}
+            onUnfollow={this.onUnfollow}
             parentType="spaceType"
             hideWhenLoggedOut
           />

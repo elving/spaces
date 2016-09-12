@@ -6,7 +6,6 @@ import isEmpty from 'lodash/isEmpty'
 import toJSON from '../api/utils/toJSON'
 import setProps from '../utils/middlewares/setProps'
 import setMetadata from '../utils/middlewares/setMetadata'
-import toStringId from '../api/utils/toStringId'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import search from '../api/spaceType/search'
@@ -17,9 +16,7 @@ import destroy from '../api/spaceType/destroy'
 import findBySid from '../api/spaceType/findBySid'
 import findByName from '../api/spaceType/findByName'
 
-import { default as searchSpaces } from '../api/space/search'
-import { default as searchProducts } from '../api/product/search'
-import { default as getAllCategories } from '../api/category/getAll'
+import getAllCategories from '../api/category/getAll'
 
 export const renderIndex = async (req, res, next) => {
   try {
@@ -49,14 +46,6 @@ export const renderDetail = async (req, res, next) => {
       return res.redirect('/404/')
     }
 
-    const spaces = await searchSpaces({
-      spaceType: toStringId(spaceType)
-    })
-
-    const products = await searchProducts({
-      spaceTypes: toStringId(spaceType)
-    })
-
     setMetadata(res, {
       title: `${get(spaceType, 'name')} | Spaces`,
       bodyId: 'page-spaceType-detail',
@@ -64,8 +53,6 @@ export const renderDetail = async (req, res, next) => {
     })
 
     setProps(res, {
-      spaces: toJSON(spaces),
-      products: toJSON(products),
       spaceType: toJSON(spaceType)
     })
 

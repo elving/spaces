@@ -8,6 +8,7 @@ export default (spaceType, limit = 3) => (
       .model('Product')
       .where({ spaceTypes: { $in: [spaceType] } })
       .limit(limit)
+      .sort('-createdAt')
       .exec((err, products = []) => {
         if (err) {
           return reject(parseError(err))

@@ -7,8 +7,8 @@ import setImage from './setImage'
 import parseError from '../utils/parseError'
 import { removeFromCache } from '../cache'
 
-export default (props) => {
-  return new Promise(async (resolve, reject) => {
+export default (props) => (
+  new Promise(async (resolve, reject) => {
     const Category = mongoose.model('Category')
     const category = new Category(sanitize(props))
     const errors = category.validateSync()
@@ -27,4 +27,4 @@ export default (props) => {
       resolve(category)
     })
   })
-}
+)

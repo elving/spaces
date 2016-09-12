@@ -2,13 +2,11 @@ import mongoose from 'mongoose'
 
 import parseError from '../utils/parseError'
 
-export default (parentType, parent, createdBy) => (
+export default (_id) => (
   new Promise((resolve, reject) => {
     mongoose
       .model('Like')
-      .findOneAndRemove({
-        parent, createdBy, parentType
-      }, (err, like) => {
+      .findOneAndRemove({ _id }, (err, like) => {
         if (err) {
           return reject(parseError(err))
         }

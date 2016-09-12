@@ -27,7 +27,6 @@ export default class Layout extends Component {
 
     return {
       toggleMobileNav: () => {
-        console.log('state', state)
         this.setState({
           mobileNavIsVisible: !state.mobileNavIsVisible
         })

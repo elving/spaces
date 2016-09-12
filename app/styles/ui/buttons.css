@@ -58,13 +58,13 @@
 .button--tiny {
   font-size: 14px;
   padding: 5px 10px 6px;
-  min-height: 100%;
+  min-height: auto;
 }
 
 .button--mini {
   font-size: 12px;
   padding: 2px 6px 3px;
-  min-height: 100%;
+  min-height: auto;
 }
 
 .button .icon {
@@ -263,7 +263,9 @@
 }
 
 .share-button .icon-fill,
-.space-detail-action [data-action="share"] .icon-fill {
+.space-detail-action [data-action="share"] .icon-fill,
+.category-detail-action [data-action="share"] .icon-fill,
+.spaceType-detail-action [data-action="share"] .icon-fill {
   fill: #439fe0;
 }
 
@@ -279,7 +281,11 @@
 .share-button:hover,
 .share-button:active,
 .space-detail-action [data-action="share"]:hover,
-.space-detail-action [data-action="share"]:active {
+.space-detail-action [data-action="share"]:active,
+.category-detail-action [data-action="share"]:hover,
+.category-detail-action [data-action="share"]:active,
+.spaceType-detail-action [data-action="share"]:hover,
+.spaceType-detail-action [data-action="share"]:active {
   color: #ffffff;
   border-color: #439fe0;
   background-color: #439fe0;
@@ -316,7 +322,11 @@
 .like-button--white:hover .icon-fill,
 .like-button--white:active .icon-fill,
 .space-detail-action [data-action="share"]:hover .icon-fill,
-.space-detail-action [data-action="share"]:active .icon-fill {
+.space-detail-action [data-action="share"]:active .icon-fill,
+.category-detail-action [data-action="share"]:hover .icon-fill,
+.category-detail-action [data-action="share"]:active .icon-fill,
+.spaceType-detail-action [data-action="share"]:hover .icon-fill,
+.spaceType-detail-action [data-action="share"]:active .icon-fill {
   fill: #ffffff;
 }
 

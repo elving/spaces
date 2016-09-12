@@ -303,7 +303,7 @@ export default class SpaceTypeForm extends Component {
             multi
             value={state.categories}
             options={map(props.categories, category => ({
-              value: toStringId(category),
+              value: get(category, 'name'),
               label: get(category, 'name')
             }))}
             onChange={this.onCategoriesChange}
@@ -360,7 +360,7 @@ export default class SpaceTypeForm extends Component {
 
     const sid = get(props.spaceType, 'sid', '')
     const url = !isEmpty(sid) ? `/admin/space-types/${sid}/update/` : '#'
-    const name = get(state, 'name', 'SpaceType')
+    const name = get(state.spaceType, 'name', 'Room')
 
     const genericError = get(state.errors, 'generic')
     const hasGenericError = !isEmpty(genericError)

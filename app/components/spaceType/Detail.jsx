@@ -1,45 +1,26 @@
-import map from 'lodash/map'
 import get from 'lodash/get'
-import size from 'lodash/size'
-import axios from 'axios'
-import concat from 'lodash/concat'
-import isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
-import Space from '../space/Card'
 import Layout from '../common/Layout'
-import Product from '../product/Card'
+import Spaces from '../space/Spaces'
+import Products from '../product/Products'
 import SharePopup from '../common/SharePopup'
 import FollowButton from '../common/FollowButton'
-import AddProductModal from '../modal/AddProduct'
 import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import sharePopupContainer from '../container/SharePopup'
-import addProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
 import toStringId from '../../api/utils/toStringId'
 
 class SpaceTypeDetail extends Component {
   static propTypes = {
-    spaces: PropTypes.object,
-    products: PropTypes.object,
-    spaceType: PropTypes.object,
-    openAddProductModal: PropTypes.func,
-    closeAddProductModal: PropTypes.func,
-    addProductModalIsOpen: PropTypes.bool,
-    createAddProductModal: PropTypes.bool
+    spaceType: PropTypes.object
   }
 
   static defaultProps = {
-    spaces: {},
-    products: {},
-    spaceType: {},
-    openAddProductModal: (() => {}),
-    closeAddProductModal: (() => {}),
-    addProductModalIsOpen: false,
-    createAddProductModal: false
+    spaceType: {}
   }
 
   static contextTypes = {
@@ -49,20 +30,10 @@ class SpaceTypeDetail extends Component {
   constructor(props) {
     super(props)
 
-    const spacesResults = get(props, 'spaces.results', [])
-    const productsResults = get(props, 'products.results', [])
-
     this.state = {
-      skip: 40,
-      spacesOffset: size(spacesResults),
-      spacesResults,
-      productsOffset: size(productsResults),
-      followersCount: get(props, 'spaceType.followersCount', 0),
-      productsResults,
-      isSearhingSpaces: false,
-      lastSpacesResults: spacesResults,
-      isSearhingProducts: false,
-      lastProductsResults: productsResults
+      showSpaces: true,
+      showProducts: false,
+      followersCount: get(props.spaceType, 'followersCount', 0),
     }
   }
 
@@ -78,51 +49,17 @@ class SpaceTypeDetail extends Component {
     return `${window.location.origin}/${spaceTypeDetailUrl}/`
   }
 
-  fetchSpaces = () => {
-    const { props, state } = this
-
+  showSpaces = () => {
     this.setState({
-      isSearhingSpaces: true
-    }, () => {
-      axios
-        .get(`/ajax/spaces/search/?skip=${state.spacesOffset}`, {
-          params: { spaceType: toStringId(props.spaceType) }
-        })
-        .then(({ data }) => {
-          const spacesResults = get(data, 'results', [])
-
-          this.setState({
-            spacesOffset: state.spacesOffset + size(spacesResults),
-            spacesResults: concat(state.spacesResults, spacesResults),
-            isSearhingSpaces: false,
-            lastSpacesResults: spacesResults
-          })
-        })
-        .catch(() => this.setState({ isSearhingSpaces: false }))
+      showSpaces: true,
+      showProducts: false
     })
   }
 
-  fetchProducts = () => {
-    const { props, state } = this
-
+  showProducts = () => {
     this.setState({
-      isSearhingProducts: true
-    }, () => {
-      axios
-        .get(`/ajax/products/search/?skip=${state.productsOffset}`, {
-          params: { spaceTypes: toStringId(props.spaceType) }
-        })
-        .then(({ data }) => {
-          const productsResults = get(data, 'results', [])
-
-          this.setState({
-            productsOffset: state.productsOffset + size(productsResults),
-            productsResults: concat(state.productsResults, productsResults),
-            isSearhingProducts: false,
-            lastProductsResults: productsResults
-          })
-        })
-        .catch(() => this.setState({ isSearhingProducts: false }))
+      showSpaces: false,
+      showProducts: true
     })
   }
 
@@ -146,24 +83,24 @@ class SpaceTypeDetail extends Component {
     return (
       <div className="spaceType-detail-counters">
         {spacesCount ? (
-          <a href="#spaces" className="spaceType-detail-counter">
+          <div className="spaceType-detail-counter">
             <div className="spaceType-detail-counter-number">
               {spacesCount}
             </div>
             <div className="spaceType-detail-counter-text">
               {inflect(spacesCount, 'Space')}
             </div>
-          </a>
+          </div>
         ) : null}
         {productsCount ? (
-          <a href="#products" className="spaceType-detail-counter">
+          <div className="spaceType-detail-counter">
             <div className="spaceType-detail-counter-number">
               {productsCount}
             </div>
             <div className="spaceType-detail-counter-text">
               {inflect(productsCount, 'Product')}
             </div>
-          </a>
+          </div>
         ) : null}
         {state.followersCount ? (
           <div
@@ -200,8 +137,9 @@ class SpaceTypeDetail extends Component {
             type="button"
             onClick={props.openSharePopup}
             className={(
-              "button button--icon button--small"
+              "button button--icon button--small button--outline"
             )}
+            data-action="share"
           >
             <MaterialDesignIcon name="send" fill="#439fe0" />
           </button>
@@ -237,80 +175,60 @@ class SpaceTypeDetail extends Component {
     )
   }
 
-  renderSpaces() {
+  renderNavigation() {
     const { state } = this
 
     return (
-      <div className="grid">
-        <div className="grid-items">
-          {map(state.spacesResults, space =>
-            <Space {...space} key={toStringId(space)} />
-          )}
-        </div>
+      <div className="navpills">
+        <button
+          type="button"
+          onClick={this.showSpaces}
+          className={classNames({
+            'navpills-link': true,
+            'navpills-link--active': state.showSpaces
+          })}
+        >
+          Spaces
+        </button>
+        <button
+          type="button"
+          onClick={this.showProducts}
+          className={classNames({
+            'navpills-link': true,
+            'navpills-link--active': state.showProducts
+          })}
+        >
+          Products
+        </button>
       </div>
     )
   }
 
-  renderProducts() {
+  renderContent() {
     const { props, state } = this
+    const room = get(props.spaceType, 'name')
 
-    return (
-      <div className="grid">
-        <div className="grid-items">
-          {map(state.productsResults, product =>
-            <Product
-              {...product}
-              key={toStringId(product)}
-              onAddButtonClick={() => props.openAddProductModal(product)}
-            />
-          )}
-        </div>
-      </div>
-    )
-  }
+    if (state.showSpaces) {
+      return (
+        <Spaces
+          params={{ spaceType: toStringId(props.spaceType) }}
+          emptyMessage={`No ${room} related spaces designed yet...`}
+        />
+      )
+    } else if (state.showProducts) {
+      return (
+        <Products
+          params={{ spaceTypes: toStringId(props.spaceType) }}
+          emptyMessage={`No ${room} related products added yet...`}
+        />
+      )
+    }
 
-  renderSpacesPagination() {
-    const { props, state } = this
-
-    return size(state.spacesResults) < get(props, 'spaces.count') ? (
-      <div className="grid-pagination">
-        <button
-          onClick={this.fetchSpaces}
-          disabled={state.isSearhingSpaces}
-          className="button button--outline"
-        >
-          {state.isSearhingSpaces ? (
-            'Loading More Spaces...'
-          ) : (
-            'Load More Spaces'
-          )}
-        </button>
-      </div>
-    ) : null
-  }
-
-  renderProductsPagination() {
-    const { props, state } = this
-
-    return size(state.productsResults) < get(props, 'products.count') ? (
-      <div className="grid-pagination">
-        <button
-          onClick={this.fetchProducts}
-          disabled={state.isSearhingProducts}
-          className="button button--outline"
-        >
-          {state.isSearhingProducts ? (
-            'Loading More Products...'
-          ) : (
-            'Load More Products'
-          )}
-        </button>
-      </div>
-    ) : null
+    return null
   }
 
   render() {
-    const { props, context } = this
+    const { context } = this
 
     return (
       <Layout
@@ -322,37 +240,18 @@ class SpaceTypeDetail extends Component {
           <CreateSpaceBanner />
         ) : null}
 
-        <AddProductModal
-          product={props.addProductModalCurrent}
-          onClose={props.closeAddProductModal}
-          isVisible={props.addProductModalIsOpen}
-        />
-
         <div className="spaceType-detail">
           {this.renderHeader()}
           {this.renderSubHeader()}
 
-          {!isEmpty(get(props, 'spaces.results', [])) ? (
-            <div className="grid-container" id="spaces">
-              <h3 className="grid-title">Spaces</h3>
-              {this.renderSpaces()}
-              {this.renderSpacesPagination()}
-            </div>
-          ) : null}
-
-          {!isEmpty(get(props, 'products.results', [])) ? (
-            <div className="grid-container" id="products">
-              <h3 className="grid-title">Products</h3>
-              {this.renderProducts()}
-              {this.renderProductsPagination()}
-            </div>
-          ) : null}
+          <div className="spaceType-detail-content">
+            {this.renderNavigation()}
+            {this.renderContent()}
+          </div>
         </div>
       </Layout>
     )
   }
 }
 
-export default addProductModalContainer(
-  sharePopupContainer(SpaceTypeDetail)
-)
+export default sharePopupContainer(SpaceTypeDetail)

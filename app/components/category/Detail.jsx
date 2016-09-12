@@ -1,92 +1,66 @@
-import map from 'lodash/map'
 import get from 'lodash/get'
-import size from 'lodash/size'
-import axios from 'axios'
-import concat from 'lodash/concat'
+import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
-import Product from '../product/Card'
+import Spaces from '../space/Spaces'
+import Products from '../product/Products'
 import SharePopup from '../common/SharePopup'
 import FollowButton from '../common/FollowButton'
-import AddProductModal from '../modal/AddProduct'
+import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import sharePopupContainer from '../container/SharePopup'
-import addProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
 import toStringId from '../../api/utils/toStringId'
 
 class CategoryDetail extends Component {
   static propTypes = {
-    category: PropTypes.object,
-    products: PropTypes.object,
-    openAddProductModal: PropTypes.func,
-    closeAddProductModal: PropTypes.func,
-    addProductModalIsOpen: PropTypes.bool,
-    createAddProductModal: PropTypes.bool
+    category: PropTypes.object
   }
 
   static defaultProps = {
-    category: {},
-    products: {},
-    openAddProductModal: (() => {}),
-    closeAddProductModal: (() => {}),
-    addProductModalIsOpen: false,
-    createAddProductModal: false
+    category: {}
+  }
+
+  static contextTypes = {
+    currentUserIsOnboarding: PropTypes.func
   }
 
   constructor(props) {
     super(props)
 
-    const results = get(props, 'products.results', [])
-
     this.state = {
-      skip: 40,
-      offset: size(results),
-      results,
-      isSearhing: false,
-      lastResults: results,
-      followersCount: get(props, 'category.followersCount', 0)
+      showSpaces: true,
+      showProducts: false,
+      followersCount: get(props.category, 'followersCount', 0),
     }
   }
 
-  fetch = () => {
-    const { props, state } = this
+  getShortUrl = () => {
+    const { props } = this
+    const categoryShortUrl = get(props.category, 'shortUrl')
+    return `${window.location.origin}/${categoryShortUrl}/`
+  }
 
-    this.setState({ isSearhing: true }, () => {
-      axios
-        .get(`/ajax/products/search/?skip=${state.offset}`, {
-          params: { categories: toStringId(props.category) }
-        })
-        .then(({ data }) => {
-          const results = get(data, 'results', [])
+  getDetailUrl = () => {
+    const { props } = this
+    const categoryDetailUrl = get(props.category, 'detailUrl')
+    return `${window.location.origin}/${categoryDetailUrl}/`
+  }
 
-          this.setState({
-            offset: state.offset + size(results),
-            results: concat(state.results, results),
-            isSearhing: false,
-            lastResults: results
-          })
-        })
-        .catch(() => this.setState({ isSearhing: false }))
+  showSpaces = () => {
+    this.setState({
+      showSpaces: true,
+      showProducts: false
     })
   }
 
-  renderPagination() {
-    const { props, state } = this
-
-    return size(state.results) < get(props, 'products.count') ? (
-      <div className="grid-pagination">
-        <button
-          onClick={this.fetch}
-          disabled={state.isSearhing}
-          className="button button--outline"
-        >
-          {state.isSearhing ? 'Loading More...' : 'Load More'}
-        </button>
-      </div>
-    ) : null
+  showProducts = () => {
+    this.setState({
+      showSpaces: false,
+      showProducts: true
+    })
   }
 
   renderHeader() {
@@ -103,19 +77,30 @@ class CategoryDetail extends Component {
 
   renderCounters() {
     const { props, state } = this
+    const spacesCount = get(props, 'category.spacesCount', 0)
     const productsCount = get(props, 'category.productsCount', 0)
 
     return (
       <div className="category-detail-counters">
+        {spacesCount ? (
+          <div className="category-detail-counter">
+            <div className="category-detail-counter-number">
+              {spacesCount}
+            </div>
+            <div className="category-detail-counter-text">
+              {inflect(spacesCount, 'Space')}
+            </div>
+          </div>
+        ) : null}
         {productsCount ? (
-          <span className="category-detail-counter">
+          <div className="category-detail-counter">
             <div className="category-detail-counter-number">
               {productsCount}
             </div>
             <div className="category-detail-counter-text">
               {inflect(productsCount, 'Product')}
             </div>
-          </span>
+          </div>
         ) : null}
         {state.followersCount ? (
           <div
@@ -138,8 +123,6 @@ class CategoryDetail extends Component {
     const { props } = this
     const categoryName = get(props.category, 'name')
     const categoryImage = get(props.category, 'image')
-    const categoryShortUrl = get(props.category, 'shortUrl')
-    const categoryDetailUrl = get(props.category, 'detailUrl')
     const categoryProductsCount = get(props.category, 'productsCount')
 
     return (
@@ -153,16 +136,19 @@ class CategoryDetail extends Component {
           <button
             type="button"
             onClick={props.openSharePopup}
-            className="button button--icon button--small"
+            className={(
+              "button button--icon button--small button--outline"
+            )}
+            data-action="share"
           >
             <MaterialDesignIcon name="send" fill="#439fe0" />
           </button>
           {props.sharePopupIsCreated ? (
             <SharePopup
-              url={() => `${window.location.origin}/${categoryShortUrl}/`}
+              url={this.getShortUrl}
               title="Share this category"
               isOpen={props.sharePopupIsOpen}
-              shareUrl={() => `${window.location.origin}/${categoryDetailUrl}/`}
+              shareUrl={this.getDetailUrl}
               className="share-popup"
               shareText={(
                 `${categoryName} — ` +
@@ -189,46 +175,83 @@ class CategoryDetail extends Component {
     )
   }
 
-  renderProducts() {
-    const { props, state } = this
+  renderNavigation() {
+    const { state } = this
 
     return (
-      <div className="grid">
-        <div id="products" className="grid-items">
-          {map(state.results, product =>
-            <Product
-              {...product}
-              key={toStringId(product)}
-              onAddButtonClick={() => props.openAddProductModal(product)}
-            />
-          )}
-        </div>
+      <div className="navpills">
+        <button
+          type="button"
+          onClick={this.showSpaces}
+          className={classNames({
+            'navpills-link': true,
+            'navpills-link--active': state.showSpaces
+          })}
+        >
+          Spaces
+        </button>
+        <button
+          type="button"
+          onClick={this.showProducts}
+          className={classNames({
+            'navpills-link': true,
+            'navpills-link--active': state.showProducts
+          })}
+        >
+          Products
+        </button>
       </div>
     )
   }
 
+  renderContent() {
+    const { props, state } = this
+    const category = get(props.category, 'name')
+
+    if (state.showSpaces) {
+      return (
+        <Spaces
+          params={{ categories: toStringId(props.category) }}
+          emptyMessage={`No ${category} related spaces designed yet...`}
+        />
+      )
+    } else if (state.showProducts) {
+      return (
+        <Products
+          params={{ categories: toStringId(props.category) }}
+          emptyMessage={`No ${category} related products added yet...`}
+        />
+      )
+    }
+
+    return null
+  }
+
   render() {
-    const { props } = this
+    const { context } = this
 
     return (
-      <Layout>
-        <AddProductModal
-          product={props.addProductModalCurrent}
-          onClose={props.closeAddProductModal}
-          isVisible={props.addProductModalIsOpen}
-        />
+      <Layout
+        className={classNames({
+          'user-is-onboarding': context.currentUserIsOnboarding()
+        })}
+      >
+        {context.currentUserIsOnboarding() ? (
+          <CreateSpaceBanner />
+        ) : null}
 
         <div className="category-detail">
           {this.renderHeader()}
           {this.renderSubHeader()}
-          {this.renderProducts()}
-          {this.renderPagination()}
+
+          <div className="category-detail-content">
+            {this.renderNavigation()}
+            {this.renderContent()}
+          </div>
         </div>
       </Layout>
     )
   }
 }
 
-export default addProductModalContainer(
-  sharePopupContainer(CategoryDetail)
-)
+export default sharePopupContainer(CategoryDetail)

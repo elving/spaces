@@ -8,11 +8,11 @@ import hasLiked from '../api/follow/hasLiked'
 import toObjectId from '../api/utils/toObjectId'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
-import { default as updateUser } from '../api/user/update'
-import { default as updateSpace } from '../api/space/update'
-import { default as updateProduct } from '../api/product/update'
-import { default as updateCategory } from '../api/category/update'
-import { default as updateSpaceType } from '../api/spaceType/update'
+import updateUser from '../api/user/update'
+import updateSpace from '../api/space/updateStats'
+import updateProduct from '../api/product/updateStats'
+import updateCategory from '../api/category/update'
+import updateSpaceType from '../api/spaceType/update'
 
 export const follow = async (req, res) => {
   const userId = get(req, 'user.id')

@@ -96,6 +96,11 @@
   flex-direction: column;
 }
 
+.category-detail-content .navpills {
+  width: 290px;
+  margin: 35px auto;
+}
+
 @media (max-width: 768px) {
   .category-detail-header {
     padding: 25px;
@@ -110,5 +115,9 @@
   .page-category-detail #spaces {
     margin: 15px auto 0;
     padding: 15px 0;
+  }
+
+  .category-detail-content .navpills {
+    margin: 15px auto;
   }
 }

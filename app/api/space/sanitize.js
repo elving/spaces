@@ -3,20 +3,20 @@ import get from 'lodash/get'
 import omit from 'lodash/omit'
 import isEmpty from 'lodash/isEmpty'
 
-import toObjectId from '../utils/toObjectId'
+import toIds from '../utils/toIds'
+import toStringId from '../utils/toStringId'
 
-export default (props) => {
-  const products = get(props, 'products', '')
+export default props => {
+  const products = get(props, 'products', [])
   const spaceType = get(props, 'spaceType', '')
 
   if (!isEmpty(products)) {
-    set(props, 'products', toObjectId(products))
+    set(props, 'products', toIds(products))
   }
 
   if (!isEmpty(spaceType)) {
-    set(props, 'spaceType', toObjectId(spaceType))
+    set(props, 'spaceType', toStringId(spaceType))
   }
 
-  Reflect.deleteProperty(props, 'updatedByAdmin')
   return omit(props, ['_csrf', '_method'])
 }

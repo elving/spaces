@@ -6,22 +6,22 @@ import generateImage from '../../utils/image/generateImage'
 import getProductImages from '../utils/getProductImages'
 import { invalidateFromCache } from '../cache'
 
-export default (category) => (
+export default (spaceType) => (
   new Promise(async (resolve, reject) => {
-    const products = await getProducts(toStringId(category), 4)
+    const products = await getProducts(toStringId(spaceType), 4)
 
     if (!isEmpty(products)) {
       const image = await generateImage(
-        'categories', getProductImages(products)
+        'spaceTypes', getProductImages(products)
       )
 
-      category.set({ image })
-      category.save((err) => {
+      spaceType.set({ image })
+      spaceType.save((err) => {
         if (err) {
           return reject(err)
         }
 
-        invalidateFromCache(toStringId(category))
+        invalidateFromCache(toStringId(spaceType))
         resolve()
       })
     } else {

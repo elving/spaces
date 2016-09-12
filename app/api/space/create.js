@@ -1,4 +1,5 @@
 import has from 'lodash/has'
+import get from 'lodash/get'
 import assign from 'lodash/assign'
 import isEmpty from 'lodash/isEmpty'
 import mongoose from 'mongoose'
@@ -8,10 +9,14 @@ import getTags from '../../utils/product/getTags'
 import sanitize from './sanitize'
 import logError from '../../utils/logError'
 import parseError from '../utils/parseError'
+import toStringId from '../utils/toStringId'
 import getProducts from './getProducts'
 import generateImage from '../../utils/image/generateImage'
 import getProductImages from '../utils/getProductImages'
 import { removeFromCache, invalidateFromCache } from '../cache'
+
+import updateRoom from '../spaceType/update'
+import updateCategory from '../category/update'
 
 export default props => (
   new Promise(async (resolve, reject) => {
@@ -29,6 +34,16 @@ export default props => (
       } catch (getProductsErr) {
         return reject(getProductsErr)
       }
+
+      try {
+        for (const category of get(updatedProps, 'categories', [])) {
+          await updateCategory(toStringId(category), {
+            $inc: { spacesCount: 1 }
+          })
+        }
+      } catch (err) {
+        return reject(parseError(err))
+      }
     }
 
     const space = new Space(updatedProps)
@@ -38,7 +53,15 @@ export default props => (
       return reject(parseError(errors))
     }
 
-    space.save(async (err) => {
+    try {
+      await updateRoom(toStringId(get(space, 'spaceType')), {
+        $inc: { spacesCount: 1 }
+      })
+    } catch (err) {
+      return reject(parseError(err))
+    }
+
+    space.save((err) => {
       if (err) {
         return reject(parseError(err))
       }

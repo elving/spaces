@@ -432,7 +432,7 @@ class SpaceDetail extends Component {
           <button
             type="button"
             onClick={this.openRedesignPopup}
-            className="button button--primary button--small"
+            className="button button--primary button--small button--outline"
           >
             <MaterialDesignIcon name="redesign" />
             Redesign
@@ -443,14 +443,14 @@ class SpaceDetail extends Component {
           parent={toStringId(props.space)}
           onLike={this.onLike}
           onUnlike={this.onUnlike}
-          className="space-detail-action"
+          className="space-detail-action button--outline"
           parentType="space"
         />
         <div className="space-detail-action">
           <button
             type="button"
             onClick={this.openSharePopup}
-            className="button button--icon button--small"
+            className="button button--icon button--small button--outline"
             data-action="share"
           >
             <MaterialDesignIcon name="send" fill="#439fe0" />
@@ -460,7 +460,8 @@ class SpaceDetail extends Component {
         <a
           href="#comments"
           className={(
-            "space-detail-action button button--icon button--small"
+            'space-detail-action ' +
+            'button button--icon button--small button--outline'
           )}
         >
           <MaterialDesignIcon name="comment" />
@@ -472,7 +473,7 @@ class SpaceDetail extends Component {
             >
               <button
                 type="button"
-                className="button button--icon button--small"
+                className="button button--icon button--small button--outline"
               >
                 <MaterialDesignIcon name="settings" />
               </button>
@@ -570,7 +571,7 @@ class SpaceDetail extends Component {
         <div className="grid-container">
           <div className="grid-title-container">
             <h3 className="grid-title">
-              More in {spaceType}
+              Other {spaceType}
             </h3>
             <a
               href={`/${get(props.space, 'spaceType.detailUrl')}/`}

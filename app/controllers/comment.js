@@ -8,8 +8,8 @@ import create from '../api/comment/create'
 import destroy from '../api/comment/destroy'
 import toObjectId from '../api/utils/toObjectId'
 import updateUser from '../api/user/update'
-import updateSpace from '../api/space/update'
-import updateProduct from '../api/product/update'
+import updateSpace from '../api/space/updateStats'
+import updateProduct from '../api/product/updateStats'
 
 export const comment = async (req, res) => {
   const userId = get(req, 'user.id')

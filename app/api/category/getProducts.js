@@ -2,11 +2,12 @@ import mongoose from 'mongoose'
 
 import parseError from '../utils/parseError'
 
-export default (category, limit = 3) => {
-  return new Promise(async (resolve, reject) => {
+export default (category, limit = 3) => (
+  new Promise(async (resolve, reject) => {
     mongoose
       .model('Product')
       .where({ categories: { $in: [category] } })
+      .sort('-createdAt')
       .limit(limit)
       .exec((err, products = []) => {
         if (err) {
@@ -16,4 +17,4 @@ export default (category, limit = 3) => {
         resolve(products)
       })
   })
-}
+)

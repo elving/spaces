@@ -10,8 +10,14 @@ import parseError from '../utils/parseError'
 
 import { invalidateFromCache } from '../cache'
 
-export default (_id) => (
-  new Promise(async (resolve, reject) => {
+import getLikes from '../like/getAll'
+import updateUser from '../user/update'
+import updateRoom from '../spaceType/update'
+import destroyLike from '../like/destroyById.js'
+import updateCategory from '../category/update'
+
+export default _id => (
+  new Promise((resolve, reject) => {
     mongoose
       .model('Space')
       .findOneAndRemove({ _id }, async (err, space) => {
@@ -32,8 +38,33 @@ export default (_id) => (
           }
         }
 
+        const room = toStringId(get(space, 'spaceType'))
+
+        await updateRoom(room, {
+          $inc: { spacesCount: -1 }
+        })
+
+        const categories = toIds(get(space, 'categories'))
+
+        for (const category of categories) {
+          await updateCategory(category, {
+            $inc: { spacesCount: -1 }
+          })
+        }
+
+        const likes = await getLikes(_id)
+
+        for (const like of likes) {
+          await updateUser(toStringId(get(like, 'createdBy')), {
+            $pull: { likes: toObjectId(like) }
+          })
+
+          await destroyLike(toStringId(like))
+        }
+
         await invalidateFromCache([
           _id,
+          room,
           toIds(get(space, 'products')),
           toIds(get(space, 'redesigns'))
         ])

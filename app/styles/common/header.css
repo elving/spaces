@@ -98,6 +98,14 @@
     border-left: 0 none;
     padding-left: 0;
   }
+
+  .header [data-action="toggleMobileNav"] {
+    display: flex;
+  }
+}
+
+.header [data-action="toggleMobileNav"] {
+  display: none;
 }
 
 .header [data-action="toggleMobileNav"],

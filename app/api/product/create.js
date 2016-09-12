@@ -13,6 +13,9 @@ import toStringId from '../utils/toStringId'
 import parseError from '../utils/parseError'
 import { removeFromCache } from '../cache'
 
+import updateRoom from '../spaceType/update'
+import updateCategory from '../category/update'
+
 import { default as findColorByName } from '../color/findByName'
 import { default as getOrCreateBrand } from '../brand/getOrCreate'
 import { default as getOrCreateCategory } from '../category/getOrCreate'
@@ -54,6 +57,10 @@ export default (props) => (
         category = await getOrCreateCategory(category, true)
 
         if (!isEmpty(category)) {
+          await updateCategory(toStringId(category), {
+            $inc: { productsCount: 1 }
+          })
+
           categories.push(category)
         }
       }
@@ -100,6 +107,10 @@ export default (props) => (
         spaceType = await findSpaceTypeByName(spaceType, true)
 
         if (!isEmpty(spaceType)) {
+          await updateRoom(toStringId(spaceType), {
+            $inc: { productsCount: 1 }
+          })
+
           spaceTypes.push(spaceType)
         }
       }

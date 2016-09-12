@@ -49,7 +49,9 @@ export default class Comment extends Component {
       }, () => {
         axios
           .delete(`/ajax/comments/${id}/`, {
-            _csrf: context.csrf
+            params: {
+              _csrf: context.csrf
+            }
           })
           .then(() => {
             props.onDelete(id)

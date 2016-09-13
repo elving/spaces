@@ -179,7 +179,7 @@ class SpaceTypeDetail extends Component {
     const { state } = this
 
     return (
-      <div className="navpills">
+      <div className="navpills" data-links="2">
         <button
           type="button"
           onClick={this.showSpaces}

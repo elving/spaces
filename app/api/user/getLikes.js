@@ -17,7 +17,7 @@ export default (_id) => (
       mongoose
         .model('User')
         .findOne({ _id })
-        .populate('following')
+        .populate('likes')
         .exec(async (err, user = {}) => {
           if (err) {
             return reject(parseError(err))
@@ -26,7 +26,7 @@ export default (_id) => (
           if (!isEmpty(user)) {
             await saveToCache(key, toJSON(user), [
               toIds(user),
-              toIdsFromPath(user, 'following')
+              toIdsFromPath(user, 'likes')
             ])
 
             resolve(user)

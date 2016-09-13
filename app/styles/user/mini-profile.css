@@ -5,7 +5,8 @@
   align-items: center;
 }
 
-.user-mini-profile:hover {
+.user-mini-profile:hover,
+.user-mini-profile:active {
   text-decoration: none;
 }
 

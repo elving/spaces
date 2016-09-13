@@ -62,18 +62,22 @@
   background-color: #ffffff;
 }
 
-.card--default:hover {
+.card--default:hover,
+.card--default:active {
   border-color: #c0c0c0;
   background-color: #ffffff;
 }
 
-.card--default:hover .icon-fill {
+.card--default:hover .icon-fill,
+.card--default:active .icon-fill {
   fill: #888888;
 }
 
 .card-action[data-action="add"]:hover,
+.card-action[data-action="add"]:active,
 .card-action[data-action="add"].button--active,
 .card-action[data-action="redesign"]:hover,
+.card-action[data-action="redesign"]:active,
 .card-action[data-action="redesign"].button--active {
   border-color: #2ECC71;
   background-color: #2ECC71;
@@ -84,16 +88,20 @@
 }
 
 .card-action[data-action="remove"]:hover,
+.card-action[data-action="remove"]:active,
 .card-action[data-action="remove"].button--active {
   border-color: #e74c3c;
   background-color: #e74c3c;
 }
 
 .card-action[data-action="add"]:hover .icon-fill,
+.card-action[data-action="add"]:active .icon-fill,
 .card-action[data-action="add"].button--active .icon-fill,
 .card-action[data-action="redesign"]:hover .icon-fill,
+.card-action[data-action="redesign"]:active .icon-fill,
 .card-action[data-action="redesign"].button--active .icon-fill,
 .card-action[data-action="remove"]:hover .icon-fill,
+.card-action[data-action="remove"]:active .icon-fill,
 .card-action[data-action="remove"].button--active .icon-fill {
   fill: #FFFFFF;
 }

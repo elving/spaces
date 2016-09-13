@@ -25,20 +25,24 @@
   position: absolute;
 }
 
-.space-card:hover .redesign-badge {
+.space-card:hover .redesign-badge,
+.space-card:active .redesign-badge {
   z-index: 100;
 }
 
-.space-card:hover .card-actions-overlay {
+.space-card:hover .card-actions-overlay,
+.space-card:active .card-actions-overlay {
   display: block;
 }
 
 .space-card:hover .card-actions,
+.space-card:active .card-actions,
 .space-card--popup-open .card-actions {
   display: flex;
 }
 
-.space-card--redesign:hover .card-actions--right {
+.space-card--redesign:hover .card-actions--right,
+.space-card--redesign:active .card-actions--right {
   right: 65px;
 }
 
@@ -46,7 +50,8 @@
   display: block;
 }
 
-.space-card--popup-open:hover .card-actions-overlay {
+.space-card--popup-open:hover .card-actions-overlay,
+.space-card--popup-open:active .card-actions-overlay {
   display: none;
 }
 

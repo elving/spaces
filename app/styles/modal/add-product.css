@@ -117,7 +117,8 @@
   justify-content: space-between;
 }
 
-.add-product-modal-space:hover {
+.add-product-modal-space:hover,
+.add-product-modal-space:active {
   background-color: #fafafa;
 }
 
@@ -149,20 +150,24 @@
   margin-left: 5px;
 }
 
-.add-product-modal-space-action:hover .icon-fill {
+.add-product-modal-space-action:hover .icon-fill,
+.add-product-modal-space-action:active .icon-fill {
   fill: #439fe0;
 }
 
 .add-product-modal-space-icon.icon-uncheck,
-.add-product-modal-space--has-product:hover .add-product-modal-space-icon.icon-check {
+.add-product-modal-space--has-product:hover .add-product-modal-space-icon.icon-check,
+.add-product-modal-space--has-product:active .add-product-modal-space-icon.icon-check {
   display: none;
 }
 
-.add-product-modal-space--has-product:hover .add-product-modal-space-icon.icon-uncheck {
+.add-product-modal-space--has-product:hover .add-product-modal-space-icon.icon-uncheck,
+.add-product-modal-space--has-product:active .add-product-modal-space-icon.icon-uncheck {
   display: block;
 }
 
 .add-product-modal-space:hover .icon-check-empty .icon-fill,
+.add-product-modal-space:active .icon-check-empty .icon-fill,
 .add-product-modal-space--has-product .icon-check .icon-fill {
   fill: #2ECC71;
 }

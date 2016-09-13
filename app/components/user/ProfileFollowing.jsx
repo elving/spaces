@@ -79,7 +79,7 @@ export default class ProfileFollowing extends Component {
     const { state } = this
 
     return (
-      <div className="navpills">
+      <div className="navpills" data-links="3">
         <button
           type="button"
           onClick={this.showDesigners}

@@ -19,7 +19,8 @@
   justify-content: center;
 }
 
-.form-title-link:hover {
+.form-title-link:hover,
+.form-title-link:active {
   text-decoration: none;
 }
 

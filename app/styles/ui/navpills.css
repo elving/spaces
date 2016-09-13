@@ -1,6 +1,7 @@
 .navpills {
   border-radius: 4px;
   background-color: #eeeeee;
+  margin: 35px auto;
   display: flex;
   padding: 4px;
   align-items: center;
@@ -36,4 +37,31 @@
 
 .navpills-link--active {
   cursor: default;
+}
+
+.navpills[data-links="2"] {
+  width: 290px;
+}
+
+.navpills[data-links="3"] {
+  width: 450px;
+}
+
+@media (max-width: 736px) {
+  .navpills {
+    width: calc(100% - 30px) !important;
+    margin: 0 auto 15px;
+  }
+
+  .navpills-link {
+    max-width: 100%;
+  }
+
+  .navpills[data-links="2"] .navpills-link {
+    width: calc(100% / 2);
+  }
+
+  .navpills[data-links="3"] .navpills-link {
+    width: calc(100% / 3);
+  }
 }

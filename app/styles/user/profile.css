@@ -49,7 +49,8 @@
   text-decoration: none;
 }
 
-.user-profile-header-bio > a:hover {
+.user-profile-header-bio > a:hover,
+.user-profile-header-bio > a:active {
   text-decoration: underline;
 }
 
@@ -87,6 +88,11 @@
   margin-bottom: 0;
 }
 
+.user-profile-content .navpills {
+  margin-top: 0;
+}
+
+.user-profile-content-likes,
 .user-profile-content-following {
   width: 100%;
   display: flex;
@@ -96,11 +102,7 @@
   justify-content: flex-start;
 }
 
-.user-profile-content-following .navpills {
-  width: 450px;
-  margin: 0 auto 35px;
-}
-
+.user-profile-content-likes .grids,
 .user-profile-content-following .grids {
   width: 100%;
 }
@@ -138,11 +140,6 @@
 
   .user-profile-header .navbar > .navbar-link:last-child {
     border-bottom: 0 none;
-  }
-
-  .user-profile-content-following .navpills {
-    width: calc(100% - 30px);
-    margin: 0 auto 15px;
   }
 
   .user-profile-content {

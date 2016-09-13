@@ -2,6 +2,7 @@ import get from 'lodash/get'
 
 import update from '../api/user/update'
 import search from '../api/user/search'
+import getLikes from '../api/user/getLikes'
 import getEmail from '../api/user/getEmail'
 import setProps from '../utils/middlewares/setProps'
 import setOgTags from '../utils/middlewares/setOgTags'
@@ -178,6 +179,18 @@ export const changePassword = async (req, res, next) => {
 
       res.status(200).json(user)
     })
+  } catch (err) {
+    res.status(500).json({ err })
+  }
+}
+
+export const getUserLikes = async (req, res) => {
+  const id = get(req, 'params.id')
+
+  try {
+    const user = await getLikes(id)
+
+    res.status(200).json(get(user, 'likes', []))
   } catch (err) {
     res.status(500).json({ err })
   }

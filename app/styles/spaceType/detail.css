@@ -45,7 +45,8 @@
 }
 
 
-.spaceType-detail-counter:hover {
+.spaceType-detail-counter:hover,
+.spaceType-detail-counter:active {
   text-decoration: none;
 }
 
@@ -83,11 +84,6 @@
   right: 25px;
 }
 
-.spaceType-detail-content .navpills {
-  width: 290px;
-  margin: 35px auto;
-}
-
 @media (max-width: 768px) {
   .spaceType-detail-header {
     padding: 25px;
@@ -97,9 +93,5 @@
     font-size: 26px;
     font-weight: 400;
     line-height: 26px;
-  }
-
-  .spaceType-detail-content .navpills {
-    margin: 15px auto;
   }
 }

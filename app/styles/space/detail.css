@@ -60,12 +60,15 @@ button.space-detail-counter {
   cursor: pointer;
 }
 
-.space-detail-counter:hover {
+.space-detail-counter:hover,
+.space-detail-counter:active {
   text-decoration: none;
 }
 
 .space-detail-counter:hover .space-detail-counter-text,
-.space-detail-counter:hover .space-detail-counter-number {
+.space-detail-counter:active .space-detail-counter-text,
+.space-detail-counter:hover .space-detail-counter-number,
+.space-detail-counter:active .space-detail-counter-number {
   color: #555555;
 }
 

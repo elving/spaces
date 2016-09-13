@@ -145,11 +145,13 @@
   text-decoration: none;
 }
 
-.product-detail-curator:hover {
+.product-detail-curator:hover,
+.product-detail-curator:active {
   text-decoration: none;
 }
 
-.product-detail-curator:hover .card-avatars-count {
+.product-detail-curator:hover .card-avatars-count,
+.product-detail-curator:active .card-avatars-count {
   text-decoration: underline;
 }
 

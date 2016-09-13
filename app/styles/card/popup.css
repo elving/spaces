@@ -73,6 +73,7 @@
 }
 
 .spaces-popup-space:hover .icon-check-empty .icon-fill,
+.spaces-popup-space:active .icon-check-empty .icon-fill,
 .spaces-popup-space--has-product .icon-check .icon-fill {
   fill: #2ECC71;
 }
@@ -82,11 +83,13 @@
 }
 
 .spaces-popup-space--has-product .icon-uncheck,
-.spaces-popup-space--has-product:hover .icon-check {
+.spaces-popup-space--has-product:hover .icon-check,
+.spaces-popup-space--has-product:active .icon-check {
   display: none;
 }
 
-.spaces-popup-space--has-product:hover .icon-uncheck {
+.spaces-popup-space--has-product:hover .icon-uncheck,
+.spaces-popup-space--has-product:active .icon-uncheck {
   display: flex;
 }
 

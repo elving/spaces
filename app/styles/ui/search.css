@@ -63,7 +63,9 @@
 }
 
 .search-type-current:hover .icon-fill,
+.search-type-current:active .icon-fill,
 .search-filters-toggle:hover .icon-fill,
+.search-filters-toggle:active .icon-fill,
 .search-type-current--is-active .icon-fill,
 .search-filters-toggle--is-active .icon-fill {
   fill: #439fe0;

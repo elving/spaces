@@ -34,7 +34,8 @@
   pointer-events: none;
 }
 
-.select .Select-control:hover {
+.select .Select-control:hover,
+.select .Select-control:active {
   box-shadow: none;
 }
 
@@ -104,7 +105,9 @@
 }
 
 .select.Select--multi .Select-item-icon:hover,
-.select.Select--multi .Select-value-icon:hover {
+.select.Select--multi .Select-item-icon:active,
+.select.Select--multi .Select-value-icon:hover,
+.select.Select--multi .Select-value-icon:active {
   color: #e74c3c;
   background-color: #f8f8f8;
 }
@@ -132,7 +135,8 @@
   right: 30px;
 }
 
-.select .Select-clear-zone:hover {
+.select .Select-clear-zone:hover,
+.select .Select-clear-zone:active {
   color: #e74c3c;
 }
 
@@ -146,7 +150,8 @@
 }
 
 .select.is-open .Select-arrow,
-.select .Select-arrow-zone:hover > .Select-arrow {
+.select .Select-arrow-zone:hover > .Select-arrow,
+.select .Select-arrow-zone:active > .Select-arrow {
   border-top-color: #a0a0a0;
 }
 

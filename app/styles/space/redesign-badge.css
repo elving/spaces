@@ -12,7 +12,8 @@
 }
 
 .redesign-badge-link,
-.redesign-badge-link:hover {
+.redesign-badge-link:hover,
+.redesign-badge-link:active {
   text-decoration: none;
 }
 

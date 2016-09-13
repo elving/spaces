@@ -179,7 +179,8 @@
   background-color: #2ecc71;
 }
 
-.button--primary-outline:not(.follow-button--following) .icon-fill {
+.button--primary-outline:not(.follow-button--following) .icon-fill,
+.button--primary-outline:not(.follow-button--following):active .icon-fill {
   fill: #2ecc71;
 }
 
@@ -338,7 +339,8 @@
   content: "Liked"
 }
 
-.like-button--liked.like-button--show-text:hover::after {
+.like-button--liked.like-button--show-text:hover::after,
+.like-button--liked.like-button--show-text:active::after {
   content: "Unlike"
 }
 
@@ -356,6 +358,7 @@
   content: "Following"
 }
 
-.follow-button--following.follow-button--show-text:hover::after {
+.follow-button--following.follow-button--show-text:hover::after,
+.follow-button--following.follow-button--show-text:active::after {
   content: "Unfollow"
 }

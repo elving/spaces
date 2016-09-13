@@ -3,7 +3,8 @@
   padding: 10px;
 }
 
-.card-title-container:hover {
+.card-title-container:hover,
+.card-title-container:active {
   text-decoration: none;
 }
 

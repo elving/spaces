@@ -1,14 +1,14 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
-import size from 'lodash/size'
 import axios from 'axios'
-import concat from 'lodash/concat'
-import isEmpty from 'lodash/isEmpty'
+import filter from 'lodash/filter'
+import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
-import Space from '../space/Card'
 import Loader from '../common/Loader'
-import Product from '../product/Card'
+import Spaces from '../space/Spaces'
+import Products from '../product/Products'
+
 import toStringId from '../../api/utils/toStringId'
 
 export default class ProfileLikes extends Component {
@@ -20,112 +20,127 @@ export default class ProfileLikes extends Component {
     profile: {}
   }
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      offset: 0,
-      results: [],
-      isFetching: true,
-      hasFetched: false,
-      lastResults: []
-    }
+  state = {
+    likes: [],
+    isWaiting: true,
+    showSpaces: true,
+    showProducts: false
   }
 
   componentDidMount() {
-    const { props } = this
-
-    if (isEmpty(props.spaces)) {
-      this.fetch()
-    }
+    this.fetch()
   }
 
   fetch = () => {
-    const { props, state } = this
+    const { props } = this
 
     axios
-      .get(`/ajax/likes/user/${toStringId(props.profile)}/`)
-      .then(({ data }) => {
-        const results = get(data, 'results', [])
-
+      .get(`/ajax/designers/${toStringId(props.profile)}/likes/`)
+      .then(({ data: likes }) => {
         this.setState({
-          offset: state.offset + size(results),
-          results: concat(state.results, results),
-          isFetching: false,
-          hasFetched: true,
-          lastResults: results
+          likes,
+          isWaiting: false
         })
       })
       .catch(() => {
         this.setState({
-          isFetching: false
+          isWaiting: false
         })
       })
   }
 
-  renderPagination() {
-    const { state } = this
-
-    return size(state.results) < state.count ? (
-      <div className="grid-pagination">
-        <button
-          onClick={this.fetch}
-          disabled={state.isFetching}
-          className="button button--outline"
-        >
-          {state.isFetching ? 'Loading More Likes...' : 'Load More Likes'}
-        </button>
-      </div>
-    ) : null
+  showSpaces = () => {
+    this.setState({
+      showSpaces: true,
+      showProducts: false
+    })
   }
 
-  renderLikes() {
-    const { props, state } = this
+  showProducts = () => {
+    this.setState({
+      showSpaces: false,
+      showProducts: true
+    })
+  }
 
-    const hasNoResults = (
-      !state.isFetching &&
-      isEmpty(state.results) &&
-      isEmpty(get(props.spaces, 'results', []))
-    )
+  renderNavigation() {
+    const { state } = this
 
     return (
-      <div className="grid">
-        <div className="grid-items">
-          {hasNoResults ? (
-            <p className="grid-items-empty">
-              {`Nothing liked by ${get(props.profile, 'name')} yet...`}
-            </p>
-          ) : (
-            map(state.results, like => {
-              const parent = get(like, 'parent', {})
-
-              if (isEmpty(parent)) {
-                return null
-              }
-
-              return like.parentType === 'space' ? (
-                <Space key={toStringId(parent)} {...parent} />
-              ) : (
-                <Product key={toStringId(parent)} {...parent} />
-              )
-            })
-          )}
-        </div>
+      <div className="navpills" data-links="2">
+        <button
+          type="button"
+          onClick={this.showSpaces}
+          className={classNames({
+            'navpills-link': true,
+            'navpills-link--active': state.showSpaces
+          })}
+        >
+          Spaces
+        </button>
+        <button
+          type="button"
+          onClick={this.showProducts}
+          className={classNames({
+            'navpills-link': true,
+            'navpills-link--active': state.showProducts
+          })}
+        >
+          Products
+        </button>
       </div>
     )
+  }
+
+  renderContent() {
+    const { props, state } = this
+
+    const user = get(props.profile, 'name', '')
+
+    const spaces = filter(state.likes, like =>
+      like.parentType === 'space'
+    )
+
+    const products = filter(state.likes, like =>
+      like.parentType === 'product'
+    )
+
+    if (state.showSpaces) {
+      return (
+        <Spaces
+          params={{
+            id: map(spaces, space => toStringId(get(space, 'parent')))
+          }}
+          emptyMessage={`${user} hasn't liked any spaces yet...`}
+        />
+      )
+    } else if (state.showProducts) {
+      return (
+        <Products
+          params={{
+            id: map(products, product => toStringId(get(product, 'parent')))
+          }}
+          emptyMessage={`${user} hasn't liked any products yet...`}
+        />
+      )
+    }
+
+    return null
   }
 
   render() {
     const { state } = this
 
-    return state.isFetching && !state.hasFetched ? (
-      <div className="grids">
-        <Loader size="52" />
-      </div>
-    ) : (
-      <div className="grids">
-        {this.renderLikes()}
-        {this.renderPagination()}
+    return (
+      <div className="user-profile-content-likes">
+        {state.isWaiting ? (
+          <Loader size="52" />
+        ) : (
+          <div style={{ width: '100%' }}>
+            {this.renderNavigation()}
+            {this.renderContent()}
+          </div>
+        )}
       </div>
     )
   }

@@ -37,7 +37,7 @@
   pointer-events: none;
 }
 
-.tooltip:hover::before, .tooltip:hover::after {
+.tooltip:hover::before, .tooltip:hover::after,
+.tooltip:active::before, .tooltip:active::after {
   opacity: 1;
-  /*transition: opacity 0.15s linear;*/
 }

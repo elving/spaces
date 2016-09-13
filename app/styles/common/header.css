@@ -35,7 +35,8 @@
   justify-content: center;
 }
 
-.header-link:hover {
+.header-link:hover,
+.header-link:active {
   color: #333333;
   text-decoration: none;
 }

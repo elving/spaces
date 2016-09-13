@@ -50,3 +50,9 @@ a:active {
 .ReactModal__Body--open .user-is-onboarding {
   padding-top: 0;
 }
+
+@media (max-width: 736px) {
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+}

@@ -15,3 +15,10 @@
 .card-tags::after {
   content: "\00a0";
 }
+
+@media (max-width: 736px) {
+  .card-tags:hover,
+  .card-tags:active {
+    -webkit-overflow-scrolling: touch;
+  }
+}

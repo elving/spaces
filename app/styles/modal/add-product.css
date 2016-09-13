@@ -191,3 +191,9 @@
 .add-product-modal-spaces-actions .button {
   width: 100%;
 }
+
+@media (max-width: 736px) {
+  .add-product-modal-spaces-list {
+    -webkit-overflow-scrolling: touch;
+  }
+}

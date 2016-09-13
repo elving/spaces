@@ -88,3 +88,11 @@
   flex-shrink: 0;
   margin-right: 10px;
 }
+
+@media (max-width: 736px) {
+  .share-popup {
+    left: 0 !important;
+    width: 100% !important;
+    right: auto !important;
+  }
+}

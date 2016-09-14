@@ -59,7 +59,7 @@
   font-size: 32px;
   font-weight: 300;
   text-align: center;
-  line-height: 42px;
+  line-height: 36px;
   margin: 0 auto 15px;
 }
 
@@ -212,7 +212,11 @@
   }
 
   .add-product-modal-left {
-    min-height: auto;
+    min-height: inherit;
+  }
+
+  .add-product-modal-right {
+    min-height: 100%;
   }
 
   .add-product-modal .product-card {

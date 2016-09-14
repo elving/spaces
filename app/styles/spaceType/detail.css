@@ -94,4 +94,20 @@
     font-weight: 400;
     line-height: 26px;
   }
+
+  .spaceType-detail-subheader {
+    flex-direction: column;
+  }
+
+  .spaceType-detail-counters {
+    margin-bottom: 15px;
+  }
+
+  .spaceType-detail-counters .spaceType-detail-counter:last-child {
+    margin-right: 0;
+  }
+
+  .spaceType-detail .navpills {
+    margin-top: 15px;
+  }
 }

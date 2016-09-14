@@ -165,12 +165,12 @@ export default class ProductCard extends Component {
   }
 
   renderActions() {
-    const { props } = this
+    const { props, context } = this
 
     return (
       <div className="product-card-actions card-actions-container">
         <div className="card-actions card-actions--left">
-          {props.mainAction === 'add' ? (
+          {props.mainAction === 'add' && context.userLoggedIn() ? (
             <button
               type="button"
               onClick={props.onAddButtonClick}
@@ -179,6 +179,15 @@ export default class ProductCard extends Component {
             >
               <MaterialDesignIcon name="add" fill="#2ECC71" />
             </button>
+          ) : null}
+          {!context.userLoggedIn() ? (
+            <a
+              href="/login/"
+              className="card-action button button--icon"
+              data-action="add"
+            >
+              <MaterialDesignIcon name="add" fill="#2ECC71" />
+            </a>
           ) : null}
           {props.mainAction === 'remove' ? (
             <button

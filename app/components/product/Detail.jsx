@@ -93,8 +93,13 @@ class ProductDetail extends Component {
   }
 
   openAddModal = () => {
-    const { props } = this
-    props.openAddProductModal(props.product)
+    const { props, context } = this
+
+    if (context.userLoggedIn()) {
+      props.openAddProductModal(props.product)
+    } else {
+      window.location.href = '/login/'
+    }
   }
 
   openSharePopup = () => {

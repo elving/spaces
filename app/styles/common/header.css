@@ -116,6 +116,7 @@
 
 .mobile-nav-link:active,
 .mobile-nav-link--active {
+  text-decoration: none;
   background-color: #f8f8f8;
 }
 

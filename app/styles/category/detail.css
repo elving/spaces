@@ -108,8 +108,19 @@
     line-height: 26px;
   }
 
-  .page-category-detail #spaces {
-    margin: 15px auto 0;
-    padding: 15px 0;
+  .category-detail-subheader {
+    flex-direction: column;
+  }
+
+  .category-detail-counters {
+    margin-bottom: 15px;
+  }
+
+  .category-detail-counters .category-detail-counter:last-child {
+    margin-right: 0;
+  }
+
+  .category-detail .navpills {
+    margin-top: 15px;
   }
 }

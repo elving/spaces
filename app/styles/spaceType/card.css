@@ -94,3 +94,7 @@
 .space-type-card-stat-text {
   font-size: 14px;
 }
+
+.space-type-card-follow {
+  flex-shrink: 0;
+}

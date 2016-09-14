@@ -64,18 +64,6 @@
   overflow: hidden;
 }
 
-/* .profile-card-follow {
-  font-size: 14px;
-  flex: 1;
-  padding: 4px 8px;
-  max-width: 100px;
-  min-height: 33px;
-}
-
-.profile-card-follow .icon {
-  margin-right: 5px;
-} */
-
 .profile-card-bio {
   font-size: 16px;
   line-height: 22px;
@@ -111,4 +99,8 @@
 
 .profile-card-stat-text {
   font-size: 14px;
+}
+
+.profile-card-follow {
+  flex-shrink: 0;
 }

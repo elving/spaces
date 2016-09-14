@@ -94,3 +94,7 @@
 .category-card-stat-text {
   font-size: 14px;
 }
+
+.category-card-follow {
+  flex-shrink: 0;
+}

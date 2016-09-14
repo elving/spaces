@@ -52,10 +52,13 @@ a:active {
 }
 
 @media (max-width: 736px) {
+  html,
   body {
-    height: auto;
-    min-height: 100%;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
+    height: inherit !important;
+    overflow: inherit !important;
+    min-height: inherit !important;
+    overflow-y: inherit !important;
+    overflow-x: inherit !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 }

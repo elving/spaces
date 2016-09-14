@@ -316,8 +316,10 @@ class ProductDetail extends Component {
           className="product-detail-action collect-button button"
           data-action="add"
         >
-          <MaterialDesignIcon name="add" />
-          Collect
+          <span className="button-text">
+            <MaterialDesignIcon name="add" />
+            Collect
+          </span>
         </button>
 
         <LikeButton
@@ -335,8 +337,10 @@ class ProductDetail extends Component {
             onClick={this.openSharePopup}
             className="button share-button"
           >
-            <MaterialDesignIcon name="send" />
-            Share
+            <span className="button-text">
+              <MaterialDesignIcon name="send" />
+              Share
+            </span>
           </button>
           {this.renderSharePopup()}
         </div>

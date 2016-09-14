@@ -131,3 +131,9 @@
 .space-card-designer-link .user-curator-badge {
   margin-left: 2px;
 }
+
+@media (max-width: 736px) {
+  .space-card-images-container {
+    padding-top: 55px !important;
+  }
+}

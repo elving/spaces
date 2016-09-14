@@ -71,40 +71,6 @@
   width: 47px;
 }
 
-@media (max-width: 768px) {
-  .header .search,
-  .header .admin-nav,
-  .header .header-link,
-  .header .header-link-divider {
-    display: none;
-  }
-
-  .header-nav > .header-link:first-child {
-    display: flex;
-  }
-
-  .header .add-product-button {
-    width: 40px;
-    height: 35px;
-    margin: 0 0 0 15px;
-    padding: 0;
-    min-height: 35px;
-  }
-
-  .header .header-container-right {
-    flex-direction: row-reverse;
-  }
-
-  .header .current-user-nav {
-    border-left: 0 none;
-    padding-left: 0;
-  }
-
-  .header [data-action="toggleMobileNav"] {
-    display: flex;
-  }
-}
-
 .header [data-action="toggleMobileNav"] {
   display: none;
 }
@@ -148,6 +114,41 @@
   justify-content: flex-start;
 }
 
+.mobile-nav-link:active,
 .mobile-nav-link--active {
   background-color: #f8f8f8;
+}
+
+@media (max-width: 768px) {
+  .header .search,
+  .header .admin-nav,
+  .header .header-link,
+  .header .header-link-divider {
+    display: none;
+  }
+
+  .header-nav > .header-link:first-child {
+    display: flex;
+  }
+
+  .header .add-product-button {
+    width: 40px;
+    height: 35px;
+    margin: 0 0 0 15px;
+    padding: 0;
+    min-height: 35px;
+  }
+
+  .header .header-container-right {
+    flex-direction: row-reverse;
+  }
+
+  .header .current-user-nav {
+    border-left: 0 none;
+    padding-left: 0;
+  }
+
+  .header [data-action="toggleMobileNav"] {
+    display: flex !important;
+  }
 }

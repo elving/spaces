@@ -148,3 +148,13 @@
     transform: scale3d(5, 5, 1);
   }
 }
+
+@media (max-width: 736px) {
+  .product-card-image-container {
+    padding-top: 55px !important;
+  }
+
+  .card-actions {
+     display: flex !important;
+  }
+}

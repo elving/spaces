@@ -55,7 +55,9 @@ module.exports = {
       }
     }, {
       test: /\.css$/,
-      loader: ExtractTextPlugin.extract('style', 'css-loader?sourceMap!postcss-loader!'),
+      loader: ExtractTextPlugin.extract(
+        'style', 'css-loader?sourceMap!postcss-loader!'
+      ),
       exclude: /node_modules/,
       include: path.join(__dirname, 'build/styles')
     }]

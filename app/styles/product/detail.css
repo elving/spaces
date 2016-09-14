@@ -232,6 +232,19 @@
     margin-right: 5px;
   }
 
+  .product-detail-actions {
+    flex-direction: column;
+  }
+
+  .product-detail-action {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .product-detail-actions > .product-detail-action:last-child {
+    margin-bottom: 0;
+  }
+
   [data-action="editProduct"] {
     display: none;
   }

@@ -222,3 +222,14 @@
   width: 75%;
   height: 13px;
 }
+
+@media (max-width: 736px) {
+  .product-card--popup-open .product-card-overlay {
+    display: none !important;
+  }
+
+  .card-actions-overlay {
+    opacity: 0 !important;
+    display: block !important;
+  }
+}

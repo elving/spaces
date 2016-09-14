@@ -53,6 +53,7 @@ a:active {
 
 @media (max-width: 736px) {
   body {
+    overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
   }
 }

@@ -32,7 +32,9 @@ export default class CardTitle extends Component {
     ) : (
       <span className={`${className} card-title-container`}>
         <div className="card-subtitle">{subTitle}</div>
-        <div className="card-title">{title}</div>
+        <div className="card-title" title={title}>
+          {truncate(title, { length: 65 })}
+        </div>
         {this.props.children}
       </span>
     )

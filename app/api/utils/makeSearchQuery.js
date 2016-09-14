@@ -1,5 +1,6 @@
 import has from 'lodash/has'
 import split from 'lodash/split'
+import compact from 'lodash/compact'
 import isArray from 'lodash/isArray'
 
 export default (params = {}) => {
@@ -28,33 +29,33 @@ export default (params = {}) => {
 
   if (has(params, 'brands')) {
     if (isArray(params.brands)) {
-      query.brands = { $in: params.brands }
+      query.brands = { $in: compact(params.brands) }
     } else {
-      query.brands = { $in: split(params.brands, ',') }
+      query.brands = { $in: compact(split(params.brands, ',')) }
     }
   }
 
   if (has(params, 'colors')) {
     if (isArray(params.colors)) {
-      query.colors = { $in: params.colors }
+      query.colors = { $in: compact(params.colors) }
     } else {
-      query.colors = { $in: split(params.colors, ',') }
+      query.colors = { $in: compact(split(params.colors, ',')) }
     }
   }
 
   if (has(params, 'categories')) {
     if (isArray(params.categories)) {
-      query.categories = { $in: params.categories }
+      query.categories = { $in: compact(params.categories) }
     } else {
-      query.categories = { $in: split(params.categories, ',') }
+      query.categories = { $in: compact(split(params.categories, ',')) }
     }
   }
 
   if (has(params, 'spaceTypes')) {
     if (isArray(params.spaceTypes)) {
-      query.spaceTypes = { $in: params.spaceTypes }
+      query.spaceTypes = { $in: compact(params.spaceTypes) }
     } else {
-      query.spaceTypes = { $in: split(params.spaceTypes, ',') }
+      query.spaceTypes = { $in: compact(split(params.spaceTypes, ',')) }
     }
   }
 
@@ -72,7 +73,7 @@ export default (params = {}) => {
 
   if (has(params, 'createdBy')) {
     if (isArray(params.createdBy)) {
-      query.createdBy = { $in: params.createdBy }
+      query.createdBy = { $in: compact(params.createdBy) }
     } else {
       query.createdBy = params.createdBy
     }
@@ -80,11 +81,12 @@ export default (params = {}) => {
 
   if (has(params, 'id')) {
     if (isArray(params.id)) {
-      query._id = { $in: params.id }
+      query._id = { $in: compact(params.id) }
     } else {
       query._id = params.id
     }
   }
 
+  console.log('query', query)
   return query
 }

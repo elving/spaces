@@ -107,14 +107,18 @@ export default class LikeButton extends Component {
           disabled={state.isSaving}
           className={btnClassName}
         >
-          <MaterialDesignIcon name="like" />
+          <span className="button-text">
+            <MaterialDesignIcon name="like" />
+          </span>
         </button>
       ) : (
         <a
           href="/login/"
           className={btnClassName}
         >
-          <MaterialDesignIcon name="like" />
+          <span className="button-text">
+            <MaterialDesignIcon name="like" />
+          </span>
         </a>
       )
     )

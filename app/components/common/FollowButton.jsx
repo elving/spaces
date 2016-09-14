@@ -122,7 +122,9 @@ export default class FollowButton extends Component {
           disabled={state.isSaving}
           className={btnClassName}
         >
-          <MaterialDesignIcon name="follow" />
+          <span className="button-text">
+            <MaterialDesignIcon name="follow" />
+          </span>
         </button>
       )
     }
@@ -130,7 +132,9 @@ export default class FollowButton extends Component {
     if (!props.hideWhenLoggedOut) {
       return (
         <a href="/login/" className={btnClassName}>
-          <MaterialDesignIcon name="follow" />
+          <span className="button-text">
+            <MaterialDesignIcon name="follow" />
+          </span>
         </a>
       )
     }

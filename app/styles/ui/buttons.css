@@ -331,16 +331,16 @@
   fill: #ffffff;
 }
 
-.like-button--show-text::after {
+.like-button--show-text .button-text::after {
   content: "Like"
 }
 
-.like-button--liked.like-button--show-text::after {
+.like-button--liked.like-button--show-text .button-text::after {
   content: "Liked"
 }
 
-.like-button--liked.like-button--show-text:hover::after,
-.like-button--liked.like-button--show-text:active::after {
+.like-button--liked.like-button--show-text:hover .button-text::after,
+.like-button--liked.like-button--show-text:active .button-text::after {
   content: "Unlike"
 }
 
@@ -350,15 +350,15 @@
   background-color: #e74c3c;
 }
 
-.follow-button--show-text::after {
+.follow-button--show-text .button-text::after {
   content: "Follow"
 }
 
-.follow-button--following.follow-button--show-text::after {
+.follow-button--following.follow-button--show-text .button-text::after {
   content: "Following"
 }
 
-.follow-button--following.follow-button--show-text:hover::after,
-.follow-button--following.follow-button--show-text:active::after {
+.follow-button--following.follow-button--show-text:hover .button-text::after,
+.follow-button--following.follow-button--show-text:active .button-text::after {
   content: "Unfollow"
 }

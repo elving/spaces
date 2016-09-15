@@ -6,14 +6,16 @@ import reduce from 'lodash/reduce'
 import compact from 'lodash/compact'
 import isEmpty from 'lodash/isEmpty'
 
-import { default as searchSpaces } from '../space/search'
-import { default as searchProducts } from '../product/search'
-import { default as getFollowsByUser } from '../follow/getByUser'
+import searchSpaces from '../space/search'
+import searchProducts from '../product/search'
+import getFollowsByUser from '../follow/getByUser'
 
 export default (user) => (
   new Promise(async (resolve, reject) => {
     try {
       const follows = await getFollowsByUser(user)
+
+      console.log('follows', follows)
 
       if (isEmpty(follows)) {
         return resolve({
@@ -39,6 +41,8 @@ export default (user) => (
           [key]: compact(concat([], params[key], parent))
         })
       }, {})
+
+      console.log('searchParams', searchParams)
 
       const spaces = await searchSpaces(searchParams, 'or')
       const products = await searchProducts(searchParams, 'or')

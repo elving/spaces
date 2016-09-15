@@ -87,6 +87,5 @@ export default (params = {}) => {
     }
   }
 
-  console.log('query', query)
   return query
 }

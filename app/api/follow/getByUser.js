@@ -5,10 +5,11 @@ import toIds from '../utils/toIds'
 import toJSON from '../utils/toJSON'
 import parseError from '../utils/parseError'
 import toIdsFromPath from '../utils/toIdsFromPath'
-import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default (createdBy) => (
+import { saveToCache } from '../cache'
+
+export default createdBy => (
   new Promise(async (resolve, reject) => {
     const key = `follow-user-${createdBy}`
 

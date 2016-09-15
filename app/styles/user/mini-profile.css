@@ -53,3 +53,7 @@
   font-size: 12px;
   margin-right: 10px;
 }
+
+.user-mini-profile-info .follow-button {
+  flex-shrink: 0;
+}

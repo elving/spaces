@@ -2,6 +2,7 @@ import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
 import slice from 'lodash/slice'
+import isEmpty from 'lodash/isEmpty'
 import reverse from 'lodash/reverse'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
@@ -160,7 +161,7 @@ export default class SpaceCard extends Component {
           <Loader size={50} />
         ) : null}
 
-        {state.imagesAreLoaded ? (
+        {state.imagesAreLoaded && !isEmpty(state.images) ? (
           map(state.images, src =>
             <div
               key={`space-image-${src}`}
@@ -168,6 +169,12 @@ export default class SpaceCard extends Component {
               className="space-card-image"
             />
           )
+        ) : null}
+
+        {isEmpty(state.images) ? (
+          <div className="space-card-empty">
+            No products in this space yet...
+          </div>
         ) : null}
       </div>
     )

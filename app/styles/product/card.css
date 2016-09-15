@@ -167,6 +167,7 @@
 }
 
 .product-card-add-icon-container {
+  min-height: 320px;
   align-items: center;
   flex-direction: column;
 }

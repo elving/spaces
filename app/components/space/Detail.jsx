@@ -533,30 +533,39 @@ class SpaceDetail extends Component {
   renderProducts() {
     const { props, state, context } = this
 
+    const isOwner = context.currentUserIsOwner(props.space)
     const spaceType = toLower(get(props.space, 'spaceType.name', 'space'))
     const suggestions = get(props.space, 'spaceType.categories', [])
 
     return (
       <div className="grid">
         <div id="products" className="grid-items">
-          {context.currentUserIsOwner(props.space) ? (
+          {isOwner ? (
             <AddProductCard
               message={`Add the perfect products for this ${spaceType}.`}
               categories={suggestions}
             />
           ) : null}
 
-          {map(state.products, product =>
-            <Product
-              {...product}
-              key={toStringId(product)}
-              mainAction={
-                context.currentUserIsOwner(props.space) ? 'remove' : 'add'
-              }
-              onAddButtonClick={() => props.openAddProductModal(product)}
-              onRemoveButtonClick={() => this.removeProduct(product)}
-            />
-          )}
+          {!isEmpty(state.products) ? (
+            map(state.products, product =>
+              <Product
+                {...product}
+                key={toStringId(product)}
+                mainAction={
+                  context.currentUserIsOwner(props.space) ? 'remove' : 'add'
+                }
+                onAddButtonClick={() => props.openAddProductModal(product)}
+                onRemoveButtonClick={() => this.removeProduct(product)}
+              />
+            )
+          ) : null}
+
+          {!isOwner && isEmpty(state.products) ? (
+            <div className="space-detail-empty">
+              No products in this space yet...
+            </div>
+          ) : null}
         </div>
       </div>
     )

@@ -132,6 +132,15 @@
   margin-left: 2px;
 }
 
+.space-card-empty {
+  color: #999;
+  font-size: 20px;
+  text-align: center;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
 @media (max-width: 736px) {
   .space-card-images-container {
     padding-top: 55px !important;

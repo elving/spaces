@@ -111,8 +111,8 @@
 }
 
 .product-detail-description {
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 22px;
+  line-height: 32px;
   white-space: pre-line;
   max-width: 960px;
 }
@@ -209,6 +209,11 @@
 
   .product-detail-description-title {
     font-size: 22px;
+  }
+
+  .product-detail-description {
+    font-size: 16px;
+    line-height: 24px;
   }
 
   .product-detail-url,

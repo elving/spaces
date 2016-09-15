@@ -171,7 +171,7 @@ export default class SpaceCard extends Component {
           )
         ) : null}
 
-        {isEmpty(state.images) ? (
+        {!state.imagesAreLoading && isEmpty(state.images) ? (
           <div className="space-card-empty">
             No products in this space yet...
           </div>
@@ -328,7 +328,7 @@ export default class SpaceCard extends Component {
       <RedesignPopup
         isOpen={state.redesignPopupIsOpen}
         spaceId={toStringId(props)}
-        spaceType={toStringId(props.spaceType)}
+        spaceType={props.spaceType}
         className="redesign-popup"
         onClickClose={this.closeRedesignPopup}
       />

@@ -117,6 +117,12 @@
   justify-content: space-between;
 }
 
+.add-product-modal-space:disabled,
+.add-product-modal-space[disabled] {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 .add-product-modal-space:hover,
 .add-product-modal-space:active {
   background-color: #fafafa;

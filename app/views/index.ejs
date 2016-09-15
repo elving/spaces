@@ -46,11 +46,11 @@
     <meta name="msapplication-config" content="https://d2xpms98gwggxd.cloudfront.net/static/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,300,100,400italic,700,900&subset=latin,latin-ext"/>
+
     <% if (env === 'production') { %>
       <link rel="stylesheet" href="https://d2xpms98gwggxd.cloudfront.net/static/bundle.css?<%= version %>"/>
     <% } %>
-
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,300,100,400italic,700,900&subset=latin,latin-ext"/>
 
     <% if (env !== 'production') { %>
       <script>window.__REACT_PROPS__ = <%- JSON.stringify(reactProps) %>;</script>

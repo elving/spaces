@@ -416,7 +416,7 @@ class SpaceDetail extends Component {
       <RedesignPopup
         isOpen={state.redesignPopupIsOpen}
         spaceId={toStringId(props.space)}
-        spaceType={toStringId(get(props.space, 'spaceType'))}
+        spaceType={get(props.space, 'spaceType')}
         className="redesign-popup"
         onClickClose={this.closeRedesignPopup}
       />

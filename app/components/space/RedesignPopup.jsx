@@ -1,5 +1,6 @@
 import get from 'lodash/get'
 import axios from 'axios'
+import toLower from 'lodash/toLower'
 import isEmpty from 'lodash/isEmpty'
 import serialize from 'form-serialize'
 import classNames from 'classnames'
@@ -7,6 +8,8 @@ import React, { Component, PropTypes } from 'react'
 
 import Popup from '../common/Popup'
 import PopupTitle from '../common/PopupTitle'
+
+import toStringId from '../../api/utils/toStringId'
 
 export default class RedesignPopup extends Component {
   static contextTypes = {
@@ -110,7 +113,12 @@ export default class RedesignPopup extends Component {
         <input type="hidden" name="_csrf" value={context.csrf} />
         <input type="hidden" name="_method" value="POST" />
 
-        <input type="hidden" name="spaceType" value={props.spaceType} />
+        <input
+          type="hidden"
+          name="spaceType"
+          value={toStringId(props.spaceType)}
+        />
+
         <input type="hidden" name="originalSpace" value={props.spaceId} />
 
         <div className="form-group form-group--small">
@@ -200,7 +208,7 @@ export default class RedesignPopup extends Component {
         onClickClose={this.closePopup}
       >
         <PopupTitle onClickClose={this.closePopup}>
-          Redesign this space
+          Redesign this {toLower(get(props.spaceType, 'name', 'space'))}
         </PopupTitle>
         <div className="popup-content">
           {this.renderForm()}

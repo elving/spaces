@@ -1,19 +1,16 @@
 import get from 'lodash/get'
-import map from 'lodash/map'
+import size from 'lodash/size'
+import filter from 'lodash/filter'
 import isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
-import SpaceCard from '../space/Card'
-import ProductCard from '../product/Card'
-import AddProductModal from '../modal/AddProduct'
+import Spaces from '../space/Spaces'
+import Products from '../product/Products'
 import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
-import addProductModalContainer from '../container/AddProductModal'
 
-import toStringId from '../../api/utils/toStringId'
-
-class Feed extends Component {
+export default class Feed extends Component {
   static propTypes = {
     feed: PropTypes.object,
     location: PropTypes.object
@@ -28,34 +25,82 @@ class Feed extends Component {
     currentUserIsOnboarding: PropTypes.func
   }
 
-  renderCards() {
-    const { props } = this
+  state = {
+    showSpaces: true,
+    showProducts: false
+  }
+
+  showSpaces = () => {
+    this.setState({
+      showSpaces: true,
+      showProducts: false
+    })
+  }
+
+  showProducts = () => {
+    this.setState({
+      showSpaces: false,
+      showProducts: true
+    })
+  }
+
+  renderNavigation() {
+    const { state } = this
 
     return (
-      <div className="grid">
-        <div className="grid-items">
-          {map(get(props.feed, 'results', []), result => {
-            const type = get(result, 'type')
-
-            if (type === 'product') {
-              return (
-                <ProductCard
-                  {...result}
-                  key={toStringId(result)}
-                  onAddButtonClick={() => props.openAddProductModal(result)}
-                />
-              )
-            } else if (type === 'space') {
-              return (
-                <SpaceCard key={toStringId(result)} {...result} />
-              )
-            }
-
-            return null
+      <div className="navpills" data-links="2">
+        <button
+          type="button"
+          onClick={this.showSpaces}
+          className={classNames({
+            'navpills-link': true,
+            'navpills-link--active': state.showSpaces
           })}
-        </div>
+        >
+          Spaces
+        </button>
+        <button
+          type="button"
+          onClick={this.showProducts}
+          className={classNames({
+            'navpills-link': true,
+            'navpills-link--active': state.showProducts
+          })}
+        >
+          Products
+        </button>
       </div>
     )
+  }
+
+  renderContent() {
+    const { props, state } = this
+
+    const feed = get(props.feed, 'results', [])
+    const spaces = filter(feed, item => get(item, 'type') === 'space')
+    const products = filter(feed, item => get(item, 'type') === 'product')
+
+    if (state.showSpaces) {
+      return (
+        <Spaces
+          spaces={{
+            count: size(spaces),
+            results: spaces
+          }}
+        />
+      )
+    } else if (state.showProducts) {
+      return (
+        <Products
+          products={{
+            count: size(products),
+            results: products
+          }}
+        />
+      )
+    }
+
+    return null
   }
 
   render() {
@@ -72,18 +117,11 @@ class Feed extends Component {
             <CreateSpaceBanner />
           ) : null}
 
-          <AddProductModal
-            product={props.addProductModalCurrent}
-            onClose={props.closeAddProductModal}
-            isVisible={props.addProductModalIsOpen}
-          />
-
           <h1 className="page-title">Your Feed</h1>
 
-          <div className="grids">
-            <div className="grid-container">
-              {this.renderCards()}
-            </div>
+          <div className="feed-content">
+            {this.renderNavigation()}
+            {this.renderContent()}
           </div>
         </Layout>
       ) : (
@@ -111,5 +149,3 @@ class Feed extends Component {
     )
   }
 }
-
-export default addProductModalContainer(Feed)

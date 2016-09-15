@@ -185,13 +185,17 @@ export default class AddProductModal extends Component {
       ? without(products, toStringId(props.product))
       : concat(products, toStringId(props.product))
 
-    this.setState({ isTogglingProduct: true }, () => {
+    this.setState({
+      addingTo: space,
+      isTogglingProduct: true
+    }, () => {
       axios
         .put(`/ajax/spaces/${space}/`, {
           _csrf: context.csrf,
           products: updatedProducts
         }).then(() => {
           this.setState({
+            addingTo: null,
             spacesHashTable: assign({}, state.spacesHashTable, {
               [space]: updatedProducts
             }),
@@ -199,10 +203,24 @@ export default class AddProductModal extends Component {
           })
         }).catch(() => {
           this.setState({
+            addingTo: null,
             isTogglingProduct: false
           })
         })
     })
+  }
+
+  isAddingToSpace(space) {
+    const { state } = this
+    const spaceId = toStringId(space)
+    const addingToId = toStringId(state.addingTo)
+
+    return (
+      !isEmpty(spaceId) &&
+      !isEmpty(addingToId) &&
+      state.addingTo === space &&
+      state.isTogglingProduct
+    )
   }
 
   renderContent() {
@@ -220,10 +238,13 @@ export default class AddProductModal extends Component {
   }
 
   renderCloseButton() {
+    const { state } = this
+
     return (
       <button
         type="button"
         onClick={this.closeModal}
+        disabled={state.isTogglingProduct}
         className={classNames({
           button: true,
           'button--icon': true,
@@ -295,6 +316,7 @@ export default class AddProductModal extends Component {
           <button
             type="button"
             onClick={this.showForm}
+            disabled={state.isTogglingProduct}
             className="button button--primary"
           >
             Create a space
@@ -307,6 +329,7 @@ export default class AddProductModal extends Component {
   renderSpace(space) {
     const { props, state } = this
     const spaceId = toStringId(space)
+
     const hasProduct = productInSpace(
       state.spacesHashTable, space, toStringId(props.product)
     )
@@ -316,6 +339,7 @@ export default class AddProductModal extends Component {
         key={spaceId}
         type="button"
         onClick={() => this.toggleProduct(spaceId, hasProduct)}
+        disabled={state.isTogglingProduct}
         className={classNames({
           'add-product-modal-space': true,
           'add-product-modal-space--has-product': hasProduct
@@ -325,7 +349,7 @@ export default class AddProductModal extends Component {
           <small className="add-product-modal-space-room">
             {get(space, 'spaceType.name')}
           </small>
-          {get(space, 'name')}
+          {this.isAddingToSpace(spaceId) ? 'Adding...' : get(space, 'name')}
         </span>
         {hasProduct ? (
           <span className="add-product-modal-space-actions">

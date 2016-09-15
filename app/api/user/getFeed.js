@@ -15,8 +15,6 @@ export default (user) => (
     try {
       const follows = await getFollowsByUser(user)
 
-      console.log('follows', follows)
-
       if (isEmpty(follows)) {
         return resolve({
           count: 0,
@@ -37,12 +35,12 @@ export default (user) => (
           key = 'spaceTypes'
         }
 
-        return assign({}, params, {
-          [key]: compact(concat([], params[key], parent))
-        })
-      }, {})
+        const param = compact(concat([], params[key], parent))
 
-      console.log('searchParams', searchParams)
+        return !isEmpty(param) ? assign({}, params, {
+          [key]: param
+        }) : params
+      }, {})
 
       const spaces = await searchSpaces(searchParams, 'or')
       const products = await searchProducts(searchParams, 'or')

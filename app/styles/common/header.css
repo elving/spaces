@@ -167,4 +167,8 @@
   .header [data-action="toggleMobileNav"] {
     display: flex !important;
   }
+
+  .header-main-navigation {
+    display: none;
+  }
 }

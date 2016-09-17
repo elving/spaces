@@ -30,9 +30,11 @@ class SpaceTypeDetail extends Component {
   constructor(props) {
     super(props)
 
+    const spacesCount = get(props.spaceType, 'spacesCount', 0)
+
     this.state = {
-      showSpaces: true,
-      showProducts: false,
+      showSpaces: spacesCount > 0,
+      showProducts: spacesCount === 0,
       followersCount: get(props.spaceType, 'followersCount', 0),
     }
   }

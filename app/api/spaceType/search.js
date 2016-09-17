@@ -1,11 +1,11 @@
 import get from 'lodash/get'
 import size from 'lodash/size'
-import isEmpty from 'lodash/isEmpty'
 import parseInt from 'lodash/parseInt'
 import mongoose from 'mongoose'
 
 import toStringId from '../utils/toStringId'
 import parseError from '../utils/parseError'
+import getProducts from './getProducts'
 import makeSearchQuery from '../utils/makeSearchQuery'
 
 const getCount = (params) => (
@@ -19,26 +19,6 @@ const getCount = (params) => (
         }
 
         resolve(count)
-      })
-  })
-)
-
-const getProducts = (spaceType) => (
-  new Promise(async (resolve, reject) => {
-    mongoose
-      .model('Product')
-      .where({ spaceTypes: { $in: [spaceType] } })
-      .limit(3)
-      .exec((err, product = {}) => {
-        if (err) {
-          return reject(parseError(err))
-        }
-
-        if (!isEmpty(product)) {
-          resolve(product)
-        } else {
-          resolve({})
-        }
       })
   })
 )

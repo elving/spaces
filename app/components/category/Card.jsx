@@ -126,6 +126,14 @@ export default class CategoryCard extends Component {
         </div>
         <div className="category-card-stat">
           <div className="category-card-stat-number">
+            {props.spacesCount}
+          </div>
+          <div className="category-card-stat-text">
+            {inflect(props.spacesCount, 'Space')}
+          </div>
+        </div>
+        <div className="category-card-stat">
+          <div className="category-card-stat-number">
             {props.productsCount}
           </div>
           <div className="category-card-stat-text">

@@ -7,8 +7,8 @@ import parseError from '../utils/parseError'
 import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default () => {
-  return new Promise(async (resolve, reject) => {
+export default () => (
+  new Promise(async (resolve, reject) => {
     const cacheKey = 'category-all'
 
     getFromCacheOrQuery(cacheKey, () => {
@@ -30,4 +30,4 @@ export default () => {
         })
     }, resolve)
   })
-}
+)

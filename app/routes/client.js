@@ -8,6 +8,11 @@ import Login from '../components/auth/Login'
 import SetPassword from '../components/auth/SetPassword'
 import ResetPassword from '../components/auth/ResetPassword'
 
+import About from '../components/page/About'
+import Terms from '../components/page/Terms'
+import Privacy from '../components/page/Privacy'
+import Copyright from '../components/page/Copyright'
+
 import Home from '../components/home/Home'
 import Feed from '../components/feed/Feed'
 import Onboarding from '../components/onboarding/Onboarding'
@@ -60,6 +65,11 @@ const routes = (
     <Route path="login" component={Login} />
     <Route path="reset-password" component={ResetPassword} />
     <Route path="set-password/:code" component={SetPassword} />
+
+    <Route path="/about/" component={About} />
+    <Route path="/terms/" component={Terms} />
+    <Route path="/privacy/" component={Privacy} />
+    <Route path="/copyright/" component={Copyright} />
 
     <Route path="/" component={Home} />
     <Route path="/feed" component={Feed} />

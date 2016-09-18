@@ -4,6 +4,7 @@ import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import { default as authRouter } from '../routes/auth'
 import { default as ajaxRouter } from '../routes/ajax'
+import { default as pageRouter } from '../routes/page'
 import { default as homeRouter } from '../routes/home'
 import { default as feedRouter } from '../routes/feed'
 import { default as userRouter } from '../routes/user'
@@ -23,6 +24,7 @@ import { default as suggestionsRouter } from '../routes/suggestions'
 const configRoutes = (server) => {
   server.use(ajaxRouter)
   server.use(authRouter)
+  server.use(pageRouter)
   server.use(homeRouter)
   server.use(feedRouter)
   server.use(userRouter)

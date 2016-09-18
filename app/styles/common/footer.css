@@ -3,7 +3,6 @@
   background-color: #ffffff;
   width: 100%;
   margin: 0 auto;
-  height: 65px;
 }
 
 .footer-container {
@@ -24,14 +23,33 @@
 
 .footer-link,
 .footer-social-link {
+  font-size: 16px;
+  text-decoration: none;
   display: flex;
-  margin-right: 15px;
+  align-items: center;
+  margin-right: 25px;
+  justify-content: center;
 }
 
-.footer-nav > .footer-link:last-child {
+.footer-link:hover,
+.footer-link:active,
+.footer-social-link:hover,
+.footer-social-link:active {
+  color: #333333;
+  text-decoration: none;
+}
+
+.footer-link--active,
+.footer-social-link--active {
+  color: #333333;
+}
+
+.footer-nav > .footer-link:last-child,
+.footer-nav > .footer-social-link:last-child {
   margin-right: 0;
 }
 
 .footer-copyright {
+  font-size: 16px;
   margin: 0;
 }

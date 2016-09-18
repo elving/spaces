@@ -1,0 +1,63 @@
+.page-basic .page-content {
+  width: 100%;
+  margin: 0 auto;
+  padding: 35px;
+  max-width: 960px;
+}
+
+.page-basic h1 {
+  margin: 0 auto 35px;
+}
+
+.page-basic h1 small {
+  color: #999999;
+  font-size: 14px;
+  display: block;
+}
+
+.page-basic h2 {
+  margin: 0 auto 35px;
+}
+
+.page-basic h3 {
+  color: #999999;
+  font-size: 22px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+  margin: 0 auto 35px;
+}
+
+.page-basic p {
+  margin: 0 auto 35px;
+}
+
+.page-basic p:last-child {
+  margin-bottom: 0;
+}
+
+.page-basic a {
+  color: #999999;
+}
+
+@media (max-width: 768px) {
+  .page-basic {
+    padding: 15px;
+  }
+
+  .page-basic h1 {
+    margin: 0 auto 15px;
+  }
+
+  .page-basic h2 {
+    margin: 0 auto 15px;
+  }
+
+  .page-basic h3 {
+    margin: 0 auto 15px;
+  }
+
+  .page-basic p {
+    margin: 0 auto 15px;
+  }
+}

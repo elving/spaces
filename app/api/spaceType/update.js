@@ -15,33 +15,36 @@ export default (_id, props) => (
   new Promise(async (resolve, reject) => {
     const updates = sanitize(props)
     const categories = []
+    const categoriesFromUpdates = get(updates, 'categories', [])
 
     const options = {
       new: true,
       runValidators: true
     }
 
-    try {
-      for (let category of get(updates, 'categories', [])) {
-        category = await findCategoryByName(category, true)
+    if (!isEmpty(categoriesFromUpdates)) {
+      try {
+        for (let category of categoriesFromUpdates) {
+          category = await findCategoryByName(category, true)
 
-        if (!isEmpty(category)) {
-          categories.push(category)
+          if (!isEmpty(category)) {
+            categories.push(category)
+          }
         }
-      }
 
-      set(updates, 'categories', toIds(categories))
-    } catch (err) {
-      if (has(err, 'name')) {
-        return reject({ categories: get(err, 'name') })
-      }
+        set(updates, 'categories', toIds(categories))
+      } catch (err) {
+        if (has(err, 'name')) {
+          return reject({ categories: get(err, 'name') })
+        }
 
-      return reject({
-        generic: (
-          'There was an error while trying to update this room. ' +
-          'Please try again.'
-        )
-      })
+        return reject({
+          generic: (
+            'There was an error while trying to update this room. ' +
+            'Please try again.'
+          )
+        })
+      }
     }
 
     mongoose

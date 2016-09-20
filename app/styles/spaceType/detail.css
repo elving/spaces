@@ -23,7 +23,7 @@
   margin: 0 auto;
   padding: 15px;
   display: flex;
-  max-width: 960px;
+  max-width: 1024px;
   align-items: center;
   justify-content: space-between;
 }

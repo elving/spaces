@@ -1,4 +1,5 @@
 import get from 'lodash/get'
+import size from 'lodash/size'
 import axios from 'axios'
 import toLower from 'lodash/toLower'
 import isEmpty from 'lodash/isEmpty'
@@ -35,7 +36,9 @@ export default class RedesignPopup extends Component {
     name: '',
     errors: {},
     isSaving: false,
-    description: ''
+    description: '',
+    descriptionCharsLeft: 140,
+    hasDescriptionCharsError: false
   }
 
   onSubmit = (event) => {
@@ -69,8 +72,12 @@ export default class RedesignPopup extends Component {
   }
 
   onDescriptionChange = ({ currentTarget: input }) => {
+    const descriptionCharsLeft = 140 - size(input.value)
+
     this.setState({
-      description: input.value
+      description: input.value,
+      descriptionCharsLeft,
+      hasDescriptionCharsError: descriptionCharsLeft < 0
     })
   }
 
@@ -96,6 +103,10 @@ export default class RedesignPopup extends Component {
 
   renderForm() {
     const { props, state, context } = this
+
+    const isDisabled = (
+      state.isSaving
+    )
 
     const nameError = get(state.errors, 'name')
     const hasNameError = !isEmpty(nameError)
@@ -132,7 +143,7 @@ export default class RedesignPopup extends Component {
             name="name"
             required
             value={state.name}
-            disabled={state.isSaving}
+            disabled={isDisabled}
             onChange={this.onNameChange}
             className={classNames({
               textfield: true,
@@ -149,7 +160,14 @@ export default class RedesignPopup extends Component {
 
         <div className="form-group form-group--small">
           <label htmlFor="description" className="form-label">
-            Description <small>optional</small>
+            Description
+            <small
+              style={{
+                color: state.hasDescriptionCharsError ? '#ED4542' : '#999999'
+              }}
+            >
+              optional &middot; {state.descriptionCharsLeft}
+            </small>
           </label>
 
           <textarea
@@ -161,7 +179,10 @@ export default class RedesignPopup extends Component {
             className={classNames({
               textfield: true,
               'textfield--small': true,
-              'textfield--error': hasDescriptionError
+              'textfield--error': (
+                hasDescriptionError ||
+                state.hasDescriptionCharsError
+              )
             })}
             placeholder="E.g. A modern residential kitchen is typically..."
           />
@@ -175,7 +196,7 @@ export default class RedesignPopup extends Component {
           <div className="form-group form-group--inline">
             <button
               type="submit"
-              disabled={state.isSaving}
+              disabled={isDisabled || state.hasDescriptionCharsError}
               className="button button--primary button--small"
             >
               <span className="button-text">
@@ -184,7 +205,7 @@ export default class RedesignPopup extends Component {
             </button>
             <button
               type="button"
-              disabled={state.isSaving}
+              disabled={isDisabled || state.hasDescriptionCharsError}
               onClick={this.onCancelClick}
               className="button button--link button--small"
             >

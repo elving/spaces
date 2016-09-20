@@ -20,9 +20,9 @@ export default (params = {}) => {
     }
   }
 
-  if (has(params, 'brand')) {
+  if (has(params, 'brandName')) {
     query.brand = {
-      $regex: params.brand,
+      $regex: params.brandName,
       $options: 'i'
     }
   }
@@ -57,6 +57,10 @@ export default (params = {}) => {
     } else {
       query.spaceTypes = { $in: compact(split(params.spaceTypes, ',')) }
     }
+  }
+
+  if (has(params, 'brand')) {
+    query.brand = params.brand
   }
 
   if (has(params, 'spaceType')) {

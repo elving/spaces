@@ -1,5 +1,6 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
+import size from 'lodash/size'
 import axios from 'axios'
 import assign from 'lodash/assign'
 import Select from 'react-select'
@@ -43,6 +44,8 @@ export default class SpaceForm extends Component {
 
     const formMethod = get(props, 'formMethod', 'POST')
     const spaceTypes = get(props, 'spaceTypes', [])
+    const description = get(props.space, 'description', '')
+    const descriptionLength = size(description)
 
     this.state = {
       name: '',
@@ -52,7 +55,9 @@ export default class SpaceForm extends Component {
       spaceTypes,
       description: '',
       isFetchingSpaceTypes: isEmpty(spaceTypes) && formMethod === 'POST',
-      hasFetchedSpaceTypes: !isEmpty(spaceTypes) && formMethod !== 'POST'
+      hasFetchedSpaceTypes: !isEmpty(spaceTypes) && formMethod !== 'POST',
+      descriptionCharsLeft: (140 - descriptionLength),
+      hasDescriptionCharsError: descriptionLength > 140
     }
 
     this.form = null
@@ -98,9 +103,13 @@ export default class SpaceForm extends Component {
     })
   }
 
-  onDescriptionChange = ({ currentTarget }) => {
+  onDescriptionChange = ({ currentTarget: input }) => {
+    const descriptionCharsLeft = 140 - size(input.value)
+
     this.setState({
-      description: currentTarget.value
+      description: input.value,
+      descriptionCharsLeft,
+      hasDescriptionCharsError: descriptionCharsLeft < 0
     })
   }
 
@@ -174,7 +183,10 @@ export default class SpaceForm extends Component {
     const { props, state, context } = this
 
     const isPOST = props.formMethod === 'POST'
-    const disabled = state.isFetchingSpaceTypes || state.isWaiting
+    const disabled = (
+      state.isFetchingSpaceTypes ||
+      state.isWaiting
+    )
 
     const typeError = get(state.errors, 'type')
     const hasTypeError = !isEmpty(typeError)
@@ -265,17 +277,27 @@ export default class SpaceForm extends Component {
 
           <div className="form-group">
             <label htmlFor="description" className="form-label">
-              Description <small>optional</small>
+              Description
+              <small
+                style={{
+                  color: state.hasDescriptionCharsError ? '#ED4542' : '#999999'
+                }}
+              >
+                optional &middot; {state.descriptionCharsLeft}
+              </small>
             </label>
 
             <textarea
               id="description"
               name="description"
-              disabled={disabled}
+              disabled={state.isWaiting}
               onChange={this.onDescriptionChange}
               className={classNames({
                 textfield: true,
-                'textfield--error': hasDescriptionError
+                'textfield--error': (
+                  hasDescriptionError ||
+                  state.hasDescriptionCharsError
+                )
               })}
               placeholder="E.g. A modern kitchen with..."
               defaultValue={get(props.space, 'description')}
@@ -290,7 +312,7 @@ export default class SpaceForm extends Component {
             <div className="form-group form-group--inline">
               <button
                 type="submit"
-                disabled={disabled}
+                disabled={disabled || state.hasDescriptionCharsError}
                 className="button button--primary"
               >
                 <span className="button-text">
@@ -300,7 +322,7 @@ export default class SpaceForm extends Component {
               <button
                 type="button"
                 onClick={props.onCancel}
-                disabled={disabled}
+                disabled={disabled || state.hasDescriptionCharsError}
                 className="button button--link"
               >
                 <span className="button-text">

@@ -8,6 +8,7 @@ import { default as applyValidations } from './validations'
 const ProductSchema = new mongoose.Schema({
   sid: { type: String, default: shortid.generate },
   url: { type: String, trim: true, default: '', unique: true },
+  note: { type: String, trim: true, default: '' },
   name: { type: String, trim: true, default: '', unique: true },
   image: { type: String, trim: true, default: '' },
   price: { type: Number, min: 0.01 },

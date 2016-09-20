@@ -194,7 +194,7 @@ export default url => (
         }
 
         resolve({
-          title: trim(title),
+          name: trim(title),
           images,
           ...metadata,
           description: trim(description)

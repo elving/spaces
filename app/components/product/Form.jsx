@@ -43,8 +43,12 @@ export default class ProductForm extends Component {
   constructor(props) {
     super(props)
 
+    const description = get(props.product, 'description', '')
+    const descriptionLength = size(description)
+
     this.state = {
       url: get(props.product, 'url', ''),
+      note: get(props.product, 'note', ''),
       name: get(props.product, 'name', ''),
       image: get(props.product, 'image', ''),
       price: get(props.product, 'price', ''),
@@ -67,9 +71,11 @@ export default class ProductForm extends Component {
       savingSuccessful: false,
       deletingSuccessful: false,
       scrappedSuccessful: false,
+      descriptionCharsLeft: (500 - descriptionLength),
       productAlreadyExists: false,
       imageUrlFormIsVisible: isEqual(get(props, 'formMethod'), 'PUT'),
-      isLoadingImageFromUrl: false
+      isLoadingImageFromUrl: false,
+      hasDescriptionCharsError: (descriptionLength > 500)
     }
   }
 
@@ -117,7 +123,9 @@ export default class ProductForm extends Component {
       axios
         .get(`/ajax/products/fetch/?url=${encodeURIComponent(formData.url)}`)
         .then(({ data: product }) => {
+          const description = get(product, 'description', '')
           const productImages = get(product, 'images', [])
+          const descriptionLength = size(description)
 
           if (!isEmpty(get(product, 'id'))) {
             this.setState({
@@ -129,17 +137,20 @@ export default class ProductForm extends Component {
             })
           } else {
             this.setState({
-              name: get(product, 'title', ''),
+              name: get(product, 'name', ''),
+              note: get(product, 'note', ''),
               price: get(product, 'price', ''),
               brand: get(product, 'brand', ''),
               errors: {},
               product: {},
               isScraping: false,
               hasScrapped: true,
-              description: get(product, 'description', ''),
+              description,
               isLoadingImage: true,
               savingSuccessful: false,
-              productAlreadyExists: false
+              productAlreadyExists: false,
+              descriptionCharsLeft: (500 - descriptionLength),
+              hasDescriptionCharsError: (descriptionLength > 500)
             }, () => {
               getValidProductImages(productImages, 200)
                 .then(validImages => {
@@ -348,9 +359,19 @@ export default class ProductForm extends Component {
     })
   }
 
-  onDescriptionChange = ({ currentTarget: input }) => {
+  onNoteChange = ({ currentTarget: input }) => {
     this.setState({
-      description: input.value
+      note: input.value
+    })
+  }
+
+  onDescriptionChange = ({ currentTarget: input }) => {
+    const descriptionCharsLeft = 500 - size(input.value)
+
+    this.setState({
+      description: input.value,
+      descriptionCharsLeft,
+      hasDescriptionCharsError: descriptionCharsLeft < 0
     })
   }
 
@@ -497,6 +518,7 @@ export default class ProductForm extends Component {
               onChange={this.onProductUrlChange}
               disabled={state.isScraping}
               className="textfield"
+              autoFocus
               placeholder="E.g. https://example.com/abc-123"
             />
           </div>
@@ -672,7 +694,8 @@ export default class ProductForm extends Component {
       state.isSaving ||
       state.isDeleting ||
       state.isLoadingImage ||
-      state.deletingSuccessful
+      state.deletingSuccessful ||
+      state.hasDescriptionCharsError
     )
 
     const formAction = isPOST
@@ -684,6 +707,9 @@ export default class ProductForm extends Component {
 
     const nameError = get(state.errors, 'name')
     const hasNameError = !isEmpty(nameError)
+
+    const noteError = get(state.errors, 'note')
+    const hasNoteError = !isEmpty(noteError)
 
     const descriptionError = get(state.errors, 'description')
     const hasDescriptionError = !isEmpty(descriptionError)
@@ -795,8 +821,44 @@ export default class ProductForm extends Component {
         </div>
 
         <div className="form-group">
+          <label htmlFor="name" className="form-label">
+            Curator's Note <small>optional</small>
+          </label>
+
+          <textarea
+            id="note"
+            name="note"
+            value={state.note}
+            onChange={this.onNoteChange}
+            disabled={state.isSaving}
+            className={classNames({
+              textfield: true,
+              'textfield--error': hasNoteError
+            })}
+            placeholder="I bought this product because it's awesome..."
+          />
+
+          <small className="form-help">
+            Give some insight into why you are adding this product.
+            For example, if you own it, you can write a simple review
+            about what makes this product special.
+          </small>
+
+          {hasNameError ? (
+            <small className="form-error">{noteError}</small>
+          ) : null}
+        </div>
+
+        <div className="form-group">
           <label htmlFor="description" className="form-label">
-            Description <small>optional</small>
+            Description
+            <small
+              style={{
+                color: state.hasDescriptionCharsError ? '#ED4542' : '#999999'
+              }}
+            >
+              optional &middot; {state.descriptionCharsLeft} chars left
+            </small>
           </label>
 
           <textarea
@@ -807,7 +869,10 @@ export default class ProductForm extends Component {
             onChange={this.onDescriptionChange}
             className={classNames({
               textfield: true,
-              'textfield--error': hasDescriptionError
+              'textfield--error': (
+                hasDescriptionError ||
+                state.hasDescriptionCharsError
+              )
             })}
             placeholder="Description"
           />

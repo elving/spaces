@@ -16,16 +16,17 @@ import create from '../api/product/create'
 import update from '../api/product/update'
 import destroy from '../api/product/destroy'
 import findBySid from '../api/product/findBySid'
+import fromBrand from '../api/product/fromBrand'
 import getRelated from '../api/product/getRelated'
 import getRelatedSpaces from '../api/product/getRelatedSpaces'
 import fetchProductData from '../api/product/fetchProductData'
 
 import toJSON from '../api/utils/toJSON'
 import toStringId from '../api/utils/toStringId'
-import { default as getAllBrands } from '../api/brand/getAll'
-import { default as getAllColors } from '../api/color/getAll'
-import { default as getAllCategories } from '../api/category/getAll'
-import { default as getAllSpaceTypes } from '../api/spaceType/getAll'
+import getAllBrands from '../api/brand/getAll'
+import getAllColors from '../api/color/getAll'
+import getAllCategories from '../api/category/getAll'
+import getAllSpaceTypes from '../api/spaceType/getAll'
 
 export const renderIndex = async (req, res, next) => {
   try {
@@ -67,6 +68,7 @@ export const renderDetail = async (req, res, next) => {
       return res.redirect('/404/')
     }
 
+    const moreFromBrand = await fromBrand(product)
     const relatedSpaces = await getRelatedSpaces(toStringId(product))
     const relatedProducts = await getRelated(product)
 
@@ -91,6 +93,7 @@ export const renderDetail = async (req, res, next) => {
 
     setProps(res, {
       product: toJSON(product),
+      moreFromBrand: toJSON(moreFromBrand),
       relatedSpaces: toJSON(relatedSpaces),
       relatedProducts: toJSON(relatedProducts)
     })

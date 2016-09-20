@@ -34,7 +34,7 @@
   width: 100%;
   margin: 15px auto 0;
   display: flex;
-  max-width: 960px;
+  max-width: 1024px;
   align-items: center;
   justify-content: center;
 }
@@ -94,7 +94,7 @@ button.space-detail-counter {
   margin: 0 auto;
   padding: 15px;
   display: flex;
-  max-width: 960px;
+  max-width: 1024px;
   align-items: center;
   justify-content: space-between;
 }
@@ -143,7 +143,7 @@ button.space-detail-counter {
 .space-detail-suggestions {
   width: 100%;
   display: flex;
-  max-width: 960px;
+  max-width: 1024px;
   align-items: center;
   justify-content: center;
 }

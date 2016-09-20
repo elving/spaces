@@ -38,6 +38,7 @@ class ProductDetail extends Component {
 
   static propTypes = {
     product: PropTypes.object,
+    moreFromBrand: PropTypes.array,
     relatedProducts: PropTypes.array,
     openAddProductModal: PropTypes.func,
     closeAddProductModal: PropTypes.func,
@@ -46,6 +47,7 @@ class ProductDetail extends Component {
 
   static defaultProps = {
     product: {},
+    moreFromBrand: [],
     relatedProducts: [],
     openAddProductModal: (() => {}),
     closeAddProductModal: (() => {}),
@@ -176,16 +178,41 @@ class ProductDetail extends Component {
     )
   }
 
-  renderDescription() {
+  renderInfo() {
     const { props } = this
+    const note = get(props.product, 'note')
     const description = get(props.product, 'description')
+    const hasBoth = !isEmpty(description) && !isEmpty(note)
 
-    return !isEmpty(description) ? (
-      <div className="product-detail-description-container">
-        <h3 className="product-detail-description-title">About this product</h3>
-        <p className="product-detail-description">
-          {description}
-        </p>
+    return !isEmpty(description) || !isEmpty(note) ? (
+      <div
+        className={classNames({
+          'product-detail-info-container': true,
+          'product-detail-info-container--has-both': hasBoth
+        })}
+      >
+        {!isEmpty(description) ? (
+          <div className="product-detail-info">
+            <h3 className="product-detail-info-title">About this product</h3>
+            <p className="product-detail-info-text">
+              {description}
+            </p>
+          </div>
+        ) : null}
+        {!isEmpty(note) ? (
+          <div className="product-detail-info">
+            <h3 className="product-detail-info-title">From the curator</h3>
+            <p className="product-detail-info-text">
+              {note}
+            </p>
+            <a
+              href={`/${get(props.product, 'createdBy.detailUrl')}/products/`}
+              className="button button--primary-alt product-detail-info-button"
+            >
+              More from @{get(props.product, 'createdBy.username')}
+            </a>
+          </div>
+        ) : null}
       </div>
     ) : null
   }
@@ -379,6 +406,29 @@ class ProductDetail extends Component {
     )
   }
 
+  renderMoreFromBrand() {
+    const { props } = this
+
+    return (
+      <div className="grid-container">
+        <h3 className="grid-title">
+          More from {get(props.product, 'brand.name')}
+        </h3>
+        <div className="grid">
+          <div className="grid-items">
+            {map(props.moreFromBrand, product =>
+              <Product
+                {...product}
+                key={toStringId(product)}
+                onAddButtonClick={() => props.openAddProductModal(product)}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   renderRelatedProducts() {
     const { props } = this
 
@@ -450,16 +500,21 @@ class ProductDetail extends Component {
         />
 
         {this.renderProduct()}
-        {this.renderDescription()}
+        {this.renderInfo()}
 
         <div className="grids">
+          {!isEmpty(props.relatedSpaces)
+            ? this.renderRelatedSpaces()
+            : null
+          }
+
           {!isEmpty(props.relatedProducts)
             ? this.renderRelatedProducts()
             : null
           }
 
-          {!isEmpty(props.relatedSpaces)
-            ? this.renderRelatedSpaces()
+          {!isEmpty(props.moreFromBrand)
+            ? this.renderMoreFromBrand()
             : null
           }
         </div>

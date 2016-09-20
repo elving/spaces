@@ -8,8 +8,8 @@ import toIdsFromPath from '../utils/toIdsFromPath'
 import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default (limit = 8) => {
-  return new Promise(async (resolve, reject) => {
+export default (limit = 8) => (
+  new Promise(async (resolve, reject) => {
     const cacheKey = `product-popular-${limit}`
 
     getFromCacheOrQuery(cacheKey, () => {
@@ -44,4 +44,4 @@ export default (limit = 8) => {
         })
     }, resolve)
   })
-}
+)

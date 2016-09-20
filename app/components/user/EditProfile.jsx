@@ -382,7 +382,11 @@ export default class EditProfile extends Component {
             <div className="edit-profile-form-bio-label">
               <label htmlFor="bio" className="form-label">
                 Bio
-                <small style={{ color: hasBioError ? '#ED4542' : '#999999' }}>
+                <small
+                  style={{
+                    color: state.hasBioCharsError ? '#ED4542' : '#999999'
+                  }}
+                >
                   {state.bioCharsLeft}
                 </small>
               </label>

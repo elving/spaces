@@ -41,8 +41,8 @@
       <script src="/public/bundle.js"></script>
     <% } %>
   </head>
-  <body id="error-page">
-    <section class="error-page-content">
+  <body>
+    <section class="error-page">
       <a href="/">
         <svg width="55" height="55" viewBox="0 0 400 400" class="ui-icon icon-logo error-page-logo" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
           <g stroke="none" stroke-width="1" fill="none">
@@ -58,14 +58,14 @@
         <h2 class="error-page-subtitle">
           Try refreshing this page.
         </h2>
-        <button class="error-page-cta ui-button" data-type="primary" onclick="window.location.href=window.location.href;">
+        <button class="error-page-cta button button--primary-alt" onclick="window.location.href=window.location.href;">
           Refresh
         </button>
       <% } else { %>
         <h2 class="error-page-subtitle">
           In the meantime, check out some beautiful products for your home.
         </h2>
-        <a href="/products" class="error-page-cta ui-button" data-type="primary">
+        <a href="/products" class="error-page-cta button button--primary-alt">
           Shop products
         </a>
       <% } %>

@@ -1,0 +1,90 @@
+.error-page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  padding: 35px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.error-page-title {
+  color: #999999;
+  font-size: 32px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+  width: 100%;
+  margin: 35px auto 15px;
+  max-width: 1024px;
+}
+
+.error-page-report,
+.error-page-subtitle {
+  font-size: 22px;
+  text-align: center;
+  width: 100%;
+  margin: 0 auto 35px;
+  max-width: 1024px;
+}
+
+.error-page-cta {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 200px;
+}
+
+.error-page-report {
+  color: #656567;
+  margin: 35px auto;
+}
+
+.error-page-code {
+  background-color: #ffffff;
+  padding-top: 35px;
+}
+
+.error-page-code-message {
+  font-size: 22px;
+  text-align: center;
+  margin: 0 auto 35px;
+}
+
+.error-page-code-extra,
+.error-page-code-stack {
+  border-top: 1px solid #f8f8f8;
+  color: #222;
+  font-size: 14px;
+  font-family: monospace;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 35px;
+}
+
+.error-page-code-extra p,
+.error-page-code-stack p {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .error-page {
+    padding: 15px;
+  }
+
+  .error-page-title {
+    font-size: 28px;
+    margin: 15px auto;
+  }
+
+  .error-page-subtitle {
+    font-size: 18px;
+    margin: 0 auto 15px;
+  }
+
+  .error-page-cta {
+    width: 100%;
+    margin: 0 auto;
+    max-width: 200px;
+  }
+}

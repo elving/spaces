@@ -6,20 +6,12 @@ import Products from './Products'
 import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
 
 export default class ProductsIndex extends Component {
-  static propTypes = {
-    products: PropTypes.object
-  }
-
-  static defaultProps = {
-    products: {}
-  }
-
   static contextTypes = {
     currentUserIsOnboarding: PropTypes.func
   }
 
   render() {
-    const { props, context } = this
+    const { context } = this
 
     return (
       <Layout
@@ -35,7 +27,7 @@ export default class ProductsIndex extends Component {
           Discover Products
         </h1>
 
-        <Products products={props.products} />
+        <Products />
       </Layout>
     )
   }

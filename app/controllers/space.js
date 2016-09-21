@@ -26,8 +26,6 @@ import { default as getAllUserSpaces } from '../api/user/getSpaces'
 
 export const renderIndex = async (req, res, next) => {
   try {
-    const spaces = await search()
-
     setOgTags(req, res, {
       ogTitle: (
         'Get inspired by the most beautiful spaces, ' +
@@ -39,10 +37,6 @@ export const renderIndex = async (req, res, next) => {
       title: 'Discover Spaces | Spaces',
       bodyId: 'all-spaces',
       bodyClass: 'page page-all-spaces'
-    })
-
-    setProps(res, {
-      spaces: toJSON(spaces)
     })
 
     next()

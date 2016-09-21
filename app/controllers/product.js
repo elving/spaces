@@ -30,8 +30,6 @@ import getAllSpaceTypes from '../api/spaceType/getAll'
 
 export const renderIndex = async (req, res, next) => {
   try {
-    const products = await search()
-
     setOgTags(req, res, {
       ogTitle: (
         'Shop and design spaces with the most beautiful ' +
@@ -45,9 +43,6 @@ export const renderIndex = async (req, res, next) => {
       bodyClass: 'page page-all-products'
     })
 
-    setProps(res, {
-      products: toJSON(products)
-    })
     next()
   } catch (err) {
     next(err)

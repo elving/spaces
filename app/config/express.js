@@ -45,8 +45,14 @@ const configExpress = (server, connection) => {
   server.use(morgan(isInDevelopment ? 'dev' : 'combined'))
 
   // bodyParser should be above methodOverride
-  server.use(bodyParser.json())
-  server.use(bodyParser.urlencoded({ extended: true }))
+  server.use(bodyParser.json({
+    limit: '10mb'
+  }))
+
+  server.use(bodyParser.urlencoded({
+    limit: '10mb',
+    extended: true
+  }))
 
   server.use(multer().any())
 

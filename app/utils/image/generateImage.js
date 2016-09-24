@@ -6,14 +6,13 @@ import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 import reverse from 'lodash/reverse'
 import request from 'request'
-
-import uploadBuffer from './uploadBuffer'
-
 import { resize } from 'aspectratio'
 import { default as Canvas } from 'canvas'
 
-const loadImage = (url) => {
-  return new Promise((resolve, reject) => {
+import uploadBuffer from './uploadBuffer'
+
+const loadImage = (url) => (
+  new Promise((resolve, reject) => {
     request.get(url, { encoding: null }, (err, res, buffer) => {
       if (err) {
         return reject(err)
@@ -25,10 +24,10 @@ const loadImage = (url) => {
       resolve(imageData)
     })
   })
-}
+)
 
-export default (folder, urls = []) => {
-  return new Promise(async (resolve, reject) => {
+export default (folder, urls = []) => (
+  new Promise(async (resolve, reject) => {
     urls = slice(reverse(urls), 0, isEqual(size(urls), 3) ? 2 : 4)
     const images = []
     const imagesLength = size(urls)
@@ -37,7 +36,7 @@ export default (folder, urls = []) => {
       return resolve('')
     }
 
-    for (let url of urls) {
+    for (const url of urls) {
       try {
         const image = await loadImage(url)
         images.push(image)
@@ -58,8 +57,9 @@ export default (folder, urls = []) => {
 
     let counter = 1
 
-    for (let image of images) {
-      let x, y
+    for (const image of images) {
+      let x
+      let y
       const wh = resize(image.width, image.height, 185, 185)
       const w = wh[0]
       const h = wh[1]
@@ -97,4 +97,4 @@ export default (folder, urls = []) => {
       reject(err)
     }
   })
-}
+)

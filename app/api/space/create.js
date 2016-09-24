@@ -1,5 +1,6 @@
 import has from 'lodash/has'
 import get from 'lodash/get'
+import set from 'lodash/set'
 import assign from 'lodash/assign'
 import isEmpty from 'lodash/isEmpty'
 import mongoose from 'mongoose'
@@ -8,11 +9,13 @@ import toIds from '../utils/toIds'
 import getTags from '../../utils/product/getTags'
 import sanitize from './sanitize'
 import logError from '../../utils/logError'
+import isDataUrl from '../../utils/isDataUrl'
 import parseError from '../utils/parseError'
 import toStringId from '../utils/toStringId'
 import getProducts from './getProducts'
 import generateImage from '../../utils/image/generateImage'
 import getProductImages from '../utils/getProductImages'
+import uploadImageFromDataUrl from '../../utils/image/uploadImageFromDataUrl'
 import { removeFromCache, invalidateFromCache } from '../cache'
 
 import updateRoom from '../spaceType/update'
@@ -43,6 +46,18 @@ export default props => (
         }
       } catch (err) {
         return reject(parseError(err))
+      }
+    }
+
+    if (has(updatedProps, 'coverImage') && isDataUrl(updatedProps.coverImage)) {
+      try {
+        const coverImage = await uploadImageFromDataUrl(
+          'spaces', updatedProps.coverImage
+        )
+
+        set(updatedProps, 'coverImage', coverImage)
+      } catch (err) {
+        return reject(err)
       }
     }
 

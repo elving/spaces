@@ -73,9 +73,11 @@ class SpaceDetail extends Component {
     this.state = {
       name: get(props.space, 'name', ''),
       products: get(props.space, 'products', []),
+      coverImage: get(props.space, 'coverImage', ''),
       isDeleting: false,
       likesCount: get(props.space, 'likesCount', 0),
       description: get(props.space, 'description', ''),
+      updatedSpace: props.space,
       commentsCount: get(props.space, 'commentsCount', 0),
       redesignsCount: get(props.space, 'redesignsCount', 0),
       editSuccessful: false,
@@ -283,8 +285,19 @@ class SpaceDetail extends Component {
   renderHeader() {
     const { props, state } = this
 
+    const coverImage = state.coverImage
+    const hasCoverImage = !isEmpty(coverImage)
+
     return (
-      <div className="space-detail-header">
+      <div
+        style={{
+          backgroundImage: `url(${coverImage})`
+        }}
+        className={classNames({
+          'space-detail-header': true,
+          'space-detail-header--has-cover': hasCoverImage
+        })}
+      >
         <h1 className="space-detail-header-title">
           <small className="space-detail-header-pre-title">
             {get(props.space, 'spaceType.name', 'Space')}
@@ -297,6 +310,21 @@ class SpaceDetail extends Component {
           </p>
         ) : null}
         {this.renderCounters()}
+        <div className="space-detail-cover-actions">
+          <button
+            type="button"
+            onClick={this.openEditFormModal}
+            className="button button--tiny button--primary-alt"
+          >
+            <span className="button-text">
+              <MaterialDesignIcon name="image" />
+              {hasCoverImage
+                ? 'Change Cover Photo'
+                : 'Add Cover Photo'
+              }
+            </span>
+          </button>
+        </div>
       </div>
     )
   }
@@ -677,12 +705,14 @@ class SpaceDetail extends Component {
         />
 
         <SpaceFormModal
-          space={props.space}
+          space={state.updatedSpace}
           onClose={this.closeEditFormModal}
           onSuccess={space => {
             this.setState({
               name: get(space, 'name'),
+              coverImage: get(space, 'coverImage'),
               description: get(space, 'description'),
+              updatedSpace: space,
               editSuccessful: true,
               editModalIsOpen: false
             })

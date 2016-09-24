@@ -8,14 +8,14 @@ import fileType from 'file-type'
 
 import knoxConfig from '../../config/knox'
 
-const optimize = (image) => {
-  return new Promise((resolve, reject) => {
+const optimize = (image) => (
+  new Promise((resolve, reject) => {
     sharp(image)
       .resize(750, null)
       .min()
       .withoutEnlargement()
       .jpeg()
-      .quality(sizeOf(image) > 150 ? 90 : 100)
+      .quality(sizeOf(image) > 200 ? 75 : 100)
       .progressive()
       .toBuffer((err, buffer, info) => {
         if (err) {
@@ -25,7 +25,7 @@ const optimize = (image) => {
         resolve({ buffer, ...info })
       })
   })
-}
+)
 
 export default (folder, buffer, tryOptimize = true) => {
   const client = knox.createClient(knoxConfig())

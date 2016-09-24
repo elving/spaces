@@ -15,3 +15,47 @@
   padding: 15px;
   flex-shrink: 0;
 }
+
+#cover-image {
+  top: -9999px;
+  left: -9999px;
+  height: 100%;
+  z-index: 5;
+  position: absolute;
+}
+
+.space-form-cover,
+.space-form-cover-container {
+  cursor: zoom-in;
+  border-radius: 4px;
+  display: block;
+  max-width: 95px;
+  max-height: 95px;
+  margin-right: 10px;
+}
+
+.space-form-cover {
+  width: 100%;
+  height: auto;
+}
+
+.space-form-cover-btn {
+  flex: 1;
+}
+
+.space-form-cover-actions {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.space-form-cover-actions > .space-form-cover-btn {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.space-form-cover-actions > .space-form-cover-btn:last-child {
+  margin-bottom: 0;
+}

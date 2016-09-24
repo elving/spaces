@@ -9,7 +9,10 @@ import serialize from 'form-serialize'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
+
 import toStringId from '../../api/utils/toStringId'
+import getImageSize from '../../utils/image/getSize'
 import withoutAnyType from '../../utils/spaceType/withoutAnyType'
 
 export default class SpaceForm extends Component {
@@ -48,12 +51,14 @@ export default class SpaceForm extends Component {
     const descriptionLength = size(description)
 
     this.state = {
-      name: '',
+      name: get(props.space, 'name', ''),
       errors: {},
-      spaceType: '',
+      spaceType: get(props.space, 'spaceType', ''),
       isWaiting: false,
       spaceTypes,
-      description: '',
+      coverImage: get(props.space, 'coverImage', ''),
+      description,
+      hasCoverError: false,
       isFetchingSpaceTypes: isEmpty(spaceTypes) && formMethod === 'POST',
       hasFetchedSpaceTypes: !isEmpty(spaceTypes) && formMethod !== 'POST',
       descriptionCharsLeft: (140 - descriptionLength),
@@ -103,6 +108,33 @@ export default class SpaceForm extends Component {
     })
   }
 
+  onCoverChange = ({ currentTarget: input }) => {
+    const file = input.files[0]
+    const reader = new FileReader()
+
+    if (!file) {
+      return
+    }
+
+    if (getImageSize(file) > 1000) {
+      this.setState({
+        errors: { coverImage: 'Cover photo can\'t be larger than 1MB.' },
+        coverImage: '',
+        hasCoverError: true
+      })
+    } else {
+      reader.onload = () => {
+        this.setState({
+          errors: { coverImage: null },
+          coverImage: reader.result,
+          hasCoverError: false
+        })
+      }
+
+      reader.readAsDataURL(file)
+    }
+  }
+
   onDescriptionChange = ({ currentTarget: input }) => {
     const descriptionCharsLeft = 140 - size(input.value)
 
@@ -116,13 +148,22 @@ export default class SpaceForm extends Component {
   onSubmit = (event) => {
     event.preventDefault()
 
-    const { props, context } = this
+    const { props, state, context } = this
+
+    if (state.hasCoverError || state.hasDescriptionCharsError) {
+      return
+    }
 
     const isPOST = props.formMethod === 'POST'
 
     const formData = assign(
+      serialize(this.form, { hash: true }),
       isPOST ? { products: props.products } : {},
-      serialize(this.form, { hash: true })
+      !isEmpty(state.coverImage) ? {
+        coverImage: state.coverImage
+      } : {
+        coverImage: ''
+      }
     )
 
     const endpoint = isPOST
@@ -141,9 +182,10 @@ export default class SpaceForm extends Component {
       .then(({ data: space }) => {
         const resetData = isPOST ? {
           name: '',
+          cover: '',
           spaceType: '',
           description: ''
-        } : {}
+        } : space
 
         this.setState({
           errors: {},
@@ -179,10 +221,23 @@ export default class SpaceForm extends Component {
     })
   }
 
+  triggerCoverInput = () => {
+    this.coverInput.click()
+  }
+
+  removeCoverImage = () => {
+    this.setState({
+      errors: { coverImage: null },
+      coverImage: '',
+      hasCoverError: false
+    })
+  }
+
   render() {
     const { props, state, context } = this
 
     const isPOST = props.formMethod === 'POST'
+
     const disabled = (
       state.isFetchingSpaceTypes ||
       state.isWaiting
@@ -193,6 +248,9 @@ export default class SpaceForm extends Component {
 
     const nameError = get(state.errors, 'name')
     const hasNameError = !isEmpty(nameError)
+
+    const coverError = get(state.errors, 'coverImage')
+    const hasCoverError = !isEmpty(coverError)
 
     const descriptionError = get(state.errors, 'description')
     const hasDescriptionError = !isEmpty(descriptionError)
@@ -218,10 +276,16 @@ export default class SpaceForm extends Component {
           className="form space-form"
         >
           <input type="hidden" name="_csrf" value={context.csrf} />
-          <input type="hidden" name="_method" value="POST" />
+          <input type="hidden" name="_method" value={props.formMethod} />
+          <input type="hidden" name="coverImage" value={state.coverImage} />
 
           {isPOST ? (
-            <div className="form-group">
+            <div
+              className={classNames({
+                'form-group': true,
+                'form-group--small': isPOST
+              })}
+            >
               <label htmlFor="type" className="form-label">
                 Type <small>required</small>
               </label>
@@ -239,6 +303,7 @@ export default class SpaceForm extends Component {
                 disabled={disabled}
                 className={classNames({
                   select: true,
+                  'select--small': isPOST,
                   'select--error': hasTypeError
                 })}
                 placeholder="E.g. Kitchen"
@@ -250,7 +315,12 @@ export default class SpaceForm extends Component {
             </div>
           ) : null}
 
-          <div className="form-group">
+          <div
+            className={classNames({
+              'form-group': true,
+              'form-group--small': isPOST
+            })}
+          >
             <label htmlFor="name" className="form-label">
               Name <small>required</small>
             </label>
@@ -259,15 +329,16 @@ export default class SpaceForm extends Component {
               id="name"
               type="text"
               name="name"
+              value={state.name}
               required
               disabled={disabled}
               onChange={this.onNameChange}
               className={classNames({
                 textfield: true,
+                'textfield--small': isPOST,
                 'textfield--error': hasNameError
               })}
               placeholder="E.g. My dream kitchen"
-              defaultValue={get(props.space, 'name')}
             />
 
             {hasNameError ? (
@@ -275,7 +346,115 @@ export default class SpaceForm extends Component {
             ) : null}
           </div>
 
-          <div className="form-group">
+          <div
+            className={classNames({
+              'form-group': true,
+              'form-group--small': isPOST
+            })}
+            style={{ position: 'relative' }}
+          >
+            <label htmlFor="name" className="form-label">
+              Cover Photo <small>optional &middot; 1MB or less</small>
+            </label>
+
+            {!isEmpty(state.coverImage) ? (
+              <div
+                className={classNames({
+                  'form-group': true,
+                  'form-group--small': isPOST,
+                  'form-group--inline': true
+                })}
+              >
+                <a
+                  rel="noopener noreferrer"
+                  href={state.coverImage}
+                  target="_blank"
+                  className="space-form-cover-container"
+                >
+                  <img
+                    alt="Cover"
+                    src={state.coverImage}
+                    className="space-form-cover"
+                  />
+                </a>
+                <div className="space-form-cover-actions">
+                  <button
+                    type="button"
+                    onClick={this.triggerCoverInput}
+                    className={classNames({
+                      button: true,
+                      'button--small': true,
+                      'space-form-cover-btn': true
+                    })}
+                  >
+                    <span className="button-text">
+                      <MaterialDesignIcon name="image" />
+                      Change Cover Photo
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={this.removeCoverImage}
+                    className={classNames({
+                      button: true,
+                      'button--small': true,
+                      'button--danger': true,
+                      'space-form-cover-btn': true
+                    })}
+                  >
+                    <span className="button-text">
+                      <MaterialDesignIcon name="close" />
+                      Remove Cover Photo
+                    </span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={this.triggerCoverInput}
+                className={classNames({
+                  button: true,
+                  'button--small': true
+                })}
+              >
+                <span className="button-text">
+                  <MaterialDesignIcon name="image" />
+                  Add Cover Photo
+                </span>
+              </button>
+            )}
+
+            <input
+              id="cover-image"
+              ref={coverInput => { this.coverInput = coverInput }}
+              type="file"
+              accept="image/png, image/jpg, image/jpeg"
+              multiple={false}
+              onChange={this.onCoverChange}
+              className={classNames({
+                textfield: true,
+                'textfield--small': isPOST,
+                'textfield--error': hasCoverError
+              })}
+            />
+
+            {hasCoverError ? (
+              <small className="form-error">{coverError}</small>
+            ) : null}
+
+            <small className="form-help">
+              Tip: Share an image of your space to let others see how
+              the products look in your home.
+            </small>
+          </div>
+
+          <div
+            className={classNames({
+              'form-group': true,
+              'form-group--small': isPOST
+            })}
+          >
             <label htmlFor="description" className="form-label">
               Description
               <small
@@ -290,17 +469,18 @@ export default class SpaceForm extends Component {
             <textarea
               id="description"
               name="description"
+              value={state.description}
               disabled={state.isWaiting}
               onChange={this.onDescriptionChange}
               className={classNames({
                 textfield: true,
+                'textfield--small': isPOST,
                 'textfield--error': (
                   hasDescriptionError ||
                   state.hasDescriptionCharsError
                 )
               })}
               placeholder="E.g. A modern kitchen with..."
-              defaultValue={get(props.space, 'description')}
             />
 
             {hasDescriptionError ? (
@@ -308,12 +488,27 @@ export default class SpaceForm extends Component {
             ) : null}
           </div>
 
-          <div className="form-group">
-            <div className="form-group form-group--inline">
+          <div
+            className={classNames({
+              'form-group': true,
+              'form-group--small': isPOST
+            })}
+          >
+            <div
+              className={classNames({
+                'form-group': true,
+                'form-group--small': isPOST,
+                'form-group--inline': true
+              })}
+            >
               <button
                 type="submit"
                 disabled={disabled || state.hasDescriptionCharsError}
-                className="button button--primary"
+                className={classNames({
+                  button: true,
+                  'button--small': isPOST,
+                  'button--primary': true
+                })}
               >
                 <span className="button-text">
                   {btnText}
@@ -323,7 +518,11 @@ export default class SpaceForm extends Component {
                 type="button"
                 onClick={props.onCancel}
                 disabled={disabled || state.hasDescriptionCharsError}
-                className="button button--link"
+                className={classNames({
+                  button: true,
+                  'button--link': true,
+                  'button--small': isPOST
+                })}
               >
                 <span className="button-text">
                   Cancel

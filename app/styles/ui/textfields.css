@@ -26,7 +26,7 @@ textarea.textfield {
 
 textarea.textfield--small {
   padding: 10px;
-  min-height: 80px;
+  min-height: 70px;
 }
 
 .textfield:focus,

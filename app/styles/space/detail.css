@@ -2,6 +2,7 @@
   border-bottom: 1px solid #e5e5e5;
   background-color: #fdfdfd;
   padding: 30px;
+  position: relative;
 }
 
 .space-detail-header-title {
@@ -9,7 +10,9 @@
   text-align: center;
   font-weight: 300;
   line-height: 42px;
+  width: 100%;
   margin: 0 auto;
+  max-width: 1024px;
 }
 
 .space-detail-header-pre-title {
@@ -81,6 +84,55 @@ button.space-detail-counter {
 .space-detail-counter-text {
   color: #999999;
   font-size: 14px;
+}
+
+.space-detail-header--has-cover {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: flex;
+  position: relative;
+  min-height: 65vh;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.space-detail-header--has-cover::after {
+  content: "";
+  background-color: rgba(0, 0, 0, 0.55);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+}
+
+.space-detail-header--has-cover .space-detail-header-title,
+.space-detail-header--has-cover .space-detail-description,
+.space-detail-header--has-cover .space-detail-counters {
+  z-index: 10;
+  position: relative;
+}
+
+.space-detail-header--has-cover .space-detail-header-title,
+.space-detail-header--has-cover .space-detail-header-pre-title,
+.space-detail-header--has-cover .space-detail-counter-number,
+.space-detail-header--has-cover .space-detail-counter-text,
+.space-detail-header--has-cover .space-detail-description {
+  color: #ffffff;
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.space-detail-cover-actions {
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .space-detail-subheader-container {

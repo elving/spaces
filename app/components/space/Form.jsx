@@ -362,7 +362,8 @@ export default class SpaceForm extends Component {
                 className={classNames({
                   'form-group': true,
                   'form-group--small': isPOST,
-                  'form-group--inline': true
+                  'form-group--inline': true,
+                  'space-form-cover-form-group': true
                 })}
               >
                 <a

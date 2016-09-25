@@ -59,3 +59,10 @@
 .space-form-cover-actions > .space-form-cover-btn:last-child {
   margin-bottom: 0;
 }
+
+@media (max-width: 768px) {
+  .space-form-cover-form-group {
+    align-items: flex-start;
+    flex-direction: row;
+  }
+}

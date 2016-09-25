@@ -33,7 +33,7 @@ body.no-scroll,
 body.ReactModal__Body--open {
   height: 100vh;
   overflow: hidden !important;
-  -webkit-overflow-scrolling: auto !important;
+  -webkit-overflow-scrolling: inherit !important;
 }
 
 a,

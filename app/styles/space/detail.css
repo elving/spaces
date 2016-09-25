@@ -235,7 +235,11 @@ button.space-detail-counter {
 
 @media (max-width: 768px) {
   .space-detail-header {
-    padding: 25px;
+    padding: 15px;
+  }
+
+  .space-detail-header--has-cover {
+    min-height: 45vh;
   }
 
   .space-detail-header-title {

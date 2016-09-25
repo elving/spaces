@@ -136,7 +136,7 @@ export const createSpace = async (req, res) => {
       })
     )
 
-    if (isEmpty(get(req.user, 'spaces', []))) {
+    if (get(req.user, 'settings.onboarding', true)) {
       user = await updateUser(userId, {
         $set: {
           settings: updateSettings(req.user, { onboarding: false })

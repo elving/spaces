@@ -283,7 +283,7 @@ class SpaceDetail extends Component {
   }
 
   renderHeader() {
-    const { props, state } = this
+    const { props, state, context } = this
 
     const coverImage = state.coverImage
     const hasCoverImage = !isEmpty(coverImage)
@@ -310,21 +310,23 @@ class SpaceDetail extends Component {
           </p>
         ) : null}
         {this.renderCounters()}
-        <div className="space-detail-cover-actions">
-          <button
-            type="button"
-            onClick={this.openEditFormModal}
-            className="button button--tiny button--primary-alt"
-          >
-            <span className="button-text">
-              <MaterialDesignIcon name="image" />
-              {hasCoverImage
-                ? 'Change Cover Photo'
-                : 'Add Cover Photo'
-              }
-            </span>
-          </button>
-        </div>
+        {context.currentUserIsOwner(props.space) ? (
+          <div className="space-detail-cover-actions">
+            <button
+              type="button"
+              onClick={this.openEditFormModal}
+              className="button button--tiny button--primary-alt"
+            >
+              <span className="button-text">
+                <MaterialDesignIcon name="image" />
+                {hasCoverImage
+                  ? 'Change Cover Photo'
+                  : 'Add Cover Photo'
+                }
+              </span>
+            </button>
+          </div>
+        ) : null}
       </div>
     )
   }

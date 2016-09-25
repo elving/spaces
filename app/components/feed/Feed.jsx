@@ -125,7 +125,11 @@ export default class Feed extends Component {
           </div>
         </Layout>
       ) : (
-        <Layout>
+        <Layout
+          className={classNames({
+            'user-is-onboarding': context.currentUserIsOnboarding()
+          })}
+        >
           {context.currentUserIsOnboarding() ? (
             <CreateSpaceBanner />
           ) : null}

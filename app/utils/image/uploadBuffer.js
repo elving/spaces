@@ -11,12 +11,10 @@ import knoxConfig from '../../config/knox'
 const optimize = (image) => (
   new Promise((resolve, reject) => {
     sharp(image)
-      .resize(750, null)
+      .resize(850, null)
       .min()
       .withoutEnlargement()
       .jpeg()
-      .quality(sizeOf(image) > 200 ? 75 : 100)
-      .progressive()
       .toBuffer((err, buffer, info) => {
         if (err) {
           return reject(err)

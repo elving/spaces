@@ -91,5 +91,11 @@ export default (params = {}) => {
     }
   }
 
+  if (has(params, 'not')) {
+    query[params.not[0]] = {
+      $nin: [params.not[1]]
+    }
+  }
+
   return query
 }

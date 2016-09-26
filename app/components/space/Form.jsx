@@ -116,9 +116,9 @@ export default class SpaceForm extends Component {
       return
     }
 
-    if (getImageSize(file) > 1000) {
+    if (getImageSize(file) > 9999) {
       this.setState({
-        errors: { coverImage: 'Cover photo can\'t be larger than 1MB.' },
+        errors: { coverImage: 'Cover photo can\'t be larger than 10MB.' },
         coverImage: '',
         hasCoverError: true
       })
@@ -354,7 +354,7 @@ export default class SpaceForm extends Component {
             style={{ position: 'relative' }}
           >
             <label htmlFor="name" className="form-label">
-              Cover Photo <small>optional &middot; 1MB or less</small>
+              Cover Photo <small>optional</small>
             </label>
 
             {!isEmpty(state.coverImage) ? (

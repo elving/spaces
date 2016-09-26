@@ -11,7 +11,7 @@ import knoxConfig from '../../config/knox'
 const optimize = (image) => (
   new Promise((resolve, reject) => {
     sharp(image)
-      .resize(850, null)
+      .resize(1024, null)
       .min()
       .withoutEnlargement()
       .jpeg()

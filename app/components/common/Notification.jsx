@@ -5,6 +5,7 @@ import MaterialDesignIcon from './MaterialDesignIcon'
 export default class Notification extends Component {
   static propTypes = {
     type: PropTypes.string,
+    style: PropTypes.object,
     timeout: PropTypes.number,
     onClose: PropTypes.func,
     children: PropTypes.node,
@@ -13,6 +14,7 @@ export default class Notification extends Component {
 
   static defaultProps = {
     type: 'default',
+    style: {},
     timeout: 0,
     onClose: (() => {}),
     isVisible: false
@@ -48,7 +50,10 @@ export default class Notification extends Component {
     const { props } = this
 
     return props.isVisible ? (
-      <div className={`notification notification--${props.type}`}>
+      <div
+        style={props.style}
+        className={`notification notification--${props.type}`}
+      >
         <span className="notification-content">
           {props.children}
         </span>

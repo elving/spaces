@@ -7,7 +7,7 @@ import Spaces from '../space/Spaces'
 import Products from '../product/Products'
 import SharePopup from '../common/SharePopup'
 import FollowButton from '../common/FollowButton'
-import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
+import CreateSpaceBanner from '../onboarding/Banner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import sharePopupContainer from '../container/SharePopup'
 

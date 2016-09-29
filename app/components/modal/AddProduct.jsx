@@ -124,6 +124,12 @@ export default class AddProductModal extends Component {
 
   closeModal = () => {
     const { props } = this
+
+    document.body.classList.remove('ReactModal__Body--open')
+    document.querySelector('html').classList.remove(
+      'ReactModal__Body--open'
+    )
+
     props.onClose()
   }
 
@@ -424,7 +430,11 @@ export default class AddProductModal extends Component {
           'add-product-modal': true,
           'add-product-modal--has-spaces': !isEmpty(spaces)
         })}
-        onRequestClose={props.onClose}
+        onAfterOpen={() => {
+          document.body.classList.add('ReactModal__Body--open')
+          document.querySelector('html').classList.add('ReactModal__Body--open')
+        }}
+        onRequestClose={this.closeModal}
       >
         <section className="add-product-modal-content">
           {this.renderCloseButton()}

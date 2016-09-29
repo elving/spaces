@@ -40,7 +40,13 @@ export default class OnboardingModal extends Component {
 
   onClose = () => {
     const { props } = this
+
     history.replaceState({}, document.title, location.pathname)
+    document.body.classList.remove('ReactModal__Body--open')
+    document.querySelector('html').classList.remove(
+      'ReactModal__Body--open'
+    )
+
     props.onClose()
   }
 
@@ -52,6 +58,10 @@ export default class OnboardingModal extends Component {
         style={resetModalStyles}
         isOpen={props.isVisible}
         className="modal onboarding-modal"
+        onAfterOpen={() => {
+          document.body.classList.add('ReactModal__Body--open')
+          document.querySelector('html').classList.add('ReactModal__Body--open')
+        }}
         onRequestClose={this.onClose}
       >
         <h1 className="onboarding-modal-title">

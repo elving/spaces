@@ -8,7 +8,7 @@ import Tag from '../common/Tag'
 import Layout from '../common/Layout'
 import ProductCard from '../product/Card'
 import AddProductModal from '../modal/AddProduct'
-import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
+import CreateSpaceBanner from '../onboarding/Banner'
 import addProductModalContainer from '../container/AddProductModal'
 
 import toStringId from '../../api/utils/toStringId'

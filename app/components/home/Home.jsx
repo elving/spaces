@@ -11,7 +11,7 @@ import ProfileCard from '../user/Card'
 import CategoryCard from '../category/Card'
 import SpaceTypeCard from '../spaceType/Card'
 import AddProductModal from '../modal/AddProduct'
-import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
+import CreateSpaceBanner from '../onboarding/Banner'
 import addProductModalContainer from '../container/AddProductModal'
 
 import fullReload from '../../utils/fullReload'

@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from 'react'
 import Layout from '../common/Layout'
 import Spaces from '../space/Spaces'
 import Products from '../product/Products'
-import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
+import CreateSpaceBanner from '../onboarding/Banner'
 
 export default class Feed extends Component {
   static propTypes = {

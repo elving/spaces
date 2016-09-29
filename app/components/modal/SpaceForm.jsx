@@ -37,6 +37,17 @@ export default class SpaceFormModal extends Component {
     formMethod: 'POST'
   }
 
+  close = () => {
+    const { props } = this
+
+    document.body.classList.remove('ReactModal__Body--open')
+    document.querySelector('html').classList.remove(
+      'ReactModal__Body--open'
+    )
+
+    props.onClose()
+  }
+
   render() {
     const { props } = this
 
@@ -45,11 +56,15 @@ export default class SpaceFormModal extends Component {
         style={overrideDefaultStyles}
         isOpen={props.isVisible}
         className="modal space-form-modal"
-        onRequestClose={props.onClose}
+        onAfterOpen={() => {
+          document.body.classList.add('ReactModal__Body--open')
+          document.querySelector('html').classList.add('ReactModal__Body--open')
+        }}
+        onRequestClose={this.close}
       >
         <button
           type="button"
-          onClick={props.onClose}
+          onClick={this.close}
           className={classNames({
             button: true,
             'button--icon': true,
@@ -62,7 +77,7 @@ export default class SpaceFormModal extends Component {
 
         <SpaceForm
           space={props.space}
-          onCancel={props.onClose}
+          onCancel={this.close}
           onSuccess={props.onSuccess}
           formMethod={props.formMethod}
         />

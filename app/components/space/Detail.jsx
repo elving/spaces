@@ -31,7 +31,7 @@ import CommentsWidget from '../comment/Widget'
 import SpaceFormModal from '../modal/SpaceForm'
 import AddProductModal from '../modal/AddProduct'
 import OnboardingModal from '../modal/Onboarding'
-import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
+import CreateSpaceBanner from '../onboarding/Banner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import addProductModalContainer from '../container/AddProductModal'
 

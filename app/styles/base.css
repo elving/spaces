@@ -29,10 +29,10 @@ body {
   overflow-x: hidden;
 }
 
-body.no-scroll,
-body.ReactModal__Body--open {
-  height: 100vh;
+.no-scroll,
+.ReactModal__Body--open {
   overflow: hidden !important;
+  overflow-y: hidden !important;
   -webkit-overflow-scrolling: inherit !important;
 }
 
@@ -62,4 +62,10 @@ a:active {
     overflow-x: inherit !important;
     -webkit-overflow-scrolling: touch !important;
   }
+
+  .no-scroll,
+  .ReactModal__Body--open {
+    height: 100vh;
+  }
+
 }

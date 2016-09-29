@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
 import Products from './Products'
-import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
+import CreateSpaceBanner from '../onboarding/Banner'
 
 export default class ProductsIndex extends Component {
   static contextTypes = {

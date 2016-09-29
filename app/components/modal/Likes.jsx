@@ -59,6 +59,12 @@ export default class LikesModal extends Component {
 
   onCloseClick = () => {
     const { props } = this
+
+    document.body.classList.remove('ReactModal__Body--open')
+    document.querySelector('html').classList.remove(
+      'ReactModal__Body--open'
+    )
+
     props.onClose()
   }
 
@@ -168,7 +174,11 @@ export default class LikesModal extends Component {
         style={overrideDefaultStyles}
         isOpen={props.isVisible}
         className="modal likes-modal"
-        onRequestClose={props.onClose}
+        onAfterOpen={() => {
+          document.body.classList.add('ReactModal__Body--open')
+          document.querySelector('html').classList.add('ReactModal__Body--open')
+        }}
+        onRequestClose={this.onCloseClick}
       >
         {this.renderContent()}
       </Modal>

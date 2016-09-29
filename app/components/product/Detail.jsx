@@ -16,7 +16,7 @@ import LikeButton from '../common/LikeButton'
 import CardAvatars from '../card/CardAvatars'
 import CommentsWidget from '../comment/Widget'
 import AddProductModal from '../modal/AddProduct'
-import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
+import CreateSpaceBanner from '../onboarding/Banner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import {

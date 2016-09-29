@@ -7,7 +7,7 @@ import React, { PropTypes, PureComponent } from 'react'
 import Layout from '../common/Layout'
 import Avatar from './Avatar'
 import CuratorBadge from './CuratorBadge'
-import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
+import CreateSpaceBanner from '../onboarding/Banner'
 
 import inflect from '../../utils/inflect'
 import isCurator from '../../utils/user/isCurator'

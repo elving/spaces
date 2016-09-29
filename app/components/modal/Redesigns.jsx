@@ -33,6 +33,12 @@ export default class RedesignsModal extends Component {
 
   onCloseClick = () => {
     const { props } = this
+
+    document.body.classList.remove('ReactModal__Body--open')
+    document.querySelector('html').classList.remove(
+      'ReactModal__Body--open'
+    )
+
     props.onClose()
   }
 
@@ -42,7 +48,7 @@ export default class RedesignsModal extends Component {
         type="button"
         onClick={this.onCloseClick}
         className={
-          "redesigns-modal-close button button--icon button--transparent"
+          'redesigns-modal-close button button--icon button--transparent'
         }
       >
         <MaterialDesignIcon name="close" />
@@ -76,7 +82,11 @@ export default class RedesignsModal extends Component {
         style={overrideDefaultStyles}
         isOpen={props.isVisible}
         className="modal redesigns-modal"
-        onRequestClose={props.onClose}
+        onAfterOpen={() => {
+          document.body.classList.add('ReactModal__Body--open')
+          document.querySelector('html').classList.add('ReactModal__Body--open')
+        }}
+        onRequestClose={this.onCloseClick}
       >
         {this.renderRedesigns()}
       </Modal>

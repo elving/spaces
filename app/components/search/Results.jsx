@@ -11,7 +11,7 @@ import SpaceCard from '../space/Card'
 import ProductCard from '../product/Card'
 import ProfileCard from '../user/Card'
 import AddProductModal from '../modal/AddProduct'
-import CreateSpaceBanner from '../onboarding/CreateSpaceBanner'
+import CreateSpaceBanner from '../onboarding/Banner'
 import addProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'

@@ -53,3 +53,39 @@
   font-size: 16px;
   margin: 0;
 }
+
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+  }
+
+  .footer-nav {
+    margin-bottom: 15px;
+  }
+
+  .footer-link[href="/"] {
+    display: none;
+  }
+
+  .footer-link,
+  .footer-social-link {
+    font-size: 16px;
+    margin-right: 10px;
+  }
+
+  .footer-social {
+    text-align: center;
+    display: block;
+  }
+
+  .footer-social-link {
+    display: inline-block;
+  }
+
+  .footer-copyright {
+    font-size: 14px;
+    width: 100%;
+    display: block;
+    margin-top: 15px;
+  }
+}

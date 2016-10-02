@@ -130,9 +130,15 @@ export default class SpaceCard extends Component {
   }
 
   openRedesignPopup = () => {
-    this.setState({
-      redesignPopupIsOpen: true
-    })
+    const { context } = this
+
+    if (context.userLoggedIn()) {
+      this.setState({
+        redesignPopupIsOpen: true
+      })
+    } else {
+      window.location.href = '/login/'
+    }
   }
 
   closeRedesignPopup = () => {

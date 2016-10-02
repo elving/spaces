@@ -43,6 +43,7 @@ class SpaceDetail extends Component {
   static contextTypes = {
     user: PropTypes.object,
     csrf: PropTypes.string,
+    userLoggedIn: PropTypes.func,
     currentUserIsOwner: PropTypes.func,
     currentUserIsOnboarding: PropTypes.func
   }
@@ -219,9 +220,15 @@ class SpaceDetail extends Component {
   }
 
   openRedesignPopup = () => {
-    this.setState({
-      redesignPopupIsOpen: true
-    })
+    const { context } = this
+
+    if (context.userLoggedIn()) {
+      this.setState({
+        redesignPopupIsOpen: true
+      })
+    } else {
+      window.location.href = '/login/'
+    }
   }
 
   closeRedesignPopup = () => {

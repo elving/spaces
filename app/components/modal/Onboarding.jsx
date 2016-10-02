@@ -102,7 +102,7 @@ export default class OnboardingModal extends Component {
           className="onboarding-modal-actions onboarding-modal-actions--main"
         >
           <a
-            href="#"
+            href="/about/"
             className="onboarding-modal-action button button--primary"
           >
             Learn More

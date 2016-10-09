@@ -75,16 +75,6 @@ class ProductDetail extends Component {
     }
   }
 
-  getShortUrl = () => {
-    const { props } = this
-    return `${window.location.origin}/${get(props.product, 'shortUrl')}/`
-  }
-
-  getDetailUrl = () => {
-    const { props } = this
-    return `${window.location.origin}/${get(props.product, 'detailUrl')}/`
-  }
-
   imageDidLoad = (img) => {
     this.setState({
       imageWidth: get(img, 'width', '100%'),
@@ -322,10 +312,14 @@ class ProductDetail extends Component {
 
     return state.sharePopupIsCreated ? (
       <SharePopup
-        url={this.getShortUrl}
+        url={() => (
+          `${window.location.origin}/${get(props.product, 'detailUrl')}/`
+        )}
         title="Share this product"
         isOpen={state.sharePopupIsOpen}
-        shareUrl={this.getDetailUrl}
+        shareUrl={() => (
+          `${window.location.origin}/${get(props.product, 'shortUrl')}/`
+        )}
         className="share-popup"
         shareText={(
           `${get(props.product, 'name')} by ` +

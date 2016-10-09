@@ -44,5 +44,38 @@ export default (schema) => {
     .get(function() { return this.__lastComments })
     .set(function(lastComments = []) { this.__lastComments = lastComments })
 
+  schema
+    .virtual('wasNew')
+    .get(function() { return this.__wasNew })
+    .set(function(wasNew = false) { this.__wasNew = wasNew })
+
+  schema
+    .virtual('shouldUpdateCategories')
+    .get(function() { return this.__shouldUpdateCategories })
+    .set(function(shouldUpdateCategories = false) {
+      this.__shouldUpdateCategories = shouldUpdateCategories
+    })
+
+  schema
+    .virtual('productCategories')
+    .get(function() { return this.__productCategories })
+    .set(function(productCategories = []) {
+      this.__productCategories = productCategories
+    })
+
+  schema
+    .virtual('shouldUpdateRooms')
+    .get(function() { return this.__shouldUpdateRooms })
+    .set(function(shouldUpdateRooms = false) {
+      this.__shouldUpdateRooms = shouldUpdateRooms
+    })
+
+  schema
+    .virtual('productRooms')
+    .get(function() { return this.__productRooms })
+    .set(function(productRooms = []) {
+      this.__productRooms = productRooms
+    })
+
   return schema
 }

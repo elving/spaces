@@ -18,7 +18,7 @@ export default (parent) => (
         .where({ parent })
         .populate('createdBy')
         .sort('createdAt')
-        .exec(async (err, likes) => {
+        .exec(async (err, likes = []) => {
           if (err) {
             return reject(parseError(err))
           }

@@ -6,10 +6,8 @@ import mongoose from 'mongoose'
 
 import toIds from '../utils/toIds'
 import sanitize from './sanitize'
-import setImage from './setImage'
 import parseError from '../utils/parseError'
 import findCategoryByName from '../category/findByName'
-import { invalidateFromCache } from '../cache'
 
 export default (_id, props) => (
   new Promise(async (resolve, reject) => {
@@ -54,8 +52,6 @@ export default (_id, props) => (
           return reject(parseError(err))
         }
 
-        await invalidateFromCache(_id)
-        setImage(spaceType)
         resolve(spaceType)
       })
   })

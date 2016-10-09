@@ -155,7 +155,7 @@ class SpaceDetail extends Component {
 
   getShortUrl = () => {
     const { props } = this
-    return `${window.location.origin}/${props.shortUrl}/`
+    return `${window.location.origin}/${get(props.space, 'shortUrl')}/`
   }
 
   getDetailUrl = () => {
@@ -430,17 +430,21 @@ class SpaceDetail extends Component {
 
     return state.sharePopupIsCreated ? (
       <SharePopup
-        url={this.getShortUrl}
+        url={() => (
+          `${window.location.origin}/${get(props.space, 'detailUrl')}/`
+        )}
         title="Share this space"
         isOpen={state.sharePopupIsOpen}
-        shareUrl={this.getDetailUrl}
+        shareUrl={() => (
+          `${window.location.origin}/${get(props.space, 'shortUrl')}/`
+        )}
         className="share-popup"
         shareText={(
           `${get(props.space, 'name')} — Designed by ` +
           `${get(props.space, 'createdBy.username')}, ` +
           `featuring ${size(get(props.space, 'products', []))} products.`
         )}
-        shareImage={get(props.space, 'image')}
+        shareImage={get(props.space, 'shareImage')}
         onClickClose={this.closeSharePopup}
       />
     ) : null

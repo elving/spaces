@@ -56,4 +56,10 @@ process.on('SIGINT', () => {
   })
 })
 
-// NODE_ENV=development ./node_modules/.bin/babel-node ./migrations/run.js
+// NODE_ENV=development ./node_modules/.bin/babel-node ./migrations/run.js category/setImage
+// NODE_ENV=development ./node_modules/.bin/babel-node ./migrations/run.js category/setProductsCount
+// NODE_ENV=development ./node_modules/.bin/babel-node ./migrations/run.js category/setSpacesCount
+// NODE_ENV=development ./node_modules/.bin/babel-node ./migrations/run.js space/setProductsMetadata
+// NODE_ENV=development ./node_modules/.bin/babel-node ./migrations/run.js spaceType/setImage
+// NODE_ENV=development ./node_modules/.bin/babel-node ./migrations/run.js spaceType/setProductsCount
+// NODE_ENV=development ./node_modules/.bin/babel-node ./migrations/run.js spaceType/setSpacesCount

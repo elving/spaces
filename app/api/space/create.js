@@ -1,25 +1,16 @@
 import has from 'lodash/has'
-import get from 'lodash/get'
 import set from 'lodash/set'
 import assign from 'lodash/assign'
 import isEmpty from 'lodash/isEmpty'
 import mongoose from 'mongoose'
 
-import toIds from '../utils/toIds'
 import getTags from '../../utils/product/getTags'
 import sanitize from './sanitize'
-import logError from '../../utils/logError'
 import isDataUrl from '../../utils/isDataUrl'
 import parseError from '../utils/parseError'
-import toStringId from '../utils/toStringId'
 import getProducts from './getProducts'
-import generateImage from '../../utils/image/generateImage'
 import getProductImages from '../utils/getProductImages'
 import uploadImageFromDataUrl from '../../utils/image/uploadImageFromDataUrl'
-import { removeFromCache, invalidateFromCache } from '../cache'
-
-import updateRoom from '../spaceType/update'
-import updateCategory from '../category/update'
 
 export default props => (
   new Promise(async (resolve, reject) => {
@@ -27,25 +18,13 @@ export default props => (
 
     let products = []
     let updatedProps = sanitize(props)
-    let shouldUpdateImage = false
 
     if (has(updatedProps, 'products')) {
       try {
         products = await getProducts(updatedProps.products)
         updatedProps = assign({}, updatedProps, getTags(products))
-        shouldUpdateImage = true
       } catch (getProductsErr) {
         return reject(getProductsErr)
-      }
-
-      try {
-        for (const category of get(updatedProps, 'categories', [])) {
-          await updateCategory(toStringId(category), {
-            $inc: { spacesCount: 1 }
-          })
-        }
-      } catch (err) {
-        return reject(parseError(err))
       }
     }
 
@@ -68,20 +47,17 @@ export default props => (
       return reject(parseError(errors))
     }
 
-    try {
-      await updateRoom(toStringId(get(space, 'spaceType')), {
-        $inc: { spacesCount: 1 }
-      })
-    } catch (err) {
-      return reject(parseError(err))
+    if (!isEmpty(products)) {
+      space.productImages = getProductImages(products)
+      space.shouldUpdateImage = true
     }
 
-    space.save((err) => {
+    space.save((err, savedSpace) => {
       if (err) {
         return reject(parseError(err))
       }
 
-      space
+      savedSpace
         .populate('products')
         .populate('createdBy')
         .populate('spaceType')
@@ -89,24 +65,6 @@ export default props => (
           if (populationErr) {
             return reject(parseError(populationErr))
           }
-
-          if (shouldUpdateImage) {
-            try {
-              const images = getProductImages(products)
-
-              generateImage('spaces', images)
-                .then((image) => {
-                  populatedSpace
-                    .set({ image })
-                    .save(() => invalidateFromCache(toIds(populatedSpace)))
-                })
-            } catch (generateImageErr) {
-              logError(generateImageErr)
-            }
-          }
-
-          await removeFromCache('space-all')
-          await removeFromCache('space-latest')
 
           resolve(populatedSpace)
         })

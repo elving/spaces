@@ -15,6 +15,19 @@
 
 html,
 body {
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+html,
+body,
+input,
+keygen,
+select,
+button,
+textarea {
   color: #555555;
   font-size: 18px;
   font-family: "Lato", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -23,10 +36,6 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-tap-highlight-color: transparent;
-  width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
 }
 
 .no-scroll,

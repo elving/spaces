@@ -10,11 +10,6 @@ import uploadImageFromUrl from '../../utils/image/uploadImageFromUrl'
 import toIds from '../utils/toIds'
 import toStringId from '../utils/toStringId'
 import parseError from '../utils/parseError'
-import toIdsFromPath from '../utils/toIdsFromPath'
-import { invalidateFromCache } from '../cache'
-
-import updateRoom from '../spaceType/update'
-import updateCategory from '../category/update'
 
 import { default as findColorByName } from '../color/findByName'
 import { default as getOrCreateBrand } from '../brand/getOrCreate'
@@ -62,20 +57,8 @@ export default (id, props) => (
 
           set(sanitizedProps, 'categories', toIds(categories))
 
-          const prevCategories = toIds(get(product, 'categories', []))
-          const nextCategories = toIds(get(sanitizedProps, 'categories', []))
-
-          for (const prevCategory of prevCategories) {
-            await updateCategory(prevCategory, {
-              $inc: { productsCount: -1 }
-            })
-          }
-
-          for (const nextCategory of nextCategories) {
-            await updateCategory(nextCategory, {
-              $inc: { productsCount: 1 }
-            })
-          }
+          product.productCategories = toIds(get(product, 'categories', []))
+          product.shouldUpdateCategories = true
         } catch (err) {
           if (has(err, 'name')) {
             return reject({ categories: get(err, 'name') })
@@ -127,20 +110,8 @@ export default (id, props) => (
 
           set(sanitizedProps, 'spaceTypes', toIds(spaceTypes))
 
-          const prevRooms = toIds(get(product, 'spaceTypes', []))
-          const nextRooms = toIds(get(sanitizedProps, 'spaceTypes', []))
-
-          for (const prevRoom of prevRooms) {
-            await updateRoom(prevRoom, {
-              $inc: { productsCount: -1 }
-            })
-          }
-
-          for (const nextRoom of nextRooms) {
-            await updateRoom(nextRoom, {
-              $inc: { productsCount: 1 }
-            })
-          }
+          product.productRooms = toIds(get(product, 'spaceTypes', []))
+          product.shouldUpdateRooms = true
         } catch (err) {
           if (has(err, 'name')) {
             return reject({ spaceTypes: get(err, 'name') })
@@ -170,14 +141,6 @@ export default (id, props) => (
               return reject(parseError(err))
             }
 
-            await invalidateFromCache([
-              toIds(product),
-              toIdsFromPath(product, 'brand'),
-              toIdsFromPath(product, 'colors'),
-              toIdsFromPath(product, 'categories'),
-              toIdsFromPath(product, 'spaceTypes')
-            ])
-
             resolve(product)
           })
         } catch (err) {
@@ -193,14 +156,6 @@ export default (id, props) => (
           if (err) {
             return reject(parseError(err))
           }
-
-          await invalidateFromCache([
-            toIds(product),
-            toIdsFromPath(product, 'brand'),
-            toIdsFromPath(product, 'colors'),
-            toIdsFromPath(product, 'categories'),
-            toIdsFromPath(product, 'spaceTypes')
-          ])
 
           resolve(product)
         })

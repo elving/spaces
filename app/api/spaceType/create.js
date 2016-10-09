@@ -6,11 +6,9 @@ import mongoose from 'mongoose'
 
 import toIds from '../utils/toIds'
 import sanitize from './sanitize'
-import setImage from './setImage'
 import validate from './validate'
 import parseError from '../utils/parseError'
 import findCategoryByName from '../category/findByName'
-import { removeFromCache } from '../cache'
 
 export default (props) => (
   new Promise(async (resolve, reject) => {
@@ -58,8 +56,6 @@ export default (props) => (
         return reject(parseError(err))
       }
 
-      await removeFromCache('spaceType-all')
-      setImage(spaceType)
       resolve(spaceType)
     })
   })

@@ -8,7 +8,6 @@ import isAdmin from '../utils/user/isAdmin'
 import setProps from '../utils/middlewares/setProps'
 import setOgTags from '../utils/middlewares/setOgTags'
 import setMetadata from '../utils/middlewares/setMetadata'
-import updateSettings from '../utils/user/updateSettings'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import search from '../api/space/search'
@@ -136,20 +135,7 @@ export const createSpace = async (req, res) => {
       })
     )
 
-    if (get(req.user, 'settings.onboarding', true)) {
-      user = await updateUser(userId, {
-        $set: {
-          settings: updateSettings(req.user, { onboarding: false })
-        },
-        $addToSet: { spaces: toObjectId(space) }
-      })
-    } else {
-      user = await updateUser(userId, {
-        $addToSet: { spaces: toObjectId(space) }
-      })
-    }
-
-    req.logIn(user, () => res.status(200).json(space))
+    res.status(200).json(space)
   } catch (err) {
     res.status(500).json({ err })
   }
@@ -223,11 +209,7 @@ export const redesignSpace = async (req, res) => {
       $addToSet: { redesigns: toObjectId(space) }
     })
 
-    const user = await updateUser(userId, {
-      $addToSet: { spaces: toObjectId(space) }
-    })
-
-    req.logIn(user, () => res.status(200).json(space))
+    res.status(200).json(space)
   } catch (err) {
     res.status(500).json({ err })
   }

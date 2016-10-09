@@ -1,21 +1,12 @@
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import isEqual from 'lodash/isEqual'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import getAll from '../api/comment/getAll'
 import create from '../api/comment/create'
 import destroy from '../api/comment/destroy'
-import toObjectId from '../api/utils/toObjectId'
-import updateUser from '../api/user/update'
-import updateSpace from '../api/space/updateStats'
-import updateProduct from '../api/product/updateStats'
 
-export const comment = async (req, res) => {
-  const userId = get(req, 'user.id')
-  const parent = get(req.body, 'parent', '')
-  const parentType = get(req.body, 'parentType', '')
-
+export const postComment = async (req, res) => {
   if (!isAuthenticatedUser(req.user)) {
     return res.status(500).json({
       err: { generic: 'Not authorized' }
@@ -24,22 +15,7 @@ export const comment = async (req, res) => {
 
   try {
     const comment = await create(req.body)
-
-    if (isEqual(parentType, 'space')) {
-      await updateSpace(parent, {
-        $inc: { commentsCount: 1 }
-      })
-    } else {
-      await updateProduct(parent, {
-        $inc: { commentsCount: 1 }
-      })
-    }
-
-    const user = await updateUser(userId, {
-      $addToSet: { comments: toObjectId(comment) }
-    })
-
-    req.logIn(user, () => res.status(200).json(comment))
+    res.status(200).json(comment)
   } catch (err) {
     res.status(500).json({ err })
   }
@@ -47,7 +23,6 @@ export const comment = async (req, res) => {
 
 export const deleteComment = async (req, res) => {
   const id = get(req.params, 'id', '')
-  const userId = get(req, 'user.id')
 
   if (!isAuthenticatedUser(req.user)) {
     return res.status(500).json({
@@ -56,23 +31,8 @@ export const deleteComment = async (req, res) => {
   }
 
   try {
-    const comment = await destroy(id)
-
-    if (isEqual(get(comment, 'parentType'), 'space')) {
-      await updateSpace(get(comment, 'parent'), {
-        $inc: { commentsCount: -1 }
-      })
-    } else {
-      await updateProduct(get(comment, 'parent'), {
-        $inc: { commentsCount: -1 }
-      })
-    }
-
-    const user = await updateUser(userId, {
-      $pull: { comments: toObjectId(comment) }
-    })
-
-    req.logIn(user, () => res.status(200).json({ success: true }))
+    await destroy(id)
+    res.status(200).json({ success: true })
   } catch (err) {
     res.status(500).json({
       err: {

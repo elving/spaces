@@ -68,7 +68,8 @@
   justify-content: center;
 }
 
-.image-picker-current--loading .image-picker-current-image {
+.image-picker-current--loading .image-picker-current-image,
+.image-picker-current--loading .image-picker-no-images-icon {
   top: -9999px;
   left: -9999px;
   position: absolute;

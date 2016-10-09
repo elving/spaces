@@ -4,7 +4,6 @@ import toStringId from '../utils/toStringId'
 import getProducts from './getProducts'
 import generateImage from '../../utils/image/generateImage'
 import getProductImages from '../utils/getProductImages'
-import { invalidateFromCache } from '../cache'
 
 export default (category) => (
   new Promise(async (resolve, reject) => {
@@ -21,7 +20,6 @@ export default (category) => (
           return reject(err)
         }
 
-        invalidateFromCache(toStringId(category))
         resolve()
       })
     } else {

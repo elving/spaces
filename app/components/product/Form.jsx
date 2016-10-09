@@ -6,6 +6,7 @@ import axios from 'axios'
 import Select from 'react-select'
 import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
+import defaultTo from 'lodash/defaultTo'
 import serialize from 'form-serialize'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
@@ -16,7 +17,6 @@ import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
 import focusOnFirstError from '../../utils/dom/focusOnFirstError'
-import getValidProductImages from '../../utils/getValidProductImages'
 
 export default class ProductForm extends Component {
   static contextTypes = {
@@ -67,7 +67,7 @@ export default class ProductForm extends Component {
       hasScrapped: false,
       description: get(props.product, 'description', ''),
       imageFromUrl: null,
-      isLoadingImage: false,
+      isLoadingImage: true,
       savingSuccessful: false,
       deletingSuccessful: false,
       scrappedSuccessful: false,
@@ -139,10 +139,13 @@ export default class ProductForm extends Component {
             this.setState({
               name: get(product, 'name', ''),
               note: get(product, 'note', ''),
+              image: defaultTo(head(productImages), ''),
               price: get(product, 'price', ''),
               brand: get(product, 'brand', ''),
+              images: productImages,
               errors: {},
               product: {},
+              imageIndex: 0,
               isScraping: false,
               hasScrapped: true,
               description,
@@ -151,40 +154,6 @@ export default class ProductForm extends Component {
               productAlreadyExists: false,
               descriptionCharsLeft: (500 - descriptionLength),
               hasDescriptionCharsError: (descriptionLength > 500)
-            }, () => {
-              getValidProductImages(productImages, 200)
-                .then(validImages => {
-                  const images = !isEmpty(validImages)
-                    ? validImages
-                    : productImages
-
-                  this.setState({
-                    image: head(images),
-                    images,
-                    errors: {},
-                    product: {},
-                    imageIndex: 0,
-                    isScraping: false,
-                    hasScrapped: true,
-                    isLoadingImage: !isEmpty(images),
-                    savingSuccessful: false,
-                    productAlreadyExists: false
-                  })
-                })
-                .catch(() => {
-                  this.setState({
-                    image: head(productImages),
-                    images: productImages,
-                    errors: {},
-                    product: {},
-                    imageIndex: 0,
-                    isScraping: false,
-                    hasScrapped: true,
-                    isLoadingImage: !isEmpty(productImages),
-                    savingSuccessful: false,
-                    productAlreadyExists: false
-                  })
-                })
             })
           }
         })
@@ -411,6 +380,22 @@ export default class ProductForm extends Component {
     })
   }
 
+  onImageError = () => {
+    const { state } = this
+    const hasMoreImages = (
+      !isEmpty(state.images) &&
+      size(state.images) > state.imageIndex
+    )
+
+    this.setState({
+      image: hasMoreImages
+        ? state.images[state.imageIndex + 1]
+        : '',
+      imageIndex: state.imageIndex + 1,
+      isLoadingImage: hasMoreImages
+    })
+  }
+
   form = null
   scraperForm = null
   imageUrlInput = null
@@ -551,7 +536,7 @@ export default class ProductForm extends Component {
     const { props, state } = this
 
     const isPOST = props.formMethod === 'POST'
-    const hasImages = !isEmpty(state.images)
+    const hasImages = !isEmpty(state.images) || !isEmpty(state.image)
 
     const shouldDisable = (
       state.isSaving ||
@@ -594,10 +579,17 @@ export default class ProductForm extends Component {
               src={state.image}
               role="presentation"
               onLoad={this.onImageLoad}
+              onError={this.onImageError}
               className="image-picker-current-image"
             />
           )}
         </div>
+
+        <small style={{ marginTop: 10 }} className="form-help">
+          If the images extracted from the product&apos;s website are not
+          desirible, click the &ldquo;Upload Image From Url&rdquo; and
+          use the url of a better image.
+        </small>
 
         {state.imageUrlFormIsVisible || !hasImages ? (
           <div className="image-picker-url-form">
@@ -774,6 +766,7 @@ export default class ProductForm extends Component {
             name="url"
             value={state.url}
             required
+            readOnly
             onChange={this.onUrlChange}
             disabled={state.isSaving}
             className={classNames({
@@ -786,6 +779,19 @@ export default class ProductForm extends Component {
           {hasUrlError ? (
             <small className="form-error">{urlError}</small>
           ) : null}
+
+          <small className="form-help">
+            If you want to change the product&apos;s url go back to the&nbsp;
+            <a
+              href="#"
+              onClick={(event) => {
+                event.preventDefault()
+                this.reset()
+              }}
+            >
+              product search form.
+            </a>
+          </small>
         </div>
 
         <div className="form-group">
@@ -822,7 +828,7 @@ export default class ProductForm extends Component {
 
         <div className="form-group">
           <label htmlFor="name" className="form-label">
-            Curator's Note <small>optional</small>
+            Curator&apos;s Note <small>optional</small>
           </label>
 
           <textarea
@@ -838,15 +844,15 @@ export default class ProductForm extends Component {
             placeholder="I bought this product because it's awesome..."
           />
 
-          <small className="form-help">
-            Give some insight into why you are adding this product.
-            For example, if you own it, you can write a simple review
-            about what makes this product special.
-          </small>
-
           {hasNameError ? (
             <small className="form-error">{noteError}</small>
           ) : null}
+
+          <small className="form-help">
+            Give some insight into why you are adding this product,
+            e.g. you own it and want write a simple review about what
+            makes it special.
+          </small>
         </div>
 
         <div className="form-group">
@@ -970,6 +976,12 @@ export default class ProductForm extends Component {
           {hasCategoriesError ? (
             <small className="form-error">{categoriesError}</small>
           ) : null}
+
+          <small className="form-help">
+            If you are adding new categories for this product, make sure
+            that they can be used for other products. We want to ensure that
+            categories have plenty of products.
+          </small>
         </div>
 
         <div className="form-group">
@@ -1024,11 +1036,16 @@ export default class ProductForm extends Component {
           {hasColorsError ? (
             <small className="form-error">{colorsError}</small>
           ) : null}
+
+          <small className="form-help">
+            If there&apos;s a color that&apos;s not present in this list please
+            &nbsp;<a href="mailto:support@joinspaces.co">let us know</a>.
+          </small>
         </div>
 
         <div className="form-group">
           <label htmlFor="spaces" className="form-label">
-            Spaces <small>required</small>
+            Rooms <small>required</small>
           </label>
 
           <Select
@@ -1055,6 +1072,13 @@ export default class ProductForm extends Component {
           {hasSpaceTypesError ? (
             <small className="form-error">{spaceTypesError}</small>
           ) : null}
+
+          <small className="form-help">
+            Select rooms where this product could be found or used, e.g. a
+            refrigerator is used for kitchens. If this product can be used
+            in any room select the &ldquo;Any&rdquo; room option. This is
+            used to generate product suggestions for spaces.
+          </small>
         </div>
 
         <div className="form-group">
@@ -1134,7 +1158,7 @@ export default class ProductForm extends Component {
           timeout={3500}
           isVisible
         >
-          "{name}" was added successfully.
+          &quot;{name}&quot; was added successfully.
           {'\u00A0'}
           Click
           {'\u00A0'}
@@ -1149,7 +1173,7 @@ export default class ProductForm extends Component {
           onClose={this.onNotificationClose}
           isVisible
         >
-          "{name}" was updated successfully.
+          &quot;{name}&quot; was updated successfully.
         </Notification>
       )
     } else if (state.deletingSuccessful) {
@@ -1160,7 +1184,7 @@ export default class ProductForm extends Component {
           onClose={this.onNotificationClose}
           isVisible
         >
-          "{name}" was deleted successfully. Redirecting...
+          &quot;{name}&quot; was deleted successfully. Redirecting...
         </Notification>
       )
     } else if (hasGenericError) {

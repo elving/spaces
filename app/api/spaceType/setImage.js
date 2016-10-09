@@ -4,7 +4,6 @@ import toStringId from '../utils/toStringId'
 import getProducts from './getProducts'
 import generateImage from '../../utils/image/generateImage'
 import getProductImages from '../utils/getProductImages'
-import { invalidateFromCache } from '../cache'
 
 export default (spaceType) => (
   new Promise(async (resolve, reject) => {
@@ -16,12 +15,12 @@ export default (spaceType) => (
       )
 
       spaceType.set({ image })
+
       spaceType.save((err) => {
         if (err) {
           return reject(err)
         }
 
-        invalidateFromCache(toStringId(spaceType))
         resolve()
       })
     } else {

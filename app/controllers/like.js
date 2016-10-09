@@ -1,6 +1,5 @@
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import isEqual from 'lodash/isEqual'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import getAll from '../api/like/getAll'
@@ -8,13 +7,8 @@ import create from '../api/like/create'
 import search from '../api/like/search'
 import destroy from '../api/like/destroy'
 import hasLiked from '../api/like/hasLiked'
-import updateUser from '../api/user/update'
-import toObjectId from '../api/utils/toObjectId'
-import updateSpace from '../api/space/updateStats'
-import updateProduct from '../api/product/updateStats'
 
 export const like = async (req, res) => {
-  const userId = get(req, 'user.id')
   const parent = get(req.body, 'parent', '')
   const createdBy = get(req.body, 'createdBy', '')
   const parentType = get(req.body, 'parentType', '')
@@ -32,22 +26,7 @@ export const like = async (req, res) => {
       res.status(200).json({ success: true })
     } else {
       const newLike = await create(req.body)
-
-      if (isEqual(parentType, 'space')) {
-        await updateSpace(parent, {
-          $inc: { likesCount: 1 }
-        })
-      } else {
-        await updateProduct(parent, {
-          $inc: { likesCount: 1 }
-        })
-      }
-
-      const user = await updateUser(userId, {
-        $addToSet: { likes: toObjectId(newLike) }
-      })
-
-      req.logIn(user, () => res.status(200).json(newLike))
+      res.status(200).json(newLike)
     }
   } catch (err) {
     res.status(500).json({
@@ -59,7 +38,6 @@ export const like = async (req, res) => {
 }
 
 export const unlike = async (req, res) => {
-  const userId = get(req, 'user.id')
   const parent = get(req.params, 'parent', '')
   const createdBy = get(req.params, 'createdBy', '')
   const parentType = get(req.params, 'parentType', '')
@@ -71,23 +49,8 @@ export const unlike = async (req, res) => {
   }
 
   try {
-    const deletedLike = await destroy(parentType, parent, createdBy)
-
-    if (isEqual(parentType, 'space')) {
-      await updateSpace(parent, {
-        $inc: { likesCount: -1 }
-      })
-    } else {
-      await updateProduct(parent, {
-        $inc: { likesCount: -1 }
-      })
-    }
-
-    const user = await updateUser(userId, {
-      $pull: { likes: toObjectId(deletedLike) }
-    })
-
-    req.logIn(user, () => res.status(200).json({ success: true }))
+    await destroy(parentType, parent, createdBy)
+    res.status(200).json({ success: true })
   } catch (err) {
     res.status(500).json({
       err: {

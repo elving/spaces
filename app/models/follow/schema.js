@@ -1,6 +1,7 @@
 import shortid from 'shortid'
 import mongoose from 'mongoose'
 
+import { default as applyHooks } from './hooks'
 import { default as applyVirtuals } from './virtuals'
 import { default as applyValidations } from './validations'
 
@@ -11,6 +12,7 @@ const FollowSchema = new mongoose.Schema({
   parentType: { type: String, trim: true, default: '' }
 }, { timestamps: true })
 
+applyHooks(FollowSchema)
 applyVirtuals(FollowSchema)
 applyValidations(FollowSchema)
 

@@ -8,7 +8,7 @@ import toIdsFromPath from '../utils/toIdsFromPath'
 import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default (_id) => (
+export default _id => (
   new Promise((resolve, reject) => {
     const key = `user-${_id}`
 

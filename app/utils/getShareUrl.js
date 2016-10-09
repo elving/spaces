@@ -46,7 +46,7 @@ export const getFacebookUrl = (url) => {
 }
 
 export const getPinterestUrl = (url, imageUrl, text) => {
-  let shareUrl = 'https://www.pinterest.com/pin/create/button/?'
+  let shareUrl = 'https://www.pinterest.com/pin/create/link/?'
 
   if (!isEmpty(url)) {
     shareUrl += `url=${encodeURIComponent(url)}&`

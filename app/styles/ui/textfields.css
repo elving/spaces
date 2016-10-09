@@ -13,6 +13,17 @@ input:-webkit-autofill {
   min-height: 47px;
 }
 
+.textfield[readonly],
+.textfield:read-only,
+.textfield[readonly]:hover,
+.textfield:read-only:hover,
+.textfield[readonly]:focus,
+.textfield:read-only:focus {
+  cursor: default;
+  border-color: #f0f0f0;
+  background-color: #f0f0f0;
+}
+
 .textfield--small {
   font-size: 16px;
   padding: 5px 10px;

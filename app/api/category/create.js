@@ -2,10 +2,7 @@ import isEmpty from 'lodash/isEmpty'
 import mongoose from 'mongoose'
 
 import sanitize from './sanitize'
-import setImage from './setImage'
-
 import parseError from '../utils/parseError'
-import { removeFromCache } from '../cache'
 
 export default (props) => (
   new Promise(async (resolve, reject) => {
@@ -22,8 +19,6 @@ export default (props) => (
         return reject(parseError(err))
       }
 
-      await removeFromCache('category-all')
-      setImage(category)
       resolve(category)
     })
   })

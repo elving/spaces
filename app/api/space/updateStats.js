@@ -15,13 +15,13 @@ export default (_id, props) => (
 
     mongoose
       .model('Space')
-      .findOneAndUpdate({ _id }, updates, options, async (err, spaceType) => {
+      .findOneAndUpdate({ _id }, updates, options, async (err, space) => {
         if (err) {
           return reject(parseError(err))
         }
 
         await invalidateFromCache(_id)
-        resolve(spaceType)
+        resolve(space)
       })
   })
 )

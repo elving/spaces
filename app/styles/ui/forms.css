@@ -102,8 +102,10 @@
   margin-left: 10px;
 }
 
-.form-help {
-  color: #666666;
+.form-help,
+.form-help > a,
+.form-help > a:hover {
+  color: #888888;
 }
 
 @media (max-width: 768px) {

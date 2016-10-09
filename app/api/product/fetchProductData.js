@@ -1,17 +1,20 @@
 /* eslint-disable max-len */
 import get from 'lodash/get'
+import set from 'lodash/set'
+import map from 'lodash/map'
 import trim from 'lodash/trim'
 import head from 'lodash/head'
 import keys from 'lodash/keys'
 import uniq from 'lodash/uniq'
 import slice from 'lodash/slice'
 import filter from 'lodash/filter'
+import replace from 'lodash/replace'
 import isEmpty from 'lodash/isEmpty'
 import forEach from 'lodash/forEach'
 import compact from 'lodash/compact'
 import request from 'request'
 import cheerio from 'cheerio'
-import parseInt from 'lodash/parseInt'
+import capitalize from 'lodash/capitalize'
 import { parse as parseUrl } from 'url'
 
 import toJSON from '../utils/toJSON'
@@ -39,6 +42,145 @@ export default url => (
     const urlHost = get(urlData, 'host')
     const urlProtocol = get(urlData, 'protocol')
 
+    const exists = element => (
+      element && element.length
+    )
+
+    const toSentence = str => (
+      capitalize(trim(str))
+    )
+
+    const toAbsolutePath = relativePath => {
+      if ((/^(\/\/)/).test(relativePath)) {
+        return `${urlProtocol}${relativePath}`
+      } else if ((/^(\/)\w/i).test(relativePath)) {
+        return `${urlProtocol}//${urlHost}${relativePath}`
+      } else if (!(/^(https?)/i).test(relativePath)) {
+        return `${urlProtocol}//${urlHost}/${relativePath}`
+      } else if ((/^(https?)/i).test(relativePath)) {
+        return relativePath
+      }
+    }
+
+    const isAmazon = () => (
+      (/(amazon|amzn)/).test(urlHost)
+    )
+
+    const getTitle = $ => {
+      let title = ''
+
+      const $title = $('title')
+      const $ogTitle = $('meta[name="og:title"]')
+      const $firstHeading = $('h1').eq(0)
+
+      if (exists($ogTitle)) {
+        title = $ogTitle.attr('content')
+      } if (exists($title)) {
+        title = $title.text()
+      } else if (exists($firstHeading)) {
+        title = $firstHeading.text()
+      }
+
+      return toSentence(title)
+    }
+
+    const getDescription = $ => {
+      let description = ''
+
+      const $description = $('meta[name="description"]')
+      const $ogDescription = $('meta[name="og:description"]')
+      const $firstParagraph = $('p').eq(0)
+
+      if (exists($ogDescription)) {
+        description = $ogDescription.attr('content')
+      } else if (exists($description)) {
+        description = $description.attr('content')
+      } else if (exists($firstParagraph)) {
+        description = $firstParagraph.text()
+      }
+
+      return toSentence(description)
+    }
+
+    const getImages = ($, body) => {
+      const images = []
+
+      const imageSources = (
+        body.match(/src=['|"]+([^'"]+)['|"]+/gim) || []
+      )
+
+      const backgroundImages = (
+        body.match(/url(?:\(['"]?)(.*?)(?:['"]?\))/gim) || []
+      )
+
+      forEach(imageSources, imageSource => {
+        images.push(
+          replace(imageSource, /'|"|src|=|;|\(|\)/gim, '')
+        )
+      })
+
+      forEach(backgroundImages, backgroundImage => {
+        images.push(
+          replace(backgroundImage, /\(|\)|'|"|;|url/gim, '')
+        )
+      })
+
+      const $images = $('img')
+      const $ogImage = $('meta[property="og:image"]')
+      const $twitterImage = $('meta[property="twitter:image:src"]')
+      const $amazonLandingImage = $('#landingImage')
+
+      if (exists($ogImage)) {
+        images.unshift($ogImage.attr('content'))
+      }
+
+      if (exists($twitterImage)) {
+        images.unshift($twitterImage.attr('content'))
+      }
+
+      if (isAmazon()) {
+        if (exists($amazonLandingImage)) {
+          let dynamicImage
+
+          try {
+            dynamicImage = head(keys(
+              JSON.parse($amazonLandingImage.attr('data-a-dynamic-image'))
+            ))
+          } catch (amazonImageErr) {
+            logError(amazonImageErr)
+          }
+
+          images.unshift(
+            $amazonLandingImage.attr('data-old-hires') ||
+            dynamicImage ||
+            $amazonLandingImage.attr('src')
+          )
+        }
+      }
+
+      if (exists($images)) {
+        forEach($images, img => {
+          const $img = $(img)
+
+          if (exists($img)) {
+            images.push($img.attr('src'))
+          }
+        })
+      }
+
+      return compact(
+        map(
+          slice(
+            filter(uniq(compact(images)), src => (
+              !(/data:image|fls-na.amazon.com\/[0-9]\/batch/gim).test(src) &&
+              (/.jpg|.jpeg|.gif|.png/gim).test(src)
+            )
+          ), 0, 15),
+          toAbsolutePath
+        )
+      )
+    }
+
     const options = {
       url,
       jar: true,
@@ -60,144 +202,50 @@ export default url => (
       if (err) {
         reject(err)
       } else if (body) {
-        let title = ''
-        let images = []
-        let description = ''
         const $ = cheerio.load(body)
-
-        const $title = $('title')
-        const $ogTitle = $('meta[name="og:title"]')
-        const $firstHeading = $('h1').eq(0)
-
-        if ($ogTitle && $ogTitle.length) {
-          title = $ogTitle.attr('content')
-        } if ($title && $title.length) {
-          title = $title.text()
-        } else if ($firstHeading && $firstHeading.length) {
-          title = $firstHeading.text()
-        }
-
-        const $description = $('meta[name="description"]')
-        const $ogDescription = $('meta[name="og:description"]')
-        const $firstParagraph = $('p').eq(0)
-
-        if ($ogDescription && $ogDescription.length) {
-          description = $ogDescription.attr('content')
-        } else if ($description && $description.length) {
-          description = $description.attr('content')
-        } else if ($firstParagraph && $firstParagraph.length) {
-          description = $firstParagraph.text()
-        }
-
-        const $images = $('img')
-        const $ogImage = $('meta[property="og:image"]')
-        const $twitterImage = $('meta[property="twitter:image:src"]')
-
-        if ($ogImage && $ogImage.length) {
-          images.push($ogImage.attr('content'))
-        }
-
-        if ($twitterImage && $twitterImage.length) {
-          images.push($twitterImage.attr('content'))
-        }
-
-        if ((/(amazon|amzn)/).test(urlHost)) {
-          const $amazonImage = $('img#landingImage')
-
-          if ($amazonImage && $amazonImage.length) {
-            let amazonDynamicImage
-
-            try {
-              amazonDynamicImage = head(keys(
-                JSON.parse($amazonImage.attr('data-a-dynamic-image'))
-              ))
-            } catch (amazonImageErr) {
-              logError(amazonImageErr)
-            }
-
-            images.push(
-              amazonDynamicImage ||
-              $amazonImage.attr('data-old-hires') ||
-              $amazonImage.attr('src')
-            )
-          }
-        } else {
-          forEach($images, (img) => {
-            let src
-            let width
-            const $img = $(img)
-
-            if ($img && $img.length) {
-              src = $img.attr('src')
-              width = $img.attr('width')
-
-              if (!isEmpty(src)) {
-                if ((/^(\/\/)/).test(src)) {
-                  src = `${urlProtocol}${src}`
-                } else if ((/^(\/)\w/i).test(src)) {
-                  src = `${urlProtocol}//${urlHost}${src}`
-                } else if (!(/^(https?)/i).test(src)) {
-                  src = `${urlProtocol}//${urlHost}/${src}`
-                }
-
-                if (!(/(https?:\/\/.*\.(?:png|gif|svg))/i).test(src)) {
-                  if (!isEmpty(width) && parseInt(width) >= 200) {
-                    images.push(trim(src))
-                  } else if (isEmpty(width)) {
-                    images.push(trim(src))
-                  }
-                }
-              }
-            }
-          })
-        }
-
-        images = filter(slice(compact(uniq(images)), 0, 15), (src) => (
-          !(/data:image/).test(src)
-        ))
 
         // Get Metadata
         const metadata = {}
-        const $ogBrand = (/(amazon|amzn)/).test(urlHost)
+        const $ogBrand = isAmazon()
           ? $('#brand')
           : $('meta[property="og:brand"]')
         const $ogStore = $('meta[property="og:site_name"]')
-        const $ogPrice = (/(amazon|amzn)/).test(urlHost)
+        const $ogPrice = isAmazon()
           ? $('#priceblock_ourprice')
           : $('meta[property="og:price:amount"]')
         const $ogCurrency = $('meta[property="og:price:currency"]')
 
-        if ((/(amazon|amzn)/).test(urlHost)) {
-          if ($ogBrand && $ogBrand.length) {
-            metadata.brand = trim($ogBrand.text())
+        if (isAmazon()) {
+          if (exists($ogBrand)) {
+            set(metadata, 'brand', trim($ogBrand.text()))
           }
 
-          if ($ogPrice && $ogPrice.length) {
-            metadata.price = trim($ogPrice.text())
+          if (exists($ogPrice)) {
+            set(metadata, 'price', trim($ogPrice.text()))
           }
         } else {
-          if ($ogBrand && $ogBrand.length) {
-            metadata.brand = trim($ogBrand.attr('content'))
+          if (exists($ogBrand)) {
+            set(metadata, 'brand', trim($ogBrand.attr('content')))
           }
 
-          if ($ogPrice && $ogPrice.length) {
-            metadata.price = trim($ogPrice.attr('content'))
+          if (exists($ogPrice)) {
+            set(metadata, 'price', trim($ogPrice.attr('content')))
           }
 
-          if ($ogStore && $ogStore.length) {
-            metadata.store = trim($ogStore.attr('content'))
+          if (exists($ogStore)) {
+            set(metadata, 'store', trim($ogStore.attr('content')))
           }
 
-          if ($ogCurrency && $ogCurrency.length) {
-            metadata.currency = trim($ogCurrency.attr('content'))
+          if (exists($ogCurrency)) {
+            set(metadata, 'currency', trim($ogCurrency.attr('content')))
           }
         }
 
         resolve({
-          name: trim(title),
-          images,
-          ...metadata,
-          description: trim(description)
+          name: getTitle($),
+          images: getImages($, body),
+          description: getDescription($),
+          ...metadata
         })
       }
     })

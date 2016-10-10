@@ -10,7 +10,7 @@ import updateRoom from '../../api/spaceType/update'
 import destroyLike from '../../api/like/destroyById'
 import deleteImage from '../../utils/image/deleteImage'
 import updateCategory from '../../api/category/update'
-import { removeFromCache, invalidateFromCache } from '../../api/cache'
+import { invalidateFromCache } from '../../api/cache'
 
 export default (schema) => {
   schema.pre('save', function(next) {
@@ -19,10 +19,7 @@ export default (schema) => {
   })
 
   schema.post('save', async function(product) {
-    const id = get(product, 'id')
-    const brand = toStringId(get(product, 'brand'))
     const rooms = toIds(get(product, 'spaceTypes', []))
-    const colors = toIds(get(product, 'colors'))
     const categories = toIds(get(product, 'categories', []))
 
     if (this.wasNew) {
@@ -88,30 +85,11 @@ export default (schema) => {
         logError(err)
       }
     }
-
-    await removeFromCache('brand-all')
-    await removeFromCache('color-all')
-    await removeFromCache('category-all')
-    await removeFromCache('spaceType-all')
-    await removeFromCache('product-all')
-    await removeFromCache('product-latest')
-    await removeFromCache('product-popular-8')
-    await removeFromCache(`product-related-${id}`)
-
-    await invalidateFromCache([
-      id,
-      brand,
-      rooms,
-      colors,
-      categories
-    ])
   })
 
   schema.post('findOneAndRemove', async (product) => {
     const id = get(product, 'id')
     const rooms = toIds(get(product, 'spaceTypes', []))
-    const brand = toStringId(get(product, 'brand'))
-    const colors = toIds(get(product, 'colors', []))
     const categories = toIds(get(product, 'categories', []))
     const usersWhoLiked = []
 
@@ -164,23 +142,7 @@ export default (schema) => {
     }
 
     try {
-      await removeFromCache('brand-all')
-      await removeFromCache('color-all')
-      await removeFromCache('category-all')
-      await removeFromCache('spaceType-all')
-      await removeFromCache('product-all')
-      await removeFromCache('product-latest')
-      await removeFromCache('product-popular-8')
-      await removeFromCache(`product-related-${id}`)
-
-      await invalidateFromCache([
-        id,
-        rooms,
-        brand,
-        colors,
-        categories,
-        usersWhoLiked
-      ])
+      await invalidateFromCache([usersWhoLiked])
     } catch (err) {
       logError(err)
     }

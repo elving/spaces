@@ -4,6 +4,7 @@ import toStringId from '../utils/toStringId'
 import getProducts from './getProducts'
 import generateImage from '../../utils/image/generateImage'
 import getProductImages from '../utils/getProductImages'
+import { removeFromCache, invalidateFromCache } from '../../api/cache'
 
 export default (spaceType) => (
   new Promise(async (resolve, reject) => {
@@ -16,10 +17,14 @@ export default (spaceType) => (
 
       spaceType.set({ image })
 
-      spaceType.save((err) => {
+      spaceType.save(async (err) => {
         if (err) {
           return reject(err)
         }
+
+        await removeFromCache('spaceType-all')
+        await removeFromCache('spaceType-popular-8')
+        await invalidateFromCache(toStringId(spaceType))
 
         resolve()
       })

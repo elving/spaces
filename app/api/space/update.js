@@ -12,8 +12,10 @@ import findById from './findById'
 import isDataUrl from '../../utils/isDataUrl'
 import parseError from '../utils/parseError'
 import getProducts from './getProducts'
+import toIdsFromPath from '../utils/toIdsFromPath'
 import getProductImages from '../utils/getProductImages'
 import uploadImageFromDataUrl from '../../utils/image/uploadImageFromDataUrl'
+import { removeFromCache, invalidateFromCache } from '../../api/cache'
 
 export default (_id, props) => (
   new Promise(async (resolve, reject) => {
@@ -68,10 +70,25 @@ export default (_id, props) => (
 
         savedSpace
           .populate('createdBy')
-          .populate('spaceType', (populationErr, populatedSpace) => {
+          .populate('spaceType', async (populationErr, populatedSpace) => {
             if (populationErr) {
               return reject(parseError(err))
             }
+
+            await removeFromCache('space-all')
+            await removeFromCache('space-latest')
+            await removeFromCache('space-popular-8')
+            await removeFromCache(`redesigns-all-${_id}`)
+
+            await invalidateFromCache([
+              _id,
+              toIdsFromPath(space, 'products'),
+              toIdsFromPath(space, 'createdBy'),
+              toIdsFromPath(space, 'spaceType'),
+              toIdsFromPath(space, 'redesigns'),
+              toIdsFromPath(space, 'categories'),
+              toIdsFromPath(space, 'originalSpace')
+            ])
 
             resolve(populatedSpace)
           })

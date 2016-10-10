@@ -7,10 +7,13 @@ import mongoose from 'mongoose'
 import getTags from '../../utils/product/getTags'
 import sanitize from './sanitize'
 import isDataUrl from '../../utils/isDataUrl'
+import toStringId from '../utils/toStringId'
 import parseError from '../utils/parseError'
 import getProducts from './getProducts'
+import toIdsFromPath from '../utils/toIdsFromPath'
 import getProductImages from '../utils/getProductImages'
 import uploadImageFromDataUrl from '../../utils/image/uploadImageFromDataUrl'
+import { removeFromCache, invalidateFromCache } from '../../api/cache'
 
 export default props => (
   new Promise(async (resolve, reject) => {
@@ -57,6 +60,8 @@ export default props => (
         return reject(parseError(err))
       }
 
+      const id = toStringId(savedSpace)
+
       savedSpace
         .populate('products')
         .populate('createdBy')
@@ -65,6 +70,21 @@ export default props => (
           if (populationErr) {
             return reject(parseError(populationErr))
           }
+
+          await removeFromCache('space-all')
+          await removeFromCache('space-latest')
+          await removeFromCache('space-popular-8')
+          await removeFromCache(`redesigns-all-${id}`)
+
+          await invalidateFromCache([
+            id,
+            toIdsFromPath(savedSpace, 'products'),
+            toIdsFromPath(savedSpace, 'createdBy'),
+            toIdsFromPath(savedSpace, 'savedSpaceType'),
+            toIdsFromPath(savedSpace, 'redesigns'),
+            toIdsFromPath(savedSpace, 'categories'),
+            toIdsFromPath(savedSpace, 'originalSpace')
+          ])
 
           resolve(populatedSpace)
         })

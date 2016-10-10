@@ -39,6 +39,22 @@ class CategoryDetail extends Component {
     }
   }
 
+  onFollow = () => {
+    const { state } = this
+
+    this.setState({
+      followersCount: state.followersCount + 1
+    })
+  }
+
+  onUnfollow = () => {
+    const { state } = this
+
+    this.setState({
+      followersCount: state.followersCount - 1
+    })
+  }
+
   getShortUrl = () => {
     const { props } = this
     const categoryShortUrl = get(props.category, 'shortUrl')
@@ -131,6 +147,8 @@ class CategoryDetail extends Component {
       <div className="category-detail-actions">
         <FollowButton
           parent={toStringId(props.category)}
+          onFollow={this.onFollow}
+          onUnfollow={this.onUnfollow}
           className="category-detail-follow-button"
           parentType="category"
         />

@@ -11,11 +11,13 @@ import uploadImageFromUrl from '../../utils/image/uploadImageFromUrl'
 import toIds from '../utils/toIds'
 import toStringId from '../utils/toStringId'
 import parseError from '../utils/parseError'
+import toIdsFromPath from '../utils/toIdsFromPath'
 
 import { default as findColorByName } from '../color/findByName'
 import { default as getOrCreateBrand } from '../brand/getOrCreate'
 import { default as getOrCreateCategory } from '../category/getOrCreate'
 import { default as findSpaceTypeByName } from '../spaceType/findByName'
+import { removeFromCache, invalidateFromCache } from '../../api/cache'
 
 export default (props) => (
   new Promise(async (resolve, reject) => {
@@ -135,6 +137,25 @@ export default (props) => (
         if (err) {
           return reject(parseError(err))
         }
+
+        const id = toStringId(product)
+
+        await removeFromCache('brand-all')
+        await removeFromCache('color-all')
+        await removeFromCache('category-all')
+        await removeFromCache('spaceType-all')
+        await removeFromCache('product-all')
+        await removeFromCache('product-latest')
+        await removeFromCache('product-popular-8')
+        await removeFromCache(`product-related-${id}`)
+
+        await invalidateFromCache([
+          id,
+          toIdsFromPath(product, 'brand'),
+          toIdsFromPath(product, 'spaceTypes'),
+          toIdsFromPath(product, 'colors'),
+          toIdsFromPath(product, 'categories'),
+        ])
 
         resolve(product)
       })

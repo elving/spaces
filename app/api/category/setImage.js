@@ -4,6 +4,7 @@ import toStringId from '../utils/toStringId'
 import getProducts from './getProducts'
 import generateImage from '../../utils/image/generateImage'
 import getProductImages from '../utils/getProductImages'
+import { removeFromCache, invalidateFromCache } from '../cache'
 
 export default (category) => (
   new Promise(async (resolve, reject) => {
@@ -15,10 +16,14 @@ export default (category) => (
       )
 
       category.set({ image })
-      category.save((err) => {
+      category.save(async (err) => {
         if (err) {
           return reject(err)
         }
+
+        await removeFromCache('category-all')
+        await removeFromCache('category-popular-8')
+        await invalidateFromCache(toStringId(category))
 
         resolve()
       })

@@ -2,7 +2,8 @@ import mongoose from 'mongoose'
 
 import sanitize from './sanitize'
 import parseError from '../utils/parseError'
-import { invalidateFromCache } from '../cache'
+import toIdsFromPath from '../utils/toIdsFromPath'
+import { removeFromCache, invalidateFromCache } from '../cache'
 
 export default (_id, props) => (
   new Promise(async (resolve, reject) => {
@@ -20,7 +21,23 @@ export default (_id, props) => (
           return reject(parseError(err))
         }
 
-        await invalidateFromCache(_id)
+        await removeFromCache('brand-all')
+        await removeFromCache('color-all')
+        await removeFromCache('category-all')
+        await removeFromCache('spaceType-all')
+        await removeFromCache('product-all')
+        await removeFromCache('product-latest')
+        await removeFromCache('product-popular-8')
+        await removeFromCache(`product-related-${_id}`)
+
+        await invalidateFromCache([
+          _id,
+          toIdsFromPath(product, 'brand'),
+          toIdsFromPath(product, 'spaceTypes'),
+          toIdsFromPath(product, 'colors'),
+          toIdsFromPath(product, 'categories'),
+        ])
+
         resolve(product)
       })
   })

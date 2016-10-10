@@ -13,19 +13,8 @@ import getProducts from '../../api/product/where'
 import deleteImage from '../../utils/image/deleteImage'
 import updateProduct from '../../api/product/update'
 import destroyFollow from '../../api/follow/destroyById'
-import { removeFromCache, invalidateFromCache } from '../../api/cache'
 
 export default (schema) => {
-  schema.post('save', async (category) => {
-    try {
-      await removeFromCache('category-all')
-      await removeFromCache('category-popular-8')
-      await invalidateFromCache(toStringId(category))
-    } catch (err) {
-      logError(err)
-    }
-  })
-
   schema.post('findOneAndUpdate', async (category) => {
     try {
       await setImage(category)
@@ -75,14 +64,6 @@ export default (schema) => {
 
     try {
       await deleteImage('categories', get(category, 'image'))
-    } catch (err) {
-      logError(err)
-    }
-
-    try {
-      await removeFromCache('category-all')
-      await removeFromCache('category-popular-8')
-      await invalidateFromCache(id)
     } catch (err) {
       logError(err)
     }

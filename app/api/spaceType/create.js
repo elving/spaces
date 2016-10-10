@@ -8,7 +8,9 @@ import toIds from '../utils/toIds'
 import sanitize from './sanitize'
 import validate from './validate'
 import parseError from '../utils/parseError'
+import toStringId from '../utils/toStringId'
 import findCategoryByName from '../category/findByName'
+import { removeFromCache, invalidateFromCache } from '../../api/cache'
 
 export default (props) => (
   new Promise(async (resolve, reject) => {
@@ -55,6 +57,10 @@ export default (props) => (
       if (err) {
         return reject(parseError(err))
       }
+
+      await removeFromCache('spaceType-all')
+      await removeFromCache('spaceType-popular-8')
+      await invalidateFromCache(toStringId(spaceType))
 
       resolve(spaceType)
     })

@@ -39,6 +39,22 @@ class SpaceTypeDetail extends Component {
     }
   }
 
+  onFollow = () => {
+    const { state } = this
+
+    this.setState({
+      followersCount: state.followersCount + 1
+    })
+  }
+
+  onUnfollow = () => {
+    const { state } = this
+
+    this.setState({
+      followersCount: state.followersCount - 1
+    })
+  }
+
   getShortUrl = () => {
     const { props } = this
     const spaceTypeShortUrl = get(props.spaceType, 'shortUrl')
@@ -131,7 +147,9 @@ class SpaceTypeDetail extends Component {
       <div className="spaceType-detail-actions">
         <FollowButton
           parent={toStringId(props.spaceType)}
+          onFollow={this.onFollow}
           className="spaceType-detail-follow-button"
+          onUnfollow={this.onUnfollow}
           parentType="spaceType"
         />
         <div className="spaceType-detail-action">

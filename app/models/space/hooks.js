@@ -13,10 +13,8 @@ import updateRoom from '../../api/spaceType/update'
 import deleteImage from '../../utils/image/deleteImage'
 import destroyLike from '../../api/like/destroyById'
 import generateImage from '../../utils/image/generateImage'
-import toIdsFromPath from '../../api/utils/toIdsFromPath'
 import updateCategory from '../../api/category/update'
 import updateSettings from '../../utils/user/updateSettings'
-import { removeFromCache, invalidateFromCache } from '../../api/cache'
 
 export default schema => {
   schema.pre('save', function(next) {
@@ -29,17 +27,6 @@ export default schema => {
 
     if (this.skipPostSaveHook) {
       this.skipPostSaveHook = false
-
-      try {
-        await removeFromCache('space-all')
-        await removeFromCache('space-latest')
-        await removeFromCache('space-popular-8')
-        await removeFromCache(`redesigns-all-${id}`)
-        await invalidateFromCache([id])
-      } catch (err) {
-        logError(err)
-      }
-
       return
     }
 
@@ -114,26 +101,6 @@ export default schema => {
       this.shouldUpdateImage = false
     }
 
-    try {
-      await removeFromCache('space-all')
-      await removeFromCache('space-latest')
-      await removeFromCache('space-popular-8')
-      await removeFromCache(`redesigns-all-${id}`)
-
-      await invalidateFromCache([
-        id,
-        room,
-        categories,
-        toIdsFromPath(space, 'products'),
-        toIdsFromPath(space, 'createdBy'),
-        toIdsFromPath(space, 'spaceType'),
-        toIdsFromPath(space, 'redesigns'),
-        toIdsFromPath(space, 'originalSpace')
-      ])
-    } catch (err) {
-      logError(err)
-    }
-
     this.wasNew = false
     this.forcedUpdate = false
   })
@@ -199,24 +166,6 @@ export default schema => {
           logError(err)
         }
       }
-    } catch (err) {
-      logError(err)
-    }
-
-    try {
-      await removeFromCache('space-all')
-      await removeFromCache('space-latest')
-      await removeFromCache('space-popular-8')
-      await removeFromCache(`redesigns-all-${id}`)
-
-      await invalidateFromCache([
-        id,
-        room,
-        categories,
-        usersWhoLiked,
-        toIds(get(space, 'products')),
-        toIds(get(space, 'redesigns'))
-      ])
     } catch (err) {
       logError(err)
     }

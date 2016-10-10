@@ -13,19 +13,8 @@ import getProducts from '../../api/product/where'
 import deleteImage from '../../utils/image/deleteImage'
 import updateProduct from '../../api/product/update'
 import destroyFollow from '../../api/follow/destroyById'
-import { removeFromCache, invalidateFromCache } from '../../api/cache'
 
 export default (schema) => {
-  schema.post('save', async (room) => {
-    try {
-      await removeFromCache('spaceType-all')
-      await removeFromCache('spaceType-popular-8')
-      await invalidateFromCache(toStringId(room))
-    } catch (err) {
-      logError(err)
-    }
-  })
-
   schema.post('findOneAndUpdate', async (room) => {
     try {
       await setImage(room)
@@ -74,14 +63,6 @@ export default (schema) => {
 
     try {
       await deleteImage('spaceTypes', get(room, 'image'))
-    } catch (err) {
-      logError(err)
-    }
-
-    try {
-      await removeFromCache('spaceType-all')
-      await removeFromCache('spaceType-popular-8')
-      await invalidateFromCache(id)
     } catch (err) {
       logError(err)
     }

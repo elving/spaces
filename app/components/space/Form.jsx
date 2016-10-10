@@ -1,10 +1,12 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
+import head from 'lodash/head'
 import size from 'lodash/size'
 import axios from 'axios'
 import assign from 'lodash/assign'
 import Select from 'react-select'
 import isEmpty from 'lodash/isEmpty'
+import includes from 'lodash/includes'
 import serialize from 'form-serialize'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
@@ -233,6 +235,16 @@ export default class SpaceForm extends Component {
     })
   }
 
+  isRecommendedRoom(room) {
+    const { props } = this
+    const product = head(props.products)
+    const productRooms = map(get(product, 'spaceTypes', []), spaceType =>
+      toStringId(spaceType)
+    )
+
+    return includes(productRooms, toStringId(room))
+  }
+
   render() {
     const { props, state, context } = this
 
@@ -307,6 +319,26 @@ export default class SpaceForm extends Component {
                   'select--error': hasTypeError
                 })}
                 placeholder="E.g. Kitchen"
+                optionRenderer={option => (
+                  this.isRecommendedRoom(option.value) ? (
+                    <span
+                      id={`select-option-${get(option, 'value')}`}
+                      className="select-option-room-container"
+                    >
+                      {get(option, 'label')}
+                      <span className="select-option-room-label">
+                        RECOMMENDED
+                      </span>
+                    </span>
+                  ) : (
+                    <span
+                      id={`select-option-${get(option, 'value')}`}
+                      className="select-option-room-container"
+                    >
+                      {get(option, 'label')}
+                    </span>
+                  )
+                )}
               />
 
               {hasTypeError ? (

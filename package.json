@@ -1,6 +1,6 @@
 {
   "name": "Spaces-Next",
-  "version": "0.0.129",
+  "version": "0.0.130",
   "description": "A visual shopping guide for your home.",
   "license": "ISC",
   "author": "",
@@ -95,7 +95,7 @@
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-import": "^2.0.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.3.0",
+    "eslint-plugin-react": "^6.4.0",
     "exports-loader": "^0.6.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "imports-loader": "^0.6.5",

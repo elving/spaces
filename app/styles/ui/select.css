@@ -177,6 +177,34 @@
   background-color: #f2f2f2;
 }
 
+.select-option-room-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.select-option-room-label {
+  color: #439fe0;
+  border: 1px solid #439fe0;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: flex;
+  padding: 2px 4px;
+  margin-left: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.Select-option:hover .select-option-room-label,
+.Select-option.is-focused .select-option-room-label,
+.Select-option.is-selected .select-option-room-label {
+  color: #ffffff;
+  border-color: #439fe0;
+  background-color: #439fe0;
+}
+
 .select-option-color-container {
   display: flex;
   align-items: center;

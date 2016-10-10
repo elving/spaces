@@ -125,6 +125,8 @@ export default class AddProductModal extends Component {
   closeModal = () => {
     const { props } = this
 
+    this.hideForm()
+
     document.body.classList.remove('ReactModal__Body--open')
     document.querySelector('html').classList.remove(
       'ReactModal__Body--open'
@@ -283,7 +285,7 @@ export default class AddProductModal extends Component {
     return (
       <div className="add-product-modal-empty">
         <h1 className="add-product-modal-empty-text">
-          You haven't created any spaces yet.
+          You haven&apos;t created any spaces yet.
         </h1>
         <button
           type="button"

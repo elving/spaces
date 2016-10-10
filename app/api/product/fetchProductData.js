@@ -90,8 +90,11 @@ export default url => (
       const $description = $('meta[name="description"]')
       const $ogDescription = $('meta[name="og:description"]')
       const $firstParagraph = $('p').eq(0)
+      const $amazonDescription = $('#productDescription p').eq(0)
 
-      if (exists($ogDescription)) {
+      if (isAmazon() && exists($amazonDescription)) {
+        description = $amazonDescription.text()
+      } else if (exists($ogDescription)) {
         description = $ogDescription.attr('content')
       } else if (exists($description)) {
         description = $description.attr('content')

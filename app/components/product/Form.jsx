@@ -588,7 +588,8 @@ export default class ProductForm extends Component {
         <small style={{ marginTop: 10 }} className="form-help">
           If the images extracted from the product&apos;s website are not
           desirible, click the &ldquo;Upload Image From Url&rdquo; and
-          use the url of a better image.
+          use the url of a better image. For best results use
+          images with white background.
         </small>
 
         {state.imageUrlFormIsVisible || !hasImages ? (
@@ -685,7 +686,7 @@ export default class ProductForm extends Component {
     const shouldDisable = (
       state.isSaving ||
       state.isDeleting ||
-      state.isLoadingImage ||
+      (state.isLoadingImage && isPOST) ||
       state.deletingSuccessful ||
       state.hasDescriptionCharsError
     )

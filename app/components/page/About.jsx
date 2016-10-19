@@ -43,7 +43,7 @@ export default class About extends Component {
     return (
       <Layout className="page-basic">
         <h1 style={{ display: 'none' }}>About Spaces</h1>
-        <h2>Spaces is a shopping guide for your home where you can find the best products curated by people with a passion for design and home decor.</h2>
+        <h2 style={{ textAlign: 'center' }}>Spaces is a shopping guide for your home where you can find the best products curated by people with a passion for design and home decor.</h2>
         <hr />
         <h3>Getting Started</h3>
         <p>Start by <a rel="noreferrer noopener" href="/join/" target="_blank">joining the community</a>. Once you join, you become designer.</p>
@@ -90,7 +90,7 @@ export default class About extends Component {
           <li>How active they are in the community. Activity is measured based on what they follow and the spaces and products they have liked, redesigned and commented on.</li>
           <li>How many followers they have.</li>
         </ul>
-        <p>If you think you don&apos;t meet this criteria but still feel that you can be a curator and contribute good content for the community let us know 🙂</p>
+        <p>If you think you don&apos;t meet this criteria but still feel that you can be a curator and contribute good content for the community <a href="mailto:hello@joinspaces.co">let us know 🙂</a></p>
         <h3>Following and liking</h3>
         <p>You can follow designers, rooms and categories. Your personal feed will show you spaces and products based on who and what you follow.</p>
         <div className="images">

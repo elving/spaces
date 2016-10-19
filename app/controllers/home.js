@@ -22,7 +22,7 @@ export const renderHome = async (req, res, next) => {
     })
 
     setMetadata(res, {
-      title: 'Home | Spaces',
+      title: 'Popular | Spaces',
       bodyId: 'home',
       bodyClass: 'page page-home'
     })

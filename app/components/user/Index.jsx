@@ -42,7 +42,7 @@ export default class UsersIndex extends Component {
       isSearhing: true
     }, () => {
       axios
-        .get(`/ajax/users/search/?skip=${state.offset}`)
+        .get(`/ajax/designers/search/?skip=${state.offset}`)
         .then(({ data }) => {
           const results = get(data, 'results', [])
 

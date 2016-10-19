@@ -3,6 +3,6 @@ import * as controller from '../controllers/home'
 
 const router = express.Router()
 
-router.get('/', controller.renderHome)
+router.get('/popular/', controller.renderHome)
 
 export default router

@@ -12,6 +12,7 @@ export default class Icon extends Component {
 
     return (
       <svg
+        width={props.width}
         height={props.height}
         viewBox="0 0 400 400"
         className="icon icon-logo"

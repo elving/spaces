@@ -11,6 +11,7 @@ import ResetPassword from '../components/auth/ResetPassword'
 import About from '../components/page/About'
 import Terms from '../components/page/Terms'
 import Privacy from '../components/page/Privacy'
+import Landing from '../components/page/Landing'
 import Copyright from '../components/page/Copyright'
 
 import Home from '../components/home/Home'
@@ -71,7 +72,8 @@ const routes = (
     <Route path="/privacy/" component={Privacy} />
     <Route path="/copyright/" component={Copyright} />
 
-    <Route path="/" component={Home} />
+    <Route path="/" component={Landing} />
+    <Route path="/popular" component={Home} />
     <Route path="/feed" component={Feed} />
     <Route path="/onboarding" component={Onboarding} />
     <Route path="/suggestions" component={Suggestions} />

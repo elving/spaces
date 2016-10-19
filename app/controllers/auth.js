@@ -1,8 +1,10 @@
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
+import includes from 'lodash/includes'
 import passport from 'passport'
 import { default as queryString } from 'query-string'
 
+import invites from '../constants/invites'
 import sendMail from '../utils/sendMail'
 import metadata from '../constants/metadata'
 import setProps from '../utils/middlewares/setProps'
@@ -31,7 +33,13 @@ export const redirectToJoin = (req, res) => {
 
 export const renderJoin = (req, res, next) => {
   if (isAuthenticatedUser(req.user)) {
-    return res.redirect(`/users/${req.user.username}/`)
+    return res.redirect(`/designers/${req.user.username}/`)
+  }
+
+  const invite = get(req, 'query.invite')
+
+  if (isEmpty(invite) || !includes(invites, invite)) {
+    return res.redirect('/')
   }
 
   setMetadata(res, {
@@ -72,7 +80,7 @@ export const redirectToLogin = (req, res) => {
 
 export const renderLogin = (req, res, next) => {
   if (isAuthenticatedUser(req.user)) {
-    return res.redirect(`/users/${req.user.username}/`)
+    return res.redirect(`/designers/${req.user.username}/`)
   }
 
   setMetadata(res, {
@@ -134,7 +142,7 @@ export const authCallback = (req, res) => {
 
 export const renderResetPassword = (req, res, next) => {
   if (isAuthenticatedUser(req.user)) {
-    return res.redirect(`/users/${req.user.username}/`)
+    return res.redirect(`/designers/${req.user.username}/`)
   }
 
   setMetadata(res, {
@@ -151,7 +159,7 @@ export const requestPasswordReset = async (req, res) => {
   const emailOrUsername = get(req, 'body.emailOrUsername')
 
   if (isAuthenticatedUser(req.user)) {
-    return res.redirect(`/users/${username}/`)
+    return res.redirect(`/designers/${username}/`)
   }
 
   try {

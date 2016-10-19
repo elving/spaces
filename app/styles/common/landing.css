@@ -1,0 +1,58 @@
+#landing {
+  background-image: url(https://d2xpms98gwggxd.cloudfront.net/static/images/landing_bg_no_logo.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing-content {
+  background-color: rgba(38, 51, 66, 0.75);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  padding: 35px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.landing-content .icon {
+  margin-bottom: 25px;
+}
+
+.landing-content h1 {
+  color: #ffffff;
+  font-size: 32px;
+  text-align: center;
+  font-weight: 300;
+  line-height: 48px;
+  text-shadow: 0 -1px 0 rgba(38,51,66,.80), 0 0 35px rgba(38,51,66,.80);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  width: 100%;
+  margin: 0 auto 35px;
+  max-width: 960px;
+}
+
+.landing-content .button {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.45), 0 0 45px rgba(0, 0, 0, 0.15);
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 15px 35px;
+}
+
+@media (max-width: 768px) {
+  .landing-content {
+    padding: 25px;
+  }
+
+  .landing-content h1 {
+    font-size: 28px;
+    margin: 0 auto 25px;
+  }
+}

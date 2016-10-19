@@ -49,7 +49,9 @@
 
 @media (max-width: 768px) {
   .landing-content {
+    height: 100%;
     padding: 25px;
+    min-height: 100vh;
   }
 
   .landing-content h1 {

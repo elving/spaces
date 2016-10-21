@@ -56,7 +56,7 @@ export default class About extends Component {
           <li>Redesign spaces you like to give them your personal touch.</li>
         </ul>
         <h3>What&apos;s a space?</h3>
-        <p>A space is a collection of products. You can design different types of spaces, like a kitchen, a home office, a bedroom, etc.</p>
+        <p>A space is a collection of products. You can design different types of spaces, like a <a href="/rooms/kitchen/" target="_blank" rel="noreferrer noopener">kitchen</a>, a <a href="/rooms/office/" target="_blank" rel="noreferrer noopener">home office</a>, a <a href="/rooms/bedroom/" target="_blank" rel="noreferrer noopener">bedroom</a>, etc.</p>
         <p>To design a space, click on the {this.renderButton('add')} button on any product you like. Save that product on any of your existing spaces or design a new space with it.</p>
         <video
           src={cdnUrl('/static/videos/design_space.mp4')} autoPlay muted loop

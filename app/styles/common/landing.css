@@ -163,10 +163,23 @@
     min-height: 100vh;
   }
 
-  .landing-content h1 {
-    font-size: 28px;
-    line-height: 38px;
+  .landing-go-down {
+    bottom: auto;
+    position: relative;
+    margin-top: 25px;
+  }
+
+  .landing-content h1,
+  .landing-about-cta h2 {
+    font-size: 24px;
+    line-height: 36px;
     margin: 0 auto 25px;
+  }
+
+  .landing-content .button--primary-alt,
+  .landing-about-cta .button--primary-alt {
+    font-size: 16px;
+    padding: 15px 25px;
   }
 
   .landing-about-text-columns,
@@ -187,10 +200,5 @@
 
   .landing-about-cards > .card:last-child {
     margin-bottom: 0;
-  }
-
-  .landing-about-cta h2 {
-    font-size: 28px;
-    line-height: 38px;
   }
 }

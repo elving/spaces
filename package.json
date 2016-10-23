@@ -1,6 +1,6 @@
 {
   "name": "Spaces-Next",
-  "version": "0.0.138",
+  "version": "0.0.139",
   "description": "A visual shopping guide for your home.",
   "license": "ISC",
   "author": "",
@@ -71,7 +71,7 @@
     "react-simple-dropdown": "^1.1.4",
     "request": "^2.75.0",
     "sha1": "^1.1.1",
-    "sharp": "^0.16.1",
+    "sharp": "^0.16.2",
     "shortid": "^2.2.6"
   },
   "devDependencies": {

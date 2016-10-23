@@ -85,7 +85,9 @@ class Suggestions extends Component {
                     href={`/${space.detailUrl}/`}
                     className="button button--small button--outline"
                   >
-                    Go to space
+                    <span className="button-text">
+                      Go to space
+                    </span>
                   </a>
                 </div>
                 <div className="tags-container">
@@ -119,7 +121,9 @@ class Suggestions extends Component {
               href="/products/"
               className="feed-empty-btn button button--primary-alt"
             >
-              Discover products
+              <span className="button-text">
+                Discover products
+              </span>
             </a>
           </div>
         </Layout>
@@ -137,7 +141,9 @@ class Suggestions extends Component {
               href="/spaces/"
               className="feed-empty-btn button button--primary-alt"
             >
-              Get inspired; Start designing
+              <span className="button-text">
+                Get inspired; Start designing
+              </span>
             </a>
           </div>
         </Layout>

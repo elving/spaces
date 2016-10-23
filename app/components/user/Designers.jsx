@@ -95,11 +95,13 @@ export default class Designers extends Component {
           disabled={state.isFetching}
           className="button button--outline"
         >
-          {state.isFetching ? (
-            'Loading More Designers...'
-          ) : (
-            'Load More Designers'
-          )}
+          <span className="button-text">
+            {state.isFetching ? (
+              'Loading More Designers...'
+            ) : (
+              'Load More Designers'
+            )}
+          </span>
         </button>
       </div>
     ) : null

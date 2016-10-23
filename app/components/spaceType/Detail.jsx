@@ -156,9 +156,7 @@ class SpaceTypeDetail extends Component {
           <button
             type="button"
             onClick={props.openSharePopup}
-            className={(
-              "button button--icon button--small button--outline"
-            )}
+            className="button button--icon button--small button--outline"
             data-action="share"
           >
             <MaterialDesignIcon name="send" fill="#439fe0" />

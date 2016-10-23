@@ -61,7 +61,12 @@ export default class ProductsTable extends Component {
           disabled={state.isFetching}
           className="button button--outline"
         >
-          {state.isFetching ? 'Loading More Products...' : 'Load More Products'}
+          <span className="button-text">
+            {state.isFetching
+              ? 'Loading More Products...'
+              : 'Load More Products'
+            }
+          </span>
         </button>
       </div>
     ) : null
@@ -109,7 +114,9 @@ export default class ProductsTable extends Component {
         </td>
         <td className="table-actions">
           <a href={`/products/${sid}/update/`} className="button">
-            Update
+            <span className="button-text">
+              Update
+            </span>
           </a>
         </td>
       </tr>

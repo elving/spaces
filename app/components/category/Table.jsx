@@ -26,7 +26,9 @@ export default class CategoriesTable extends Component {
         </td>
         <td className="table-actions">
           <a href={`/admin/categories/${sid}/update/`} className="button">
-            Update
+            <span className="button-text">
+              Update
+            </span>
           </a>
         </td>
       </tr>

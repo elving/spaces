@@ -292,7 +292,9 @@ export default class AddProductModal extends Component {
           onClick={this.showForm}
           className="button button--primary"
         >
-          Create your first space
+          <span className="button-text">
+            Create your first space
+          </span>
         </button>
       </div>
     )

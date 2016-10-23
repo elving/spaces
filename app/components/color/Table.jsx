@@ -37,7 +37,9 @@ export default class ColorsTable extends Component {
         </td>
         <td className="table-actions">
           <a href={`/admin/colors/${sid}/update/`} className="button">
-            Update
+            <span className="button-text">
+              Update
+            </span>
           </a>
         </td>
       </tr>

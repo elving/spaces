@@ -350,17 +350,21 @@ export default class Search extends Component {
           <button
             type="submit"
             className={
-              "search-filters-button button button--small button--primary"
+              'search-filters-button button button--small button--primary'
             }
           >
-            {`Search ${upperFirst(state.searchType)}`}
+            <span className="button-text">
+              {`Search ${upperFirst(state.searchType)}`}
+            </span>
           </button>
           <button
             type="submit"
             onClick={this.onCloseFiltersClick}
             className="search-filters-button button button--small"
           >
-            Close
+            <span className="button-text">
+              Close
+            </span>
           </button>
         </div>
       </div>

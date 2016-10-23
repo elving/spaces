@@ -152,7 +152,9 @@ class Home extends Component {
                   className="button button--small button--outline"
                   activeClassName="is-active"
                 >
-                  All Spaces
+                  <span className="button-text">
+                    All Spaces
+                  </span>
                 </Link>
               </div>
               {this.renderSpaces()}
@@ -169,7 +171,9 @@ class Home extends Component {
                   className="button button--small button--outline"
                   activeClassName="is-active"
                 >
-                  All Rooms
+                  <span className="button-text">
+                    All Rooms
+                  </span>
                 </Link>
               </div>
               {this.renderRooms()}
@@ -186,7 +190,9 @@ class Home extends Component {
                   className="button button--small button--outline"
                   activeClassName="is-active"
                 >
-                  All Designers
+                  <span className="button-text">
+                    All Designers
+                  </span>
                 </Link>
               </div>
               {this.renderDesigners()}
@@ -203,7 +209,9 @@ class Home extends Component {
                   className="button button--small button--outline"
                   activeClassName="is-active"
                 >
-                  All Products
+                  <span className="button-text">
+                    All Products
+                  </span>
                 </Link>
               </div>
               {this.renderProducts()}
@@ -220,7 +228,9 @@ class Home extends Component {
                   className="button button--small button--outline"
                   activeClassName="is-active"
                 >
-                  All Categories
+                  <span className="button-text">
+                    All Categories
+                  </span>
                 </Link>
               </div>
               {this.renderCategories()}

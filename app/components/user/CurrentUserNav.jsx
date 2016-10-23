@@ -45,10 +45,12 @@ export default class CurrentUserNav extends Component {
             <a
               href="/join/"
               className={(
-                "current-user-nav-link button button--primary button--small"
+                'current-user-nav-link button button--primary button--small'
               )}
             >
-              Join Spaces
+              <span className="button-text">
+                Join Spaces
+              </span>
             </a>
           </div>
         )}

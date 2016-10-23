@@ -237,8 +237,10 @@ export default class ProductCard extends Component {
           'button--primary-outline': true
         })}
       >
-        <MaterialDesignIcon name="cart" size={16} color="#2ECC71" />
-        {`$${props.price}`}
+        <span className="button-text">
+          <MaterialDesignIcon name="cart" size={16} color="#2ECC71" />
+          {`$${props.price}`}
+        </span>
       </a>
     )
   }

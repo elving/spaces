@@ -69,7 +69,9 @@ export default class CategoriesIndex extends Component {
           disabled={state.isSearhing}
           className="button button--outline"
         >
-          {state.isSearhing ? 'Loading More...' : 'Load More'}
+          <span className="button-text">
+            {state.isSearhing ? 'Loading More...' : 'Load More'}
+          </span>
         </button>
       </div>
     ) : null

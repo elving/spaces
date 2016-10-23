@@ -82,7 +82,9 @@ export default class OnboardingModal extends Component {
                 href={getSuggestionsUrl(props.categories)}
                 className="onboarding-modal-action button button--primary-alt"
               >
-                Product Suggestions
+                <span className="button-text">
+                  Product Suggestions
+                </span>
               </a>
             </div>
           </div>
@@ -105,7 +107,9 @@ export default class OnboardingModal extends Component {
             href="/about/"
             className="onboarding-modal-action button button--primary"
           >
-            Learn More
+            <span className="button-text">
+              Learn More
+            </span>
           </a>
           <button
             onClick={this.onClose}

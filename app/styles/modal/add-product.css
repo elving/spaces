@@ -129,6 +129,7 @@
 }
 
 .add-product-modal-space-name {
+  flex: 1;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
@@ -257,6 +258,12 @@
   }
 
   .add-product-modal-spaces-list {
+    height: auto;
+    max-height: 100%;
     -webkit-overflow-scrolling: touch;
+  }
+
+  .add-product-modal-spaces-actions {
+    z-index: 15;
   }
 }

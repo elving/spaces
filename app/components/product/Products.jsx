@@ -100,7 +100,12 @@ class ProductsIndex extends Component {
           disabled={state.isFetching}
           className="button button--outline"
         >
-          {state.isFetching ? 'Loading More Products...' : 'Load More Products'}
+          <span className="button-text">
+            {state.isFetching
+              ? 'Loading More Products...'
+              : 'Load More Products'
+            }
+          </span>
         </button>
       </div>
     ) : null

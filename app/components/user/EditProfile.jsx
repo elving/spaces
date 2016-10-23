@@ -263,10 +263,12 @@ export default class EditProfile extends Component {
                   onClick={this.triggerAvatarInput}
                   className="button"
                 >
-                  {isEmpty(get(context.user, 'avatar'))
-                    ? 'Upload avatar'
-                    : 'Change avatar'
-                  }
+                  <span className="button-text">
+                    {isEmpty(get(context.user, 'avatar'))
+                      ? 'Upload avatar'
+                      : 'Change avatar'
+                    }
+                  </span>
                 </button>
               </div>
 
@@ -374,7 +376,9 @@ export default class EditProfile extends Component {
               href={`/designers/${username}/password/`}
               className="button"
             >
-              Change Password
+              <span className="button-text">
+                Change Password
+              </span>
             </a>
           </div>
 
@@ -416,7 +420,9 @@ export default class EditProfile extends Component {
             disabled={state.isWaiting || state.hasBioCharsError}
             className="button button--primary edit-profile-action"
           >
-            {state.isWaiting ? 'Updating...' : 'Update'}
+            <span className="button-text">
+              {state.isWaiting ? 'Updating...' : 'Update'}
+            </span>
           </button>
         </form>
       </Layout>

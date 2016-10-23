@@ -126,8 +126,10 @@ class ProductDetail extends Component {
             className="button button--primary button--small"
             data-action="editProduct"
           >
-            <MaterialDesignIcon name="edit" />
-            Edit
+            <span className="button-text">
+              <MaterialDesignIcon name="edit" />
+              Edit
+            </span>
           </a>
         ) : null}
 
@@ -199,7 +201,9 @@ class ProductDetail extends Component {
               href={`/${get(props.product, 'createdBy.detailUrl')}/products/`}
               className="button button--primary-alt product-detail-info-button"
             >
-              More from @{get(props.product, 'createdBy.username')}
+              <span className="button-text">
+                More from @{get(props.product, 'createdBy.username')}
+              </span>
             </a>
           </div>
         ) : null}
@@ -301,8 +305,10 @@ class ProductDetail extends Component {
         target="_blank"
         className="product-detail-url button button--primary"
       >
-        <MaterialDesignIcon name="cart" />
-        {`$${ceil(price)} on ${getDomain(url)}`}
+        <span className="button-text">
+          <MaterialDesignIcon name="cart" />
+          {`$${ceil(price)} on ${getDomain(url)}`}
+        </span>
       </a>
     )
   }

@@ -30,7 +30,9 @@ export default class BrandsTable extends Component {
         </td>
         <td className="table-actions">
           <a href={`/admin/brands/${sid}/update/`} className="button">
-            Update
+            <span className="button-text">
+              Update
+            </span>
           </a>
         </td>
       </tr>

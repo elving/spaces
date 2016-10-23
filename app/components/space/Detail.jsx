@@ -475,8 +475,10 @@ class SpaceDetail extends Component {
             onClick={this.openRedesignPopup}
             className="button button--primary button--small button--outline"
           >
-            <MaterialDesignIcon name="redesign" />
-            Redesign
+            <span className="button-text">
+              <MaterialDesignIcon name="redesign" />
+              Redesign
+            </span>
           </button>
           {this.renderRedesignPopup()}
         </div>
@@ -627,7 +629,9 @@ class SpaceDetail extends Component {
               href={`/${get(props.space, 'spaceType.detailUrl')}/`}
               className="button button--small button--outline"
             >
-              See All {spaceType}
+              <span className="button-text">
+                See All {spaceType}
+              </span>
             </a>
           </div>
           <div className="grid-items">

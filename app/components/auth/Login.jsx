@@ -84,16 +84,20 @@ export default class Login extends Component {
               disabled={state.isWaitingForServer}
               className="button button--facebook"
             >
-              <SocialIcon name="facebook" />
-              Login with Facebook
+              <span className="button-text">
+                <SocialIcon name="facebook" />
+                Login with Facebook
+              </span>
             </a>
             <a
               href="/auth/twitter/"
               disabled={state.isWaitingForServer}
               className="button button--twitter"
             >
-              <SocialIcon name="twitter" />
-              Login with Twitter
+              <span className="button-text">
+                <SocialIcon name="twitter" />
+                Login with Twitter
+              </span>
             </a>
           </div>
 
@@ -149,7 +153,9 @@ export default class Login extends Component {
               disabled={state.isWaitingForServer}
               className="button button--link"
             >
-              I forgot my password
+              <span className="button-text">
+                I forgot my password
+              </span>
             </a>
           </div>
         </form>

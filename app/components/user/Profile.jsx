@@ -80,7 +80,9 @@ export default class UserProfile extends PureComponent {
                 href={`/designers/${username}/edit/`}
                 className="button button--small button--primary-alt"
               >
-                Edit
+                <span className="button-text">
+                  Edit
+                </span>
               </a>
             </div>
           ) : null}

@@ -91,7 +91,12 @@ export default class Rooms extends Component {
           disabled={state.isFetching}
           className="button button--outline"
         >
-          {state.isFetching ? 'Loading More Rooms...' : 'Load More Rooms'}
+          <span className="button-text">
+            {state.isFetching
+              ? 'Loading More Rooms...'
+              : 'Load More Rooms'
+            }
+          </span>
         </button>
       </div>
     ) : null

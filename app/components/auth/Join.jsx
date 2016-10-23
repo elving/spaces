@@ -151,16 +151,20 @@ export default class Join extends Component {
                 disabled={state.isWaitingForServer}
                 className="button button--facebook"
               >
-                <SocialIcon name="facebook" />
-                Join with Facebook
+                <span className="button-text">
+                  <SocialIcon name="facebook" />
+                  Join with Facebook
+                </span>
               </a>
               <a
                 href="/auth/twitter/"
                 disabled={state.isWaitingForServer}
                 className="button button--twitter"
               >
-                <SocialIcon name="twitter" />
-                Join with Twitter
+                <span className="button-text">
+                  <SocialIcon name="twitter" />
+                  Join with Twitter
+                </span>
               </a>
             </div>
           ) : null}

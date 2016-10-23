@@ -91,7 +91,9 @@ export default class Spaces extends Component {
           disabled={state.isFetching}
           className="button button--outline"
         >
-          {state.isFetching ? 'Loading More Spaces...' : 'Load More Spaces'}
+          <span className="button-text">
+            {state.isFetching ? 'Loading More Spaces...' : 'Load More Spaces'}
+          </span>
         </button>
       </div>
     ) : null

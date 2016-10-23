@@ -92,7 +92,9 @@ export default class SetPassword extends Component {
               href="/products/"
               className="button button--primary auth-form-success-cta"
             >
-              Design A New Space 😉
+              <span className="button-text">
+                Design A New Space 😉
+              </span>
             </a>
           </div>
         ) : (

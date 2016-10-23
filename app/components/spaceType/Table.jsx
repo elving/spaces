@@ -30,7 +30,9 @@ export default class SpaceTypesTable extends Component {
         </td>
         <td className="table-actions">
           <a href={`/admin/space-types/${sid}/update/`} className="button">
-            Update
+            <span className="button-text">
+              Update
+            </span>
           </a>
         </td>
       </tr>

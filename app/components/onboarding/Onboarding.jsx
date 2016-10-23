@@ -104,7 +104,9 @@ export default class Onboarding extends Component {
                 disabled={state.following < 5}
                 className="onboarding-header-button button button--primary-alt"
               >
-                Continue
+                <span className="button-text">
+                  Continue
+                </span>
               </a>
             </div>
           </div>

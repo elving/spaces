@@ -91,11 +91,13 @@ export default class Categories extends Component {
           disabled={state.isFetching}
           className="button button--outline"
         >
-          {state.isFetching ? (
-            'Loading More Categories...'
-          ) : (
-            'Load More Categories'
-          )}
+          <span className="button-text">
+            {state.isFetching ? (
+              'Loading More Categories...'
+            ) : (
+              'Load More Categories'
+            )}
+          </span>
         </button>
       </div>
     ) : null

@@ -59,9 +59,7 @@ export default class Notification extends Component {
         </span>
         <button
           onClick={this.onClick}
-          className={(
-            'notification-close button button--transparent button--icon'
-          )}
+          className="notification-close button button--transparent button--icon"
         >
           <MaterialDesignIcon name="close" />
         </button>

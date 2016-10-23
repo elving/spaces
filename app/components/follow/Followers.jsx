@@ -90,11 +90,13 @@ export default class Followers extends Component {
           disabled={state.isFetching}
           className="button button--outline"
         >
-          {state.isFetching ? (
-            'Loading More Followers...'
-          ) : (
-            'Load More Followers'
-          )}
+          <span className="button-text">
+            {state.isFetching ? (
+              'Loading More Followers...'
+            ) : (
+              'Load More Followers'
+            )}
+          </span>
         </button>
       </div>
     ) : null

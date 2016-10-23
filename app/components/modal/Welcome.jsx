@@ -86,10 +86,14 @@ export default class WelcomeModal extends Component {
         </div>
         <div className="form-group form-group--inline">
           <a href="/join/" className="button button--primary-alt">
-            Become a Designer
+            <span className="button-text">
+              Become a Designer
+            </span>
           </a>
           <a href="/about/" className="button">
-            Learn More
+            <span className="button-text">
+              Learn More
+            </span>
           </a>
         </div>
       </Modal>

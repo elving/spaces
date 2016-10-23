@@ -145,7 +145,9 @@ export default class Feed extends Component {
               href="/onboarding/"
               className="feed-empty-btn button button--primary-alt"
             >
-              Follow More Interests
+              <span className="button-text">
+                Follow More Interests
+              </span>
             </a>
           </div>
         </Layout>

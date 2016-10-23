@@ -122,7 +122,9 @@ export default class AdminTable extends Component {
           placeholder={props.searchPlaceholder}
         />
         <a href={props.headerCtaLink} className="button">
-          {props.headerCtaText}
+          <span className="button-text">
+            {props.headerCtaText}
+          </span>
         </a>
       </div>
     )

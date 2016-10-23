@@ -71,7 +71,12 @@ export default class SpaceTypesIndex extends Component {
           disabled={state.isSearhing}
           className="button button--outline"
         >
-          {state.isSearhing ? 'Loading More Rooms...' : 'Load More Rooms'}
+          <span className="button-text">
+            {state.isSearhing
+                ? 'Loading More Rooms...'
+                : 'Load More Rooms'
+            }
+          </span>
         </button>
       </div>
     ) : null

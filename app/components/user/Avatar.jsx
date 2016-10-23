@@ -31,8 +31,6 @@ export default class Avatar extends Component {
   }
 
   getBackgroundColor() {
-    const { props } = this
-
     const colors = {
       abcde: '#1abc9c',
       fgh: '#2ecc71',
@@ -55,7 +53,7 @@ export default class Avatar extends Component {
   render() {
     const { props } = this
 
-    const imageUrl = get(props.user, 'imageUrl', props.imageUrl)
+    const imageUrl = get(props.user, 'avatar', props.imageUrl)
 
     const fontSize = (props.height - 46) > 18
       ? props.height - 46

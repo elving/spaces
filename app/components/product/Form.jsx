@@ -16,6 +16,7 @@ import Notification from '../common/Notification'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
+import onImageLoad from '../../utils/image/onImageLoad'
 import focusOnFirstError from '../../utils/dom/focusOnFirstError'
 
 export default class ProductForm extends Component {
@@ -269,6 +270,12 @@ export default class ProductForm extends Component {
       this.setState({
         image,
         isLoadingImage: true
+      }, () => {
+        onImageLoad(image, () => {
+          this.setState({
+            isLoadingImage: false
+          })
+        })
       })
     }
   }
@@ -283,6 +290,12 @@ export default class ProductForm extends Component {
       image,
       isLoadingImage: state.image !== this.imageUrlInput.value,
       imageUrlFormIsVisible: false
+    }, () => {
+      onImageLoad(image, () => {
+        this.setState({
+          isLoadingImage: false
+        })
+      })
     })
   }
 
@@ -393,6 +406,15 @@ export default class ProductForm extends Component {
         : '',
       imageIndex: state.imageIndex + 1,
       isLoadingImage: hasMoreImages
+    }, () => {
+      if (hasMoreImages) {
+        onImageLoad(state.images[
+          Index + 1], () => {
+          this.setState({
+            isLoadingImage: false
+          })
+        })
+      }
     })
   }
 
@@ -409,6 +431,12 @@ export default class ProductForm extends Component {
         image: state.images[nextImage],
         imageIndex: nextImage,
         isLoadingImage: true
+      }, () => {
+        onImageLoad(state.images[nextImage], () => {
+          this.setState({
+            isLoadingImage: false
+          })
+        })
       })
     }
   }
@@ -422,6 +450,12 @@ export default class ProductForm extends Component {
         image: state.images[nextImage],
         imageIndex: nextImage,
         isLoadingImage: true
+      }, () => {
+        onImageLoad(state.images[nextImage], () => {
+          this.setState({
+            isLoadingImage: false
+          })
+        })
       })
     }
   }

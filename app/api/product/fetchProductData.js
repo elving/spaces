@@ -71,9 +71,12 @@ export default url => (
 
       const $title = $('title')
       const $ogTitle = $('meta[name="og:title"]')
+      const $amazonTitle = $('#title')
       const $firstHeading = $('h1').eq(0)
 
-      if (exists($ogTitle)) {
+      if (isAmazon() && exists($amazonTitle)) {
+        title = $amazonTitle.text()
+      } else if (exists($ogTitle)) {
         title = $ogTitle.attr('content')
       } if (exists($title)) {
         title = $title.text()

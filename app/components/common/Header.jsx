@@ -78,6 +78,14 @@ export default class Header extends Component {
             >
               Categories
             </Link>
+            <Link
+              to={{ pathname: '/designers/' }}
+              onClick={fullReload}
+              className="dropdown-link"
+              activeClassName="dropdown-link--active"
+            >
+              Designers
+            </Link>
           </DropdownContent>
         </Dropdown>
 

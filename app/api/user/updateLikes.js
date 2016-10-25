@@ -9,8 +9,8 @@ import update from './update'
 import toStringId from '../utils/toStringId'
 import toObjectId from '../utils/toObjectId'
 
-export default (req, like, action = 'add') => {
-  return new Promise(async (resolve, reject) => {
+export default (req, like, action = 'add') => (
+  new Promise(async (resolve, reject) => {
     const key = isEqual(get(like, 'parentType'), 'space')
       ? 'spacesLiked'
       : 'productsLiked'
@@ -38,4 +38,4 @@ export default (req, like, action = 'add') => {
       reject(err)
     }
   })
-}
+)

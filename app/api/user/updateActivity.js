@@ -9,8 +9,8 @@ import update from './update'
 import toStringId from '../utils/toStringId'
 import toObjectId from '../utils/toObjectId'
 
-export default (req, key, value, action = 'add') => {
-  return new Promise(async (resolve, reject) => {
+export default (req, key, value, action = 'add') => (
+  new Promise(async (resolve, reject) => {
     const user = get(req, 'user', {})
     const parent = toString(get(value, 'parent'))
     const values = get(user, key, [])
@@ -36,4 +36,4 @@ export default (req, key, value, action = 'add') => {
       reject(err)
     }
   })
-}
+)

@@ -1,13 +1,15 @@
 import has from 'lodash/has'
+import get from 'lodash/get'
 import set from 'lodash/set'
 import mongoose from 'mongoose'
 
 import sanitize from './sanitize'
 import parseError from '../utils/parseError'
+import toStringId from '../utils/toStringId'
 import toIdsFromPath from '../utils/toIdsFromPath'
 import uploadImageFromDataUrl from '../../utils/image/uploadImageFromDataUrl'
 
-import { invalidateFromCache } from '../cache'
+import { removeFromCache, invalidateFromCache } from '../cache'
 
 export default (_id, props) => (
   new Promise(async (resolve, reject) => {
@@ -37,6 +39,12 @@ export default (_id, props) => (
           if (err) {
             return reject(parseError(err))
           }
+
+          await removeFromCache(`user-${toStringId(user)}`)
+          await removeFromCache(`user-${get(user, 'username')}`)
+          await removeFromCache(`user-likes-${toStringId(user)}`)
+          await removeFromCache(`user-follows-${toStringId(user)}`)
+          await removeFromCache('user-popular-8')
 
           await invalidateFromCache([
             _id,

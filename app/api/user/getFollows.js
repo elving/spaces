@@ -11,7 +11,7 @@ import { saveToCache } from '../cache'
 
 export default (_id) => (
   new Promise((resolve, reject) => {
-    const key = `user-${_id}`
+    const key = `user-follows-${_id}`
 
     const query = () => {
       mongoose

@@ -26,8 +26,8 @@ export default class Feed extends Component {
   }
 
   state = {
-    showSpaces: true,
-    showProducts: false
+    showSpaces: false,
+    showProducts: true
   }
 
   showSpaces = () => {

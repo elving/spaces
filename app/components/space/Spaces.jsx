@@ -11,6 +11,7 @@ import Space from './Card'
 import Loader from '../common/Loader'
 
 import toStringId from '../../api/utils/toStringId'
+import hasEmptyIdParam from '../../utils/hasEmptyIdParam'
 
 export default class Spaces extends Component {
   static propTypes = {
@@ -36,7 +37,7 @@ export default class Spaces extends Component {
       count,
       offset: size(results),
       results,
-      isFetching: isEmpty(results),
+      isFetching: isEmpty(results) && !hasEmptyIdParam(props.params),
       hasFetched: !isEmpty(results),
       lastResults: results
     }
@@ -45,7 +46,7 @@ export default class Spaces extends Component {
   componentDidMount() {
     const { props } = this
 
-    if (isEmpty(props.spaces)) {
+    if (isEmpty(props.spaces) && !hasEmptyIdParam(props.params)) {
       this.fetch()
     }
   }

@@ -10,6 +10,7 @@ import React, { Component, PropTypes } from 'react'
 import Loader from '../common/Loader'
 import Product from './Card'
 import AddProductModal from '../modal/AddProduct'
+import hasEmptyIdParam from '../../utils/hasEmptyIdParam'
 import addProductModalContainer from '../container/AddProductModal'
 
 import toStringId from '../../api/utils/toStringId'
@@ -46,7 +47,7 @@ class ProductsIndex extends Component {
       count,
       offset: size(results),
       results,
-      isFetching: isEmpty(results),
+      isFetching: isEmpty(results) && !hasEmptyIdParam(props.params),
       hasFetched: !isEmpty(results),
       lastResults: results
     }
@@ -55,7 +56,7 @@ class ProductsIndex extends Component {
   componentDidMount() {
     const { props } = this
 
-    if (isEmpty(props.products)) {
+    if (isEmpty(props.products) && !hasEmptyIdParam(props.params)) {
       this.fetch()
     }
   }

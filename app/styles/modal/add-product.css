@@ -112,6 +112,9 @@
   background-color: #ffffff;
   width: 100%;
   padding: 15px;
+}
+
+.add-product-modal-space-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;

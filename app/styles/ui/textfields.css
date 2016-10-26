@@ -7,6 +7,7 @@ input:-webkit-autofill {
 .textfield {
   color: #555;
   border: 1px solid #dadada;
+  box-shadow: none;
   border-radius: 4px;
   background-color: #ffffff;
   padding: 10px;

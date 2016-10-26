@@ -355,55 +355,57 @@ export default class AddProductModal extends Component {
           'add-product-modal-space--has-product': hasProduct
         })}
       >
-        <span className="add-product-modal-space-name">
-          <small className="add-product-modal-space-room">
-            {get(space, 'spaceType.name')}
-          </small>
-          {this.isAddingToSpace(spaceId) ? 'Adding...' : get(space, 'name')}
-        </span>
-        {hasProduct ? (
-          <span className="add-product-modal-space-actions">
-            <MaterialDesignIcon
-              name="check"
-              className="add-product-modal-space-icon"
-            />
-            <MaterialDesignIcon
-              name="uncheck"
-              className="add-product-modal-space-icon"
-            />
-            <a
-              rel="noopener noreferrer"
-              href={`/${get(space, 'detailUrl')}/`}
-              target="_blank"
-              onClick={this.stopPropagation}
-              className="add-product-modal-space-action"
-            >
+        <div className="add-product-modal-space-inner">
+          <span className="add-product-modal-space-name">
+            <small className="add-product-modal-space-room">
+              {get(space, 'spaceType.name')}
+            </small>
+            {this.isAddingToSpace(spaceId) ? 'Adding...' : get(space, 'name')}
+          </span>
+          {hasProduct ? (
+            <span className="add-product-modal-space-actions">
               <MaterialDesignIcon
-                name="open"
+                name="check"
                 className="add-product-modal-space-icon"
               />
-            </a>
-          </span>
-        ) : (
-          <span className="spaces-popup-space-actions">
-            <MaterialDesignIcon
-              name="check-empty"
-              className="add-product-modal-space-icon"
-            />
-            <a
-              rel="noopener noreferrer"
-              href={`/${get(space, 'detailUrl')}/`}
-              target="_blank"
-              onClick={this.stopPropagation}
-              className="add-product-modal-space-action"
-            >
               <MaterialDesignIcon
-                name="open"
+                name="uncheck"
                 className="add-product-modal-space-icon"
               />
-            </a>
-          </span>
-        )}
+              <a
+                rel="noopener noreferrer"
+                href={`/${get(space, 'detailUrl')}/`}
+                target="_blank"
+                onClick={this.stopPropagation}
+                className="add-product-modal-space-action"
+              >
+                <MaterialDesignIcon
+                  name="open"
+                  className="add-product-modal-space-icon"
+                />
+              </a>
+            </span>
+          ) : (
+            <span className="spaces-popup-space-actions">
+              <MaterialDesignIcon
+                name="check-empty"
+                className="add-product-modal-space-icon"
+              />
+              <a
+                rel="noopener noreferrer"
+                href={`/${get(space, 'detailUrl')}/`}
+                target="_blank"
+                onClick={this.stopPropagation}
+                className="add-product-modal-space-action"
+              >
+                <MaterialDesignIcon
+                  name="open"
+                  className="add-product-modal-space-icon"
+                />
+              </a>
+            </span>
+          )}
+        </div>
       </button>
     )
   }

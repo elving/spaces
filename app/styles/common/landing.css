@@ -124,6 +124,7 @@
 .landing-about-cards > .card {
   margin: 0 15px;
   max-width: 303px;
+  max-height: 444px;
 }
 
 .landing-about-cta {

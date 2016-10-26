@@ -35,9 +35,21 @@
 }
 
 .category-detail-counter {
+  border: 0 none;
+  background-color: transparent;
   text-align: center;
   text-decoration: none;
   margin: 0 15px;
+  padding: 0;
+}
+
+button.category-detail-counter {
+  cursor: pointer;
+}
+
+button.category-detail-counter:hover .category-detail-counter-number,
+button.category-detail-counter:hover .category-detail-counter-text {
+  color: #333333;
 }
 
 .category-detail-counters .category-detail-counter:first-child {

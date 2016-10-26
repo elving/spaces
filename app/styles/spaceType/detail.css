@@ -35,15 +35,26 @@
 }
 
 .spaceType-detail-counter {
+  border: 0 none;
+  background-color: transparent;
   text-align: center;
   text-decoration: none;
   margin: 0 15px;
+  padding: 0;
+}
+
+button.spaceType-detail-counter {
+  cursor: pointer;
+}
+
+button.spaceType-detail-counter:hover .spaceType-detail-counter-number,
+button.spaceType-detail-counter:hover .spaceType-detail-counter-text {
+  color: #333333;
 }
 
 .spaceType-detail-counters .spaceType-detail-counter:first-child {
   margin-left: 0;
 }
-
 
 .spaceType-detail-counter:hover,
 .spaceType-detail-counter:active {

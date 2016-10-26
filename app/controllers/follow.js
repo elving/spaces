@@ -1,6 +1,7 @@
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 
+import search from '../api/follow/search'
 import getAll from '../api/follow/getAll'
 import create from '../api/follow/create'
 import destroy from '../api/follow/destroy'
@@ -59,21 +60,63 @@ export const unfollow = async (req, res) => {
   }
 }
 
-export const getSpaceLikes = async (req, res) => {
-  const space = get(req.params, 'space', '')
+export const getUserFollowers = async (req, res) => {
+  const createdBy = get(req.params, 'user', '')
 
-  if (isEmpty(space)) {
-    return res.status(200).json({ follows: [] })
+  if (isEmpty(createdBy)) {
+    return res.status(200).json({ followers: [] })
   }
 
   try {
-    const follows = await getAll(space)
-    res.status(200).json({ follows })
+    const followers = await search({ createdBy })
+    res.status(200).json(followers)
   } catch (err) {
     res.status(500).json({
       err: {
         genereic: (
-          'There was an error while trying to fetch follows from this space.'
+          'There was an error while trying to fetch followers of this designer.'
+        )
+      }
+    })
+  }
+}
+
+export const getRoomFollowers = async (req, res) => {
+  const room = get(req.params, 'room', '')
+
+  if (isEmpty(room)) {
+    return res.status(200).json({ followers: [] })
+  }
+
+  try {
+    const followers = await getAll(room)
+    res.status(200).json({ followers })
+  } catch (err) {
+    res.status(500).json({
+      err: {
+        genereic: (
+          'There was an error while trying to fetch followers of this room.'
+        )
+      }
+    })
+  }
+}
+
+export const getCategoryFollowers = async (req, res) => {
+  const category = get(req.params, 'category', '')
+
+  if (isEmpty(category)) {
+    return res.status(200).json({ followers: [] })
+  }
+
+  try {
+    const followers = await getAll(category)
+    res.status(200).json({ followers })
+  } catch (err) {
+    res.status(500).json({
+      err: {
+        genereic: (
+          'There was an error while trying to fetch followers of this category.'
         )
       }
     })

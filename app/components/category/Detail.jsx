@@ -7,6 +7,7 @@ import Spaces from '../space/Spaces'
 import Products from '../product/Products'
 import SharePopup from '../common/SharePopup'
 import FollowButton from '../common/FollowButton'
+import FollowersModal from '../modal/Followers'
 import CreateSpaceBanner from '../onboarding/Banner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import sharePopupContainer from '../container/SharePopup'
@@ -36,6 +37,8 @@ class CategoryDetail extends Component {
       showSpaces: spacesCount > 0,
       showProducts: spacesCount === 0,
       followersCount: get(props.category, 'followersCount', 0),
+      followersModalIsOpen: false,
+      createFollowersModal: false
     }
   }
 
@@ -53,6 +56,11 @@ class CategoryDetail extends Component {
     this.setState({
       followersCount: state.followersCount - 1
     })
+  }
+
+  onFollowersCounterClick = (event) => {
+    event.preventDefault()
+    this.openFollowersModal()
   }
 
   getShortUrl = () => {
@@ -78,6 +86,19 @@ class CategoryDetail extends Component {
     this.setState({
       showSpaces: false,
       showProducts: true
+    })
+  }
+
+  openFollowersModal = () => {
+    this.setState({
+      followersModalIsOpen: true,
+      createFollowersModal: true
+    })
+  }
+
+  closeFollowersModal = () => {
+    this.setState({
+      followersModalIsOpen: false
     })
   }
 
@@ -121,7 +142,9 @@ class CategoryDetail extends Component {
           </div>
         ) : null}
         {state.followersCount ? (
-          <div
+          <button
+            type="button"
+            onClick={this.onFollowersCounterClick}
             className="category-detail-counter"
             data-action="followers"
           >
@@ -131,10 +154,23 @@ class CategoryDetail extends Component {
             <div className="category-detail-counter-text">
               {inflect(state.followersCount, 'Follower')}
             </div>
-          </div>
+          </button>
         ) : null}
       </div>
     )
+  }
+
+  renderFollowersModal() {
+    const { props, state } = this
+
+    return state.createFollowersModal ? (
+      <FollowersModal
+        parent={toStringId(props.category)}
+        onClose={this.closeFollowersModal}
+        isVisible={state.followersModalIsOpen}
+        parentType="category"
+      />
+    ) : null
   }
 
   renderActions() {
@@ -261,6 +297,7 @@ class CategoryDetail extends Component {
         <div className="category-detail">
           {this.renderHeader()}
           {this.renderSubHeader()}
+          {this.renderFollowersModal()}
 
           <div className="category-detail-content">
             {this.renderNavigation()}

@@ -38,7 +38,7 @@ const getLikesCount = createdBy => (
       .model('Like')
       .where({
         createdBy,
-        parentType: { $not: 'comment' }
+        parentType: { $not: /comment/ }
       })
       .count((err, count = 0) => {
         if (err) {

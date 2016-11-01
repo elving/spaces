@@ -21,7 +21,8 @@ const ProductSchema = new mongoose.Schema({
   description: { type: String, trim: true, default: '' },
   likesCount: { type: Number, default: 0 },
   commentsCount: { type: Number, default: 0 },
-  followersCount: { type: Number, default: 0 }
+  followersCount: { type: Number, default: 0 },
+  owners: { type: mongoose.Schema.ObjectId, ref: 'User' }
 }, { timestamps: true })
 
 applyHooks(ProductSchema)

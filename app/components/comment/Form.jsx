@@ -7,29 +7,29 @@ import serialize from 'form-serialize'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
+import Avatar from '../user/Avatar'
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
+
 import toStringId from '../../api/utils/toStringId'
 
-export default class CommentForm extends Component {
+export default class CommentsForm extends Component {
   static contextTypes = {
     csrf: PropTypes.string,
     user: PropTypes.object,
-    userLoggedIn: PropTypes.func
+    userLoggedIn: PropTypes.func,
+    onCommentAdded: PropTypes.func
   }
 
   static propTypes = {
     parent: PropTypes.string.isRequired,
-    onCreate: PropTypes.func,
     parentType: PropTypes.string.isRequired
-  }
-
-  static defaultProps = {
-    onCreate: (() => {})
   }
 
   state = {
     errors: {},
     content: '',
     isSaving: false,
+    hasFocused: false,
     contentCharsLeft: 500,
     hasContentCharsError: false
   }
@@ -38,7 +38,7 @@ export default class CommentForm extends Component {
     event.preventDefault()
 
     const formData = serialize(this.form, { hash: true })
-    const { props, state, context } = this
+    const { state, context } = this
 
     if (!isEmpty(state.content)) {
       this.setState({
@@ -54,7 +54,9 @@ export default class CommentForm extends Component {
               contentCharsLeft: 500,
               hasContentCharsError: false
             }, () => {
-              props.onCreate(merge({}, comment, { createdBy: context.user }))
+              context.onCommentAdded(
+                merge({}, comment, { createdBy: context.user })
+              )
             })
           })
           .catch(({ response }) => {
@@ -77,19 +79,21 @@ export default class CommentForm extends Component {
     })
   }
 
-  form = null;
-
   render() {
     const { props, state, context } = this
 
     const contentError = get(state.errors, 'content')
     const hasContentError = !isEmpty(contentError)
 
-    return context.userLoggedIn() ? (
+    return (
       <form
         ref={form => { this.form = form }}
-        className="form comment-form"
         onSubmit={this.onSubmit}
+        className={classNames({
+          form: true,
+          'comment-form': true,
+          'form--has-focused': state.hasFocused
+        })}
       >
         <input type="hidden" name="_csrf" value={context.csrf} />
         <input type="hidden" name="parent" value={props.parent} />
@@ -101,34 +105,50 @@ export default class CommentForm extends Component {
           value={toStringId(context.user)}
         />
 
-        <div className="form-group form-group--small">
+        <div className="comment-form-left">
+          <Avatar
+            user={context.user}
+            width={52}
+            height={52}
+          />
+        </div>
+
+        <div className="comment-form-right">
           <textarea
             name="content"
             value={state.content}
+            onFocus={() => {
+              if (!context.userLoggedIn()) {
+                window.location.href = '/login/'
+              } else if (!state.hasFocused) {
+                this.setState({
+                  hasFocused: true
+                })
+              }
+            }}
             disabled={state.isSaving}
             onChange={this.onContentChange}
             className={classNames({
               textfield: true,
-              'textfield--small': true,
-              'textfield--error': hasContentError
+              'textfield--error': hasContentError,
+              'comment-form-textfield': true
             })}
-            placeholder={`Post a comment about this ${props.parentType}...`}
+            placeholder="Join the discussion..."
           />
 
           {hasContentError ? (
             <small className="form-error">{contentError}</small>
           ) : null}
-        </div>
 
-        <div className="form-group form-group--small">
-          <div className="form-group form-group--inline form-group--small">
+          <div className="comment-form-actions">
             <button
               type="submit"
               disabled={state.isSaving || state.hasContentCharsError}
-              className="button button--primary button--small"
+              className="button button--primary button--tiny"
               data-action="post"
             >
               <span className="button-text">
+                <MaterialDesignIcon name="comment" />
                 {state.isSaving ? 'Posting...' : 'Post'}
               </span>
             </button>
@@ -143,24 +163,6 @@ export default class CommentForm extends Component {
           </div>
         </div>
       </form>
-    ) : (
-      <div
-        style={{
-          marginTop: 15,
-          marginBottom: 0
-        }}
-        className="comments-list"
-      >
-        <h4 className="comments-title" style={{ marginBottom: 15 }}>
-          <a href="/join/">Join</a>
-          {'\u00A0'}
-          or
-          {'\u00A0'}
-          <a href="/login/">Log in</a>
-          {'\u00A0'}
-          to Spaces to comment on this {props.parentType}
-        </h4>
-      </div>
     )
   }
 }

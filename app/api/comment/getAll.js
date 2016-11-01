@@ -8,8 +8,8 @@ import toIdsFromPath from '../utils/toIdsFromPath'
 import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default (parent) => {
-  return new Promise(async (resolve, reject) => {
+export default (parent) => (
+  new Promise(async (resolve, reject) => {
     const key = `comment-all-${parent}`
 
     getFromCacheOrQuery(key, () => {
@@ -17,7 +17,7 @@ export default (parent) => {
         .model('Comment')
         .where({ parent })
         .populate('createdBy')
-        .sort('createdAt')
+        .sort('-createdAt')
         .exec(async (err, comments) => {
           if (err) {
             return reject(parseError(err))
@@ -36,4 +36,4 @@ export default (parent) => {
         })
     }, resolve)
   })
-}
+)

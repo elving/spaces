@@ -9,6 +9,13 @@
   -webkit-overflow-scrolling: touch !important;
 }
 
+[data-action="betaLogin"] {
+  top: 15px;
+  right: 15px;
+  z-index: 1000;
+  position: absolute;
+}
+
 .landing-content {
   background-color: rgba(38, 51, 66, 0.75);
   width: 100%;

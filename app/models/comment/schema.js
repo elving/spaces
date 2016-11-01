@@ -10,7 +10,8 @@ const CommentSchema = new mongoose.Schema({
   parent: { type: mongoose.Schema.ObjectId },
   content: { type: String, trim: true },
   createdBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
-  parentType: { type: String, trim: true, default: '' }
+  parentType: { type: String, trim: true, default: '' },
+  likesCount: { type: Number, default: 0 }
 }, { timestamps: true })
 
 applyHooks(CommentSchema)

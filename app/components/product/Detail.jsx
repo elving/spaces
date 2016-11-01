@@ -11,10 +11,10 @@ import Layout from '../common/Layout'
 import Avatar from '../user/Avatar'
 import Loader from '../common/Loader'
 import Product from './Card'
+import Comments from '../comment/Comments'
 import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
 import CardAvatars from '../card/CardAvatars'
-import CommentsWidget from '../comment/Widget'
 import AddProductModal from '../modal/AddProduct'
 import CreateSpaceBanner from '../onboarding/Banner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
@@ -472,7 +472,7 @@ class ProductDetail extends Component {
 
     return (
       <div id="comments">
-        <CommentsWidget
+        <Comments
           parent={toStringId(props.product)}
           parentType="product"
         />

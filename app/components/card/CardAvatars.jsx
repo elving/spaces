@@ -1,12 +1,14 @@
 import map from 'lodash/map'
+import uniqBy from 'lodash/uniqBy'
 import React, { Component, PropTypes } from 'react'
 
 import Avatar from '../user/Avatar'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import inflect from '../../utils/inflect'
+import toStringId from '../../api/utils/toStringId'
 
-export default class CardTags extends Component {
+export default class CardAvatars extends Component {
   static propTypes = {
     verb: PropTypes.string,
     users: PropTypes.array,
@@ -60,11 +62,13 @@ export default class CardTags extends Component {
 
   renderAvatars() {
     const { props } = this
+    const uniqueUsers = uniqBy(props.users, 'id')
 
     return (
       <div className="card-avatars-users">
-        {map(props.users, user =>
+        {map(uniqueUsers, user =>
           <Avatar
+            key={`card-avatar-${props.action}-${toStringId(user)}`}
             user={user}
             style={{ marginLeft: -(props.avatarSize / 2.5) }}
             width={props.avatarSize}

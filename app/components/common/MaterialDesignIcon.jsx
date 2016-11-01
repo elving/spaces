@@ -134,6 +134,12 @@ export default class MaterialDesignIcon extends Component {
         )
       }
 
+      case 'check-simple': {
+        return (
+          <path fill={props.fill} className="icon-fill" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
+        )
+      }
+
       case 'check': {
         return (
           <path fill={props.fill} className="icon-fill" d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
@@ -268,7 +274,13 @@ export default class MaterialDesignIcon extends Component {
 
       case 'star': {
         return (
-          <path fill={props.fill} d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z" />
+          <path fill={props.fill} className="icon-fill" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z" />
+        )
+      }
+
+      case 'sort': {
+        return (
+          <path fill={props.fill} className="icon-fill" d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z" />
         )
       }
 

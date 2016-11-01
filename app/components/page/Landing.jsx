@@ -10,6 +10,13 @@ export default class Landing extends Component {
   render() {
     return (
       <div className="landing-container">
+        <a
+          href="/login/"
+          className="button button--primary-alt"
+          data-action="betaLogin"
+        >
+          Beta Login
+        </a>
         <div className="landing-content">
           <Logo width={80} height={80} />
           <h1>We are building a shopping guide for your home, curated by people like you.</h1>

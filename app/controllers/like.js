@@ -122,3 +122,24 @@ export const getProductLikes = async (req, res) => {
     })
   }
 }
+
+export const getCommentLikes = async (req, res) => {
+  const comment = get(req.params, 'comment', '')
+
+  if (isEmpty(comment)) {
+    return res.status(200).json({ likes: [] })
+  }
+
+  try {
+    const likes = await getAll(comment)
+    res.status(200).json({ likes })
+  } catch (err) {
+    res.status(500).json({
+      err: {
+        genereic: (
+          'There was an error while trying to fetch likes from this comment.'
+        )
+      }
+    })
+  }
+}

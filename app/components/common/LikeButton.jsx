@@ -93,6 +93,7 @@ export default class LikeButton extends Component {
       [props.className]: !isEmpty(props.className),
       'like-button': true,
       'button--icon': !props.showText,
+      'button--tiny': props.size === 'tiny',
       'button--small': props.size === 'small',
       'like-button--liked': state.liked,
       'like-button--white': props.isWhite,

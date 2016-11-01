@@ -62,6 +62,8 @@ export default schema => {
       } catch (err) {
         logError(err)
       }
+
+      this.wasNew = false
     }
 
     if (this.shouldUpdateCategories) {
@@ -101,7 +103,6 @@ export default schema => {
       this.shouldUpdateImage = false
     }
 
-    this.wasNew = false
     this.forcedUpdate = false
   })
 

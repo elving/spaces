@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import mongoose from 'mongoose'
 
 import parseError from '../utils/parseError'

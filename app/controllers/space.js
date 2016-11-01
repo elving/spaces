@@ -16,7 +16,6 @@ import update from '../api/space/update'
 import destroy from '../api/space/destroy'
 import findById from '../api/space/findById'
 import findBySid from '../api/space/findBySid'
-import updateUser from '../api/user/update'
 
 import toJSON from '../api/utils/toJSON'
 import toStringId from '../api/utils/toStringId'

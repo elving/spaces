@@ -2,8 +2,10 @@ import get from 'lodash/get'
 import axios from 'axios'
 import React, { Component, PropTypes } from 'react'
 
-import MiniProfile from '../user/MiniProfile'
+import Avatar from '../user/Avatar'
+import LikeButton from '../common/LikeButton'
 
+import inflect from '../../utils/inflect'
 import formatDate from '../../utils/formatDate'
 import toStringId from '../../api/utils/toStringId'
 
@@ -11,29 +13,51 @@ export default class Comment extends Component {
   static contextTypes = {
     csrf: PropTypes.string,
     user: PropTypes.object,
+    onCommentRemoved: PropTypes.func,
     currentUserIsOwner: PropTypes.func
   }
 
   static propTypes = {
     id: PropTypes.string,
     content: PropTypes.string,
-    onDelete: PropTypes.func,
     createdBy: PropTypes.object,
-    createdAt: PropTypes.string
+    createdAt: PropTypes.string,
+    likesCount: PropTypes.number
   }
 
   static defaultProps = {
     content: '',
-    onDelete: (() => {}),
-    createdBy: {}
+    createdBy: {},
+    likesCount: 0
   }
 
-  state = {
-    errors: {},
-    isDeleting: false
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      errors: {},
+      isDeleting: false,
+      likesCount: get(props, 'likesCount', 0)
+    }
   }
 
-  onClickDelete = () => {
+  onLike = () => {
+    const { state } = this
+
+    this.setState({
+      likesCount: state.likesCount + 1
+    })
+  }
+
+  onUnlike = () => {
+    const { state } = this
+
+    this.setState({
+      likesCount: state.likesCount - 1
+    })
+  }
+
+  onClickDelete = event => {
     const { props, context } = this
     const id = toStringId(props)
 
@@ -41,6 +65,8 @@ export default class Comment extends Component {
       'Are you sure you want to delete this comment? \n' +
       'This action cannot be undone. '
     )
+
+    event.preventDefault()
 
     if (window.confirm(deleteMessage)) {
       this.setState({
@@ -54,7 +80,7 @@ export default class Comment extends Component {
             }
           })
           .then(() => {
-            props.onDelete(id)
+            context.onCommentRemoved(id)
           })
           .catch(({ response }) => {
             this.setState({
@@ -67,25 +93,64 @@ export default class Comment extends Component {
   }
 
   render() {
-    const { props, context } = this
+    const { props, state, context } = this
 
     return (
-      <div className="comment">
-        <MiniProfile user={props.createdBy} />
-        <p className="comment-content">{props.content}</p>
-        <div className="comment-actions">
-          <small className="comment-date">
-            {formatDate(props.createdAt)}
-          </small>
-          {context.currentUserIsOwner(props.createdBy) ? (
-            <button
-              onClick={this.onClickDelete}
-              className="button button--danger button--mini"
-              data-action="deleteComment"
+      <div id={`comment-${toStringId(props)}`} className="comment">
+        <div className="comment-left">
+          <Avatar
+            user={props.createdBy}
+            width={52}
+            height={52}
+            className="comment-author-avatar"
+          />
+        </div>
+        <div className="comment-right">
+          <p className="comment-content">
+            <a
+              rel="noopener noreferrer"
+              href={`/${get(props.createdBy, 'detailUrl')}/`}
+              target="_blank"
+              className="comment-author-name"
             >
-              <span className="button-text">Delete</span>
-            </button>
-          ) : null}
+              {get(props.createdBy, 'name')}
+            </a>
+            :&nbsp;{props.content}
+          </p>
+          <div className="comment-actions">
+            <div className="comment-actions-left">
+              <small className="comment-action comment-date">
+                {formatDate(props.createdAt)}
+              </small>
+              {state.likesCount ? (
+                <small className="comment-action comment-likes">
+                  {`${state.likesCount} ${inflect(state.likesCount, 'like')}`}
+                </small>
+              ) : null}
+            </div>
+            <div className="comment-actions-right">
+              <LikeButton
+                parent={props.id}
+                onLike={this.onLike}
+                onUnlike={this.onUnlike}
+                showText
+                className={
+                  'button--transparent comment-action comment-action-like'
+                }
+                parentType="comment"
+              />
+              {context.currentUserIsOwner(props.createdBy) ? (
+                <a
+                  href={`#${toStringId(props)}`}
+                  onClick={this.onClickDelete}
+                  className="comment-action"
+                  data-action="deleteComment"
+                >
+                  <small className="button-text">Delete</small>
+                </a>
+              ) : null}
+            </div>
+          </div>
         </div>
       </div>
     )

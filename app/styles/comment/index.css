@@ -1,11 +1,7 @@
-.comments-widget {
+.comments-container {
   width: 100%;
   padding: 0 15px;
   max-width: 620px;
-}
-
-.comments-widget-title {
-  margin: 0 auto 35px;
 }
 
 @import './list.css';

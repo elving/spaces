@@ -83,6 +83,11 @@
   height: 18px;
 }
 
+.button--mini .icon {
+  width: 16px;
+  height: 16px;
+}
+
 .button--tiny .icon,
 .button--small .icon {
   margin-right: 5px;

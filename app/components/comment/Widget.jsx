@@ -47,16 +47,16 @@ export default class CommentsWidget extends Component {
 
     return (
       <div className="comments-widget">
+        <CommentForm
+          parent={props.parent}
+          onCreate={this.addNewComment}
+          parentType={props.parentType}
+        />
         <Comments
           parent={props.parent}
           parentType={props.parentType}
           newComments={state.newComments}
           onCommentRemoved={this.removeComment}
-        />
-        <CommentForm
-          parent={props.parent}
-          onCreate={this.addNewComment}
-          parentType={props.parentType}
         />
       </div>
     )

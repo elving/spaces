@@ -19,6 +19,7 @@ import Tag from '../common/Tag'
 import Space from '../space/Card'
 import Layout from '../common/Layout'
 import Product from '../product/Card'
+import Comments from '../comment/Comments'
 import LikesModal from '../modal/Likes'
 import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
@@ -27,7 +28,6 @@ import Notification from '../common/Notification'
 import RedesignPopup from './RedesignPopup'
 import RedesignsModal from '../modal/Redesigns'
 import AddProductCard from '../product/AddCard'
-import CommentsWidget from '../comment/Widget'
 import SpaceFormModal from '../modal/SpaceForm'
 import AddProductModal from '../modal/AddProduct'
 import OnboardingModal from '../modal/Onboarding'
@@ -674,7 +674,7 @@ class SpaceDetail extends Component {
 
     return (
       <div id="comments">
-        <CommentsWidget
+        <Comments
           parent={toStringId(props.space)}
           parentType="space"
           onCommentAdded={this.onCommentAdded}

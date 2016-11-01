@@ -3,10 +3,18 @@
   display: block;
 }
 
+.comments-header {
+  border-bottom: 1px solid #dadada;
+  margin: 0 0 15px;
+  display: flex;
+  align-items: center;
+  padding-bottom: 15px;
+  justify-content: space-between;
+}
+
 .comments-title {
-  font-size: 22px;
-  text-align: center;
-  margin: 0 auto 35px;
+  font-size: 18px;
+  margin: 0;
 }
 
 .comments-list {

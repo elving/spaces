@@ -5,6 +5,7 @@ import toStringId from '../../api/utils/toStringId'
 import toObjectId from '../../api/utils/toObjectId'
 import updateUser from '../../api/user/update'
 import updateSpace from '../../api/space/updateStats'
+import updateComment from '../../api/comment/updateStats'
 import updateProduct from '../../api/product/updateStats'
 
 export default schema => {
@@ -24,8 +25,12 @@ export default schema => {
           await updateSpace(parent, {
             $inc: { likesCount: 1 }
           })
-        } else {
+        } else if (parentType === 'product') {
           await updateProduct(parent, {
+            $inc: { likesCount: 1 }
+          })
+        } else if (parentType === 'comment') {
+          await updateComment(parent, {
             $inc: { likesCount: 1 }
           })
         }
@@ -51,8 +56,12 @@ export default schema => {
         await updateSpace(parent, {
           $inc: { likesCount: -1 }
         })
-      } else {
+      } else if (parentType === 'product') {
         await updateProduct(parent, {
+          $inc: { likesCount: -1 }
+        })
+      } else if (parentType === 'comment') {
+        await updateComment(parent, {
           $inc: { likesCount: -1 }
         })
       }

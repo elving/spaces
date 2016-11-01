@@ -1,7 +1,51 @@
 .comment-form {
   width: 100%;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 25px;
+  justify-content: space-between;
 }
 
-.comment-form [data-action="post"] {
-  width: 180px;
+.comment-form-left {
+  width: 52px;
+  margin-right: 10px;
+}
+
+.comment-form-right {
+  flex: 1;
+  width: 100%;
+}
+
+.comment-form .comment-form-textfield {
+  width: 100%;
+  resize: none;
+  height: 47px;
+  min-height: 47px;
+  margin-top: 5px;
+}
+
+.comment-form .comment-form-textfield:focus,
+.comment-form .comment-form-textfield:focus + .comment-form-actions {
+  border-color: #bababa;
+}
+
+.comment-form-actions {
+  border: 1px solid #dadada;
+  border-radius: 0 0 4px 4px;
+  display: none;
+  padding: 10px;
+  margin-top: -7px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.comment-form.form--has-focused .comment-form-textfield {
+  border-radius: 4px 4px 0 0;
+  resize: vertical;
+  height: auto;
+  min-height: 80px;
+}
+
+.comment-form.form--has-focused .comment-form-actions {
+  display: flex;
 }

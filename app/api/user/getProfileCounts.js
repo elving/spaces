@@ -36,7 +36,10 @@ const getLikesCount = createdBy => (
   new Promise((resolve, reject) => {
     mongoose
       .model('Like')
-      .where({ createdBy })
+      .where({
+        createdBy,
+        parentType: { $not: 'comment' }
+      })
       .count((err, count = 0) => {
         if (err) {
           return reject(parseError(err))

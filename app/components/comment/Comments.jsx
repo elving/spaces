@@ -61,7 +61,7 @@ export default class Comments extends Component {
     const { props, state } = this
 
     this.setState({
-      comments: concat([], state.comments, comment)
+      comments: concat([], comment, state.comments)
     }, props.onCommentAdded)
   }
 
@@ -77,16 +77,25 @@ export default class Comments extends Component {
     })
   }
 
-  sortComments = sorting => {
+  sortComments = (sorting, _comments) => {
     const { state } = this
     let comments = []
+    const commentsToSort = !isEmpty(_comments)
+      ? _comments
+      : state.comments
 
     if (sorting === 'Newest') {
-      comments = orderBy(state.comments, 'createdAt', 'desc')
+      comments = orderBy(commentsToSort, 'createdAt', 'desc')
     } else if (sorting === 'Oldest') {
-      comments = orderBy(state.comments, 'createdAt', 'asc')
+      comments = orderBy(commentsToSort, 'createdAt', 'asc')
+    } else if (sorting === 'Popular') {
+      comments = orderBy(commentsToSort, 'likesCount', 'desc')
     } else {
-      comments = state.comments
+      comments = commentsToSort
+    }
+
+    if (!isEmpty(_comments)) {
+      return comments
     }
 
     this.setState({ comments })
@@ -102,7 +111,7 @@ export default class Comments extends Component {
         .get(`/ajax/comments/${props.parentType}/${props.parent}/`)
         .then(({ data }) => {
           this.setState({
-            comments: get(data, 'comments', []),
+            comments: this.sortComments('Popular', get(data, 'comments', [])),
             isFetching: false
           })
         })

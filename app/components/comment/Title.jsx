@@ -27,7 +27,7 @@ export default class CommentsList extends Component {
   }
 
   state = {
-    currentSorting: 'Newest'
+    currentSorting: 'Popular'
   }
 
   sort = sorting => {
@@ -49,7 +49,7 @@ export default class CommentsList extends Component {
 
   renderSorting() {
     const { state } = this
-    const sortingTypes = ['Newest', 'Oldest']
+    const sortingTypes = ['Popular', 'Newest', 'Oldest']
 
     return (
       <Dropdown

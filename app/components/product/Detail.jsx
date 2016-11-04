@@ -1,6 +1,9 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
+import size from 'lodash/size'
 import ceil from 'lodash/ceil'
+import concat from 'lodash/concat'
+import uniqBy from 'lodash/uniqBy'
 import isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
@@ -14,7 +17,6 @@ import Product from './Card'
 import Comments from '../comment/Comments'
 import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
-import CardAvatars from '../card/CardAvatars'
 import AddProductModal from '../modal/AddProduct'
 import CreateSpaceBanner from '../onboarding/Banner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
@@ -166,6 +168,13 @@ class ProductDetail extends Component {
     return (
       <p className="product-detail-brand">
         {`By ${get(props.product, 'brand.name')}`}
+        &nbsp;&middot;&nbsp;Curated by&nbsp;
+        <a
+          href={`/${get(props.product, 'createdBy.detailUrl')}/`}
+          className="product-detail-curator"
+        >
+          @{get(props.product, 'createdBy.username')}
+        </a>
       </p>
     )
   }
@@ -211,67 +220,67 @@ class ProductDetail extends Component {
     ) : null
   }
 
-  renderCurator() {
+  renderActivity() {
     const { props } = this
 
-    return (
-      <a
-        href={`/${get(props.product, 'createdBy.detailUrl')}/`}
-        className="product-detail-curator"
-      >
-        <div className="card-avatars">
-          <Avatar
-            user={get(props.product, 'createdBy')}
-            width={34}
-            height={34}
-            className="card-avatars-icon"
-          />
-          <div className="card-avatars-count">
-            Curated by {get(props.product, 'createdBy.name')}
-          </div>
-        </div>
-      </a>
-    )
-  }
-
-  renderLikesCount() {
-    const { props } = this
     const lastLikes = get(props.product, 'lastLikes')
-    const usersWhoLiked = map(
-      get(lastLikes, 'likes'), like => get(like, 'createdBy')
-    )
+    const likesCount = get(lastLikes, 'count', 0)
+    const usersWhoLiked = map(get(lastLikes, 'likes'), like => {
+      const user = get(like, 'createdBy', {})
+      return { ...user, activity: 'like' }
+    })
 
-    return (
-      <div className="product-detail-likes">
-        <CardAvatars
-          verb="like"
-          users={usersWhoLiked}
-          count={get(lastLikes, 'count', 0)}
-          action="liked"
-          avatarSize={32}
-        />
-      </div>
-    )
-  }
-
-  renderCommentsCount() {
-    const { props } = this
     const lastComments = get(props.product, 'lastComments')
-    const usersWhoCommented = map(
-      get(lastComments, 'comments'), comment => get(comment, 'createdBy')
+    const commentsCount = get(lastComments, 'count', 0)
+    const usersWhoCommented = uniqBy(
+      map(get(lastComments, 'comments'), comment => {
+        const user = get(comment, 'createdBy', {})
+        return { ...user, activity: 'comment' }
+      }), 'id'
     )
 
-    return (
-      <div className="product-detail-comments">
-        <CardAvatars
-          verb="comment"
-          users={usersWhoCommented}
-          count={get(lastComments, 'count', 0)}
-          action="commented"
-          avatarSize={32}
-        />
-      </div>
+    const hasActivity = likesCount || commentsCount
+    const activityCount = (
+      (likesCount + commentsCount) -
+      (size(usersWhoLiked) + size(usersWhoCommented))
     )
+    const activityUsers = concat([], usersWhoLiked, usersWhoCommented)
+
+    return hasActivity ? (
+      <div className="product-detail-activity">
+        <div className="product-detail-activity-users">
+          {map(activityUsers, user =>
+            <a
+              rel="noopener noreferrer"
+              href={`/${get(user, 'detailUrl')}/`}
+              target="_blank"
+              className="product-detail-activity-user"
+              data-activity={user.activity}
+            >
+              <Avatar
+                key={`product-activity-${toStringId(user)}-${user.activity}`}
+                user={user}
+                width={34}
+                height={34}
+                className="product-detail-activity-avatar"
+              />
+              <span className="product-detail-activity-icon-container">
+                <MaterialDesignIcon
+                  name={user.activity}
+                  size={12}
+                  className="product-detail-activity-icon"
+                />
+              </span>
+            </a>
+          )}
+          {activityCount ? (
+            <div className="product-detail-activity-count">
+              +{activityCount}
+            </div>
+          ) : null}
+        </div>
+      </div>
+    ) : null
   }
 
   renderTags() {
@@ -385,9 +394,7 @@ class ProductDetail extends Component {
       <div className="product-detail-content">
         {this.renderName()}
         {this.renderBrand()}
-        {this.renderCurator()}
-        {this.renderLikesCount()}
-        {this.renderCommentsCount()}
+        {this.renderActivity()}
         {this.renderTags()}
         {this.renderUrl()}
         {this.renderActions()}

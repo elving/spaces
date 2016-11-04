@@ -39,6 +39,8 @@ export default class Comments extends Component {
   constructor(props) {
     super(props)
 
+    console.log('const', get(props, 'comments', []),)
+
     this.state = {
       comments: get(props, 'comments', []),
       isFetching: false
@@ -59,6 +61,7 @@ export default class Comments extends Component {
 
   addComment = comment => {
     const { props, state } = this
+    console.log('addComment', comment, state.comments)
 
     this.setState({
       comments: concat([], comment, state.comments)
@@ -110,8 +113,12 @@ export default class Comments extends Component {
       axios
         .get(`/ajax/comments/${props.parentType}/${props.parent}/`)
         .then(({ data }) => {
+          const comments = get(data, 'comments', [])
+
           this.setState({
-            comments: this.sortComments('Popular', get(data, 'comments', [])),
+            comments: !isEmpty(comments)
+              ? this.sortComments('Popular', comments)
+              : [],
             isFetching: false
           })
         })

@@ -4,7 +4,9 @@ input:-webkit-autofill {
   transition: unset;
 }
 
-.textfield {
+.textfield,
+#doorbell-email,
+#doorbell-feedback {
   color: #555;
   border: 1px solid #dadada;
   box-shadow: none;

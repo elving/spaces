@@ -15,7 +15,8 @@
   pointer-events: none;
 }
 
-.button {
+.button,
+#doorbell-submit-button {
   color: #555555;
   cursor: pointer;
   border: 1px solid #ececec;
@@ -194,13 +195,16 @@
 }
 
 .button--primary-alt,
-.button--primary-alt:active {
+.button--primary-alt:active,
+#doorbell-submit-button,
+#doorbell-submit-button:active {
   color: #ffffff;
   border-color: #439fe0;
   background-color: #439fe0;
 }
 
-.button--primary-alt:hover {
+.button--primary-alt:hover,
+#doorbell-submit-button:hover {
   color: #ffffff;
   border-color: #3f95d2;
   background-color: #3f95d2;

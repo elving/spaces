@@ -61,6 +61,34 @@ a:active {
   padding-top: 0;
 }
 
+#doorbell-button {
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+#doorbell,
+#doorbell * {
+  box-sizing: border-box !important;
+}
+
+#doorbell form {
+  border: 1px solid #dadada;
+  box-shadow: none;
+  border-radius: 4px;
+  background-color: #ffffff;
+  padding: 30px;
+}
+
+#doorbell form legend {
+  border: 0 none;
+}
+
+#doorbell-email,
+#doorbell-feedback {
+  width: 100% !important;
+  padding: 10px !important;
+}
+
 @media (max-width: 736px) {
   html,
   body {
@@ -76,5 +104,4 @@ a:active {
   .ReactModal__Body--open {
     height: 100vh;
   }
-
 }

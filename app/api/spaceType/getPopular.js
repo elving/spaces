@@ -19,7 +19,7 @@ export default (limit = 8) => (
         .find()
         .limit(limit)
         .populate('categories')
-        .sort('-followersCount -spacesCount -productsCount -updatedAt')
+        .sort('-followersCount -spacesCount -productsCount')
         .exec(async (err, spaceTypes = []) => {
           if (err) {
             return reject(parseError(err))

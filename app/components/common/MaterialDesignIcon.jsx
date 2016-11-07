@@ -6,6 +6,7 @@ export default class MaterialDesignIcon extends Component {
     name: PropTypes.string,
     size: PropTypes.number,
     fill: PropTypes.string,
+    style: PropTypes.object,
     className: PropTypes.string
   }
 
@@ -13,6 +14,7 @@ export default class MaterialDesignIcon extends Component {
     name: '',
     size: 20,
     fill: '#999999',
+    style: {},
     className: ''
   }
 
@@ -284,6 +286,12 @@ export default class MaterialDesignIcon extends Component {
         )
       }
 
+      case 'cards': {
+        return (
+          <path fill={props.fill} className="icon-fill" d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+        )
+      }
+
       case 'twitter': {
         return (
           <path fill={props.fill} className="icon-fill" d="M18,0 L2,0 C0.9,0 0,0.9 0,2 L0,18 C0,19.1 0.9,20 2,20 L18,20 C19.1,20 20,19.1 20,18 L20,2 C20,0.9 19.1,0 18,0 L18,0 Z M15.7,7.3 C15.6,11.9 12.7,15.1 8.3,15.3 C6.5,15.4 5.2,14.8 4,14.1 C5.3,14.3 7,13.8 7.9,13 C6.6,12.9 5.8,12.2 5.4,11.1 C5.8,11.2 6.2,11.1 6.5,11.1 C5.3,10.7 4.5,10 4.4,8.4 C4.7,8.6 5.1,8.7 5.5,8.7 C4.6,8.2 4,6.3 4.7,5.1 C6,6.5 7.6,7.7 10.2,7.9 C9.5,5.1 13.3,3.6 14.8,5.5 C15.5,5.4 16,5.1 16.5,4.9 C16.3,5.6 15.9,6 15.4,6.4 C15.9,6.3 16.4,6.2 16.8,6 C16.7,6.5 16.2,6.9 15.7,7.3 L15.7,7.3 Z" />
@@ -313,6 +321,7 @@ export default class MaterialDesignIcon extends Component {
 
     return (
       <svg
+        style={props.style}
         width={props.size}
         height={props.size}
         viewBox="0 0 24 24"

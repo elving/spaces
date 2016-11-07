@@ -39,8 +39,6 @@ export default class Comments extends Component {
   constructor(props) {
     super(props)
 
-    console.log('const', get(props, 'comments', []),)
-
     this.state = {
       comments: get(props, 'comments', []),
       isFetching: false
@@ -61,7 +59,6 @@ export default class Comments extends Component {
 
   addComment = comment => {
     const { props, state } = this
-    console.log('addComment', comment, state.comments)
 
     this.setState({
       comments: concat([], comment, state.comments)
@@ -144,6 +141,7 @@ export default class Comments extends Component {
         <CommentsForm
           parent={props.parent}
           parentType={props.parentType}
+          hasComments={size(state.comments) > 0}
         />
         <CommentsList
           parent={props.parent}

@@ -1,19 +1,45 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
+import find from 'lodash/find'
 import axios from 'axios'
+import assign from 'lodash/assign'
 import concat from 'lodash/concat'
 import isEmpty from 'lodash/isEmpty'
+import classNames from 'classnames'
 import { default as queryString } from 'query-string'
 import React, { Component, PropTypes } from 'react'
+
+import Dropdown, {
+  DropdownTrigger,
+  DropdownContent
+} from 'react-simple-dropdown'
 
 import Loader from '../common/Loader'
 import Product from './Card'
 import AddProductModal from '../modal/AddProduct'
-import hasEmptyIdParam from '../../utils/hasEmptyIdParam'
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import addProductModalContainer from '../container/AddProductModal'
 
 import toStringId from '../../api/utils/toStringId'
+import hasEmptyIdParam from '../../utils/hasEmptyIdParam'
+
+const productSortingTypes = [{
+  sort: '-likesCount -commentsCount',
+  label: 'Popular'
+}, {
+  sort: '-createdAt',
+  label: 'Newest'
+}, {
+  sort: 'createdAt',
+  label: 'Oldest'
+}, {
+  sort: '-price',
+  label: 'Expensive'
+}, {
+  sort: 'price',
+  label: 'Less Expensive'
+}]
 
 class ProductsIndex extends Component {
   static propTypes = {
@@ -44,6 +70,7 @@ class ProductsIndex extends Component {
 
     this.state = {
       skip: 40,
+      sort: 'Popular',
       count,
       offset: size(results),
       results,
@@ -61,13 +88,32 @@ class ProductsIndex extends Component {
     }
   }
 
-  fetch = () => {
-    const { props, state } = this
+  getSorting = label => (
+    get(find(productSortingTypes, type =>
+      type.label === label
+    ), 'sort')
+  )
 
-    this.setState({ isFetching: true }, () => {
-      const params = !isEmpty(props.params)
-        ? queryString.stringify(props.params)
-        : ''
+  fetch = sorting => {
+    const { props } = this
+
+    const reset = sorting ? {
+      count: 0,
+      offset: 0,
+      results: [],
+      hasFetched: false,
+      lastResults: []
+    } : {}
+
+    this.setState(assign(reset, {
+      sort: (sorting || this.state.sort),
+      isFetching: true
+    }), () => {
+      const { state } = this
+      const sort = this.getSorting(sorting || state.sort)
+      const params = queryString.stringify(
+        assign(get(props, 'params', {}), { sort })
+      )
 
       axios
         .get(`/ajax/products/search/?skip=${state.offset}&${params}`)
@@ -112,6 +158,44 @@ class ProductsIndex extends Component {
     ) : null
   }
 
+  renderSorting() {
+    const { state } = this
+
+    return (
+      <Dropdown
+        ref={sortingDropdown => { this.sortingDropdown = sortingDropdown }}
+        className="dropdown"
+        data-sorting={state.sort}
+      >
+        <DropdownTrigger className="dropdown-trigger">
+          <MaterialDesignIcon name="cards" style={{ marginRight: 5 }} />
+          Sort by {state.sort}
+        </DropdownTrigger>
+        <DropdownContent
+          className="dropdown-content dropdown-content--left"
+        >
+          {map(productSortingTypes, type =>
+            <a
+              key={`comment-sort-type-${type.label}`}
+              href={`#${type.label}`}
+              onClick={event => {
+                event.preventDefault()
+                this.sortingDropdown.hide()
+                this.fetch(type.label)
+              }}
+              className={classNames({
+                'dropdown-link': true,
+                'dropdown-link--active': type.label === state.sort
+              })}
+            >
+              {type.label}
+            </a>
+          )}
+        </DropdownContent>
+      </Dropdown>
+    )
+  }
+
   renderProducts() {
     const { props, state } = this
 
@@ -123,6 +207,9 @@ class ProductsIndex extends Component {
 
     return (
       <div className="grid">
+        <div className="grid-sorting">
+          {this.renderSorting()}
+        </div>
         <div className="grid-items">
           {hasNoResults ? (
             <p className="grid-items-empty">
@@ -132,7 +219,7 @@ class ProductsIndex extends Component {
             map(state.results, product =>
               <Product
                 {...product}
-                key={toStringId(product)}
+                key={`${state.sort}-${toStringId(product)}`}
                 onAddButtonClick={() => props.openAddProductModal(product)}
               />
             )

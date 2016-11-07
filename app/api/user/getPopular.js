@@ -16,7 +16,7 @@ export default (limit = 8) => (
         .model('User')
         .find()
         .limit(limit)
-        .sort('-followersCount -updatedAt')
+        .sort('-followersCount')
         .exec(async (err, users) => {
           if (err) {
             return reject(parseError(err))

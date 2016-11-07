@@ -22,7 +22,8 @@ export default class CommentsForm extends Component {
 
   static propTypes = {
     parent: PropTypes.string.isRequired,
-    parentType: PropTypes.string.isRequired
+    parentType: PropTypes.string.isRequired,
+    hasComments: PropTypes.bool
   }
 
   state = {
@@ -133,7 +134,11 @@ export default class CommentsForm extends Component {
               'textfield--error': hasContentError,
               'comment-form-textfield': true
             })}
-            placeholder="Join the discussion..."
+            placeholder={props.hasComments ? (
+              'Join the discussion...'
+            ) : (
+              'Start the discussion...'
+            )}
           />
 
           {hasContentError ? (

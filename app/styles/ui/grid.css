@@ -11,6 +11,13 @@
   display: block;
 }
 
+.grid-sorting {
+  display: flex;
+  padding: 0 15px 35px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
 .grid-container {
   border-bottom: 1px solid #e5e5e5;
   margin: 0 auto;
@@ -157,5 +164,10 @@
 
   .grid-pagination {
     margin: 15px auto 15px;
+  }
+
+  .grid-sorting {
+    display: flex;
+    padding: 0 15px 15px;
   }
 }

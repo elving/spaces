@@ -202,6 +202,14 @@
   width: 100%;
 }
 
+.add-product-modal-spaces-list-empty {
+  color: #999;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 35px;
+}
+
 @media (max-width: 736px) {
   .add-product-modal {
     margin: 15px auto;
@@ -268,5 +276,9 @@
 
   .add-product-modal-spaces-actions {
     z-index: 15;
+  }
+
+  .add-product-modal-spaces-list-empty {
+    padding: 15px;
   }
 }

@@ -321,6 +321,11 @@ export default class AddProductModal extends Component {
         </div>
         <div className="add-product-modal-spaces-list">
           {map(state.filteredSpaces, ::this.renderSpace)}
+          {isEmpty(state.filteredSpaces) ? (
+            <div className="add-product-modal-spaces-list-empty">
+              No spaces found...
+            </div>
+          ) : null}
         </div>
         <div className="add-product-modal-spaces-actions">
           <button

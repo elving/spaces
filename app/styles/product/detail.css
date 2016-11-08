@@ -207,6 +207,11 @@
   margin-bottom: 10px;
 }
 
+.product-detail-activity-user:hover,
+.product-detail-activity-user:active {
+  text-decoration: none;
+}
+
 .product-detail-activity-icon-container {
   border: 2px solid #ffffff;
   border-radius: 50%;

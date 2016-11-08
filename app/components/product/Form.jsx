@@ -593,7 +593,7 @@ export default class ProductForm extends Component {
         <div
           className={classNames({
             'image-picker-current': true,
-            'image-picker-current--loading': state.isLoadingImage
+            'image-picker-current--loading': state.isLoadingImage && isPOST
           })}
         >
           {state.isLoadingImage ? (

@@ -161,6 +161,25 @@ class Home extends Component {
             </div>
           ) : null}
 
+          {!isEmpty(props.products) ? (
+            <div className="grid-container">
+              <div className="grid-title-container">
+                <h3 className="grid-title">Products</h3>
+                <Link
+                  to={{ pathname: '/products/' }}
+                  onClick={fullReload}
+                  className="button button--small button--outline"
+                  activeClassName="is-active"
+                >
+                  <span className="button-text">
+                    All Products
+                  </span>
+                </Link>
+              </div>
+              {this.renderProducts()}
+            </div>
+          ) : null}
+
           {!isEmpty(props.rooms) ? (
             <div className="grid-container">
               <div className="grid-title-container">
@@ -196,25 +215,6 @@ class Home extends Component {
                 </Link>
               </div>
               {this.renderDesigners()}
-            </div>
-          ) : null}
-
-          {!isEmpty(props.products) ? (
-            <div className="grid-container">
-              <div className="grid-title-container">
-                <h3 className="grid-title">Products</h3>
-                <Link
-                  to={{ pathname: '/products/' }}
-                  onClick={fullReload}
-                  className="button button--small button--outline"
-                  activeClassName="is-active"
-                >
-                  <span className="button-text">
-                    All Products
-                  </span>
-                </Link>
-              </div>
-              {this.renderProducts()}
             </div>
           ) : null}
 

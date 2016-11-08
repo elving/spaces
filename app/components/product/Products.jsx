@@ -143,7 +143,7 @@ class ProductsIndex extends Component {
     return size(state.results) < state.count ? (
       <div className="grid-pagination">
         <button
-          onClick={this.fetch}
+          onClick={() => this.fetch()}
           disabled={state.isFetching}
           className="button button--outline"
         >
@@ -176,7 +176,7 @@ class ProductsIndex extends Component {
         >
           {map(productSortingTypes, type =>
             <a
-              key={`comment-sort-type-${type.label}`}
+              key={`product-sort-type-${type.label}`}
               href={`#${type.label}`}
               onClick={event => {
                 event.preventDefault()

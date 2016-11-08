@@ -408,8 +408,7 @@ export default class ProductForm extends Component {
       isLoadingImage: hasMoreImages
     }, () => {
       if (hasMoreImages) {
-        onImageLoad(state.images[
-          Index + 1], () => {
+        onImageLoad(state.images[state.imageIndex + 1], () => {
           this.setState({
             isLoadingImage: false
           })

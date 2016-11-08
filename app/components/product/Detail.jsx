@@ -252,13 +252,13 @@ class ProductDetail extends Component {
           {map(activityUsers, user =>
             <a
               rel="noopener noreferrer"
+              key={`product-activity-${toStringId(user)}-${user.activity}`}
               href={`/${get(user, 'detailUrl')}/`}
               target="_blank"
               className="product-detail-activity-user"
               data-activity={user.activity}
             >
               <Avatar
-                key={`product-activity-${toStringId(user)}-${user.activity}`}
                 user={user}
                 width={34}
                 height={34}

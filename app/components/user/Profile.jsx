@@ -6,6 +6,7 @@ import React, { PropTypes, PureComponent } from 'react'
 
 import Layout from '../common/Layout'
 import Avatar from './Avatar'
+import FollowButton from '../common/FollowButton'
 import CuratorBadge from './CuratorBadge'
 import CreateSpaceBanner from '../onboarding/Banner'
 
@@ -49,6 +50,7 @@ export default class UserProfile extends PureComponent {
 
     const bio = get(props.profile, 'bio')
     const username = get(props.profile, 'username')
+    const profileId = toStringId(props.profile)
 
     return (
       <div className="user-profile-header">
@@ -74,8 +76,12 @@ export default class UserProfile extends PureComponent {
             />
           ) : null}
 
-          {this.isProfileOwner() ? (
-            <div className="user-profile-header-actions">
+          <div className="user-profile-header-actions">
+            <FollowButton
+              parent={profileId}
+              parentType="user"
+            />
+            {this.isProfileOwner() ? (
               <a
                 href={`/designers/${username}/edit/`}
                 className="button button--small button--primary-alt"
@@ -84,8 +90,8 @@ export default class UserProfile extends PureComponent {
                   Edit
                 </span>
               </a>
-            </div>
-          ) : null}
+            ) : null}
+          </div>
         </div>
 
         {this.renderNavigation()}

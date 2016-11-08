@@ -128,7 +128,7 @@ const INVITES = [
   'e4664a77-00bb-45b0-8b4f-b0fa26bba998',
   '5a09db17-85da-48d1-ae4f-8cf593437156',
   '0da20616-1015-41c1-871c-9af75608efc6',
-  '7549cd07-2517-4c78-81cd-65c48ac1e915', // last
+  '7549cd07-2517-4c78-81cd-65c48ac1e915',
   'f7d569fe-1476-41f2-a90d-345a2435760c',
   'a7b1ad2d-5d20-494d-ae40-7cbce81d0515',
   '3a72c470-3058-4588-9254-671a435c3bf0',
@@ -153,7 +153,7 @@ const INVITES = [
   '447e0f4c-fa11-47a7-ac5d-30188c6d27cb',
   '6d739b84-3d91-46f9-a109-f52235bb6d9c',
   'e2aae97e-b5d8-478c-8b41-b70da102e352',
-  '8560b961-28b0-4a48-a535-ad50309b2e51',
+  '8560b961-28b0-4a48-a535-ad50309b2e51', // last
   'f83a9ca9-04b5-4c95-b8b6-c66f77bf7840',
   'f871dd36-631f-44a2-b3db-ed35fbbf2869',
   'bb53538a-46e2-4888-ad5b-b61a2d47bdae',
@@ -3998,7 +3998,9 @@ const INVITES = [
   'c01e2de9-43ed-4df6-94fe-c8edd4da0c73',
   'de15a913-4215-4087-b59e-7f18442afae4',
   'd224d889-ebde-4aa4-9404-5d90a5b5a22f',
-  'e3829c2b-9cd4-4f88-abf7-5a8b703f35cb'
+  'e3829c2b-9cd4-4f88-abf7-5a8b703f35cb',
+  'hyp3r',
+  'beta2016'
 ]
 
 export default INVITES

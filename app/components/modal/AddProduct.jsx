@@ -315,7 +315,7 @@ export default class AddProductModal extends Component {
               type="text"
               onChange={this.onSearchChange}
               className="textfield"
-              placeholder="Search"
+              placeholder="Search spaces by name"
             />
           </div>
         </div>

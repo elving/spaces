@@ -1179,7 +1179,7 @@ export default class ProductForm extends Component {
           onClose={this.onNotificationClose}
           isVisible
         >
-          This product aleary exists.
+          This product already exists.
           {'\u00A0'}
           <a href={`/products/${sid}/`}>{name}</a>.
         </Notification>

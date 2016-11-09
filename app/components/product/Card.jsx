@@ -1,4 +1,5 @@
 import get from 'lodash/get'
+import ReactGA from 'react-ga'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
@@ -231,6 +232,11 @@ export default class ProductCard extends Component {
         rel="noopener noreferrer"
         href={props.url}
         target="_blank"
+        onClick={() => {
+          ReactGA.outboundLink({
+            label: `product-card-${props.id}`
+          }, () => {})
+        }}
         className={classNames({
           button: true,
           'product-card-price': true,

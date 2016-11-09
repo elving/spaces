@@ -5,6 +5,7 @@ import ceil from 'lodash/ceil'
 import concat from 'lodash/concat'
 import uniqBy from 'lodash/uniqBy'
 import isEmpty from 'lodash/isEmpty'
+import ReactGA from 'react-ga'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
@@ -309,9 +310,14 @@ class ProductDetail extends Component {
 
     return (
       <a
-        rel="noopener noreferrer"
+        rel="noreferrer noopener"
         href={url}
         target="_blank"
+        onClick={() => {
+          ReactGA.outboundLink({
+            label: `product-detail-${props.id}`
+          }, () => {})
+        }}
         className="product-detail-url button button--primary"
       >
         <span className="button-text">

@@ -109,6 +109,7 @@ export default schema => {
   schema.post('findOneAndRemove', async (space) => {
     const id = get(space, 'id')
     const room = toStringId(get(space, 'spaceType'))
+    const createdBy = toStringId(get(space, 'createdBy'))
     const categories = toIds(get(space, 'categories', []))
     const originalSpace = toStringId(get(space, 'originalSpace'))
     const usersWhoLiked = []
@@ -167,6 +168,14 @@ export default schema => {
           logError(err)
         }
       }
+    } catch (err) {
+      logError(err)
+    }
+
+    try {
+      await updateUser(createdBy, {
+        $pull: { spaces: toObjectId(space) }
+      })
     } catch (err) {
       logError(err)
     }

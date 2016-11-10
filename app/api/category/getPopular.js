@@ -18,7 +18,7 @@ export default (limit = 8) => {
         .model('Category')
         .find()
         .limit(limit)
-        .sort('-followersCount -productsCount')
+        .sort('-followersCount -spacesCount -productsCount')
         .exec(async (err, categories) => {
           if (err) {
             return reject(parseError(err))

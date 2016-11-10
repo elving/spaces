@@ -7,7 +7,7 @@
 }
 
 .grids > .loader {
-  margin: 35px auto;
+  margin: 25vh auto 0;
   display: block;
 }
 
@@ -16,6 +16,17 @@
   padding: 0 15px 35px;
   align-items: center;
   justify-content: flex-start;
+}
+
+.grid-sorting:after {
+  content: "";
+  border-bottom: 1px solid #e5e5e5;
+  width: 100%;
+  margin-left: 15px;
+}
+
+.grid-sorting .dropdown {
+  flex-shrink: 0;
 }
 
 .grid-container {

@@ -1,17 +1,37 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
+import find from 'lodash/find'
 import axios from 'axios'
+import assign from 'lodash/assign'
 import concat from 'lodash/concat'
 import isEmpty from 'lodash/isEmpty'
-import { default as queryString } from 'query-string'
+import classNames from 'classnames'
+import queryString from 'query-string'
 import React, { Component, PropTypes } from 'react'
+
+import Dropdown, {
+  DropdownTrigger,
+  DropdownContent
+} from 'react-simple-dropdown'
 
 import Loader from '../common/Loader'
 import Category from './Card'
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
 import hasEmptyIdParam from '../../utils/hasEmptyIdParam'
+
+const categorySortingTypes = [{
+  sort: '-followersCount -spacesCount -productsCount',
+  label: 'Popular'
+}, {
+  sort: '-productsCount',
+  label: 'Most Products'
+}, {
+  sort: '-spacesCount',
+  label: 'Most Spaces'
+}]
 
 export default class Categories extends Component {
   static propTypes = {
@@ -34,6 +54,7 @@ export default class Categories extends Component {
 
     this.state = {
       skip: 40,
+      sort: 'Popular',
       count,
       offset: size(results),
       results,
@@ -51,13 +72,32 @@ export default class Categories extends Component {
     }
   }
 
-  fetch = () => {
-    const { props, state } = this
+  getSorting = label => (
+    get(find(categorySortingTypes, type =>
+      type.label === label
+    ), 'sort')
+  )
 
-    this.setState({ isFetching: true }, () => {
-      const params = !isEmpty(props.params)
-        ? queryString.stringify(props.params)
-        : ''
+  fetch = sorting => {
+    const { props } = this
+
+    const reset = sorting ? {
+      count: 0,
+      offset: 0,
+      results: [],
+      hasFetched: false,
+      lastResults: []
+    } : {}
+
+    this.setState(assign(reset, {
+      sort: (sorting || this.state.sort),
+      isFetching: true
+    }), () => {
+      const { state } = this
+      const sort = this.getSorting(sorting || state.sort)
+      const params = queryString.stringify(
+        assign(get(props, 'params', {}), { sort })
+      )
 
       axios
         .get(`/ajax/categories/search/?skip=${state.offset}&${params}`)
@@ -103,6 +143,44 @@ export default class Categories extends Component {
     ) : null
   }
 
+  renderSorting() {
+    const { state } = this
+
+    return (
+      <Dropdown
+        ref={sortingDropdown => { this.sortingDropdown = sortingDropdown }}
+        className="dropdown"
+        data-sorting={state.sort}
+      >
+        <DropdownTrigger className="dropdown-trigger">
+          <MaterialDesignIcon name="cards" style={{ marginRight: 5 }} />
+          Sort by {state.sort}
+        </DropdownTrigger>
+        <DropdownContent
+          className="dropdown-content dropdown-content--left"
+        >
+          {map(categorySortingTypes, type =>
+            <a
+              key={`category-sort-type-${type.label}`}
+              href={`#${type.label}`}
+              onClick={event => {
+                event.preventDefault()
+                this.sortingDropdown.hide()
+                this.fetch(type.label)
+              }}
+              className={classNames({
+                'dropdown-link': true,
+                'dropdown-link--active': type.label === state.sort
+              })}
+            >
+              {type.label}
+            </a>
+          )}
+        </DropdownContent>
+      </Dropdown>
+    )
+  }
+
   renderCategories() {
     const { props, state } = this
 
@@ -114,6 +192,9 @@ export default class Categories extends Component {
 
     return (
       <div className="grid">
+        <div className="grid-sorting">
+          {this.renderSorting()}
+        </div>
         <div className="grid-items grid-items--3-cards">
           {hasNoResults ? (
             <p className="grid-items-empty">

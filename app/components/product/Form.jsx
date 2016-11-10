@@ -596,7 +596,7 @@ export default class ProductForm extends Component {
             'image-picker-current--loading': state.isLoadingImage && isPOST
           })}
         >
-          {state.isLoadingImage ? (
+          {state.isLoadingImage && isPOST ? (
             <Loader size={60} />
           ) : null}
 

@@ -7,7 +7,7 @@ import assign from 'lodash/assign'
 import concat from 'lodash/concat'
 import isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
-import { default as queryString } from 'query-string'
+import queryString from 'query-string'
 import React, { Component, PropTypes } from 'react'
 
 import Dropdown, {

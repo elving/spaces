@@ -6,6 +6,7 @@ export default class CardTitle extends Component {
   static propTypes = {
     url: PropTypes.string,
     title: PropTypes.string,
+    limit: PropTypes.number,
     subTitle: PropTypes.string,
     children: PropTypes.node,
     className: PropTypes.string
@@ -13,19 +14,20 @@ export default class CardTitle extends Component {
 
   static defaultProps = {
     url: '',
+    limit: 65,
     title: '',
     subTitle: '',
     className: '',
   }
 
   render() {
-    const { url, title, subTitle, className } = this.props
+    const { url, title, limit, subTitle, className } = this.props
 
     return !isEmpty(url) ? (
       <a href={url} className={`${className} card-title-container`}>
         <div className="card-subtitle">{subTitle}</div>
         <div className="card-title" title={title}>
-          {truncate(title, { length: 65 })}
+          {truncate(title, { length: limit })}
         </div>
         {this.props.children}
       </a>
@@ -33,7 +35,7 @@ export default class CardTitle extends Component {
       <span className={`${className} card-title-container`}>
         <div className="card-subtitle">{subTitle}</div>
         <div className="card-title" title={title}>
-          {truncate(title, { length: 65 })}
+          {truncate(title, { length: limit })}
         </div>
         {this.props.children}
       </span>

@@ -1,8 +1,8 @@
 import express from 'express'
-import * as controller from '../controllers/home'
+import controller from '../controllers/home'
 
 const router = express.Router()
 
-router.get('/popular/', controller.renderHome)
+router.get('/popular/', controller)
 
 export default router

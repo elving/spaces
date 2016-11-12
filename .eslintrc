@@ -14,6 +14,11 @@
     "arrow-parens": 0,
     "comma-dangle": 0,
     "consistent-return": 0,
+    "no-restricted-syntax": [
+      'error',
+      'WithStatement',
+      'LabeledStatement'
+    ],
     'generator-star-spacing': 0,
     "space-before-function-paren": 0,
     "babel/no-await-in-loop": 0,

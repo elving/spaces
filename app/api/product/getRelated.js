@@ -1,5 +1,7 @@
 import get from 'lodash/get'
 import set from 'lodash/set'
+import size from 'lodash/size'
+import slice from 'lodash/slice'
 import filter from 'lodash/filter'
 import isEmpty from 'lodash/isEmpty'
 
@@ -19,7 +21,7 @@ export default (product) => (
     getFromCacheOrQuery(cacheKey, async () => {
       const categories = get(product, 'categories', [])
       const spaceTypes = get(product, 'spaceTypes', [])
-      const searchParams = { limit: 8 }
+      const searchParams = { limit: 9 }
 
       if (!isEmpty(categories)) {
         set(searchParams, 'categories', toIds(categories))
@@ -34,18 +36,21 @@ export default (product) => (
         const products = filter(get(results, 'results', []), result => (
           toStringId(result) !== id
         ))
+        const relatedProducts = size(products) > 8
+          ? slice(products, 0, 8)
+          : products
 
-        if (!isEmpty(products)) {
-          await saveToCache(cacheKey, toJSON(products), [
+        if (!isEmpty(relatedProducts)) {
+          await saveToCache(cacheKey, toJSON(relatedProducts), [
             id,
-            toIds(products),
-            toIdsFromPath(products, 'brand'),
-            toIdsFromPath(products, 'colors'),
-            toIdsFromPath(products, 'categories'),
-            toIdsFromPath(products, 'spaceTypes')
+            toIds(relatedProducts),
+            toIdsFromPath(relatedProducts, 'brand'),
+            toIdsFromPath(relatedProducts, 'colors'),
+            toIdsFromPath(relatedProducts, 'categories'),
+            toIdsFromPath(relatedProducts, 'spaceTypes')
           ])
 
-          resolve(products)
+          resolve(relatedProducts)
         } else {
           resolve([])
         }

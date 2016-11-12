@@ -1,0 +1,21 @@
+.mini-card .product-card-image-container {
+  min-height: 140px;
+}
+
+.mini-card .product-title {
+  border-bottom: 0 none;
+}
+
+.mini-card .card-title {
+  font-size: 14px;
+}
+
+.mini-card .card-subtitle {
+  font-size: 11px;
+}
+
+
+.mini-card .product-card-price {
+  font-size: 12px;
+  min-height: 24px;
+}

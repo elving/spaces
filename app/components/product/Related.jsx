@@ -1,5 +1,7 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
+import size from 'lodash/size'
+import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import ProductCard from './Card'
@@ -40,7 +42,13 @@ export default class RelatedCategories extends Component {
               key={toStringId(mainProduct)}
               onAddButtonClick={() => props.onAddButtonClick(mainProduct)}
             />
-            <div className="grid-items grid-items--inline">
+            <div
+              className={classNames({
+                'grid-items': true,
+                'grid-items--inline': true,
+                'grid-items--less-than-5': size(relatedProducts) <= 4
+              })}
+            >
               {map(relatedProducts, product =>
                 <ProductMiniCard
                   {...product}

@@ -102,6 +102,10 @@
   padding: 0;
 }
 
+.grid-items--less-than-5 .mini-card {
+  max-height: 215px;
+}
+
 .grid-items-empty {
   color: #999999;
   font-size: 32px;

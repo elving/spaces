@@ -177,6 +177,7 @@
     margin-right: 0;
   }
 
+  .grid--has-inline > .grid-items,
   .grid--has-inline .grid-items--3-cards {
     min-width: 100%;
   }
@@ -226,5 +227,9 @@
   .grid-sorting {
     display: flex;
     padding: 0 15px 15px;
+  }
+
+  .mini-card .card-actions {
+    display: none !important;
   }
 }

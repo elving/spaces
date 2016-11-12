@@ -79,7 +79,7 @@
   overflow-x: auto;
 }
 
-.grid--has-inline .grid-items--3-cards {
+.grid--has-inline > .grid-items {
   min-width: 1280px;
 }
 
@@ -159,6 +159,10 @@
 }
 
 @media (max-width: 620px) {
+  .grid > .grid-items {
+    flex-direction: column;
+  }
+
   .grid-items > .card {
     width: calc(100% - 15px);
     margin-right: 0;

@@ -1,9 +1,6 @@
-#suggestions .sticky-inner {
-  background-color: #ffffff;
-}
-
 #suggestions .sticky-inner--active {
   box-shadow: 0 1px 15px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
   border-bottom: 1px solid #d0d0d0;
   padding: 15px 0;
 }

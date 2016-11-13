@@ -3,7 +3,7 @@
 }
 
 .grids > .grid-container:nth-child(even) {
-  background-color: #f7f7f7;
+  background-color: #f9f9f9;
 }
 
 .grids > .loader {

@@ -49,7 +49,7 @@ export default user => (
           if (!isEmpty(categories)) {
             const productsSearch = await searchProducts({
               sort: '-createdAt -likesCount -commentsCount',
-              limit: 16,
+              limit: 8,
               categories: map(categories, 'id')
             }, 'and')
 

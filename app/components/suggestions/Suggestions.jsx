@@ -81,7 +81,7 @@ class Suggestions extends Component {
                       <small className="grid-title-top-subtitle">
                         {get(space, 'spaceType.name', 'Space')}
                       </small>
-                      {space.name}
+                      <span className="grid-title-text">{space.name}</span>
                     </h3>
                     <a
                       href={`/${space.detailUrl}/`}

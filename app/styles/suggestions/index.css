@@ -9,9 +9,22 @@
 }
 
 #suggestions .sticky-inner--active .grid-title-container {
-  margin-bottom: 15px;
+  margin-bottom: 0;
+}
+
+#suggestions .sticky-inner--active .grid-title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: calc(100% - 135px);
+}
+
+#suggestions .sticky-inner--active .grid-title-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #suggestions .sticky-inner--active .tags-container {
-  margin-bottom: 0;
+  display: none;
 }

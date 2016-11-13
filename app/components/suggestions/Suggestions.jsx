@@ -96,7 +96,7 @@ class Suggestions extends Component {
                     {map(get(space, 'spaceType.categories', []), category =>
                       <Tag
                         key={`suggestion-${toStringId(category)}`}
-                        url={`/${category.detailUrl}/`}
+                        url={`/${category.detailUrl}/?show=products`}
                         type={category.type}
                         name={category.name}
                         size="big"

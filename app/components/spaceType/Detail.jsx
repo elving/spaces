@@ -1,4 +1,5 @@
 import get from 'lodash/get'
+import isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
@@ -17,10 +18,12 @@ import toStringId from '../../api/utils/toStringId'
 
 class SpaceTypeDetail extends Component {
   static propTypes = {
+    location: PropTypes.object,
     spaceType: PropTypes.object
   }
 
   static defaultProps = {
+    location: {},
     spaceType: {}
   }
 
@@ -32,13 +35,25 @@ class SpaceTypeDetail extends Component {
     super(props)
 
     const spacesCount = get(props.spaceType, 'spacesCount', 0)
+    const defaultView = get(props.location, 'query.show')
 
     this.state = {
-      showSpaces: spacesCount > 0,
-      showProducts: spacesCount === 0,
       followersCount: get(props.spaceType, 'followersCount', 0),
       followersModalIsOpen: false,
       createFollowersModal: false
+    }
+
+    if (!isEmpty(defaultView)) {
+      if (defaultView !== 'spaces' && defaultView !== 'products') {
+        this.state.showSpaces = spacesCount > 0
+        this.state.showProducts = spacesCount === 0
+      } else {
+        this.state.showSpaces = defaultView === 'spaces'
+        this.state.showProducts = defaultView === 'products'
+      }
+    } else {
+      this.state.showSpaces = spacesCount > 0
+      this.state.showProducts = spacesCount === 0
     }
   }
 

@@ -561,7 +561,7 @@ class SpaceDetail extends Component {
           {map(suggestions, suggestion =>
             <Tag
               key={`suggestion-${toStringId(suggestion)}`}
-              url={`/${suggestion.detailUrl}/`}
+              url={`/${suggestion.detailUrl}/?show=products`}
               type={suggestion.type}
               name={suggestion.name}
               size="big"

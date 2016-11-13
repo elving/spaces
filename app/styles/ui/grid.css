@@ -3,7 +3,7 @@
 }
 
 .grids > .grid-container:nth-child(even) {
-  background-color: #fcfcfc;
+  background-color: #f7f7f7;
 }
 
 .grids > .loader {
@@ -71,6 +71,7 @@
 }
 
 .grid-title-container .button {
+  background-color: #ffffff;
   flex-shrink: 0;
   margin-left: 15px;
 }

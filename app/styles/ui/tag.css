@@ -5,7 +5,7 @@
   justify-content: flex-start;
 }
 
-.grid-container > .tags-container {
+.grid-container .tags-container {
   padding: 0 15px;
   margin: -15px 0 35px;
 }
@@ -66,7 +66,7 @@ span.tag {
 }
 
 @media (max-width: 768px) {
-  .grid-container > .tags-container {
+  .grid-container .tags-container {
     padding: 0 15px;
     margin: -15px 0 15px;
   }

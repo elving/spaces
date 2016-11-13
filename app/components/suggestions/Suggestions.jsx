@@ -6,6 +6,7 @@ import React, { Component, PropTypes } from 'react'
 
 import Tag from '../common/Tag'
 import Layout from '../common/Layout'
+import Sticky from '../common/Sticky'
 import ProductCard from '../product/Card'
 import AddProductModal from '../modal/AddProduct'
 import CreateSpaceBanner from '../onboarding/Banner'
@@ -74,33 +75,35 @@ class Suggestions extends Component {
                 key={`space-${toStringId(space)}`}
                 className="grid-container"
               >
-                <div className="grid-title-container">
-                  <h3 className="grid-title has-subtitle">
-                    <small className="grid-title-top-subtitle">
-                      {get(space, 'spaceType.name', 'Space')}
-                    </small>
-                    {space.name}
-                  </h3>
-                  <a
-                    href={`/${space.detailUrl}/`}
-                    className="button button--small button--outline"
-                  >
-                    <span className="button-text">
-                      Go to space
-                    </span>
-                  </a>
-                </div>
-                <div className="tags-container">
-                  {map(get(space, 'spaceType.categories', []), category =>
-                    <Tag
-                      key={`suggestion-${toStringId(category)}`}
-                      url={`/${category.detailUrl}/`}
-                      type={category.type}
-                      name={category.name}
-                      size="big"
-                    />
-                  )}
-                </div>
+                <Sticky>
+                  <div className="grid-title-container">
+                    <h3 className="grid-title has-subtitle">
+                      <small className="grid-title-top-subtitle">
+                        {get(space, 'spaceType.name', 'Space')}
+                      </small>
+                      {space.name}
+                    </h3>
+                    <a
+                      href={`/${space.detailUrl}/`}
+                      className="button button--small button--outline"
+                    >
+                      <span className="button-text">
+                        Go to space
+                      </span>
+                    </a>
+                  </div>
+                  <div className="tags-container">
+                    {map(get(space, 'spaceType.categories', []), category =>
+                      <Tag
+                        key={`suggestion-${toStringId(category)}`}
+                        url={`/${category.detailUrl}/`}
+                        type={category.type}
+                        name={category.name}
+                        size="big"
+                      />
+                    )}
+                  </div>
+                </Sticky>
                 {this.renderProducts(space)}
               </div>
             )}
@@ -114,7 +117,7 @@ class Suggestions extends Component {
 
           <div className="feed-empty">
             <h2 className="feed-empty-title">
-              It looks like we don't have any suggestions for your spaces
+              It looks like we don&apos;t have any suggestions for your spaces
               at the moment.
             </h2>
             <a
@@ -135,7 +138,7 @@ class Suggestions extends Component {
 
           <div className="feed-empty">
             <h2 className="feed-empty-title">
-              It looks like you haven't designed any spaces yet.
+              It looks like you haven&apos;t designed any spaces yet.
             </h2>
             <a
               href="/spaces/"

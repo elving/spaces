@@ -1,10 +1,14 @@
-import get from 'lodash/get'
-import { default as $ } from '../../utils/dom/selector'
+import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 export default class Sticky extends Component {
   static propTypes = {
+    offset: PropTypes.number,
     children: PropTypes.node
+  }
+
+  static defaultProps = {
+    offset: 5
   }
 
   state = {
@@ -20,12 +24,18 @@ export default class Sticky extends Component {
   }
 
   onScroll = () => {
+    const { props } = this
+
     if (!this.originalOffsetTop) {
       return false
     }
 
+    const offset = props.offset >= this.originalOffsetTop
+      ? props.offset - this.originalOffsetTop
+      : this.originalOffsetTop - props.offset
+
     this.setState({
-      isSticky: window.scrollY >= (this.originalOffsetTop - 5)
+      isSticky: window.scrollY >= offset
     })
   }
 
@@ -46,6 +56,7 @@ export default class Sticky extends Component {
             this.originalOffsetHeight = sticky.offsetHeight
           }
         }}
+        className="sticky"
       >
         <div
           style={state.isSticky ? {
@@ -55,13 +66,19 @@ export default class Sticky extends Component {
             zIndex: 1000,
             position: 'fixed'
           } : {}}
-          className={state.isSticky ? 'is-sticky' : ''}
+          className={classNames({
+            'sticky-inner': true,
+            'sticky-inner--active': state.isSticky
+          })}
         >
           {props.children}
         </div>
 
         {state.isSticky ? (
-          <div style={{ height: this.originalOffsetHeight }} />
+          <div
+            style={{ height: this.originalOffsetHeight }}
+            className="sticky-placeholder"
+          />
         ) : null}
       </div>
     )

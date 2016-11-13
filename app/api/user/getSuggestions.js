@@ -11,7 +11,7 @@ import mongoose from 'mongoose'
 import parseError from '../utils/parseError'
 import toStringId from '../utils/toStringId'
 import toIdsFromPath from '../utils/toIdsFromPath'
-import { default as searchProducts } from '../product/search'
+import searchProducts from '../product/search'
 
 const getSpaces = createdBy => (
   new Promise((resolve, reject) => {
@@ -48,8 +48,8 @@ export default user => (
 
           if (!isEmpty(categories)) {
             const productsSearch = await searchProducts({
-              sort: '-likesCount -updatedAt',
-              limit: 12,
+              sort: '-createdAt -likesCount -commentsCount',
+              limit: 16,
               categories: map(categories, 'id')
             }, 'and')
 

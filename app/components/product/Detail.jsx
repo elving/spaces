@@ -12,6 +12,7 @@ import React, { Component, PropTypes } from 'react'
 import Tag from '../common/Tag'
 import Space from '../space/Card'
 import Layout from '../common/Layout'
+import Sticky from '../common/Sticky'
 import Avatar from '../user/Avatar'
 import Loader from '../common/Loader'
 import Product from './Card'
@@ -21,10 +22,7 @@ import LikeButton from '../common/LikeButton'
 import AddProductModal from '../modal/AddProduct'
 import CreateSpaceBanner from '../onboarding/Banner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
-
-import {
-  default as addProductModalContainer
-} from '../container/AddProductModal'
+import addProductModalContainer from '../container/AddProductModal'
 
 import getTags from '../../utils/getTags'
 import getDomain from '../../utils/getDomain'
@@ -322,7 +320,12 @@ class ProductDetail extends Component {
       >
         <span className="button-text">
           <MaterialDesignIcon name="cart" />
-          {`$${ceil(price)} on ${getDomain(url)}`}
+          <span className="product-detail-url-text">
+            {`$${ceil(price)}`}
+          </span>
+          <span className="product-detail-url-text-full">
+            {`$${ceil(price)} on ${getDomain(url)}`}
+          </span>
         </span>
       </a>
     )
@@ -410,7 +413,10 @@ class ProductDetail extends Component {
 
   renderProduct() {
     return (
-      <div className="product-detail">
+      <div
+        ref={productDetail => this.productDetail = productDetail}
+        className="product-detail"
+      >
         <div className="product-detail-inner">
           {this.renderImage()}
           {this.renderContent()}
@@ -512,7 +518,12 @@ class ProductDetail extends Component {
           isVisible={props.addProductModalIsOpen}
         />
 
-        {this.renderProduct()}
+        <Sticky
+          offset={get(this.productDetail, 'offsetHeight', 500)}
+        >
+          {this.renderProduct()}
+        </Sticky>
+
         {this.renderInfo()}
 
         <div className="grids">

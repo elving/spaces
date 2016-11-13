@@ -195,7 +195,7 @@ export default class SpaceForm extends Component {
           ...resetData
         }, () => {
           if (context.currentUserIsOnboarding()) {
-            window.location.href = `/${get(space, 'detailUrl')}/?onboarded=1`
+            window.location.href = `/${get(space, 'detailUrl')}/`
           } else {
             props.onSuccess(space)
           }

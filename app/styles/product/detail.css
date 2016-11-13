@@ -2,6 +2,85 @@
   background-color: #fefefe;
 }
 
+#page-product-detail .sticky-inner--active {
+  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid #d0d0d0;
+  background-color: #ffffff;
+  padding: 5px 10px;
+}
+
+#page-product-detail .sticky-inner--active [data-action="editProduct"],
+#page-product-detail .sticky-inner--active .product-detail-activity,
+#page-product-detail .sticky-inner--active .product-detail-tags,
+#page-product-detail .sticky-inner--active .product-detail-actions,
+#page-product-detail .sticky-inner--active .product-detail-url-text-full {
+  display: none;
+}
+
+#page-product-detail .sticky-inner--active .product-detail {
+  border-bottom: 0 none;
+  padding: 0;
+}
+
+#page-product-detail .sticky-inner--active .product-detail-inner {
+  max-width: 100%;
+  align-items: center;
+  flex-direction: row;
+}
+
+#page-product-detail .sticky-inner--active .product-detail-image-container {
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  min-height: 60px;
+  margin-right: 15px;
+}
+
+#page-product-detail .sticky-inner--active .product-detail-content {
+  width: calc(100% - 60px);
+  padding: 0;
+}
+
+#page-product-detail .sticky-inner--active .product-detail-name {
+  font-size: 18px;
+  overflow: hidden;
+  line-height: 28px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-right: 95px;
+  margin-bottom: 0;
+}
+
+#page-product-detail .sticky-inner--active .product-detail-brand {
+  font-size: 13px;
+}
+
+#page-product-detail .sticky-inner--active .product-detail-url {
+  font-size: 13px;
+  top: 50%;
+  right: 10px;
+  width: auto;
+  margin: 0;
+  padding: 4px 6px;
+  position: absolute;
+  transform: translateY(-50%);
+  min-height: inherit;
+}
+
+#page-product-detail .sticky-inner--active .product-detail-url .icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+}
+
+#page-product-detail .sticky-inner--active .product-detail-url-text {
+  display: flex;
+}
+
+#page-product-detail .sticky-placeholder {
+  display: none;
+}
+
 #page-product-detail .grids > .grid-container {
   background-color: #fefefe;
 }
@@ -100,6 +179,10 @@
 .product-detail-comments,
 .product-detail-activity {
   margin: 30px 0 0;
+}
+
+.product-detail-url-text {
+  display: none;
 }
 
 .product-detail-actions {
@@ -250,6 +333,11 @@
 }
 
 @media (max-width: 768px) {
+  #page-product-detail .sticky-inner--active .product-detail-name {
+    font-size: 16px;
+    line-height: 22px;
+  }
+
   .product-detail {
     padding: 0;
   }

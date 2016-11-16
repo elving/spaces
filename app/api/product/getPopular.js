@@ -8,21 +8,29 @@ import toIdsFromPath from '../utils/toIdsFromPath'
 import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default (limit = 8) => (
+export default (limit = 8, upcoming = false) => (
   new Promise(async (resolve, reject) => {
-    const cacheKey = `product-popular-${limit}`
+    const cacheKey = upcoming
+      ? `product-popular-${limit}-upcoming`
+      : `product-popular-${limit}`
 
     getFromCacheOrQuery(cacheKey, () => {
       mongoose
         .model('Product')
-        .find()
+        .where(upcoming
+          ? { likesCount: { $gte: 1 } }
+          : {}
+        )
         .limit(limit)
         .populate('brand')
         .populate('colors')
         .populate('createdBy')
         .populate('categories')
         .populate('spaceTypes')
-        .sort('-likesCount -commentsCount')
+        .sort(upcoming
+          ? '-createdAt -likesCount -commentsCount'
+          : '-likesCount -commentsCount'
+        )
         .exec(async (err, products = []) => {
           if (err) {
             return reject(parseError(err))

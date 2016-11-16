@@ -30,6 +30,7 @@ class Home extends Component {
     categories: PropTypes.array,
     relatedRooms: PropTypes.array,
     relatedProducts: PropTypes.array,
+    trendingProducts: PropTypes.array,
     relatedCategories: PropTypes.array,
     openAddProductModal: PropTypes.func,
     closeAddProductModal: PropTypes.func,
@@ -45,6 +46,7 @@ class Home extends Component {
     categories: [],
     relatedRooms: [],
     relatedProducts: [],
+    trendingProducts: [],
     relatedCategories: [],
     openAddProductModal: (() => {}),
     closeAddProductModal: (() => {}),
@@ -65,6 +67,24 @@ class Home extends Component {
         <div className="grid-items">
           {map(props.spaces, space =>
             <SpaceCard key={toStringId(space)} {...space} />
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  renderTrendingProducts() {
+    const { props } = this
+
+    return (
+      <div className="grid">
+        <div className="grid-items">
+          {map(props.trendingProducts, product =>
+            <ProductCard
+              {...product}
+              key={toStringId(product)}
+              onAddButtonClick={() => props.openAddProductModal(product)}
+            />
           )}
         </div>
       </div>
@@ -203,6 +223,25 @@ class Home extends Component {
                 </Link>
               </div>
               {this.renderSpaces()}
+            </div>
+          ) : null}
+
+          {!isEmpty(props.trendingProducts) ? (
+            <div className="grid-container">
+              <div className="grid-title-container">
+                <h3 className="grid-title">Trending Products</h3>
+                <Link
+                  to={{ pathname: '/products/?sorting=newest' }}
+                  onClick={fullReload}
+                  className="button button--small button--outline"
+                  activeClassName="is-active"
+                >
+                  <span className="button-text">
+                    Latest Products
+                  </span>
+                </Link>
+              </div>
+              {this.renderTrendingProducts()}
             </div>
           ) : null}
 

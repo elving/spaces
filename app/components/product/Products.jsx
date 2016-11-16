@@ -22,7 +22,9 @@ import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import addProductModalContainer from '../container/AddProductModal'
 
 import toStringId from '../../api/utils/toStringId'
+import sortingIsValid from '../../utils/sortingIsValid'
 import hasEmptyIdParam from '../../utils/hasEmptyIdParam'
+import reverseKebabCase from '../../utils/reverseKebabCase'
 
 const productSortingTypes = [{
   sort: '-likesCount -commentsCount',
@@ -35,15 +37,16 @@ const productSortingTypes = [{
   label: 'Oldest'
 }, {
   sort: '-price',
-  label: 'Expensive'
+  label: 'Most Expensive'
 }, {
   sort: 'price',
-  label: 'Less Expensive'
+  label: 'Least Expensive'
 }]
 
 class ProductsIndex extends Component {
   static propTypes = {
     params: PropTypes.object,
+    sorting: PropTypes.string,
     products: PropTypes.object,
     emptyMessage: PropTypes.string,
     openAddProductModal: PropTypes.func,
@@ -54,6 +57,7 @@ class ProductsIndex extends Component {
 
   static defaultProps = {
     params: {},
+    sorting: 'Popular',
     products: {},
     emptyMessage: 'No Products Found...',
     openAddProductModal: (() => {}),
@@ -65,12 +69,13 @@ class ProductsIndex extends Component {
   constructor(props) {
     super(props)
 
+    const sort = reverseKebabCase(get(props, 'sorting', 'Popular'))
     const count = get(props.products, 'count', 0)
     const results = get(props.products, 'results', [])
 
     this.state = {
       skip: 40,
-      sort: 'Popular',
+      sort: sortingIsValid(productSortingTypes, sort) ? sort : 'Popular',
       count,
       offset: size(results),
       results,

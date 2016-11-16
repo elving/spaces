@@ -20,7 +20,9 @@ import Category from './Card'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
+import sortingIsValid from '../../utils/sortingIsValid'
 import hasEmptyIdParam from '../../utils/hasEmptyIdParam'
+import reverseKebabCase from '../../utils/reverseKebabCase'
 
 const categorySortingTypes = [{
   sort: '-followersCount -spacesCount -productsCount',
@@ -36,12 +38,14 @@ const categorySortingTypes = [{
 export default class Categories extends Component {
   static propTypes = {
     params: PropTypes.object,
+    sorting: PropTypes.string,
     categories: PropTypes.object,
     emptyMessage: PropTypes.string
   }
 
   static defaultProps = {
     params: {},
+    sorting: 'Popular',
     categories: {},
     emptyMessage: 'No Categories Found...'
   }
@@ -49,12 +53,13 @@ export default class Categories extends Component {
   constructor(props) {
     super(props)
 
+    const sort = reverseKebabCase(get(props, 'sorting', 'Popular'))
     const count = get(props.categories, 'count', 0)
     const results = get(props.categories, 'results', [])
 
     this.state = {
       skip: 40,
-      sort: 'Popular',
+      sort: sortingIsValid(categorySortingTypes, sort) ? sort : 'Popular',
       count,
       offset: size(results),
       results,

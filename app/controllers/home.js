@@ -1,9 +1,13 @@
+import map from 'lodash/map'
 import slice from 'lodash/slice'
+import filter from 'lodash/filter'
 import concat from 'lodash/concat'
+import includes from 'lodash/includes'
 
 import toJSON from '../api/utils/toJSON'
 import setProps from '../utils/middlewares/setProps'
 import setOgTags from '../utils/middlewares/setOgTags'
+import toStringId from '../api/utils/toStringId'
 import setMetadata from '../utils/middlewares/setMetadata'
 
 import getUsers from '../api/user/getPopular'
@@ -26,10 +30,13 @@ export default async (req, res, next) => {
     const spaces = await getSpaces(8)
     const products = await getProducts(8)
     const categories = await getCategories(6)
+    const trendingProducts = await getProducts(8, true)
 
     const roomsToJSON = toJSON(rooms)
     const productsToJSON = toJSON(products)
     const categoriesToJSON = toJSON(categories)
+
+    const productIds = map(productsToJSON, product => toStringId(product))
 
     for (const product of slice(productsToJSON, 4, 8)) {
       relatedProducts = concat(relatedProducts, {
@@ -70,6 +77,9 @@ export default async (req, res, next) => {
       categories: slice(categoriesToJSON, 0, 3),
       relatedRooms,
       relatedProducts,
+      trendingProducts: filter(toJSON(trendingProducts), product =>
+        !includes(productIds, toStringId(product))
+      ),
       relatedCategories
     })
 

@@ -20,7 +20,9 @@ import Loader from '../common/Loader'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
+import sortingIsValid from '../../utils/sortingIsValid'
 import hasEmptyIdParam from '../../utils/hasEmptyIdParam'
+import reverseKebabCase from '../../utils/reverseKebabCase'
 
 const roomSortingTypes = [{
   sort: '-followersCount -spacesCount -productsCount',
@@ -37,24 +39,27 @@ export default class Rooms extends Component {
   static propTypes = {
     rooms: PropTypes.object,
     params: PropTypes.object,
+    sorting: PropTypes.string,
     emptyMessage: PropTypes.string
   }
 
   static defaultProps = {
     rooms: {},
     params: {},
+    sorting: 'Popular',
     emptyMessage: 'No Rooms Found...'
   }
 
   constructor(props) {
     super(props)
 
+    const sort = reverseKebabCase(get(props, 'sorting', 'Popular'))
     const count = get(props.rooms, 'count', 0)
     const results = get(props.rooms, 'results', [])
 
     this.state = {
       skip: 40,
-      sort: 'Popular',
+      sort: sortingIsValid(roomSortingTypes, sort) ? sort : 'Popular',
       count,
       offset: size(results),
       results,

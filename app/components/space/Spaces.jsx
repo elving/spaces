@@ -7,7 +7,7 @@ import assign from 'lodash/assign'
 import concat from 'lodash/concat'
 import isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
-import { default as queryString } from 'query-string'
+import queryString from 'query-string'
 import React, { Component, PropTypes } from 'react'
 
 import Dropdown, {
@@ -20,7 +20,9 @@ import Loader from '../common/Loader'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
+import sortingIsValid from '../../utils/sortingIsValid'
 import hasEmptyIdParam from '../../utils/hasEmptyIdParam'
+import reverseKebabCase from '../../utils/reverseKebabCase'
 
 const spaceSortingTypes = [{
   sort: '-likesCount -commentsCount -productsCount',
@@ -37,24 +39,27 @@ export default class Spaces extends Component {
   static propTypes = {
     spaces: PropTypes.object,
     params: PropTypes.object,
+    sorting: PropTypes.string,
     emptyMessage: PropTypes.string
   }
 
   static defaultProps = {
     spaces: {},
     params: {},
+    sorting: 'Popular',
     emptyMessage: 'No Spaces Found...'
   }
 
   constructor(props) {
     super(props)
 
+    const sort = reverseKebabCase(get(props, 'sorting', 'Popular'))
     const count = get(props, 'spaces.count', 0)
     const results = get(props, 'spaces.results', [])
 
     this.state = {
       skip: 40,
-      sort: 'Popular',
+      sort: sortingIsValid(spaceSortingTypes, sort) ? sort : 'Popular',
       count,
       offset: size(results),
       results,

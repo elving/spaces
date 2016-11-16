@@ -151,6 +151,7 @@ export default (id, props) => (
             await removeFromCache('product-latest')
             await removeFromCache('product-popular-8')
             await removeFromCache(`product-related-${id}`)
+            await removeFromCache('product-popular-8-upcoming')
 
             await invalidateFromCache([
               id,
@@ -184,6 +185,7 @@ export default (id, props) => (
           await removeFromCache('product-latest')
           await removeFromCache('product-popular-8')
           await removeFromCache(`product-related-${id}`)
+          await removeFromCache('product-popular-8-upcoming')
 
           await invalidateFromCache([
             id,

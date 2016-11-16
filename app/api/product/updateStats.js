@@ -29,6 +29,7 @@ export default (_id, props) => (
         await removeFromCache('product-latest')
         await removeFromCache('product-popular-8')
         await removeFromCache(`product-related-${_id}`)
+        await removeFromCache('product-popular-8-upcoming')
 
         await invalidateFromCache([
           _id,

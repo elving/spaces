@@ -1,3 +1,4 @@
+import get from 'lodash/get'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
@@ -6,12 +7,20 @@ import Products from './Products'
 import CreateSpaceBanner from '../onboarding/Banner'
 
 export default class ProductsIndex extends Component {
+  static propTypes = {
+    location: PropTypes.object
+  }
+
+  static defaultProps = {
+    location: {}
+  }
+
   static contextTypes = {
     currentUserIsOnboarding: PropTypes.func
   }
 
   render() {
-    const { context } = this
+    const { props, context } = this
 
     return (
       <Layout
@@ -27,7 +36,7 @@ export default class ProductsIndex extends Component {
           Discover Products
         </h1>
 
-        <Products />
+        <Products sorting={get(props.location, 'query.sorting')} />
       </Layout>
     )
   }

@@ -7,17 +7,20 @@ import Header from './Header'
 import Footer from './Footer'
 import Welcome from './Welcome'
 import MobileNav from '../mobile/Nav'
+import AdBlockModal from '../modal/AdBlock'
 
 import isNotAppRoute from '../../utils/isNotAppRoute'
 
 export default class Layout extends Component {
   static propTypes = {
     children: PropTypes.node,
-    className: PropTypes.string
+    className: PropTypes.string,
+    contentClassName: PropTypes.string
   }
 
   static defaultProps = {
-    className: ''
+    className: '',
+    contentClassName: ''
   }
 
   static contextTypes = {
@@ -71,6 +74,7 @@ export default class Layout extends Component {
 
     return (
       <div id="app-container" className={props.className}>
+        <AdBlockModal />
         <MobileNav isVisible={state.mobileNavIsVisible} />
 
         <Header />
@@ -79,7 +83,7 @@ export default class Layout extends Component {
           <Welcome onClose={this.persistWelcomeState} />
         ) : null}
 
-        <div className="page-content">
+        <div className={`page-content ${props.contentClassName}`}>
           {props.children}
         </div>
         <Footer />

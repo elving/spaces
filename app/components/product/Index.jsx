@@ -27,14 +27,11 @@ export default class ProductsIndex extends Component {
         className={classNames({
           'user-is-onboarding': context.currentUserIsOnboarding()
         })}
+        contentClassName="page-content--padding-top"
       >
         {context.currentUserIsOnboarding() ? (
           <CreateSpaceBanner />
         ) : null}
-
-        <h1 className="page-title page-title--has-margin">
-          Discover Products
-        </h1>
 
         <Products sorting={get(props.location, 'query.sorting')} />
       </Layout>

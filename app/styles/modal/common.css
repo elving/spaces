@@ -1,0 +1,111 @@
+.ReactModal__Overlay {
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 10000;
+  overflow-y: auto;
+}
+
+.modal {
+  border-radius: 4px;
+  background-color: #ffffff;
+  width: 100%;
+  margin: 60px auto;
+  display: flex;
+  position: relative;
+  max-width: 720px;
+  min-height: 250px;
+  flex-direction: column;
+}
+
+.modal--small {
+  max-width: 420px;
+}
+
+.modal-inner {
+  width: 100%;
+  position: relative;
+}
+
+.modal-title {
+  font-size: 36px;
+  text-align: center;
+  font-weight: 300;
+  line-height: 46px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 25px 30px 30px;
+}
+
+.modal-content {
+  padding: 0 30px 30px;
+}
+
+.modal-content p {
+  text-align: center;
+  margin: 0 0 30px;
+}
+
+.modal-content p:last-child {
+  text-align: center;
+  margin: 0;
+}
+
+.modal-content img {
+  width: 100%;
+  height: auto;
+  margin: 0 auto 30px;
+  display: block;
+  min-height: 310px;
+}
+
+.modal-close {
+  top: 0;
+  right: 0;
+  padding: 10px;
+  position: absolute;
+}
+
+.modal-close .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.modal .form-group {
+  border-top: 1px solid #e5e5e5;
+  border-radius: 0 0 4px 4px;
+  background-color: #fafafa;
+  padding: 30px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 736px) {
+  .ReactModal__Overlay {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal {
+    margin: 0 auto;
+    padding: 15px;
+  }
+
+  .modal-title {
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 32px;
+    margin: 0 auto 15px;
+  }
+
+  .modal-close {
+    top: -15px;
+    right: -15px;
+    padding: 5px;
+  }
+
+  .modal-close .ui-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .modal-content img {
+    min-height: 100px;
+  }
+}

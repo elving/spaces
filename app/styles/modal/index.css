@@ -1,15 +1,4 @@
-.ReactModal__Overlay {
-  background-color: rgba(0, 0, 0, 0.35);
-  z-index: 10000;
-  overflow-y: auto;
-}
-
-@media (max-width: 736px) {
-  .ReactModal__Overlay {
-    -webkit-overflow-scrolling: touch;
-  }
-}
-
+@import './common.css'
 @import './likes.css';
 @import './welcome.css';
 @import './redesigns.css';

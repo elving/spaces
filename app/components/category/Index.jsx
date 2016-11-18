@@ -17,11 +17,7 @@ export default class CategoriesIndex extends Component {
     const { props } = this
 
     return (
-      <Layout>
-        <h1 className="page-title page-title--has-margin">
-          Discover Categories
-        </h1>
-
+      <Layout contentClassName="page-content--padding-top">
         <Categories sorting={get(props.location, 'query.sorting')} />
       </Layout>
     )

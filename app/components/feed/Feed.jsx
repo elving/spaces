@@ -117,8 +117,6 @@ export default class Feed extends Component {
             <CreateSpaceBanner />
           ) : null}
 
-          <h1 className="page-title">Your Feed</h1>
-
           <div className="feed-content">
             {this.renderNavigation()}
             {this.renderContent()}

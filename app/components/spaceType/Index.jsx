@@ -17,11 +17,7 @@ export default class SpaceTypesIndex extends Component {
     const { props } = this
 
     return (
-      <Layout>
-        <h1 className="page-title page-title--has-margin">
-          Discover Rooms
-        </h1>
-
+      <Layout contentClassName="page-content--padding-top">
         <Rooms sorting={get(props.location, 'query.sorting')} />
       </Layout>
     )

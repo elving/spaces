@@ -1,6 +1,6 @@
 {
   "name": "Spaces-Next",
-  "version": "0.0.177",
+  "version": "0.0.178",
   "description": "A visual shopping guide for your home.",
   "license": "ISC",
   "author": "",
@@ -26,6 +26,7 @@
     "aspectratio": "^2.2.2",
     "autoprefixer": "^6.3.6",
     "axios": "^0.15.2",
+    "blockadblock": "^3.2.1",
     "body-parser": "^1.15.2",
     "cacheman": "^2.2.1",
     "cacheman-redis": "^1.1.2",

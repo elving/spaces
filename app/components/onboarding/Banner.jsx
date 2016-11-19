@@ -52,7 +52,7 @@ export default class CreateSpaceBanner extends Component {
         >
           <MaterialDesignIcon name="add" fill="#2ECC71" />
         </button>
-        Create your first space by adding a product.
+        Design your first space by adding a product.
         {'\u00A0'}
         <a href="/about/">Learn more</a>
         {'\u00A0'}

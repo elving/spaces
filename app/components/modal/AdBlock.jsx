@@ -92,7 +92,7 @@ export default class AdBlockModal extends Component {
             to help us keep Spaces alive.
           </p>
         </div>
-        <div className="form-group">
+        <div className="modal-actions form-group">
           <a href="/about/" className="button button--primary-alt">
             <span className="button-text">
               Learn More

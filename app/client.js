@@ -20,7 +20,10 @@ const render = () => {
   Modal.setAppElement('#app')
 
   ReactDOM.render((
-    <Router history={history} createElement={createElement}>
+    <Router
+      history={history}
+      createElement={createElement}
+    >
       {routes}
     </Router>
   ), document.querySelector('#app'))

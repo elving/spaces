@@ -84,7 +84,7 @@ export default class WelcomeModal extends Component {
             on the web.
           </p>
         </div>
-        <div className="form-group form-group--inline">
+        <div className="modal-actions form-group form-group--inline">
           <a href="/join/" className="button button--primary-alt">
             <span className="button-text">
               Become a Designer

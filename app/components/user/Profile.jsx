@@ -11,7 +11,6 @@ import CuratorBadge from './CuratorBadge'
 import CreateSpaceBanner from '../onboarding/Banner'
 
 import inflect from '../../utils/inflect'
-import isCurator from '../../utils/user/isCurator'
 import toStringId from '../../api/utils/toStringId'
 import addTwitterLinks from '../../utils/addTwitterLinks'
 
@@ -118,15 +117,13 @@ export default class UserProfile extends PureComponent {
         >
           {`${spacesCount || ''} ${inflect(spacesCount, 'Space')}`}
         </Link>
-        {isCurator(props.profile) ? (
-          <Link
-            to={{ pathname: `/designers/${username}/products` }}
-            className="navbar-link"
-            activeClassName="is-active"
-          >
-            {`${productsCount || ''} ${inflect(productsCount, 'Product')}`}
-          </Link>
-        ) : null}
+        <Link
+          to={{ pathname: `/designers/${username}/products` }}
+          className="navbar-link"
+          activeClassName="is-active"
+        >
+          {`${productsCount || ''} ${inflect(productsCount, 'Product')}`}
+        </Link>
         <Link
           to={{ pathname: `/designers/${username}/likes` }}
           className="navbar-link"

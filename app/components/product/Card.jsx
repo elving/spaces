@@ -13,6 +13,8 @@ import CardActivity from '../card/CardActivity'
 import CuratorBadge from '../user/CuratorBadge'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
+import isCurator from '../../utils/user/isCurator'
+
 export default class ProductCard extends Component {
   static contextTypes = {
     csrf: PropTypes.string,
@@ -178,7 +180,7 @@ export default class ProductCard extends Component {
               className="card-action button button--icon"
               data-action="add"
             >
-              <MaterialDesignIcon name="add" fill="#2ECC71" />
+              <MaterialDesignIcon name="check-simple" fill="#2ECC71" />
             </button>
           ) : null}
           {!context.userLoggedIn() ? (
@@ -187,7 +189,7 @@ export default class ProductCard extends Component {
               className="card-action button button--icon"
               data-action="add"
             >
-              <MaterialDesignIcon name="add" fill="#2ECC71" />
+              <MaterialDesignIcon name="check-simple" fill="#2ECC71" />
             </a>
           ) : null}
           {props.mainAction === 'remove' ? (
@@ -302,7 +304,7 @@ export default class ProductCard extends Component {
           className="product-card-designer-avatar"
         />
         <span className="product-card-designer-name">
-          Added by {' '}
+          {`${isCurator(props.createdBy) ? 'Curated' : 'Recommended'} by `}
           {!props.forDisplayOnly ? (
             <a
               href={`/${get(props.createdBy, 'detailUrl', '#')}/`}

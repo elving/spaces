@@ -5,19 +5,18 @@ import isEmpty from 'lodash/isEmpty'
 
 import isAdmin from '../utils/user/isAdmin'
 import isOwner from '../utils/user/isOwner'
-import isCurator from '../utils/user/isCurator'
 import setProps from '../utils/middlewares/setProps'
 import setOgTags from '../utils/middlewares/setOgTags'
 import setMetadata from '../utils/middlewares/setMetadata'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
-import search from '../api/product/search'
 import create from '../api/product/create'
 import update from '../api/product/update'
 import destroy from '../api/product/destroy'
 import findBySid from '../api/product/findBySid'
 import fromBrand from '../api/product/fromBrand'
 import getRelated from '../api/product/getRelated'
+import getRecommended from '../api/product/getRecommended'
 import getRelatedSpaces from '../api/product/getRelatedSpaces'
 import fetchProductData from '../api/product/fetchProductData'
 
@@ -59,7 +58,7 @@ export const renderDetail = async (req, res, next) => {
   try {
     const product = await findBySid(sid)
 
-    if (isEmpty(product)) {
+    if (isEmpty(product) || get(product, 'isPendingApproval') === true) {
       return res.redirect('/404/')
     }
 
@@ -132,42 +131,39 @@ export const fetchProductInfo = async (req, res) => {
     })
   }
 
-  if (get(req, 'user.isCurator') || get(req, 'user.isAdmin')) {
-    try {
-      const data = await fetchProductData(url)
-      res.status(200).json({ ...data })
-    } catch (err) {
-      res.status(500).json({
-        err: {
-          generic: (
-            'There was a problem while trying to get ' +
-            'this product\'s information'
-          )
-        }
-      })
-    }
-  } else {
-    return res.status(500).json({
+  try {
+    const data = await fetchProductData(url)
+    res.status(200).json({ ...data })
+  } catch (err) {
+    res.status(500).json({
       err: {
-        generic: 'Not authorized'
+        generic: (
+          'There was a problem while trying to get ' +
+          'this product\'s information'
+        )
       }
     })
   }
 }
 
 export const renderAddProduct = async (req, res, next) => {
-  if (!isAuthenticatedUser(req.user) || !isCurator(req.user)) {
+  if (!isAuthenticatedUser(req.user)) {
     return res.redirect('/404/')
   }
 
   try {
+    const action = (
+      !get(req, 'user.isCurator', false) ||
+      !get(req, 'user.isAdmin', false)
+    ) ? 'Recommend' : 'Add'
+
     const brands = await getAllBrands()
     const colors = await getAllColors()
     const categories = await getAllCategories()
     const spaceTypes = await getAllSpaceTypes()
 
     setMetadata(res, {
-      title: 'Add Product | Spaces',
+      title: `${action} Product | Spaces`,
       bodyId: 'add-product',
       bodyClass: 'page page-add-product'
     })
@@ -186,7 +182,7 @@ export const renderAddProduct = async (req, res, next) => {
 }
 
 export const addProduct = async (req, res) => {
-  if (!isAuthenticatedUser(req.user) || !isCurator(req.user)) {
+  if (!isAuthenticatedUser(req.user)) {
     res.status(500).json({
       err: {
         generic: 'Not authorized'
@@ -198,7 +194,11 @@ export const addProduct = async (req, res) => {
     const product = await create(
       merge(req.body, {
         createdBy: get(req, 'user.id'),
-        updatedBy: get(req, 'user.id')
+        updatedBy: get(req, 'user.id'),
+        isPendingApproval: (
+          !get(req, 'user.isCurator', false) ||
+          !get(req, 'user.isAdmin', false)
+        )
       })
     )
 
@@ -211,7 +211,7 @@ export const addProduct = async (req, res) => {
 export const renderUpdateProduct = async (req, res, next) => {
   const sid = get(req, 'params.sid')
 
-  if (!isAuthenticatedUser(req.user) || !isCurator(req.user)) {
+  if (!isAuthenticatedUser(req.user)) {
     return res.redirect('/404/')
   }
 
@@ -295,5 +295,25 @@ export const destroyProduct = async (req, res) => {
     res.status(200).json({ success: true })
   } catch (err) {
     res.status(500).json({ err })
+  }
+}
+
+export const renderRecommended = async (req, res, next) => {
+  try {
+    const products = await getRecommended()
+
+    setMetadata(res, {
+      title: 'Recommended Products | Spaces',
+      bodyId: 'recommended-products',
+      bodyClass: 'page page-recommended-products page-admin-table'
+    })
+
+    setProps(res, {
+      products: toJSON(products)
+    })
+
+    next()
+  } catch (err) {
+    next(err)
   }
 }

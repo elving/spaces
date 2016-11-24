@@ -1,3 +1,4 @@
+import set from 'lodash/set'
 import get from 'lodash/get'
 import size from 'lodash/size'
 import parseInt from 'lodash/parseInt'
@@ -26,6 +27,8 @@ export default (params = {}, operation = 'where') => (
   new Promise((resolve, reject) => {
     let query
     const searchParams = makeSearchQuery(params)
+
+    set(searchParams, 'isPendingApproval', { $ne: true })
 
     if (operation === 'and') {
       query = mongoose.model('Product').find({

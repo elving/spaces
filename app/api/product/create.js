@@ -13,10 +13,10 @@ import toStringId from '../utils/toStringId'
 import parseError from '../utils/parseError'
 import toIdsFromPath from '../utils/toIdsFromPath'
 
-import { default as findColorByName } from '../color/findByName'
-import { default as getOrCreateBrand } from '../brand/getOrCreate'
-import { default as getOrCreateCategory } from '../category/getOrCreate'
-import { default as findSpaceTypeByName } from '../spaceType/findByName'
+import findColorByName from '../color/findByName'
+import getOrCreateBrand from '../brand/getOrCreate'
+import getOrCreateCategory from '../category/getOrCreate'
+import findSpaceTypeByName from '../spaceType/findByName'
 import { removeFromCache, invalidateFromCache } from '../../api/cache'
 
 export default (props) => (
@@ -139,6 +139,7 @@ export default (props) => (
         }
 
         const id = toStringId(product)
+        const createdBy = toStringId(get(product, 'createdBy', {}))
 
         await removeFromCache('brand-all')
         await removeFromCache('color-all')
@@ -147,8 +148,10 @@ export default (props) => (
         await removeFromCache('product-all')
         await removeFromCache('product-latest')
         await removeFromCache('product-popular-8')
+        await removeFromCache('product-recommended')
         await removeFromCache(`product-related-${id}`)
         await removeFromCache('product-popular-8-upcoming')
+        await removeFromCache(`product-recommended-${createdBy}`)
 
         await invalidateFromCache([
           id,

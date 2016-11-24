@@ -3,6 +3,7 @@ import map from 'lodash/map'
 import head from 'lodash/head'
 import size from 'lodash/size'
 import axios from 'axios'
+import assign from 'lodash/assign'
 import Select from 'react-select'
 import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
@@ -22,7 +23,8 @@ import focusOnFirstError from '../../utils/dom/focusOnFirstError'
 export default class ProductForm extends Component {
   static contextTypes = {
     csrf: PropTypes.string,
-    currentUserIsAdmin: PropTypes.func
+    currentUserIsAdmin: PropTypes.func,
+    currentUserIsCurator: PropTypes.func
   }
 
   static propTypes = {
@@ -41,8 +43,8 @@ export default class ProductForm extends Component {
     formMethod: 'POST'
   }
 
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
 
     const description = get(props.product, 'description', '')
     const descriptionLength = size(description)
@@ -63,6 +65,8 @@ export default class ProductForm extends Component {
       imageIndex: 0,
       categories: map(get(props.product, 'categories', []), 'name'),
       spaceTypes: map(get(props.product, 'spaceTypes', []), 'name'),
+      approvedBy: toStringId(context.user),
+      isPendingApproval: false,
       isScraping: false,
       isDeleting: false,
       hasScrapped: false,
@@ -176,6 +180,10 @@ export default class ProductForm extends Component {
     const { props, state } = this
 
     const isPOST = props.formMethod === 'POST'
+    const isApproving = (
+      !isPOST &&
+      get(props.product, 'isPendingApproval', false)
+    )
 
     event.preventDefault()
 
@@ -188,7 +196,9 @@ export default class ProductForm extends Component {
     }
 
     const form = this.form
-    const formData = serialize(form, { hash: true })
+    const formData = assign(isApproving ? {
+      isPendingApproval: false
+    } : {}, serialize(form, { hash: true }))
     const endpoint = isPOST
       ? '/ajax/products/add/'
       : `/ajax/products/${toStringId(props.product)}/`
@@ -497,6 +507,7 @@ export default class ProductForm extends Component {
 
   renderScrapeForm() {
     const { props, state, context } = this
+    const titleAction = context.currentUserIsCurator() ? 'Add' : 'Recommend'
 
     return (
       <form
@@ -510,7 +521,10 @@ export default class ProductForm extends Component {
         <input type="hidden" name="_method" value={props.formMethod} />
 
         <h1 className="form-title">
-          {props.formMethod === 'POST' ? 'Add Product' : 'Update Product'}
+          {props.formMethod === 'POST'
+            ? `${titleAction} Product`
+            : 'Update Product'
+          }
 
           {context.currentUserIsAdmin() ? (
             <a href="/admin/products/" className="form-title-link">
@@ -715,6 +729,14 @@ export default class ProductForm extends Component {
     const { props, state, context } = this
 
     const isPOST = props.formMethod === 'POST'
+    const isAdmin = context.currentUserIsAdmin()
+    const isCurator = context.currentUserIsCurator()
+    const isApproving = get(props.product, 'isPendingApproval', false)
+
+    const mainVerb = isCurator ? 'Adding' : 'Recommending'
+    const mainAction = isCurator ? 'Add' : 'Recommend'
+    const deleteVerb = isApproving ? 'Disapproving' : 'Deleting'
+    const deleteAction = isApproving ? 'Disapprove' : 'Delete'
 
     const shouldDisable = (
       state.isSaving ||
@@ -759,8 +781,8 @@ export default class ProductForm extends Component {
 
     if (isPOST) {
       btnText = state.isSaving
-        ? 'Adding Product...'
-        : 'Add Product'
+        ? `${mainVerb} Product...`
+        : `${mainAction} Product`
     } else {
       btnText = state.isSaving
         ? 'Updating Product...'
@@ -779,9 +801,9 @@ export default class ProductForm extends Component {
         <input type="hidden" name="_method" value={props.formMethod} />
 
         <h1 className="form-title">
-          {isPOST ? 'Add Product' : 'Update Product'}
+          {isPOST ? `${mainAction} Product` : 'Update Product'}
 
-          {context.currentUserIsAdmin() ? (
+          {isAdmin ? (
             <a href="/admin/products/" className="form-title-link">
               <MaterialDesignIcon name="list" size={18} />
               All Products
@@ -860,34 +882,36 @@ export default class ProductForm extends Component {
           ) : null}
         </div>
 
-        <div className="form-group">
-          <label htmlFor="name" className="form-label">
-            Curator&apos;s Note <small>optional</small>
-          </label>
+        {isCurator ? (
+          <div className="form-group">
+            <label htmlFor="name" className="form-label">
+              Curator&apos;s Note <small>optional</small>
+            </label>
 
-          <textarea
-            id="note"
-            name="note"
-            value={state.note}
-            onChange={this.onNoteChange}
-            disabled={state.isSaving}
-            className={classNames({
-              textfield: true,
-              'textfield--error': hasNoteError
-            })}
-            placeholder="I bought this product because it's awesome..."
-          />
+            <textarea
+              id="note"
+              name="note"
+              value={state.note}
+              onChange={this.onNoteChange}
+              disabled={state.isSaving}
+              className={classNames({
+                textfield: true,
+                'textfield--error': hasNoteError
+              })}
+              placeholder="I bought this product because it's awesome..."
+            />
 
-          {hasNameError ? (
-            <small className="form-error">{noteError}</small>
-          ) : null}
+            {hasNameError ? (
+              <small className="form-error">{noteError}</small>
+            ) : null}
 
-          <small className="form-help">
-            Give some insight into why you are adding this product,
-            e.g. you own it and want write a simple review about what
-            makes it special.
-          </small>
-        </div>
+            <small className="form-help">
+              Give some insight into why you are adding this product,
+              e.g. you own it and want write a simple review about what
+              makes it special.
+            </small>
+          </div>
+        ) : null}
 
         <div className="form-group">
           <label htmlFor="description" className="form-label">
@@ -1002,7 +1026,7 @@ export default class ProductForm extends Component {
               select: true,
               'select--error': hasCategoriesError
             })}
-            allowCreate
+            allowCreate={isCurator}
             placeholder="E.g. Pattern, Minimal"
             addLabelText={'Add "{label}" as a new category'}
           />
@@ -1011,11 +1035,13 @@ export default class ProductForm extends Component {
             <small className="form-error">{categoriesError}</small>
           ) : null}
 
-          <small className="form-help">
-            If you are adding new categories for this product, make sure
-            that they can be used for other products. We want to ensure that
-            categories have plenty of products.
-          </small>
+          {isCurator ? (
+            <small className="form-help">
+              If you are adding new categories for this product, make sure
+              that they can be used for other products. We want to ensure that
+              categories have plenty of products.
+            </small>
+          ) : null}
         </div>
 
         <div className="form-group">
@@ -1117,16 +1143,29 @@ export default class ProductForm extends Component {
 
         <div className="form-group">
           <div className="form-group form-group--inline">
-            <button
-              type="submit"
-              disabled={shouldDisable}
-              className="button button--primary"
-            >
-              <span className="button-text">
-                <MaterialDesignIcon name={isPOST ? 'add' : 'edit'} />
-                {btnText}
-              </span>
-            </button>
+            {isAdmin && isApproving ? (
+              <button
+                type="submit"
+                disabled={shouldDisable}
+                className="button button--primary"
+              >
+                <span className="button-text">
+                  <MaterialDesignIcon name="approve" />
+                  {state.isSaving ? 'Approving...' : 'Approve'}
+                </span>
+              </button>
+            ) : (
+              <button
+                type="submit"
+                disabled={shouldDisable}
+                className="button button--primary"
+              >
+                <span className="button-text">
+                  <MaterialDesignIcon name={isPOST ? 'add' : 'edit'} />
+                  {btnText}
+                </span>
+              </button>
+            )}
 
             {isPOST ? (
               <button type="button" onClick={this.reset} className="button">
@@ -1142,8 +1181,10 @@ export default class ProductForm extends Component {
                 className="button button--danger"
               >
                 <span className="button-text">
-                  <MaterialDesignIcon name="delete" />
-                  {state.isDeleting ? 'Deleting...' : 'Delete'}
+                  <MaterialDesignIcon
+                    name={isApproving ? 'disapprove' : 'delete'}
+                  />
+                  {state.isDeleting ? `${deleteVerb}...` : deleteAction}
                 </span>
               </button>
             ) : null}
@@ -1164,24 +1205,36 @@ export default class ProductForm extends Component {
   }
 
   renderNotification() {
-    const { props, state } = this
+    const { props, state, context } = this
 
     const sid = get(state.product, 'sid', '')
     const name = get(state.product, 'name', 'Product')
 
+    const isCurator = context.currentUserIsCurator()
     const genericError = get(state.errors, 'generic')
     const hasGenericError = !isEmpty(genericError)
 
     if (state.productAlreadyExists) {
       return (
         <Notification
-          timeout={3500}
+          timeout={5000}
           onClose={this.onNotificationClose}
           isVisible
         >
-          This product already exists.
-          {'\u00A0'}
-          <a href={`/products/${sid}/`}>{name}</a>.
+          This product&nbsp;<a href={`/products/${sid}/`}>already exists</a>
+        </Notification>
+      )
+    } else if (!isCurator && state.savingSuccessful) {
+      return (
+        <Notification
+          type="success"
+          onClose={this.onNotificationClose}
+          timeout={5000}
+          isVisible
+        >
+          Thanks for the recommendation! We&apos;ll review it shortly.
+          &nbsp;<a href="/about/#adding-products">Learn about
+          recommendations</a>.
         </Notification>
       )
     } else if (state.savingSuccessful) {
@@ -1189,21 +1242,15 @@ export default class ProductForm extends Component {
         <Notification
           type="success"
           onClose={this.onNotificationClose}
-          timeout={3500}
+          timeout={5000}
           isVisible
         >
-          &quot;{name}&quot; was added successfully.
-          {'\u00A0'}
-          Click
-          {'\u00A0'}
-          <a href={`/products/${sid}/update/`}>here</a>
-          {'\u00A0'}
-          to edit.
+          {name}&nbsp;was added successfully.
         </Notification>
       ) : (
         <Notification
           type="success"
-          timeout={3500}
+          timeout={5000}
           onClose={this.onNotificationClose}
           isVisible
         >
@@ -1214,11 +1261,11 @@ export default class ProductForm extends Component {
       return (
         <Notification
           type="success"
-          timeout={3500}
+          timeout={5000}
           onClose={this.onNotificationClose}
           isVisible
         >
-          &quot;{name}&quot; was deleted successfully. Redirecting...
+          &quot;{name}&quot; was deleted successfully.
         </Notification>
       )
     } else if (hasGenericError) {

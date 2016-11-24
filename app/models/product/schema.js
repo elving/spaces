@@ -1,9 +1,9 @@
 import shortid from 'shortid'
 import mongoose from 'mongoose'
 
-import { default as applyHooks } from './hooks'
-import { default as applyVirtuals } from './virtuals'
-import { default as applyValidations } from './validations'
+import applyHooks from './hooks'
+import applyVirtuals from './virtuals'
+import applyValidations from './validations'
 
 const ProductSchema = new mongoose.Schema({
   sid: { type: String, default: shortid.generate },
@@ -22,7 +22,9 @@ const ProductSchema = new mongoose.Schema({
   likesCount: { type: Number, default: 0 },
   commentsCount: { type: Number, default: 0 },
   followersCount: { type: Number, default: 0 },
-  owners: { type: mongoose.Schema.ObjectId, ref: 'User' }
+  owners: { type: mongoose.Schema.ObjectId, ref: 'User' },
+  isPendingApproval: { type: Boolean, default: false },
+  approvedBy: { type: mongoose.Schema.ObjectId, ref: 'User' }
 }, { timestamps: true })
 
 applyHooks(ProductSchema)

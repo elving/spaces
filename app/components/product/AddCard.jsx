@@ -28,7 +28,7 @@ export default class AddProductCard extends Component {
       >
         <div className="product-card-add-icon-container">
           <MaterialDesignIcon
-            name="add-alt"
+            name="check-simple"
             size={110}
             className="product-card-add-icon"
           />

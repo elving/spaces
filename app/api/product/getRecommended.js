@@ -8,14 +8,23 @@ import toIdsFromPath from '../utils/toIdsFromPath'
 import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default () => (
+export default createdBy => (
   new Promise(async (resolve, reject) => {
-    const key = 'product-all'
+    const query = isEmpty(createdBy) ? {
+      isPendingApproval: true
+    } : {
+      createdBy,
+      isPendingApproval: true
+    }
 
-    getFromCacheOrQuery(key, () => {
+    const cacheKey = isEmpty(createdBy)
+      ? `product-recommended-${createdBy}`
+      : 'product-recommended'
+
+    getFromCacheOrQuery(cacheKey, () => {
       mongoose
         .model('Product')
-        .find({ isPendingApproval: { $ne: true } })
+        .find(query)
         .populate('brand')
         .populate('colors')
         .populate('createdBy')
@@ -28,19 +37,17 @@ export default () => (
           }
 
           if (!isEmpty(products)) {
-            await saveToCache(key, toJSON(products), [
+            await saveToCache(cacheKey, toJSON(products), [
               toIds(products),
               toIdsFromPath(products, 'brand'),
               toIdsFromPath(products, 'colors'),
               toIdsFromPath(products, 'categories'),
               toIdsFromPath(products, 'spaceTypes')
             ])
-
-            resolve(products)
-          } else {
-            resolve([])
           }
+
+          resolve(products)
         })
-    }, resolve)
+    })
   })
 )

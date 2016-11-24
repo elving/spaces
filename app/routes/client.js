@@ -24,6 +24,7 @@ import ProductDetail from '../components/product/Detail'
 import ProductsIndex from '../components/product/Index'
 import UpdateProduct from '../components/product/Update'
 import ProductsTable from '../components/product/Table'
+import RecommendedProducts from '../components/product/Recommended'
 
 import AddCategory from '../components/category/Add'
 import CategoryDetail from '../components/category/Detail'
@@ -57,6 +58,7 @@ import ChangePassword from '../components/user/ChangePassword'
 import ProfileProducts from '../components/user/ProfileProducts'
 import ProfileFollowers from '../components/user/ProfileFollowers'
 import ProfileFollowing from '../components/user/ProfileFollowing'
+import UserRecommendedProducts from '../components/user/Recommended'
 
 import SearchResults from '../components/search/Results'
 
@@ -100,6 +102,10 @@ const routes = (
 
     <Route path="designers/:username/edit" component={EditProfile} />
     <Route path="designers/:username/password" component={ChangePassword} />
+    <Route
+      path="designers/:username/recommended"
+      component={UserRecommendedProducts}
+    />
 
     <Route path="categories" component={CategoriesIndex} />
     <Route path="categories/:slug" component={CategoryDetail} />
@@ -110,6 +116,7 @@ const routes = (
     <Route path="search" component={SearchResults} />
 
     <Route path="admin/products" component={ProductsTable} />
+    <Route path="admin/products/recommended" component={RecommendedProducts} />
 
     <Route path="admin/categories" component={CategoriesTable} />
     <Route path="admin/categories/add" component={AddCategory} />

@@ -26,6 +26,7 @@ import addProductModalContainer from '../container/AddProductModal'
 
 import getTags from '../../utils/getTags'
 import getDomain from '../../utils/getDomain'
+import isCurator from '../../utils/user/isCurator'
 import toStringId from '../../api/utils/toStringId'
 
 class ProductDetail extends Component {
@@ -163,11 +164,12 @@ class ProductDetail extends Component {
 
   renderBrand() {
     const { props } = this
+    const createdBy = get(props.product, 'createdBy', {})
 
     return (
       <p className="product-detail-brand">
         {`By ${get(props.product, 'brand.name')}`}
-        &nbsp;&middot;&nbsp;Curated by&nbsp;
+        {` · ${isCurator(createdBy) ? 'Curated' : 'Recommended'} by `}
         <a
           href={`/${get(props.product, 'createdBy.detailUrl')}/`}
           className="product-detail-curator"
@@ -367,7 +369,7 @@ class ProductDetail extends Component {
           data-action="add"
         >
           <span className="button-text">
-            <MaterialDesignIcon name="add" />
+            <MaterialDesignIcon name="check-simple" />
             Collect
           </span>
         </button>

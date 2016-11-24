@@ -1,5 +1,6 @@
 import get from 'lodash/get'
 
+import toJSON from '../api/utils/toJSON'
 import update from '../api/user/update'
 import search from '../api/user/search'
 import getLikes from '../api/user/getLikes'
@@ -9,6 +10,7 @@ import setOgTags from '../utils/middlewares/setOgTags'
 import getFollows from '../api/user/getFollows'
 import toStringId from '../api/utils/toStringId'
 import setMetadata from '../utils/middlewares/setMetadata'
+import getRecommended from '../api/product/getRecommended'
 import updatePassword from '../api/user/updatePassword'
 import findByUsername from '../api/user/findByUsername'
 import getProfileCounts from '../api/user/getProfileCounts'
@@ -205,5 +207,33 @@ export const getUserFollows = async (req, res) => {
     res.status(200).json(get(user, 'following', []))
   } catch (err) {
     res.status(500).json({ err })
+  }
+}
+
+export const renderRecommended = async (req, res, next) => {
+  const username = get(req, 'params.username')
+
+  try {
+    if (!isAuthenticatedUser(req.user)) {
+      return res.redirect('/404/')
+    }
+
+    if (get(req, 'user.username') !== username) {
+      return res.redirect('/404/')
+    }
+
+    const products = await getRecommended(toStringId(req.user))
+
+    setMetadata(res, {
+      title: 'Your Recommendations | Spaces',
+      bodyId: 'user-profile',
+      bodyClass: 'page page-profile'
+    })
+
+    setProps(res, { products: toJSON(products) })
+
+    next()
+  } catch (err) {
+    next(err)
   }
 }

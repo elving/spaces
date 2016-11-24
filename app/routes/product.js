@@ -12,6 +12,9 @@ router.get('/p/:sid/', controller.renderDetail)
 router.get('/products/:sid/:name/', controller.renderDetail)
 
 router.get('/admin/products/', isAdmin, controller.renderAdminProducts)
+router.get(
+  '/admin/products/recommended/', isAdmin, controller.renderRecommended
+)
 
 router.get(`${ajaxRoot}/fetch/`, controller.fetchProductInfo)
 router.post(`${ajaxRoot}/add/`, controller.addProduct)

@@ -1,0 +1,34 @@
+.user-recommended-products-subtitle {
+  color: #999;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 22px;
+  line-height: 36px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.user-recommended-products-subtitle a {
+  color: #439fe0;
+}
+
+.user-recommended-products-empty {
+  font-size: 28px;
+  text-align: center;
+  width: 100%;
+  margin: 70px auto 35px;
+  display: flex;
+  max-width: 620px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.user-recommended-products-empty > .button {
+  font-size: 18px;
+  margin-top: 30px;
+}
+
+.user-recommended-products .table-container {
+  padding: 0 30px;
+}

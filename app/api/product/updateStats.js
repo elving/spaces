@@ -1,6 +1,8 @@
+import get from 'lodash/get'
 import mongoose from 'mongoose'
 
 import sanitize from './sanitize'
+import toStringId from '../utils/toStringId'
 import parseError from '../utils/parseError'
 import toIdsFromPath from '../utils/toIdsFromPath'
 import { removeFromCache, invalidateFromCache } from '../cache'
@@ -21,6 +23,8 @@ export default (_id, props) => (
           return reject(parseError(err))
         }
 
+        const createdBy = toStringId(get(product, 'createdBy', {}))
+
         await removeFromCache('brand-all')
         await removeFromCache('color-all')
         await removeFromCache('category-all')
@@ -28,8 +32,10 @@ export default (_id, props) => (
         await removeFromCache('product-all')
         await removeFromCache('product-latest')
         await removeFromCache('product-popular-8')
+        await removeFromCache('product-recommended')
         await removeFromCache(`product-related-${_id}`)
         await removeFromCache('product-popular-8-upcoming')
+        await removeFromCache(`product-recommended-${createdBy}`)
 
         await invalidateFromCache([
           _id,

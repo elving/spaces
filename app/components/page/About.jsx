@@ -27,7 +27,7 @@ const renderButton = type => {
           className="card-action button button--icon button--small"
           data-action="add"
         >
-          <MaterialDesignIcon name="add" fill="#2ECC71" />
+          <MaterialDesignIcon name="check-simple" fill="#2ECC71" />
         </button>
       )
     }

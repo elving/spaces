@@ -84,7 +84,17 @@ export default class MaterialDesignIcon extends Component {
 
       case 'add-alt': {
         return (
-          <path fill={props.fill} className="icon-fill" d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+          <path fill={props.fill} className="icon-fill" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+        )
+      }
+
+      case 'add-product': {
+        return (
+          <g>
+            <path fill={props.fill} className="icon-fill" d="M14,0.01 L2,0 C0.9,0 0,0.89 0,2 L0,18 C0,19.1 0.9,20 2,20 L14,20 C15.1,20 16,19.1 16,18 L16,2 C16,0.89 15.1,0.01 14,0.01 Z M14,18 L2,18 L2,8.98 L14,8.98 L14,18 Z M14,7 L2,7 L2,2 L14,2 L14,7 Z M4,3 L6,3 L6,6 L4,6 L4,3 Z M4,10 L6,10 L6,15 L4,15 L4,10 Z" />
+            <circle fill="#2ecc71" cx="16" cy="16" r="10" />
+            <path fill={props.fill} className="icon-fill" transform="scale(0.75) translate(8.5, 8.5)" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+          </g>
         )
       }
 
@@ -289,6 +299,33 @@ export default class MaterialDesignIcon extends Component {
       case 'cards': {
         return (
           <path fill={props.fill} className="icon-fill" d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+        )
+      }
+
+      case 'recommend': {
+        return (
+          <g>
+            <circle fill={props.fill} className="icon-fill" cx="9" cy="9" r="4" />
+            <path fill={props.fill} className="icon-fill" d="M9 15c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm7.76-9.64l-1.68 1.69c.84 1.18.84 2.71 0 3.89l1.68 1.69c2.02-2.02 2.02-5.07 0-7.27zM20.07 2l-1.63 1.63c2.77 3.02 2.77 7.56 0 10.74L20.07 16c3.9-3.89 3.91-9.95 0-14z" />
+          </g>
+        )
+      }
+
+      case 'review': {
+        return (
+          <path fill={props.fill} className="icon-fill" d="M12 6c0-.55-.45-1-1-1H5.82l.66-3.18.02-.23c0-.31-.13-.59-.33-.8L5.38 0 .44 4.94C.17 5.21 0 5.59 0 6v6.5c0 .83.67 1.5 1.5 1.5h6.75c.62 0 1.15-.38 1.38-.91l2.26-5.29c.07-.17.11-.36.11-.55V6zm10.5 4h-6.75c-.62 0-1.15.38-1.38.91l-2.26 5.29c-.07.17-.11.36-.11.55V18c0 .55.45 1 1 1h5.18l-.66 3.18-.02.24c0 .31.13.59.33.8l.79.78 4.94-4.94c.27-.27.44-.65.44-1.06v-6.5c0-.83-.67-1.5-1.5-1.5z" />
+        )
+      }
+
+      case 'approve': {
+        return (
+          <path fill={props.fill} className="icon-fill" d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.01-.01L23 10z" />
+        )
+      }
+
+      case 'disapprove': {
+        return (
+          <path fill={props.fill} className="icon-fill" d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v1.91l.01.01L1 14c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z" />
         )
       }
 

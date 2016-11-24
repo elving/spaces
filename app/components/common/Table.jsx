@@ -21,6 +21,7 @@ export default class AdminTable extends Component {
     headerCtaLink: PropTypes.string,
     headerCtaText: PropTypes.string,
     renderTableRow: PropTypes.func.isRequired,
+    hideAdminHeader: PropTypes.bool,
     searchPlaceholder: PropTypes.string,
     defaultSortingOrder: PropTypes.string,
     defaultSortingProperty: PropTypes.string
@@ -29,7 +30,8 @@ export default class AdminTable extends Component {
   static defaultProps = {
     items: [],
     count: 0,
-    searchPath: 'name'
+    searchPath: 'name',
+    hideAdminHeader: false
   }
 
   constructor(props) {
@@ -121,11 +123,13 @@ export default class AdminTable extends Component {
           className="textfield"
           placeholder={props.searchPlaceholder}
         />
-        <a href={props.headerCtaLink} className="button">
-          <span className="button-text">
-            {props.headerCtaText}
-          </span>
-        </a>
+        {!isEmpty(props.headerCtaLink) && !isEmpty(props.headerCtaText) ? (
+          <a href={props.headerCtaLink} className="button">
+            <span className="button-text">
+              {props.headerCtaText}
+            </span>
+          </a>
+        ) : null}
       </div>
     )
   }
@@ -166,11 +170,11 @@ export default class AdminTable extends Component {
 
   render() {
     const { sortedItems } = this.state
-    const { renderTableRow } = this.props
+    const { renderTableRow, hideAdminHeader } = this.props
 
     return (
       <div className="table-container">
-        {this.renderHeader()}
+        {!hideAdminHeader ? this.renderHeader() : null}
         <div className="table-content">
           <table className="table">
             {this.renderTableHeader()}

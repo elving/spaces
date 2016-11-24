@@ -135,6 +135,10 @@
   background-color: #f8f8f8;
 }
 
+.admin-nav .dropdown-content {
+  min-width: 280px;
+}
+
 @media (max-width: 768px) {
   .header .search,
   .header .admin-nav,

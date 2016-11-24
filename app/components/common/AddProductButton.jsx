@@ -4,19 +4,21 @@ import MaterialDesignIcon from './MaterialDesignIcon'
 
 export default class AddProductButton extends Component {
   static contextTypes = {
-    currentUserIsCurator: PropTypes.func
+    userLoggedIn: PropTypes.func
   }
 
   render() {
     const { context } = this
 
-    return context.currentUserIsCurator() ? (
+    return (
       <a
-        href="/products/add/"
+        href={context.userLoggedIn() ? '/products/add/' : '/login/'}
         className="add-product-button button button--icon button--primary"
       >
-        <MaterialDesignIcon name="add-alt" size={24} />
+        <span className="button-text">
+          <MaterialDesignIcon name="add-alt" size={24} />
+        </span>
       </a>
-    ) : null
+    )
   }
 }

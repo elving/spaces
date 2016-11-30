@@ -1,4 +1,5 @@
 import get from 'lodash/get'
+import startCase from 'lodash/startCase'
 
 import logError from '../../utils/logError'
 import toStringId from '../../api/utils/toStringId'
@@ -6,6 +7,7 @@ import toObjectId from '../../api/utils/toObjectId'
 import updateUser from '../../api/user/update'
 import updateSpace from '../../api/space/updateStats'
 import updateProduct from '../../api/product/updateStats'
+import createNotification from '../../api/notification/create'
 
 export default schema => {
   schema.pre('save', function(next) {
@@ -32,6 +34,24 @@ export default schema => {
 
         await updateUser(createdBy, {
           $addToSet: { comments: toObjectId(comment) }
+        })
+
+        this.populate({
+          path: 'parent',
+          model: startCase(parentType),
+          select: 'createdBy'
+        }, async (err, _comment) => {
+          if (err) {
+            return logError(err)
+          }
+
+          await createNotification({
+            action: 'comment',
+            context: parent,
+            recipient: toStringId(get(_comment, 'parent.createdBy')),
+            createdBy,
+            contextType: parentType
+          })
         })
       } catch (err) {
         logError(err)

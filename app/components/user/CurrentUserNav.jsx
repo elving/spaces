@@ -34,12 +34,18 @@ export default class CurrentUserNav extends Component {
               >
                 Profile <MaterialDesignIcon name="profile" />
               </a>
+              <a
+                href={'/notifications/'}
+                className="dropdown-link"
+              >
+                Notifications <MaterialDesignIcon name="notifications" />
+              </a>
               {!context.currentUserIsCurator() ? (
                 <a
                   href={`/designers/${username}/recommended/`}
                   className="dropdown-link"
                 >
-                  Recommended <MaterialDesignIcon name="approve" />
+                  Recommended <MaterialDesignIcon name="approve" size="17" />
                 </a>
               ) : null}
               <a href="/logout/" className="dropdown-link">

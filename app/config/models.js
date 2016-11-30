@@ -1,46 +1,15 @@
-import {
-  default as registerUserModel
-} from '../models/user/schema'
-
-import {
-  default as registerLikeModel
-} from '../models/like/schema'
-
-import {
-  default as registerFollowModel
-} from '../models/follow/schema'
-
-import {
-  default as registerBrandModel
-} from '../models/brand/schema'
-
-import {
-  default as registerColorModel
-} from '../models/color/schema'
-
-import {
-  default as registerSpaceModel
-} from '../models/space/schema'
-
-import {
-  default as registerCommentModel
-} from '../models/comment/schema'
-
-import {
-  default as registerProductModel
-} from '../models/product/schema'
-
-import {
-  default as registerCategoryModel
-} from '../models/category/schema'
-
-import {
-  default as registerSpaceTypeModel
-} from '../models/spaceType/schema'
-
-import {
-  default as registerPasswordResetModel
-} from '../models/passwordReset/schema'
+import registerUserModel from '../models/user/schema'
+import registerLikeModel from '../models/like/schema'
+import registerBrandModel from '../models/brand/schema'
+import registerColorModel from '../models/color/schema'
+import registerSpaceModel from '../models/space/schema'
+import registerFollowModel from '../models/follow/schema'
+import registerCommentModel from '../models/comment/schema'
+import registerProductModel from '../models/product/schema'
+import registerCategoryModel from '../models/category/schema'
+import registerSpaceTypeModel from '../models/spaceType/schema'
+import registerNotificationModel from '../models/notification/schema'
+import registerPasswordResetModel from '../models/passwordReset/schema'
 
 const configModels = () => {
   registerUserModel()
@@ -53,6 +22,7 @@ const configModels = () => {
   registerProductModel()
   registerCategoryModel()
   registerSpaceTypeModel()
+  registerNotificationModel()
   registerPasswordResetModel()
 }
 

@@ -1,0 +1,46 @@
+@import './global.css';
+
+.user-notifications-container .user-notifications-header {
+  width: 100%;
+  padding: 35px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-notifications-container .sticky-inner--active .user-notifications-header {
+  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid #d0d0d0;
+}
+
+.user-notifications-container .user-notifications-header-text {
+  font-size: 32px;
+  margin: 0;
+}
+
+.user-notifications-container .user-notifications-loading {
+  padding: 35px;
+}
+
+.user-notifications-container .user-notifications-list {
+  height: 100%;
+  max-height: inherit;
+}
+
+.user-notifications-container .user-notification-text {
+  font-size: 16px;
+}
+
+.user-notifications-container .user-notification-time {
+  font-size: 13px;
+}
+
+.user-notifications-container .user-notification-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.user-notifications-container .user-notification-icon .icon {
+  width: 24px;
+  height: 24px;
+}

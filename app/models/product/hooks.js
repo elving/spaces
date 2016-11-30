@@ -10,6 +10,7 @@ import updateRoom from '../../api/spaceType/update'
 import destroyLike from '../../api/like/destroyById'
 import deleteImage from '../../utils/image/deleteImage'
 import updateCategory from '../../api/category/update'
+import createNotification from '../../api/notification/create'
 import { invalidateFromCache } from '../../api/cache'
 
 export default (schema) => {
@@ -81,6 +82,22 @@ export default (schema) => {
 
         this.productRooms = []
         this.shouldUpdateRooms = false
+      } catch (err) {
+        logError(err)
+      }
+    }
+
+    if (this.shouldNotifyApproval) {
+      try {
+        await createNotification({
+          action: 'approve',
+          context: product,
+          recipient: toStringId(get(product, 'createdBy')),
+          createdBy: get(product, 'updatedBy'),
+          contextType: 'product'
+        })
+
+        this.shouldNotifyApproval = false
       } catch (err) {
         logError(err)
       }

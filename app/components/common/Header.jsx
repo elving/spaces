@@ -12,6 +12,7 @@ import AdminNav from '../user/AdminNav'
 import CurrentUserNav from '../user/CurrentUserNav'
 import AddProductButton from './AddProductButton'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
+import GlobalNotifications from '../notification/GlobalNotifications'
 
 import fullReload from '../../utils/fullReload'
 
@@ -134,6 +135,7 @@ export default class Header extends Component {
             </button>
             <AddProductButton />
             <AdminNav />
+            <GlobalNotifications />
             <CurrentUserNav />
           </div>
         </div>

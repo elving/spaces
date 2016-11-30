@@ -71,6 +71,13 @@ export default (schema) => {
     })
 
   schema
+    .virtual('shouldNotifyApproval')
+    .get(function() { return this.__shouldNotifyApproval })
+    .set(function(shouldNotifyApproval = false) {
+      this.__shouldNotifyApproval = shouldNotifyApproval
+    })
+
+  schema
     .virtual('productRooms')
     .get(function() { return this.__productRooms })
     .set(function(productRooms = []) {

@@ -62,6 +62,8 @@ import UserRecommendedProducts from '../components/user/Recommended'
 
 import SearchResults from '../components/search/Results'
 
+import Notifications from '../components/notification/Index'
+
 const routes = (
   <Route component={App}>
     <Route path="join" component={Join} />
@@ -114,6 +116,8 @@ const routes = (
     <Route path="rooms/:slug" component={SpaceTypeDetail} />
 
     <Route path="search" component={SearchResults} />
+
+    <Route path="notifications" components={Notifications} />
 
     <Route path="admin/products" component={ProductsTable} />
     <Route path="admin/products/recommended" component={RecommendedProducts} />

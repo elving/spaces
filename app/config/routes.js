@@ -21,6 +21,7 @@ import categoryRouter from '../routes/category'
 import spaceTypeRouter from '../routes/spaceType'
 import onboardingRouter from '../routes/onboarding'
 import suggestionsRouter from '../routes/suggestions'
+import notificationRouter from '../routes/notification'
 
 const configRoutes = (server) => {
   server.use((req, res, next) => {
@@ -51,6 +52,7 @@ const configRoutes = (server) => {
   server.use(spaceTypeRouter)
   server.use(onboardingRouter)
   server.use(suggestionsRouter)
+  server.use(notificationRouter)
 
   // Misc
   server.get('/400/', (req, res) => {

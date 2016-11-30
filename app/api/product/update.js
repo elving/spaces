@@ -29,6 +29,10 @@ export default (id, props) => (
       const product = await findById(id)
       const sanitizedProps = sanitize(props)
 
+      if (has(sanitizedProps, 'isPendingApproval')) {
+        product.shouldNotifyApproval = true
+      }
+
       if (has(sanitizedProps, 'brand')) {
         try {
           brand = await getOrCreateBrand(get(sanitizedProps, 'brand'), true)

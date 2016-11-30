@@ -15,6 +15,7 @@ import destroyLike from '../../api/like/destroyById'
 import generateImage from '../../utils/image/generateImage'
 import updateCategory from '../../api/category/update'
 import updateSettings from '../../utils/user/updateSettings'
+import createNotification from '../../api/notification/create'
 
 export default schema => {
   schema.pre('save', function(next) {
@@ -61,6 +62,30 @@ export default schema => {
         })
       } catch (err) {
         logError(err)
+      }
+
+      if (!isEmpty(get(space, 'originalSpace'))) {
+        try {
+          this.populate({
+            path: 'originalSpace',
+            model: 'Space',
+            select: 'createdBy'
+          }, async (err, _space) => {
+            if (err) {
+              return logError(err)
+            }
+
+            await createNotification({
+              action: 'redesign',
+              context: space,
+              recipient: toStringId(get(_space, 'originalSpace.createdBy')),
+              createdBy: get(space, 'createdBy'),
+              contextType: 'space'
+            })
+          })
+        } catch (err) {
+          logError(err)
+        }
       }
 
       this.wasNew = false

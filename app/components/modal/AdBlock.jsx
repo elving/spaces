@@ -51,6 +51,11 @@ export default class AdBlockModal extends Component {
   }
 
   persistState = () => {
+    document.body.classList.remove('ReactModal__Body--open')
+    document.querySelector('html').classList.remove(
+      'ReactModal__Body--open'
+    )
+
     this.setState({
       isVisible: false
     }, () => {

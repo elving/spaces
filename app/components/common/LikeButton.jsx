@@ -23,7 +23,8 @@ export default class LikeButton extends Component {
     showText: PropTypes.bool,
     onUnlike: PropTypes.func,
     className: PropTypes.string,
-    parentType: PropTypes.string
+    parentType: PropTypes.string,
+    showTooltip: PropTypes.bool
   }
 
   static defaultProps = {
@@ -31,7 +32,8 @@ export default class LikeButton extends Component {
     onLike: (() => {}),
     isWhite: false,
     onUnlike: (() => {}),
-    showText: false
+    showText: false,
+    showTooltip: false
   }
 
   constructor(props, context) {
@@ -91,6 +93,7 @@ export default class LikeButton extends Component {
     const btnClassName = classNames({
       button: true,
       [props.className]: !isEmpty(props.className),
+      tooltip: props.showTooltip,
       'like-button': true,
       'button--icon': !props.showText,
       'button--tiny': props.size === 'tiny',
@@ -107,6 +110,9 @@ export default class LikeButton extends Component {
           onClick={this.onClick}
           disabled={state.isSaving}
           className={btnClassName}
+          data-tooltip={
+            `${state.liked ? 'Unlike' : 'Like'} this ${props.parentType}`
+          }
         >
           <span className="button-text">
             <MaterialDesignIcon name="like" />

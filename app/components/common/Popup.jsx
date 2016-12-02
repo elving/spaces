@@ -2,8 +2,8 @@ import isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
+import $ from '../../utils/dom/selector'
 import hasParent from '../../utils/dom/hasParent'
-import { default as $ } from '../../utils/dom/selector'
 
 export default class Popup extends Component {
   static propTypes = {
@@ -23,8 +23,10 @@ export default class Popup extends Component {
     const $body = $('body')
 
     if (this.props.isOpen) {
+      document.body.classList.add('popup-open')
       $body.addEventListener('click', this.onBodyClick)
     } else {
+      document.body.classList.remove('popup-open')
       $body.removeEventListener('click', this.onBodyClick)
     }
   }
@@ -33,10 +35,17 @@ export default class Popup extends Component {
     const $body = $('body')
 
     if (newProps.isOpen) {
+      document.body.classList.add('popup-open')
       $body.addEventListener('click', this.onBodyClick)
     } else {
+      document.body.classList.remove('popup-open')
       $body.removeEventListener('click', this.onBodyClick)
     }
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove('popup-open')
+    $('body').removeEventListener('click', this.onBodyClick)
   }
 
   onBodyClick = (event) => {

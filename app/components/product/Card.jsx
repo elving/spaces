@@ -177,8 +177,9 @@ export default class ProductCard extends Component {
             <button
               type="button"
               onClick={props.onAddButtonClick}
-              className="card-action button button--icon"
+              className="card-action button button--icon tooltip"
               data-action="add"
+              data-tooltip="Add to space"
             >
               <MaterialDesignIcon name="check-simple" fill="#2ECC71" />
             </button>
@@ -188,6 +189,7 @@ export default class ProductCard extends Component {
               href="/login/"
               className="card-action button button--icon"
               data-action="add"
+              data-tooltip="Add to space"
             >
               <MaterialDesignIcon name="check-simple" fill="#2ECC71" />
             </a>
@@ -196,8 +198,9 @@ export default class ProductCard extends Component {
             <button
               type="button"
               onClick={props.onRemoveButtonClick}
-              className="card-action button button--icon"
+              className="card-action button button--icon tooltip"
               data-action="remove"
+              data-tooltip="Remove from space"
             >
               <MaterialDesignIcon name="remove" fill="#e74c3c" />
             </button>
@@ -209,6 +212,7 @@ export default class ProductCard extends Component {
             onUnlike={this.onUnlike}
             className="card-action"
             parentType="product"
+            showTooltip
           />
         </div>
 
@@ -216,8 +220,9 @@ export default class ProductCard extends Component {
           <button
             type="button"
             onClick={this.openSharePopup}
-            className="card-action share-button button button--icon"
+            className="card-action share-button button button--icon tooltip"
             data-action="send"
+            data-tooltip="Share this product"
           >
             <MaterialDesignIcon name="send" />
           </button>

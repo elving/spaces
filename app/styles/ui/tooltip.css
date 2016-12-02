@@ -41,3 +41,11 @@
 .tooltip:active::before, .tooltip:active::after {
   opacity: 1;
 }
+
+@media (max-width: 736px) {
+  .tooltip::before,
+  .tooltip::after {
+    display: none !important;
+    visibility: hidden;
+  }
+}

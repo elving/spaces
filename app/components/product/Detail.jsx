@@ -268,7 +268,7 @@ class ProductDetail extends Component {
               <span className="product-detail-activity-icon-container">
                 <MaterialDesignIcon
                   name={user.activity}
-                  size={12}
+                  size={10}
                   className="product-detail-activity-icon"
                 />
               </span>

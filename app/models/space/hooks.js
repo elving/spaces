@@ -75,13 +75,17 @@ export default schema => {
               return logError(err)
             }
 
-            await createNotification({
-              action: 'redesign',
-              context: space,
-              recipient: toStringId(get(_space, 'originalSpace.createdBy')),
-              createdBy: get(space, 'createdBy'),
-              contextType: 'space'
-            })
+            const recipient = toStringId(get(_space, 'originalSpace.createdBy'))
+
+            if (recipient !== createdBy) {
+              await createNotification({
+                action: 'redesign',
+                context: space,
+                recipient,
+                createdBy,
+                contextType: 'space'
+              })
+            }
           })
         } catch (err) {
           logError(err)

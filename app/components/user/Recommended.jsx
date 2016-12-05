@@ -31,12 +31,6 @@ class UserRecommendedProducts extends Component {
     )
   }
 
-  renderGuideUrl = () => (
-    <a href="/about/#adding-products">
-      product guidelines
-    </a>
-  )
-
   render() {
     const { props } = this
 
@@ -52,7 +46,6 @@ class UserRecommendedProducts extends Component {
             reviewed to see if they get to be featured on Spaces.
             If any products you have recommended are not here or
             in {this.renderProductsPageUrl()} they have been declined.
-            Read our {this.renderGuideUrl()} for more information.
           </h2>
         ) : (
           <h2 className="user-recommended-products-empty">

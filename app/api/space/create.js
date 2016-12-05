@@ -66,7 +66,12 @@ export default props => (
         .populate('products')
         .populate('createdBy')
         .populate('spaceType')
-        .populate('originalSpace', async (populationErr, populatedSpace) => {
+        .populate({
+          path: 'originalSpace',
+          options: {
+            populate: 'createdBy'
+          }
+        }, async (populationErr, populatedSpace) => {
           if (populationErr) {
             return reject(parseError(populationErr))
           }

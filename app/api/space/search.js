@@ -51,7 +51,12 @@ export default (params = {}, operation = 'where') => (
       .populate('createdBy')
       .populate('categories')
       .populate('spaceType')
-      .populate('originalSpace')
+      .populate({
+        path: 'originalSpace',
+        options: {
+          populate: 'createdBy'
+        }
+      })
       .exec(async (err, spaces = []) => {
         if (err) {
           return reject(parseError(err))

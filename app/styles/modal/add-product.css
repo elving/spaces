@@ -132,6 +132,7 @@
 }
 
 .add-product-modal-space-name {
+  text-align: left;
   flex: 1;
   display: flex;
   align-items: flex-start;

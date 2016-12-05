@@ -50,13 +50,17 @@ export default schema => {
             return logError(err)
           }
 
-          await createNotification({
-            action: 'like',
-            context: parent,
-            recipient: toStringId(get(_like, 'parent.createdBy')),
-            createdBy,
-            contextType: parentType
-          })
+          const recipient = toStringId(get(_like, 'parent.createdBy'))
+
+          if (recipient !== createdBy) {
+            await createNotification({
+              action: 'like',
+              context: parent,
+              recipient,
+              createdBy,
+              contextType: parentType
+            })
+          }
         })
       } catch (err) {
         logError(err)

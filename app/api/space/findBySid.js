@@ -30,7 +30,12 @@ export default (sid, returnDocument = false) => (
         .populate('redesigns')
         .populate('createdBy')
         .populate('categories')
-        .populate('originalSpace')
+        .populate({
+          path: 'originalSpace',
+          options: {
+            populate: 'createdBy'
+          }
+        })
         .exec(async (err, space = {}) => {
           if (err) {
             return reject(parseError(err))

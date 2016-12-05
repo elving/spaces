@@ -59,7 +59,7 @@ export default (params = {}, operation = 'where') => (
               model: upperFirst(parentType),
               options: parentType === 'space' ? {
                 populate: (
-                  'colors products createdBy categories spaceType originalSpace'
+                  'colors products createdBy categories spaceType'
                 )
               } : {
                 populate: (
@@ -67,6 +67,15 @@ export default (params = {}, operation = 'where') => (
                 )
               }
             }).execPopulate()
+
+            if (parentType === 'space') {
+              await like.populate({
+                path: 'originalSpace',
+                options: {
+                  populate: 'createdBy'
+                }
+              }).execPopulate()
+            }
           }
 
           const count = await getCount(searchParams)

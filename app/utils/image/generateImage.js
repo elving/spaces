@@ -2,12 +2,12 @@ import set from 'lodash/set'
 import size from 'lodash/size'
 import slice from 'lodash/slice'
 import sizeOf from 'image-size'
+import Canvas from 'canvas'
 import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 import reverse from 'lodash/reverse'
 import request from 'request'
 import { resize } from 'aspectratio'
-import { default as Canvas } from 'canvas'
 
 import uploadBuffer from './uploadBuffer'
 
@@ -26,9 +26,9 @@ const loadImage = (url) => (
   })
 )
 
-export default (folder, urls = []) => (
+export default (folder, _urls = []) => (
   new Promise(async (resolve, reject) => {
-    urls = slice(reverse(urls), 0, isEqual(size(urls), 3) ? 2 : 4)
+    const urls = slice(reverse(_urls), 0, isEqual(size(_urls), 3) ? 2 : 4)
     const images = []
     const imagesLength = size(urls)
 

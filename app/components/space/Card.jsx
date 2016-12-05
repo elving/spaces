@@ -32,6 +32,7 @@ export default class SpaceCard extends Component {
   static propTypes = {
     sid: PropTypes.string,
     name: PropTypes.string,
+    image: PropTypes.string,
     shortUrl: PropTypes.string,
     products: PropTypes.array,
     createdBy: PropTypes.object,
@@ -64,10 +65,12 @@ export default class SpaceCard extends Component {
   componentDidMount() {
     const { props } = this
 
-    const images = map(
-      slice(reverse(props.products), 0, 4),
-      product => get(product, 'image', '')
-    )
+    const images = !isEmpty(props.image)
+      ? [props.image]
+      : map(
+        slice(reverse(props.products), 0, 4),
+        product => get(product, 'image', '')
+      )
 
     preloadImages(images).then(() => {
       this.setState({
@@ -172,7 +175,10 @@ export default class SpaceCard extends Component {
             <div
               key={`space-image-${src}`}
               style={{ backgroundImage: `url(${src})` }}
-              className="space-card-image"
+              className={classNames({
+                'space-card-image': true,
+                'space-card-image--main': !isEmpty(props.image)
+              })}
             />
           )
         ) : null}
@@ -190,7 +196,7 @@ export default class SpaceCard extends Component {
     const { props } = this
 
     return isRedesign(props)
-      ? <RedesignBadge space={props} />
+      ? <RedesignBadge space={get(props, 'originalSpace', props)} />
       : null
   }
 

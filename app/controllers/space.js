@@ -20,7 +20,7 @@ import findBySid from '../api/space/findBySid'
 import toJSON from '../api/utils/toJSON'
 import toStringId from '../api/utils/toStringId'
 import toObjectId from '../api/utils/toObjectId'
-import { default as getAllUserSpaces } from '../api/user/getSpaces'
+import getAllUserSpaces from '../api/user/getSpaces'
 
 export const renderIndex = async (req, res, next) => {
   try {

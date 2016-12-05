@@ -22,19 +22,24 @@ export default originalSpace => (
         .populate('createdBy')
         .populate('categories')
         .populate('spaceType')
-        .populate('originalSpace')
+        .populate({
+          path: 'originalSpace',
+          options: {
+            populate: 'createdBy'
+          }
+        })
         .exec(async (err, spaces = []) => {
           if (err) {
             return reject(parseError(err))
           }
 
-          if (!isEmpty(likes)) {
-            await saveToCache(key, toJSON(likes), [
-              toIds(likes),
-              toIdsFromPath(likes, 'createdBy')
+          if (!isEmpty(spaces)) {
+            await saveToCache(key, toJSON(spaces), [
+              toIds(spaces),
+              toIdsFromPath(spaces, 'createdBy')
             ])
 
-            resolve(likes)
+            resolve(spaces)
           } else {
             resolve()
           }

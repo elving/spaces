@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
-import { anchorate } from 'anchorate'
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 
 import cdnUrl from '../../utils/cdnUrl'
 
@@ -24,6 +23,18 @@ const renderButton = type => {
       return (
         <button
           type="button"
+          className="button button--icon button--primary button--small"
+          data-action="add"
+        >
+          <MaterialDesignIcon name="add-alt" fill="#2ECC71" />
+        </button>
+      )
+    }
+
+    case 'design': {
+      return (
+        <button
+          type="button"
           className="card-action button button--icon button--small"
           data-action="add"
         >
@@ -39,6 +50,21 @@ const renderButton = type => {
           className="button button--primary button--small"
         >
           Create a space
+        </button>
+      )
+    }
+
+    case 'check': {
+      return (
+        <button
+          type="button"
+          style={{
+            paddingLeft: 2,
+            paddingRight: 2
+          }}
+          className="button button--icon button--transparent button--small"
+        >
+          <MaterialDesignIcon name="check-empty" />
         </button>
       )
     }
@@ -61,11 +87,7 @@ const renderButton = type => {
   }
 }
 
-export default class About extends Component {
-  componentDidMount() {
-    anchorate()
-  }
-
+export default class About extends PureComponent {
   render() {
     return (
       <Layout className="about">
@@ -75,22 +97,22 @@ export default class About extends Component {
           </h1>
         </div>
 
-        <h2 className="about-title">
-          Spaces is a shopping guide for your home where you can find the
-          best products curated by people like you.
-        </h2>
-
         <div className="about-index-container">
           <div className="about-index">
             <ol className="about-index-list">
+              <li className="about-index-item">
+                <a href="#about-spaces" className="about-index-link">
+                  About Spaces
+                </a>
+              </li>
               <li className="about-index-item">
                 <a href="#getting-started" className="about-index-link">
                   Getting started
                 </a>
               </li>
               <li className="about-index-item">
-                <a href="#whats-a-space" className="about-index-link">
-                  What&apos;s a space?
+                <a href="#creating-spaces" className="about-index-link">
+                  Creating spaces
                 </a>
               </li>
               <li className="about-index-item">
@@ -102,8 +124,13 @@ export default class About extends Component {
 
             <ol className="about-index-list">
               <li className="about-index-item">
-                <a href="#how-can-i-add-products" className="about-index-link">
-                  How can I add products
+                <a href="#adding-products" className="about-index-link">
+                  Adding products
+                </a>
+              </li>
+              <li className="about-index-item">
+                <a href="#becoming-a-curator" className="about-index-link">
+                  Becoming a curator
                 </a>
               </li>
               <li className="about-index-item">
@@ -120,13 +147,23 @@ export default class About extends Component {
           </div>
         </div>
 
+        <div id="about-spaces" className="about-section-container">
+          {renderSectionTitle('about-spaces', 'About Spaces')}
+          <div className="about-section about-section-content">
+            <h2 className="about-title">
+              Spaces is a shopping guide for your home where you can find the
+              best products curated by people like you.
+            </h2>
+          </div>
+        </div>
+
         <div id="getting-started" className="about-section-container">
           {renderSectionTitle('getting-started', 'Getting Started')}
           <div className="about-section about-section-content">
             <p>Start by <a rel="noreferrer noopener" href="/join/" target="_blank">joining the community</a>. Once you join, you become designer.</p>
             <p>As a designer you can:</p>
             <ul>
-              <li>Design spaces.</li>
+              <li>Create spaces.</li>
               <li>Like spaces and products you love.</li>
               <li>Follow other designers, rooms and categories that interest you.</li>
               <li>Comment on spaces and products that you are passionate about.</li>
@@ -135,17 +172,11 @@ export default class About extends Component {
           </div>
         </div>
 
-        <div id="whats-a-space" className="about-section-container">
-          {renderSectionTitle('whats-a-space', 'What\'s a space?')}
+        <div id="creating-spaces" className="about-section-container">
+          {renderSectionTitle('creating-spaces', 'Creating spaces')}
           <div className="about-section about-section-content">
             <p>A space is a collection of products. It’s where you experiment and generate ideas for your next project. When you a design a space you are helping others make informed decisions when shopping for their homes.</p>
-          </div>
-        </div>
-
-        <div id="how-to-create-a-space" className="about-section-container">
-          {renderSectionTitle('how-to-create-a-space', 'How to create a space?')}
-          <div className="about-section about-section-content">
-            <p>You can create different types of spaces, like a <a href="/rooms/kitchen/" target="_blank" rel="noreferrer noopener">kitchen</a>, a <a href="/rooms/office/" target="_blank" rel="noreferrer noopener">home office</a>, a <a href="/rooms/bedroom/" target="_blank" rel="noreferrer noopener">bedroom</a>, etc. To create a space, click on the {renderButton('add')} button on any product you like. A popup will appear with one of two things:</p>
+            <p>You can create different types of spaces, like a <a href="/rooms/kitchen/" target="_blank" rel="noreferrer noopener">kitchen</a>, a <a href="/rooms/office/" target="_blank" rel="noreferrer noopener">home office</a>, a <a href="/rooms/bedroom/" target="_blank" rel="noreferrer noopener">bedroom</a>, etc. To create a space, click on the {renderButton('design')} button on any product you like. A popup will appear with one of two things:</p>
             <div className="about-section-media-container">
               <a
                 rel="noreferrer noopener"
@@ -170,15 +201,15 @@ export default class About extends Component {
                 />
               </a>
             </div>
-            <p>You can create a new space with it by clicking the {renderButton('create')} button and filling the form. You can also add that product to any of your existing spaces by clicking on it.</p>
+            <p>You can create a new space with the selected product by clicking the {renderButton('create')} button and filling the form. You can also add that product to any of your existing spaces by clicking on the {renderButton('check')} icon.</p>
             <a
               rel="noreferrer noopener"
-              href={cdnUrl('/static/videos/design_space.mp4')}
+              href={cdnUrl('/static/videos/design_space.mp4?v=2')}
               target="_blank"
               className="about-section-media"
             >
               <video
-                src={cdnUrl('/static/videos/design_space.mp4')} autoPlay muted loop
+                src={cdnUrl('/static/videos/design_space.mp4?v=2')} autoPlay muted loop
                 width="100%"
                 height="auto"
               />
@@ -197,15 +228,14 @@ export default class About extends Component {
           {renderSectionTitle('redesigning-spaces', 'Redesigning spaces')}
           <div className="about-section about-section-content">
             <p>You can redesign any space you like by clicking on the {renderButton('redesign')} button.</p>
-            <p>When you redesign a space you are designing a new space based on the original. You can add or remove products on your redesigned spaces any time you want to make them more personal.</p>
             <a
               rel="noreferrer noopener"
-              href={cdnUrl('/static/videos/redesign_space.mp4')}
+              href={cdnUrl('/static/videos/redesign_space.mp4?v=2')}
               target="_blank"
               className="about-section-media"
             >
               <video
-                src={cdnUrl('/static/videos/redesign_space.mp4')}
+                src={cdnUrl('/static/videos/redesign_space.mp4?v=2')}
                 autoPlay
                 muted
                 loop
@@ -213,14 +243,36 @@ export default class About extends Component {
                 height="auto"
               />
             </a>
+            <p>When you redesign a space you are designing a new space based on the original. You can add or remove products on your redesigned spaces any time you want to make them more personal.</p>
           </div>
         </div>
 
-        <div id="how-can-i-add-products" className="about-section-container">
-          {renderSectionTitle('how-can-i-add-products', 'How can I add products?')}
+        <div id="adding-products" className="about-section-container">
+          {renderSectionTitle('adding-products', 'Adding products')}
           <div className="about-section about-section-content">
-            <p>Products are added by curators. Curators are people with influence within the community.</p>
-            <p>We hand pick curators to ensure the quality of the products in Spaces.</p>
+            <p>The products featured on Spaces are hand picked to ensure the quality of our product guides and recommendations for the community.</p>
+            <p>Only curators can add products directly to Spaces, but anyone can recommend products by clicking the {renderButton('add')} button found on the top right corner of any page.</p>
+            <a
+              rel="noreferrer noopener"
+              href={cdnUrl('/static/videos/recommend_product.mp4')}
+              target="_blank"
+              className="about-section-media"
+            >
+              <video
+                src={cdnUrl('/static/videos/recommend_product.mp4')} autoPlay muted loop
+                width="100%"
+                height="auto"
+              />
+            </a>
+            <p>We review every recommendation and approve products based on what’s currently trending on Spaces. As the community grows, this process will be more organic and community-driven.</p>
+            <p>Our goal is for Spaces to be a place where people find beautiful and useful products for their homes everyday.</p>
+          </div>
+        </div>
+
+        <div id="becoming-a-curator" className="about-section-container">
+          {renderSectionTitle('becoming-a-curator', 'Becoming a curator')}
+          <div className="about-section about-section-content">
+            <p>Curators are people with influence within the community so they can add products directly to Spaces.</p>
             <p>We pick curators based on:</p>
             <ul>
               <li>The amount of spaces they have designed and how many likes, redesigns and comments they have.</li>
@@ -276,7 +328,7 @@ export default class About extends Component {
             <div className="about-section-media-container">
               <a
                 rel="noreferrer noopener"
-                href={cdnUrl('/static/videos/like_product.mp4')}
+                href={cdnUrl('/static/videos/like_product.mp4?v=2')}
                 style={{
                   border: '1px solid #e5e5e5',
                   maxHeight: 400,
@@ -286,7 +338,7 @@ export default class About extends Component {
                 className="about-section-media"
               >
                 <video
-                  src={cdnUrl('/static/videos/like_product.mp4')}
+                  src={cdnUrl('/static/videos/like_product.mp4?v=2')}
                   autoPlay
                   muted
                   loop

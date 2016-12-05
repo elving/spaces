@@ -54,7 +54,7 @@ export default class CreateSpaceBanner extends Component {
         </button>
         Design your first space by adding a product.
         {'\u00A0'}
-        <a href="/about/">Learn more</a>
+        <a href="/about/#creating-spaces">Learn more</a>
         {'\u00A0'}
         or
         {'\u00A0'}

@@ -13,7 +13,12 @@ export default (product) => (
       .populate('createdBy')
       .populate('spaceType')
       .populate('categories')
-      .populate('originalSpace')
+      .populate({
+        path: 'originalSpace',
+        options: {
+          populate: 'createdBy'
+        }
+      })
       .exec((err, spaces = []) => {
         if (err) {
           return reject(parseError(err))

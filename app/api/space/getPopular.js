@@ -22,7 +22,12 @@ export default (limit = 8) => {
         .populate('createdBy')
         .populate('spaceType')
         .populate('categories')
-        .populate('originalSpace')
+        .populate({
+          path: 'originalSpace',
+          options: {
+            populate: 'createdBy'
+          }
+        })
         .sort('-likesCount -commentsCount -productsCount')
         .exec(async (err, spaces = []) => {
           if (err) {

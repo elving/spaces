@@ -43,7 +43,7 @@ export default class AdBlockModal extends Component {
       )
 
       this.setState({ isVisible })
-    }, 30000)
+    }, 60000)
   }
 
   componentWillUnmount() {
@@ -98,11 +98,15 @@ export default class AdBlockModal extends Component {
           </p>
         </div>
         <div className="modal-actions form-group">
-          <a href="/about/" className="button button--primary-alt">
+          <button
+            type="button"
+            onClick={this.persistState}
+            className="button button--primary-alt"
+          >
             <span className="button-text">
-              Learn More
+              Got it
             </span>
-          </a>
+          </button>
         </div>
       </Modal>
     )

@@ -115,22 +115,9 @@
   position: relative;
 }
 
-.user-is-onboarding .card .card-action[data-action="add"]::before {
-  content: "";
-  opacity: 0;
+.user-is-onboarding .card .card-action[data-action="add"],
+.user-is-onboarding .card .card-action[data-action="add"] .icon-fill {
   animation: pulsate 1.2s ease-in-out 0.15s infinite alternate-reverse;
-  transform-origin: center center;
-  backface-visibility: hidden;
-  border-radius: 100px;
-  background-color: #2ECC71;
-  top: 50%;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  margin: -5px 0 0 -5px;
-  z-index: 5;
-  display: block;
-  position: absolute;
 }
 
 .ReactModal__Body--open .user-is-onboarding .card-action[data-action="add"]::before {
@@ -139,13 +126,15 @@
 
 @keyframes pulsate {
   from {
-    opacity: 0;
-    transform: scale3d(1, 1, 1);
+    fill: #2ecc71;
+    border-color: #ececec;
+    background-color: #ffffff;
   }
 
   to {
-    opacity: 0.35;
-    transform: scale3d(5, 5, 1);
+    fill: #ffffff;
+    border-color: #2ecc71;
+    background-color: #2ecc71;
   }
 }
 

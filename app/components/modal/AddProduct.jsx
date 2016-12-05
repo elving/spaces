@@ -110,7 +110,7 @@ export default class AddProductModal extends Component {
 
   onFormSuccess = (space) => {
     const { props, state } = this
-    const spaces = concat(state.spaces, space)
+    const spaces = concat([], space, state.spaces)
 
     this.setState({
       spaces,
@@ -123,16 +123,19 @@ export default class AddProductModal extends Component {
   }
 
   closeModal = () => {
-    const { props } = this
+    const { state, props } = this
 
-    this.hideForm()
+    this.setState({
+      formIsVisible: false,
+      filteredSpaces: state.spaces
+    }, () => {
+      document.body.classList.remove('ReactModal__Body--open')
+      document.querySelector('html').classList.remove(
+        'ReactModal__Body--open'
+      )
 
-    document.body.classList.remove('ReactModal__Body--open')
-    document.querySelector('html').classList.remove(
-      'ReactModal__Body--open'
-    )
-
-    props.onClose()
+      props.onClose()
+    })
   }
 
   showForm = () => {
@@ -156,7 +159,7 @@ export default class AddProductModal extends Component {
       const { context } = this
 
       axios
-        .get(`/ajax/spaces/designer/${toStringId(context.user)}`)
+        .get(`/ajax/spaces/designer/${toStringId(context.user)}/`)
         .then(({ data }) => {
           resolve(get(data, 'spaces', []))
         })

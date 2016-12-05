@@ -45,7 +45,7 @@ export default class CurrentUserNav extends Component {
                   href={`/designers/${username}/recommended/`}
                   className="dropdown-link"
                 >
-                  Recommended <MaterialDesignIcon name="approve" size="17" />
+                  Recommended <MaterialDesignIcon name="approve" size={17} />
                 </a>
               ) : null}
               <a href="/logout/" className="dropdown-link">

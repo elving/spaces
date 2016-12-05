@@ -2,7 +2,6 @@ import Modal from 'react-modal'
 import toLower from 'lodash/toLower'
 import React, { Component, PropTypes } from 'react'
 
-import cdnUrl from '../../utils/cdnUrl'
 import getSuggestionsUrl from '../../utils/space/getSuggestionsUrl'
 
 const resetModalStyles = {
@@ -70,10 +69,10 @@ export default class OnboardingModal extends Component {
         <div className="onboarding-modal-content">
           <div className="onboarding-modal-content-row">
             <h3 className="onboarding-modal-content-title">
-              So what's next?
+              So what&apos;s next?
             </h3>
             <p className="onboarding-modal-content-text">
-              Now that you've designed your first space, take
+              Now that you&apos;ve designed your first space, take
               a look at some product suggestions for
               your <strong>{toLower(props.room)}</strong>.
             </p>

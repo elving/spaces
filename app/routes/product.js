@@ -7,6 +7,7 @@ const ajaxRoot = '/ajax/products'
 
 router.get('/products/', controller.renderIndex)
 router.get('/products/add/', controller.renderAddProduct)
+router.get('/products/recommend/', controller.renderAddProduct)
 router.get('/products/:sid/update/', controller.renderUpdateProduct)
 router.get('/p/:sid/', controller.renderDetail)
 router.get('/products/:sid/:name/', controller.renderDetail)

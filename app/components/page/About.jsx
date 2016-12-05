@@ -21,13 +21,13 @@ const renderButton = type => {
   switch (type) {
     case 'add': {
       return (
-        <button
-          type="button"
+        <a
+          href="/products/recommend/"
           className="button button--icon button--primary button--small"
           data-action="add"
         >
           <MaterialDesignIcon name="add-alt" fill="#2ECC71" />
-        </button>
+        </a>
       )
     }
 

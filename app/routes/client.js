@@ -84,6 +84,7 @@ const routes = (
 
     <Route path="products" component={ProductsIndex} />
     <Route path="products/add" component={AddProduct} />
+    <Route path="products/recommend" component={AddProduct} />
     <Route path="products/:id/update" component={UpdateProduct} />
     <Route path="products/:sid/:name" component={ProductDetail} />
     <Route path="p/:sid" component={ProductDetail} />

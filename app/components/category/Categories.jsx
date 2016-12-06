@@ -105,7 +105,7 @@ export default class Categories extends Component {
       )
 
       axios
-        .get(`/ajax/categories/search/?skip=${state.offset}&${params}`)
+        .get(`/ajax/categories/search/?limit=1000&skip=${state.offset}&${params}`)
         .then(({ data }) => {
           const results = get(data, 'results', [])
 

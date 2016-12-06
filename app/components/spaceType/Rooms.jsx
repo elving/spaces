@@ -105,7 +105,7 @@ export default class Rooms extends Component {
       )
 
       axios
-        .get(`/ajax/rooms/search/?skip=${state.offset}&${params}`)
+        .get(`/ajax/rooms/search/?limit=1000&skip=${state.offset}&${params}`)
         .then(({ data }) => {
           const results = get(data, 'results', [])
 

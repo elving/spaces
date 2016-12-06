@@ -31,7 +31,7 @@ export default (params = {}) => (
       .model('Category')
       .where(searchParams)
       .skip(parseInt(get(params, 'skip', 0)))
-      .limit(parseInt(get(params, 'limit', 40)))
+      .limit(parseInt(get(params, 'limit', 50)))
       .sort(get(params, 'sort', 'name'))
       .exec(async (err, categories = []) => {
         if (err) {

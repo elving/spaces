@@ -31,7 +31,7 @@ export default (params = {}) => (
       .model('SpaceType')
       .where(searchParams)
       .skip(parseInt(get(params, 'skip', 0)))
-      .limit(parseInt(get(params, 'limit', 40)))
+      .limit(parseInt(get(params, 'limit', 50)))
       .sort(get(params, 'sort', 'name'))
       .populate('categories')
       .exec(async (err, spaceTypes = []) => {

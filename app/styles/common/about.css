@@ -2,6 +2,18 @@
   margin-bottom: 35px;
 }
 
+.about .grid-sorting {
+  display: none;
+}
+
+.about .grid-items {
+  padding: 0;
+}
+
+.about .grid-items .card {
+  width: calc(100% / 2 - 15px);
+}
+
 .about-header {
   background-image: url(https://d2xpms98gwggxd.cloudfront.net/static/images/landing_bg_no_logo.jpg);
   background-repeat: no-repeat;
@@ -41,8 +53,9 @@
   max-width: 960px;
 }
 
-.about-title {
-  font-size: 24px;
+.about-title,
+.about-subtitle {
+  font-size: 22px;
   line-height: 38px;
   width: 100%;
   margin: 35px auto;
@@ -148,7 +161,7 @@
   display: inline-flex;
 }
 
-.about-section a {
+.about-section a:not(.profile-card) {
   color: #439fe0;
 }
 
@@ -203,4 +216,104 @@
   width: 100%;
   height: auto;
   display: block;
+}
+
+@media (max-width: 736px) {
+  .about .page-content {
+    margin-bottom: 15px;
+  }
+
+  .about-index-container {
+    margin-bottom: 15px;
+  }
+
+  .about-index {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .about-index-list {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .about-index .about-index-list:first-child {
+    border-bottom: 0 none;
+    border-radius: 4px 4px 0 0;
+    padding: 15px 15px 0;
+    margin-bottom: -1px;
+  }
+
+  .about-index .about-index-list:last-child {
+    border-top: 0 none;
+    border-radius: 0 0 4px 4px;
+    padding: 0 15px 15px;
+  }
+
+  .about-index .about-index-list:first-child .about-index-link:last-child,
+  .about-index .about-index-list:last-child .about-index-link:first-child {
+    border-radius: 0;
+  }
+
+  .about .grid-items .card {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .about-header-text {
+    font-size: 28px;
+    line-height: 42px;
+    margin: 15px auto;
+  }
+
+  .about-title,
+  .about-subtitle {
+    font-size: 22px;
+    margin: 15px auto;
+  }
+
+  .about-index-container {
+    margin-bottom: 15px;
+  }
+
+  .about-index-list {
+    padding: 15px;
+  }
+
+  .about-section-container {
+    margin-top: 15px;
+  }
+
+  .about-section-title {
+    margin: 0 0 15px;
+  }
+
+  .about-section-content {
+    padding: 0 15px;
+  }
+
+  .about-section p {
+    margin: 0 auto 15px;
+  }
+
+  .about-section ul,
+  .about-section ol {
+    margin: 0 auto 15px;
+    padding: 0 0 0 25px;
+  }
+
+  .about-section-media {
+    margin-bottom: 15px;
+  }
+
+  .about-section-media-container {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .about-section-media-container > .about-section-media {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 15px;
+  }
 }

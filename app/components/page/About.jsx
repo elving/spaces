@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react'
 import cdnUrl from '../../utils/cdnUrl'
 
 import Layout from '../common/Layout'
+import Designers from '../user/Designers'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 const renderSectionTitle = (id, title) => (
@@ -154,6 +155,9 @@ export default class About extends PureComponent {
               Spaces is a shopping guide for your home where you can find the
               best products curated by people like you.
             </h2>
+
+            <h3 className="about-subtitle">Meet the team</h3>
+            <Designers params={{ usernames: ['elving', 'karla'] }} />
           </div>
         </div>
 

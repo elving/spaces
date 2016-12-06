@@ -97,5 +97,13 @@ export default (params = {}) => {
     }
   }
 
+  if (has(params, 'usernames')) {
+    if (isArray(params.usernames)) {
+      query.username = { $in: compact(params.usernames) }
+    } else {
+      query.username = { $in: compact(split(params.usernames, ',')) }
+    }
+  }
+
   return query
 }

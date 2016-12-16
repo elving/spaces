@@ -45,6 +45,14 @@ export default class MobileNav extends Component {
           Trending
         </Link>
         <Link
+          to={{ pathname: '/guides/' }}
+          onClick={fullReload}
+          className="mobile-nav-link"
+          activeClassName="mobile-nav-link--active"
+        >
+          Guides
+        </Link>
+        <Link
           to={{ pathname: '/spaces/' }}
           onClick={fullReload}
           className="mobile-nav-link"
@@ -59,6 +67,14 @@ export default class MobileNav extends Component {
           activeClassName="mobile-nav-link--active"
         >
           Products
+        </Link>
+        <Link
+          to={{ pathname: '/designers/' }}
+          onClick={fullReload}
+          className="mobile-nav-link"
+          activeClassName="mobile-nav-link--active"
+        >
+          Designers
         </Link>
         <Link
           to={{ pathname: '/feed/' }}

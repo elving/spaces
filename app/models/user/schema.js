@@ -26,7 +26,6 @@ const UserSchema = new mongoose.Schema({
   likes: [{ type: mongoose.Schema.ObjectId, ref: 'Like' }],
   spaces: [{ type: mongoose.Schema.ObjectId, ref: 'Space' }],
   products: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }],
-  productsOwned: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }],
   comments: [{ type: mongoose.Schema.ObjectId, ref: 'Comment' }],
   following: [{ type: mongoose.Schema.ObjectId, ref: 'Follow' }],
   followersCount: { type: Number, default: 0 }

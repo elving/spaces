@@ -105,5 +105,13 @@ export default (params = {}) => {
     }
   }
 
+  if (has(params, 'shortIds')) {
+    if (isArray(params.shortIds)) {
+      query.sid = { $in: compact(params.shortIds) }
+    } else {
+      query.sid = { $in: compact(split(params.shortIds, ',')) }
+    }
+  }
+
   return query
 }

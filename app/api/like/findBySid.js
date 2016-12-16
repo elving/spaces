@@ -7,8 +7,8 @@ import parseError from '../utils/parseError'
 import { saveToCache } from '../cache'
 import getFromCacheOrQuery from '../utils/getFromCacheOrQuery'
 
-export default (sid, returnDocument = false) => {
-  return new Promise((resolve, reject) => {
+export default (sid, returnDocument = false) => (
+  new Promise((resolve, reject) => {
     const key = `like-${sid}`
     const query = () => {
       mongoose
@@ -34,4 +34,4 @@ export default (sid, returnDocument = false) => {
       getFromCacheOrQuery(key, query, resolve)
     }
   })
-}
+)

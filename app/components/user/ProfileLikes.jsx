@@ -7,6 +7,7 @@ import React, { Component, PropTypes } from 'react'
 
 import Loader from '../common/Loader'
 import Spaces from '../space/Spaces'
+import Guides from '../guide/Guides'
 import Products from '../product/Products'
 
 import toStringId from '../../api/utils/toStringId'
@@ -24,6 +25,7 @@ export default class ProfileLikes extends Component {
     likes: [],
     isWaiting: true,
     showSpaces: true,
+    showGuides: false,
     showProducts: false
   }
 
@@ -52,6 +54,15 @@ export default class ProfileLikes extends Component {
   showSpaces = () => {
     this.setState({
       showSpaces: true,
+      showGuides: false,
+      showProducts: false
+    })
+  }
+
+  showGuides = () => {
+    this.setState({
+      showSpaces: false,
+      showGuides: true,
       showProducts: false
     })
   }
@@ -59,6 +70,7 @@ export default class ProfileLikes extends Component {
   showProducts = () => {
     this.setState({
       showSpaces: false,
+      showGuides: false,
       showProducts: true
     })
   }
@@ -88,6 +100,16 @@ export default class ProfileLikes extends Component {
         >
           Products
         </button>
+        <button
+          type="button"
+          onClick={this.showGuides}
+          className={classNames({
+            'navpills-link': true,
+            'navpills-link--active': state.showGuides
+          })}
+        >
+          Guides
+        </button>
       </div>
     )
   }
@@ -99,6 +121,10 @@ export default class ProfileLikes extends Component {
 
     const spaces = filter(state.likes, like =>
       like.parentType === 'space'
+    )
+
+    const guides = filter(state.likes, like =>
+      like.parentType === 'guide'
     )
 
     const products = filter(state.likes, like =>
@@ -121,6 +147,15 @@ export default class ProfileLikes extends Component {
             id: map(products, product => toStringId(get(product, 'parent')))
           }}
           emptyMessage={`${user} hasn't liked any products yet...`}
+        />
+      )
+    } else if (state.showGuides) {
+      return (
+        <Guides
+          params={{
+            id: map(guides, guide => toStringId(get(guide, 'parent')))
+          }}
+          emptyMessage={`${user} hasn't liked any guides yet...`}
         />
       )
     }

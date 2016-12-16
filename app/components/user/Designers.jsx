@@ -23,7 +23,7 @@ import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import toStringId from '../../api/utils/toStringId'
 import hasEmptyIdParam from '../../utils/hasEmptyIdParam'
 
-const roomSortingTypes = [{
+const designerSortingTypes = [{
   sort: '-followersCount',
   label: 'Popular'
 }, {
@@ -73,7 +73,7 @@ export default class Designers extends Component {
   }
 
   getSorting = label => (
-    get(find(roomSortingTypes, type =>
+    get(find(designerSortingTypes, type =>
       type.label === label
     ), 'sort')
   )
@@ -115,7 +115,7 @@ export default class Designers extends Component {
         })
         .catch(() => {
           this.setState({
-            isWaiting: false
+            isFetching: false
           })
         })
     })
@@ -159,9 +159,9 @@ export default class Designers extends Component {
         <DropdownContent
           className="dropdown-content dropdown-content--left"
         >
-          {map(roomSortingTypes, type =>
+          {map(designerSortingTypes, type =>
             <a
-              key={`room-sort-type-${type.label}`}
+              key={`designer-sort-type-${type.label}`}
               href={`#${type.label}`}
               onClick={event => {
                 event.preventDefault()

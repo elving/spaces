@@ -448,6 +448,7 @@ export default class AddProductModal extends Component {
           document.body.classList.add('ReactModal__Body--open')
           document.querySelector('html').classList.add('ReactModal__Body--open')
         }}
+        contentLabel="Modal"
         onRequestClose={this.closeModal}
       >
         <section className="add-product-modal-content">

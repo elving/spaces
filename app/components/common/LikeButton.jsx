@@ -20,6 +20,7 @@ export default class LikeButton extends Component {
     onLike: PropTypes.func,
     parent: PropTypes.string,
     isWhite: PropTypes.bool,
+    children: PropTypes.node,
     showText: PropTypes.bool,
     onUnlike: PropTypes.func,
     className: PropTypes.string,
@@ -116,6 +117,7 @@ export default class LikeButton extends Component {
         >
           <span className="button-text">
             <MaterialDesignIcon name="like" />
+            {this.props.children}
           </span>
         </button>
       ) : (
@@ -125,6 +127,7 @@ export default class LikeButton extends Component {
         >
           <span className="button-text">
             <MaterialDesignIcon name="like" />
+            {this.props.children}
           </span>
         </a>
       )

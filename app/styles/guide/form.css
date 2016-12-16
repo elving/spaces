@@ -1,0 +1,94 @@
+.guide-form {
+  border: 1px solid #dadada;
+  border-radius: 4px;
+  width: 100%;
+  margin: 35px auto;
+  padding: 15px;
+  max-width: 720px;
+}
+
+.guide-form .form-title {
+  padding: 0 0 15px;
+}
+
+.guide-form-sections-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.guide-form-sections--has-sections .guide-form-sections-header {
+  margin-bottom: 15px;
+}
+
+.sticky-inner--active .guide-form-sections-header {
+  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.15);
+  border: 1px solid #d0d0d0;
+  border-top: 0 none;
+  background-color: #ffffff;
+  width: 100%;
+  margin: 0 auto;
+  padding: 15px;
+  max-width: 720px;
+}
+
+.guide-form-sections-header > .select {
+  width: calc(100% - 15px);
+  margin-right: 15px;
+}
+
+.guide-form-sections-header > .button {
+  flex-shrink: 0;
+}
+
+.guide-form-section {
+  border-top: 1px dashed #dadada;
+  margin: 0 -15px;
+  padding: 15px;
+}
+
+.guide-form-section:last-child {
+  border-bottom: 1px dashed #dadada;
+}
+
+.guide-form-sections > .guide-form-section:nth-child(odd) {
+  background-color: #fbfbfb;
+}
+
+.guide-form-sections > .guide-form-section:nth-child(even) {
+  background-color: #f6f6f6;
+}
+
+.guide-form-section-header {
+  border-bottom: 1px solid #dadada;
+  margin: 0 -15px 15px;
+  padding: 0 15px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.guide-form-section .form-group {
+  margin-bottom: 15px;
+}
+
+.guide-form-section-row {
+  border-bottom: 1px solid #dadada;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.guide-form-section-row > .textfield {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.guide-form-section-row > .button {
+  width: auto;
+  flex-shrink: 0;
+  margin-left: 15px;
+  margin-bottom: 0;
+}

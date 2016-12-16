@@ -61,8 +61,13 @@ import ProfileFollowing from '../components/user/ProfileFollowing'
 import UserRecommendedProducts from '../components/user/Recommended'
 
 import SearchResults from '../components/search/Results'
-
 import Notifications from '../components/notification/Index'
+
+import AddGuide from '../components/guide/Add'
+import UpdateGuide from '../components/guide/Update'
+import GuidesIndex from '../components/guide/Index'
+import GuideDetail from '../components/guide/Detail'
+import GuidesAdmin from '../components/guide/Admin'
 
 const routes = (
   <Route component={App}>
@@ -117,8 +122,15 @@ const routes = (
     <Route path="rooms/:slug" component={SpaceTypeDetail} />
 
     <Route path="search" component={SearchResults} />
-
     <Route path="notifications" components={Notifications} />
+
+    <Route path="guides" component={GuidesIndex} />
+    <Route path="guides/add" component={AddGuide} />
+    <Route path="guides/:sid/update" component={UpdateGuide} />
+    <Route path="guides/:sid/:name" component={GuideDetail} />
+    <Route path="g/:sid" component={GuideDetail} />
+
+    <Route path="admin/guides" component={GuidesAdmin} />
 
     <Route path="admin/products" component={ProductsTable} />
     <Route path="admin/products/recommended" component={RecommendedProducts} />

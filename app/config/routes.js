@@ -10,6 +10,7 @@ import homeRouter from '../routes/home'
 import feedRouter from '../routes/feed'
 import userRouter from '../routes/user'
 import likeRouter from '../routes/like'
+import guideRouter from '../routes/guide'
 import colorRouter from '../routes/color'
 import brandRouter from '../routes/brand'
 import spaceRouter from '../routes/space'
@@ -41,6 +42,7 @@ const configRoutes = (server) => {
   server.use(feedRouter)
   server.use(userRouter)
   server.use(likeRouter)
+  server.use(guideRouter)
   server.use(colorRouter)
   server.use(brandRouter)
   server.use(spaceRouter)

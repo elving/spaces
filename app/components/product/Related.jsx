@@ -1,6 +1,7 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
+import isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
@@ -11,7 +12,9 @@ import toStringId from '../../api/utils/toStringId'
 
 export default class RelatedCategories extends Component {
   static propTypes = {
+    title: PropTypes.string,
     products: PropTypes.object,
+    className: PropTypes.string,
     onAddButtonClick: PropTypes.func
   }
 
@@ -20,6 +23,7 @@ export default class RelatedCategories extends Component {
       main: {},
       related: []
     },
+    className: '',
     onAddButtonClick: (() => {})
   }
 
@@ -29,10 +33,14 @@ export default class RelatedCategories extends Component {
     const relatedProducts = get(props, 'products.related', [])
 
     return (
-      <div className="grid-container">
+      <div className={`grid-container ${props.className}`}>
         <div className="grid-title-container">
           <h3 className="grid-title">
-            Related to {get(mainProduct, 'name')}
+            {!isEmpty(props.title) ? (
+              props.title
+            ) : (
+              `Related to ${get(mainProduct, 'name')}`
+            )}
           </h3>
         </div>
         <div className="grid grid--has-inline">

@@ -148,6 +148,12 @@
   margin-bottom: 15px;
 }
 
+.grid-items--2-cards > .card {
+  width: calc(100% / 2 - 15px);
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
 .redesigns-modal .grid-items > .card {
   width: calc(100% / 2 - 15px);
   margin-right: 15px;

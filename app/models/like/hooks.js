@@ -6,6 +6,7 @@ import toStringId from '../../api/utils/toStringId'
 import toObjectId from '../../api/utils/toObjectId'
 import updateUser from '../../api/user/update'
 import updateSpace from '../../api/space/updateStats'
+import updateGuide from '../../api/guide/updateStats'
 import updateComment from '../../api/comment/updateStats'
 import updateProduct from '../../api/product/updateStats'
 import createNotification from '../../api/notification/create'
@@ -33,6 +34,10 @@ export default schema => {
           })
         } else if (parentType === 'comment') {
           await updateComment(parent, {
+            $inc: { likesCount: 1 }
+          })
+        } else if (parentType === 'guide') {
+          await updateGuide(parent, {
             $inc: { likesCount: 1 }
           })
         }
@@ -86,6 +91,10 @@ export default schema => {
         })
       } else if (parentType === 'comment') {
         await updateComment(parent, {
+          $inc: { likesCount: -1 }
+        })
+      } else if (parentType === 'guide') {
+        await updateGuide(parent, {
           $inc: { likesCount: -1 }
         })
       }

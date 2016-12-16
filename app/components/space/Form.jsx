@@ -184,8 +184,8 @@ export default class SpaceForm extends Component {
       .then(({ data: space }) => {
         const resetData = isPOST ? {
           name: '',
-          cover: '',
           spaceType: '',
+          coverImage: '',
           description: ''
         } : space
 

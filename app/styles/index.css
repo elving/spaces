@@ -2,6 +2,7 @@
 @import '~react-select/dist/react-select.css';
 @import '~react-colors-picker/assets/index.css';
 @import '~react-simple-dropdown/styles/Dropdown.css';
+@import '~react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 @import './base.css';
 
@@ -13,6 +14,7 @@
 @import './card/index.css';
 @import './auth/index.css';
 @import './user/index.css';
+@import './guide/index.css';
 @import './modal/index.css';
 @import './admin/index.css';
 @import './color/index.css';

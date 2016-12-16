@@ -24,6 +24,12 @@ export default class CurrentUserNav extends Component {
           </DropdownTrigger>
           <DropdownContent className="dropdown-content">
             <a
+              href="/admin/guides/"
+              className="dropdown-link"
+            >
+              Manage Guides
+            </a>
+            <a
               href="/admin/categories/"
               className="dropdown-link"
             >

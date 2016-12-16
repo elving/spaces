@@ -94,6 +94,14 @@ export default class Header extends Component {
           <div className="header-nav">
             <div className="header-link-divider" />
             <Link
+              to={{ pathname: '/guides/' }}
+              onClick={fullReload}
+              className="header-link"
+              activeClassName="is-active"
+            >
+              Guides
+            </Link>
+            <Link
               to={{ pathname: '/feed/' }}
               onClick={fullReload}
               className="header-link"

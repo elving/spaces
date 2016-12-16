@@ -120,7 +120,7 @@ export default class Categories extends Component {
         })
         .catch(() => {
           this.setState({
-            isWaiting: false
+            isFetching: false
           })
         })
     })

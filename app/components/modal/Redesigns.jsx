@@ -86,6 +86,7 @@ export default class RedesignsModal extends Component {
           document.body.classList.add('ReactModal__Body--open')
           document.querySelector('html').classList.add('ReactModal__Body--open')
         }}
+        contentLabel="Modal"
         onRequestClose={this.onCloseClick}
       >
         {this.renderRedesigns()}

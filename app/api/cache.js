@@ -1,13 +1,13 @@
 import map from 'lodash/map'
 import keys from 'lodash/keys'
 import uniq from 'lodash/uniq'
+import Cache from 'cacheman'
 import assign from 'lodash/assign'
 import compact from 'lodash/compact'
 import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import flattenDeep from 'lodash/flattenDeep'
 import intersection from 'lodash/intersection'
-import { default as Cache } from 'cacheman'
 
 import toStringId from './utils/toStringId'
 
@@ -16,12 +16,7 @@ let mappings = {}
 const CACHE_TIME = 604800 // Cache objects for one week
 
 const getIds = (ids = []) => uniq(
-  map(
-    compact(
-      flattenDeep(isArray(ids) ? ids : [ids])
-    ),
-    id => toStringId(id)
-  )
+  map(compact(flattenDeep(isArray(ids) ? ids : [ids])), id => toStringId(id))
 )
 
 const cacheStarted = () => !isEmpty(cache)

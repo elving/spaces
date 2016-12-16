@@ -3,8 +3,8 @@ import mongoose from 'mongoose'
 
 import parseError from '../utils/parseError'
 
-export default (parentType, parent, createdBy) => {
-  return new Promise((resolve, reject) => {
+export default (parentType, parent, createdBy) => (
+  new Promise((resolve, reject) => {
     mongoose
       .model('Like')
       .findOne({ parent, createdBy, parentType })
@@ -16,4 +16,4 @@ export default (parentType, parent, createdBy) => {
         resolve(!isEmpty(like))
       })
   })
-}
+)

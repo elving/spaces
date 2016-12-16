@@ -123,6 +123,11 @@
   text-align: center;
 }
 
+.table-centered .icon {
+  margin-right: 5px;
+  vertical-align: sub;
+}
+
 .table-actions {
   text-align: center;
   white-space: nowrap;

@@ -1,0 +1,78 @@
+.guide-card {
+  border-radius: 4px;
+  background-size: cover;
+  background-position: center center;
+  text-decoration: none;
+  height: 280px;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+
+.guide-card:hover {
+  text-decoration: none;
+}
+
+.guide-card:hover:before {
+  background-color: rgba(35, 40, 50, 0.6);
+}
+
+.guide-card:before {
+  border-radius: 4px;
+  background-color: rgba(35, 40, 50, 0.5);
+  content: "";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+}
+
+.guide-card-likes {
+  color: #ffffff;
+  font-size: 16px;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.25);
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+  display: flex;
+  position: absolute;
+  align-items: center;
+}
+
+.guide-card-likes .icon {
+  margin-right: 5px;
+}
+
+.guide-card-likes .icon-fill {
+  fill: #ffffff;
+}
+
+.guide-card-content {
+  z-index: 5;
+  display: flex;
+  padding: 35px;
+  position: relative;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.guide-card-name {
+  color: #ffffff;
+  font-size: 32px;
+  text-align: center;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.25);
+  line-height: 48px;
+  margin: 0 auto;
+}
+
+.guide-card-date,
+.guide-card-description {
+  color: #ffffff;
+  text-align: center;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.25);
+  margin: 0 auto;
+}

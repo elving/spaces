@@ -6,7 +6,8 @@ input:-webkit-autofill {
 
 .textfield,
 #doorbell-email,
-#doorbell-feedback {
+#doorbell-feedback,
+.DraftEditor-editorContainer {
   color: #555;
   border: 1px solid #dadada;
   box-shadow: none;
@@ -44,7 +45,13 @@ textarea.textfield--small {
 }
 
 .textfield:focus,
-.textfield:active {
+.textfield:active,
+#doorbell-email:focus,
+#doorbell-email:active,
+#doorbell-feedback:focus,
+#doorbell-feedback:active,
+.DraftEditor-editorContainer:focus,
+.DraftEditor-editorContainer:active {
   border-color: #bababa;
 }
 

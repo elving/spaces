@@ -6,12 +6,13 @@ import setProps from '../utils/middlewares/setProps'
 import setOgTags from '../utils/middlewares/setOgTags'
 import setMetadata from '../utils/middlewares/setMetadata'
 
-import { default as searchAllUsers } from '../api/user/search'
-import { default as searchAllSpaces } from '../api/space/search'
-import { default as searchAllFollows } from '../api/follow/search'
-import { default as searchAllProducts } from '../api/product/search'
-import { default as searchAllCategories } from '../api/category/search'
-import { default as searchAllSpaceTypes } from '../api/spaceType/search'
+import searchAllUsers from '../api/user/search'
+import searchAllSpaces from '../api/space/search'
+import searchAllGuides from '../api/guide/search'
+import searchAllFollows from '../api/follow/search'
+import searchAllProducts from '../api/product/search'
+import searchAllCategories from '../api/category/search'
+import searchAllSpaceTypes from '../api/spaceType/search'
 
 export const renderSearchResults = async (req, res, next) => {
   let results = []
@@ -108,6 +109,17 @@ export const searchCategories = async (req, res) => {
 
   try {
     const results = await searchAllCategories(params)
+    res.status(200).json(results)
+  } catch (err) {
+    res.status(500).json({ err })
+  }
+}
+
+export const searchGuides = async (req, res) => {
+  const params = get(req, 'query', {})
+
+  try {
+    const results = await searchAllGuides(params)
     res.status(200).json(results)
   } catch (err) {
     res.status(500).json({ err })

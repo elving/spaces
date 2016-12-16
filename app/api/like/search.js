@@ -52,20 +52,21 @@ export default (params = {}, operation = 'where') => (
 
         try {
           for (const like of likes) {
+            let populate = ''
             const parentType = get(like, 'parentType')
+
+            if (parentType === 'space') {
+              populate = 'colors products createdBy categories spaceType'
+            } else if (parentType === 'product') {
+              populate = 'brand colors createdBy categories spaceTypes'
+            } else if (parentType === 'guide') {
+              populate = 'createdBy'
+            }
 
             await like.populate({
               path: 'parent',
               model: upperFirst(parentType),
-              options: parentType === 'space' ? {
-                populate: (
-                  'colors products createdBy categories spaceType'
-                )
-              } : {
-                populate: (
-                  'brand colors createdBy categories spaceTypes'
-                )
-              }
+              options: { populate }
             }).execPopulate()
 
             if (parentType === 'space') {

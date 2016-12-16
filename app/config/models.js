@@ -1,5 +1,6 @@
 import registerUserModel from '../models/user/schema'
 import registerLikeModel from '../models/like/schema'
+import registerGuideModel from '../models/guide/schema'
 import registerBrandModel from '../models/brand/schema'
 import registerColorModel from '../models/color/schema'
 import registerSpaceModel from '../models/space/schema'
@@ -14,6 +15,7 @@ import registerPasswordResetModel from '../models/passwordReset/schema'
 const configModels = () => {
   registerUserModel()
   registerLikeModel()
+  registerGuideModel()
   registerFollowModel()
   registerBrandModel()
   registerColorModel()

@@ -74,8 +74,8 @@ export default class ResetPassword extends Component {
 
             <div className="form-group">
               <p className="form-text">
-                Forgot your password? Don't worry, give us your username or
-                email and we'll send you instructions on how to recover it.
+                Forgot your password? Don&apos;t worry, give us your username or
+                email and we&apos;ll send you instructions on how to recover it.
               </p>
             </div>
 

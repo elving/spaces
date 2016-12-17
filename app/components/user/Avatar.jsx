@@ -54,11 +54,7 @@ export default class Avatar extends Component {
     const { props } = this
 
     const imageUrl = get(props.user, 'avatar', props.imageUrl)
-
-    const fontSize = (props.height - 46) > 18
-      ? props.height - 46
-      : 18
-
+    const fontSize = (props.height - 46)
     const lineHeight = `${fontSize}px`
 
     return (

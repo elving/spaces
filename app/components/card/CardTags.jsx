@@ -1,4 +1,7 @@
+import get from 'lodash/get'
 import map from 'lodash/map'
+import size from 'lodash/size'
+import slice from 'lodash/slice'
 import React, { Component, PropTypes } from 'react'
 
 import Tag from '../common/Tag'
@@ -17,96 +20,18 @@ export default class CardTags extends Component {
   static defaultProps = {
     model: {},
     className: '',
-    autoScroll: false,
     forDisplayOnly: false
   }
 
-  state = {
-    isHovering: false
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { state } = this
-
-    if (nextProps.autoScroll && this.container && !state.isHovering) {
-      this.setInterval()
-    } else {
-      this.clearInterval()
-    }
-  }
-
-  componentWillUnmount() {
-    this.clearInterval()
-  }
-
-  onMouseEnter = () => {
-    this.clearInterval()
-
-    this.setState({
-      isHovering: true
-    })
-  }
-
-  onMouseLeave = () => {
-    const { props } = this
-
-    this.setState({
-      isHovering: false
-    })
-
-    if (props.autoScroll) {
-      this.setInterval()
-    }
-  }
-
-  setInterval = () => {
-    this.clearInterval()
-
-    this.lastScrollLeft = this.container.scrollLeft
-
-    this.scrollInterval = setInterval(() => {
-      const scrollLeft = this.container.scrollLeft
-      const scrollWidth = this.container.scrollWidth
-      const offsetWidth = this.container.offsetWidth
-      const currentScroll = scrollWidth - offsetWidth
-      const { scrollingBack, lastScrollLeft } = this
-
-      if (!scrollingBack && lastScrollLeft < currentScroll) {
-        this.lastScrollLeft += 1
-      } else if (lastScrollLeft === 0) {
-        this.scrollingBack = false
-        this.lastScrollLeft += 1
-      } else if (scrollingBack) {
-        this.lastScrollLeft -= 1
-      } else if (scrollLeft === currentScroll) {
-        this.scrollingBack = true
-        this.lastScrollLeft -= 1
-      }
-
-      this.container.scrollLeft = this.lastScrollLeft
-    }, 35)
-  }
-
-  clearInterval = () => {
-    clearInterval(this.scrollInterval)
-  }
-
-  container = null
-  scrollingBack = false
-  lastScrollLeft = 0
-  scrollInterval = null
-
   render() {
     const { props } = this
+    const tags = getTags(props.model)
+    const tagsShown = slice(tags, 0, 3)
+    const tagsNotShown = size(tags) - size(tagsShown)
 
     return (
-      <div
-        ref={container => { this.container = container }}
-        className={`${props.className} card-tags`}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
-      >
-        {map(getTags(props.model), tag =>
+      <div className={`${props.className} card-tags`}>
+        {map(tagsShown, tag =>
           <Tag
             key={`${toStringId(props.model)}-${tag.id}`}
             url={!props.forDisplayOnly ? tag.url : null}
@@ -116,6 +41,15 @@ export default class CardTags extends Component {
             className="card-tag"
           />
         )}
+        {tagsNotShown > 0 ? (
+          <a
+            href={`/${get(props.model, 'detailUrl')}/`}
+            style={{ marginRight: 0 }}
+            className="tag tag--small card-tag"
+          >
+            + {tagsNotShown} more
+          </a>
+        ) : null}
       </div>
     )
   }

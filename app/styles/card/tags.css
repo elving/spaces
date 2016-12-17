@@ -1,8 +1,8 @@
 .card-tags {
   width: 100%;
-  padding: 10px;
+  padding: 0 10px 5px;
   display: flex;
-  overflow-x: hidden;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
 }
@@ -14,6 +14,12 @@
 
 .card-tags::after {
   content: "\00a0";
+}
+
+.card-tag {
+  border: 1px solid #dadada;
+  margin-right: 5px;
+  margin-bottom: 5px;
 }
 
 @media (max-width: 736px) {

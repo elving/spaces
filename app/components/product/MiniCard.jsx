@@ -4,11 +4,14 @@ import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import Loader from '../common/Loader'
+import Avatar from '../user/Avatar'
 import CardTitle from '../card/CardTitle'
 import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
 import CardActivity from '../card/CardActivity'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
+
+import isCurator from '../../utils/user/isCurator'
 
 export default class ProductMiniCard extends Component {
   static contextTypes = {
@@ -76,18 +79,6 @@ export default class ProductMiniCard extends Component {
     }
   }
 
-  onMouseEnter = () => {
-    this.setState({
-      isHovering: true
-    })
-  }
-
-  onMouseLeave = () => {
-    this.setState({
-      isHovering: false
-    })
-  }
-
   onImageLoad = () => {
     this.setState({
       imageIsLoaded: true,
@@ -109,11 +100,6 @@ export default class ProductMiniCard extends Component {
     this.setState({
       likesCount: state.likesCount - 1
     })
-  }
-
-  getProductUrl = () => {
-    const { props } = this
-    return `${window.location.origin}/${props.shortUrl}/`
   }
 
   closeSharePopup = () => {
@@ -157,6 +143,7 @@ export default class ProductMiniCard extends Component {
           />
         ) : null}
 
+        {this.renderDesigner()}
         {this.renderPrice()}
       </div>
     )
@@ -223,6 +210,30 @@ export default class ProductMiniCard extends Component {
           </button>
         </div>
       </div>
+    )
+  }
+
+  renderDesigner() {
+    const { props } = this
+
+    return (
+      <a
+        rel="noreferrer noopener"
+        href={`/${get(props.createdBy, 'detailUrl')}/`}
+        target="_blank"
+        className="product-card-designer tooltip"
+        data-tooltip={`@${get(props.createdBy, 'username')}`}
+      >
+        <Avatar
+          user={props.createdBy}
+          width={18}
+          height={18}
+          className="product-card-designer-avatar"
+        />
+        <span className="product-card-designer-name">
+          {isCurator(props.createdBy) ? 'Curated' : 'Recommended'}
+        </span>
+      </a>
     )
   }
 
@@ -301,10 +312,20 @@ export default class ProductMiniCard extends Component {
 
         {state.sharePopupIsCreated ? (
           <SharePopup
-            url={this.getProductUrl}
+            url={() => (
+              `${window.location.origin}/${props.detailUrl}/`
+            )}
             title="Share this product"
             isOpen={state.sharePopupIsOpen}
+            shareUrl={() => (
+              `${window.location.origin}/${props.shortUrl}/`
+            )}
             className="share-popup"
+            shareText={(
+              `${props.name} by ` +
+              `${get(props.brand, 'name')}.`
+            )}
+            shareImage={props.image}
             onClickClose={this.closeSharePopup}
           />
         ) : null}

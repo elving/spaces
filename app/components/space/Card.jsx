@@ -51,7 +51,6 @@ export default class SpaceCard extends Component {
 
     this.state = {
       images: [],
-      isHovering: false,
       likesCount: get(props, 'likesCount', 0),
       redesignsCount: get(props, 'redesignsCount', 0),
       imagesAreLoaded: false,
@@ -78,18 +77,6 @@ export default class SpaceCard extends Component {
         imagesAreLoaded: true,
         imagesAreLoading: false
       })
-    })
-  }
-
-  onMouseEnter = () => {
-    this.setState({
-      isHovering: true
-    })
-  }
-
-  onMouseLeave = () => {
-    this.setState({
-      isHovering: false
     })
   }
 
@@ -164,6 +151,7 @@ export default class SpaceCard extends Component {
         <a href={`/${props.detailUrl}/`} className="card-actions-overlay" />
 
         {this.renderActions()}
+        {this.renderDesigner()}
         {this.renderRedesignBadge()}
 
         {state.imagesAreLoading ? (
@@ -281,14 +269,10 @@ export default class SpaceCard extends Component {
   }
 
   renderTags() {
-    const { props, state } = this
+    const { props } = this
 
     return (
-      <CardTags
-        model={props}
-        className="space-tags"
-        autoScroll={state.isHovering}
-      />
+      <CardTags model={props} className="space-tags" />
     )
   }
 
@@ -296,24 +280,23 @@ export default class SpaceCard extends Component {
     const { props } = this
 
     return (
-      <div className="space-card-designer">
+      <a
+        rel="noopener noreferrer"
+        href={`/${get(props.createdBy, 'detailUrl')}/`}
+        target="_blank"
+        className="space-card-designer tooltip"
+        data-tooltip={`@${get(props.createdBy, 'username')}`}
+      >
         <Avatar
           user={props.createdBy}
-          width={26}
-          height={26}
+          width={18}
+          height={18}
           className="space-card-designer-avatar"
         />
         <span className="space-card-designer-name">
-          {isRedesign(props) ? 'Redesigned by ' : 'Designed by '}
-          <a
-            href={`/${get(props.createdBy, 'detailUrl')}/`}
-            className="space-card-designer-link"
-          >
-            {get(props.createdBy, 'name')}
-            <CuratorBadge user={props.createdBy} size={16} />
-          </a>
+          {isRedesign(props) ? 'Redesigned' : 'Designed'}
         </span>
-      </div>
+      </a>
     )
   }
 
@@ -377,7 +360,6 @@ export default class SpaceCard extends Component {
         {this.renderImages()}
         {this.renderTitle()}
         {this.renderTags()}
-        {this.renderDesigner()}
       </div>
     )
   }

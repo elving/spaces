@@ -15,7 +15,22 @@
 }
 
 
-.mini-card .product-card-price {
+.mini-card .product-card-price,
+.mini-card .product-card-designer {
   font-size: 12px;
   min-height: 24px;
+}
+
+.mini-card .product-card-designer-name {
+  font-size: 12px;
+}
+
+.mini-card .product-card-designer {
+  padding: 2px 6px;
+}
+
+.mini-card .user-avatar-image,
+.mini-card .user-avatar-initials {
+  width: 16px !important;
+  height: 16px !important;
 }

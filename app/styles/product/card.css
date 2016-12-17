@@ -10,12 +10,7 @@
 }
 
 .product-card > * {
-  border-bottom: 1px solid #dadada;
   width: 100%;
-}
-
-.product-card > *:last-child {
-  border-bottom: 0 none;
 }
 
 .user-is-onboarding .card-actions .like-button,
@@ -73,6 +68,7 @@
 .product-card-image-container,
 .product-card-add-icon-container {
   border-radius: 4px 4px 0 0;
+  border-bottom: 1px solid #dadada;
   flex: 1;
   width: 100%;
   height: 100%;
@@ -118,19 +114,32 @@
 }
 
 .product-card-designer {
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  left: 10px;
+  bottom: 10px;
+  z-index: 5;
   display: flex;
-  padding: 10px;
+  padding: 4px 6px;
+  position: absolute;
   align-items: center;
   justify-content: flex-start;
 }
 
+.product-card-designer:hover {
+  text-decoration: none;
+}
+
 .product-card-designer-avatar {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .product-card-designer-name {
-  color: #999999;
-  font-size: 16px;
+  color: #666;
+  font-size: 14px;
+  text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: flex-start;

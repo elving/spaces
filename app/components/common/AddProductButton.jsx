@@ -10,19 +10,19 @@ export default class AddProductButton extends Component {
 
   render() {
     const { context } = this
-    const url = context.currentUserIsCurator()
-      ? '/products/add/'
-      : '/products/recommend/'
 
-    return (
+    return context.userLoggedIn() ? (
       <a
-        href={context.userLoggedIn() ? url : '/login/'}
+        href={context.currentUserIsCurator()
+          ? '/products/add/'
+          : '/products/recommend/'
+        }
         className="add-product-button button button--icon button--primary"
       >
         <span className="button-text">
           <MaterialDesignIcon name="add-alt" size={24} />
         </span>
       </a>
-    )
+    ) : null
   }
 }

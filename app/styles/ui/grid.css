@@ -235,6 +235,10 @@
   .grid--has-inline > .grid-items > .card {
     width: 25%;
   }
+
+  .grid-items--less-than-5 .mini-card {
+    max-height: 100%;
+  }
 }
 
 @media (max-width: 620px) {

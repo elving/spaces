@@ -6,7 +6,11 @@ import Layout from '../common/Layout'
 export default class ProductsIndex extends Component {
   render() {
     return (
-      <Layout contentClassName="page-content--padding-top">
+      <Layout>
+        <h1 className="page-title">
+          Our shopping guides showcase the
+          best spaces and products curated by the community
+        </h1>
         <Guides />
       </Layout>
     )

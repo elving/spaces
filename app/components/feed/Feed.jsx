@@ -117,6 +117,10 @@ export default class Feed extends Component {
             <CreateSpaceBanner />
           ) : null}
 
+          <h1 className="page-title">
+            Here are some interesting things we found for you
+          </h1>
+
           <div className="feed-content">
             {this.renderNavigation()}
             {this.renderContent()}
@@ -132,11 +136,9 @@ export default class Feed extends Component {
             <CreateSpaceBanner />
           ) : null}
 
-          <h1 className="page-title">Your Feed</h1>
-
           <div className="feed-empty">
             <h2 className="feed-empty-title">
-              It looks like you don't have enough interests to generate
+              It looks like you don&apos;t follow enough interests to generate
               your personal feed.
             </h2>
             <a

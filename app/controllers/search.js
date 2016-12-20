@@ -21,7 +21,9 @@ export const renderSearchResults = async (req, res, next) => {
   const searchParams = omit(params, ['type'])
 
   try {
-    if (isEqual(searchType, 'products')) {
+    if (isEqual(searchType, 'guides')) {
+      results = await searchAllGuides(searchParams)
+    } else if (isEqual(searchType, 'products')) {
       results = await searchAllProducts(searchParams)
     } else if (isEqual(searchType, 'spaces')) {
       results = await searchAllSpaces(searchParams)

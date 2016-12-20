@@ -1,12 +1,10 @@
 import map from 'lodash/map'
-import keys from 'lodash/keys'
+import omit from 'lodash/omit'
 import size from 'lodash/size'
-import head from 'lodash/head'
 import assign from 'lodash/assign'
-import filter from 'lodash/filter'
+import forEach from 'lodash/forEach'
 import isEmpty from 'lodash/isEmpty'
 import toArray from 'lodash/toArray'
-import flatten from 'lodash/flatten'
 import uniqueId from 'lodash/uniqueId'
 import defaultTo from 'lodash/defaultTo'
 import upperFirst from 'lodash/upperFirst'
@@ -34,11 +32,15 @@ export default class GridSectionForm extends Component {
   constructor(props) {
     super(props)
 
+    let items = {}
+
+    forEach(props.items, item => {
+      items = assign({}, items, { [uniqueId(props.id)]: item })
+    })
+
     this.state = {
       title: defaultTo(props.title, ''),
-      items: !isEmpty(props.items) ? map(props.items, item => ({
-        [uniqueId(props.id)]: item
-      })) : {
+      items: !isEmpty(items) ? items : {
         [uniqueId(props.id)]: ''
       }
     }
@@ -56,7 +58,7 @@ export default class GridSectionForm extends Component {
     return {
       type: props.type,
       title: state.title,
-      items: map(flatten(map(state.items, toArray)), getSid),
+      items: map(toArray(state.items), getSid),
       modelName: upperFirst(props.modelName)
     }
   }
@@ -81,11 +83,11 @@ export default class GridSectionForm extends Component {
     })
   }
 
-  removeItem = cidToRemove => {
+  removeItem = cid => {
     const { state } = this
 
     this.setState({
-      items: filter(state.items, (item, cid) => cid !== cidToRemove)
+      items: omit(state.items, [cid])
     })
   }
 
@@ -130,35 +132,31 @@ export default class GridSectionForm extends Component {
             defaultValue={defaultTo(state.title, '')}
           />
         </div>
-        {map(state.items, item => {
-          const cid = head(keys(item))
-
-          return (
-            <div
-              key={`${props.id}-${cid}`}
-              className="form-group guide-form-section-row"
-            >
-              <input
-                type="text"
-                onChange={({ currentTarget: input }) => {
-                  this.updateItem(cid, input.value)
-                }}
-                className="textfield"
-                placeholder={`${upperFirst(props.modelName)} url or short id`}
-                defaultValue={defaultTo(item[cid], '')}
-              />
-              {size(state.items) > 1 ? (
-                <button
-                  type="button"
-                  onClick={() => this.removeItem(cid)}
-                  className="button button--danger"
-                >
-                  Remove {upperFirst(props.modelName)}
-                </button>
-              ) : null}
-            </div>
-          )
-        })}
+        {map(state.items, (item, cid) =>
+          <div
+            key={`${props.id}-${cid}`}
+            className="form-group guide-form-section-row"
+          >
+            <input
+              type="text"
+              onChange={({ currentTarget: input }) => {
+                this.updateItem(cid, input.value)
+              }}
+              className="textfield"
+              placeholder={`${upperFirst(props.modelName)} url or short id`}
+              defaultValue={defaultTo(item, '')}
+            />
+            {size(state.items) > 1 ? (
+              <button
+                type="button"
+                onClick={() => this.removeItem(cid)}
+                className="button button--danger"
+              >
+                Remove {upperFirst(props.modelName)}
+              </button>
+            ) : null}
+          </div>
+        )}
         <div className="form-group">
           <button
             type="button"

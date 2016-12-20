@@ -52,6 +52,10 @@ a:active {
   text-decoration: underline;
 }
 
+#app-container {
+  padding-top: 77px;
+}
+
 .user-is-onboarding {
   position: relative;
   padding-top: 70px;
@@ -87,6 +91,15 @@ a:active {
 #doorbell-feedback {
   width: 100% !important;
   padding: 10px !important;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
 }
 
 @media (max-width: 736px) {

@@ -7,6 +7,7 @@ import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
+import GuideCard from '../guide/Card'
 import SpaceCard from '../space/Card'
 import ProductCard from '../product/Card'
 import ProfileCard from '../user/Card'
@@ -113,9 +114,18 @@ class SearchResults extends Component {
 
     return (
       <div className="grid">
-        <div className="grid-items">
+        <div
+          className={classNames({
+            'grid-items': true,
+            'grid-items--2-cards': searchType === 'guides'
+          })}
+        >
           {map(state.results, result => {
-            if (searchType === 'products') {
+            if (searchType === 'guides') {
+              return (
+                <GuideCard key={toStringId(result)} {...result} />
+              )
+            } else if (searchType === 'products') {
               return (
                 <ProductCard
                   {...result}
@@ -124,9 +134,13 @@ class SearchResults extends Component {
                 />
               )
             } else if (searchType === 'spaces') {
-              return <SpaceCard key={toStringId(result)} {...result} />
+              return (
+                <SpaceCard key={toStringId(result)} {...result} />
+              )
             } else if (searchType === 'designers') {
-              return <ProfileCard key={toStringId(result)} user={result} />
+              return (
+                <ProfileCard key={toStringId(result)} user={result} />
+              )
             }
 
             return null
@@ -158,7 +172,7 @@ class SearchResults extends Component {
           isVisible={props.addProductModalIsOpen}
         />
 
-        <h1 className="page-title page-title--has-margin">
+        <h1 className="page-title">
           {`${props.count} ${inflect(props.count, searchType)} found`}
         </h1>
 

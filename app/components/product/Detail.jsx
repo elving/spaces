@@ -416,7 +416,9 @@ class ProductDetail extends Component {
   renderProduct() {
     return (
       <div
-        ref={productDetail => this.productDetail = productDetail}
+        ref={productDetail => {
+          this.productDetail = productDetail
+        }}
         className="product-detail"
       >
         <div className="product-detail-inner">
@@ -521,7 +523,7 @@ class ProductDetail extends Component {
         />
 
         <Sticky
-          offset={get(this.productDetail, 'offsetHeight', 500)}
+          offset={get(this.productDetail, 'offsetHeight', 500) + 250}
         >
           {this.renderProduct()}
         </Sticky>

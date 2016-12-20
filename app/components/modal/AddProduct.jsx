@@ -167,8 +167,8 @@ export default class AddProductModal extends Component {
     })
   }
 
-  fetchSpaceTypes() {
-    return new Promise(async (resolve, reject) => {
+  fetchSpaceTypes = () => (
+    new Promise(async (resolve, reject) => {
       axios
         .get('/ajax/space-types/')
         .then(({ data }) => {
@@ -176,7 +176,7 @@ export default class AddProductModal extends Component {
         })
         .catch(reject)
     })
-  }
+  )
 
   search(term) {
     const { state } = this
@@ -268,11 +268,9 @@ export default class AddProductModal extends Component {
     )
   }
 
-  renderLoadingState() {
-    return (
-      <Loader size={55} />
-    )
-  }
+  renderLoadingState = () => (
+    <Loader size={55} />
+  )
 
   renderProduct() {
     const { props } = this
@@ -337,7 +335,9 @@ export default class AddProductModal extends Component {
             disabled={state.isTogglingProduct}
             className="button button--primary"
           >
-            Create a space
+            <span className="button-text">
+              Create a space
+            </span>
           </button>
         </div>
       </div>

@@ -1,8 +1,12 @@
 .header {
   border-bottom: 1px solid #e5e5e5;
   background-color: #ffffff;
+  top: 0;
+  left: 0;
   width: 100%;
   margin: 0 auto;
+  z-index: 1000;
+  position: fixed;
 }
 
 .header-container {
@@ -161,11 +165,24 @@
 
   .header .header-container-right {
     flex-direction: row-reverse;
+    justify-content: flex-end;
   }
 
   .header .current-user-nav {
     border-left: 0 none;
+    margin-left: 0;
     padding-left: 0;
+  }
+
+  .header .user-notifications {
+    margin: 0 0 0 15px;
+  }
+
+  .header .user-notifications .dropdown__content {
+    top: calc(100% + 15px);
+    right: 0;
+    width: 320px;
+    margin-right: -135px;
   }
 
   .header [data-action="toggleMobileNav"] {

@@ -20,6 +20,7 @@ export default class GuidesAdmin extends Component {
   renderRow = guide => {
     const sid = get(guide, 'sid', '')
     const name = get(guide, 'name', '')
+    const detailUrl = get(guide, 'detailUrl', '')
     const createdBy = get(guide, 'createdBy', {})
     const createdAt = get(guide, 'createdAt', (new Date()))
     const isPublished = get(guide, 'isPublished', false)
@@ -40,7 +41,9 @@ export default class GuidesAdmin extends Component {
           </a>
         </td>
         <td className="table-centered">
-          {name}
+          <a href={`/${detailUrl}/`}>
+            {name}
+          </a>
         </td>
         <td className="table-centered">
           {description}

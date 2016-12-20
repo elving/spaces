@@ -1,4 +1,5 @@
 import map from 'lodash/map'
+import isEmpty from 'lodash/isEmpty'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
@@ -8,10 +9,12 @@ import Product from '../product/Card'
 import LikeButton from '../common/LikeButton'
 import SharePopup from '../common/SharePopup'
 import RelatedProducts from '../product/Related'
+import AddProductModal from '../modal/AddProduct'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import addProductModalContainer from '../container/AddProductModal'
 
 import getDate from '../../utils/guide/getDate'
+import getDomain from '../../utils/getDomain'
 import toStringId from '../../api/utils/toStringId'
 
 class GuideDetail extends Component {
@@ -82,31 +85,43 @@ class GuideDetail extends Component {
     return map(props.sections, this.renderSection)
   }
 
-  renderSection = section => {
+  renderSection = (section, index) => {
     const { props } = this
 
     if (section.type === 'grid') {
       return (
-        <div className="grid guide-section guide-section-grid">
-          <div className="grid-items">
-            {map(section.items, item => {
-              if (section.modelName === 'Product') {
-                return (
-                  <Product
-                    {...item}
-                    key={`${section.type}-${toStringId(item)}`}
-                    onAddButtonClick={() => props.openAddProductModal(item)}
-                  />
-                )
-              } else if (section.modelName === 'Space') {
-                return (
-                  <Space
-                    {...item}
-                    key={`${section.type}-${toStringId(item)}`}
-                  />
-                )
-              }
-            })}
+        <div
+          key={`${section.type}-${index}`}
+          className="guide-section guide-section-grid grid-container"
+        >
+          {!isEmpty(section.title) ? (
+            <div className="grid-title-container">
+              <h3 className="grid-title">
+                {section.title}
+              </h3>
+            </div>
+          ) : null}
+          <div className="grid">
+            <div className="grid-items">
+              {map(section.items, item => {
+                if (section.modelName === 'Product') {
+                  return (
+                    <Product
+                      {...item}
+                      key={`${section.type}-${toStringId(item)}`}
+                      onAddButtonClick={() => props.openAddProductModal(item)}
+                    />
+                  )
+                } else if (section.modelName === 'Space') {
+                  return (
+                    <Space
+                      {...item}
+                      key={`${section.type}-${toStringId(item)}`}
+                    />
+                  )
+                }
+              })}
+            </div>
           </div>
         </div>
       )
@@ -134,29 +149,35 @@ class GuideDetail extends Component {
       )
     } else if (section.type === 'item-text') {
       return (
-        <div className="grid guide-section guide-section-item-text">
-          {section.modelName === 'Product' ? (
-            <div className="grid-items">
-              <Product
-                {...section.item}
-                key={toStringId(section.item)}
-                onAddButtonClick={() => props.openAddProductModal(section.item)}
-              />
-              <div className="card card-text">
+        <div className="guide-section guide-section-item-text">
+          <div className="guide-section-item-text-container">
+            <div className="guide-section-item-text-card">
+              {section.modelName === 'Product' ? (
+                <Product
+                  {...section.item}
+                  key={toStringId(section.item)}
+                  onAddButtonClick={() => {
+                    props.openAddProductModal(section.item)
+                  }}
+                />
+              ) : (
+                <Space
+                  {...section.item}
+                  key={toStringId(section.item)}
+                />
+              )}
+            </div>
+            <div className="guide-section-item-text-content">
+              {!isEmpty(section.title) ? (
+                <h3 className="guide-section-item-text-content-title">
+                  {section.title}
+                </h3>
+              ) : null}
+              <div className="guide-section-item-text-content-text">
                 {section.text}
               </div>
             </div>
-          ) : (
-            <div className="grid-items">
-              <Space
-                {...section.item}
-                key={toStringId(section.item)}
-              />
-              <div className="card card-text">
-                {section.text}
-              </div>
-            </div>
-          )}
+          </div>
         </div>
       )
     }
@@ -237,11 +258,33 @@ class GuideDetail extends Component {
               />
             ) : null}
           </div>
+          <a
+            rel="noopener noreferrer"
+            href={props.coverSource}
+            target="_blank"
+            className="guide-header-source"
+          >
+            source: {getDomain(props.coverSource)}
+          </a>
         </div>
+
+        {!isEmpty(props.introduction) ? (
+          <div className="guide-introduction-container clearfix">
+            <p className="guide-introduction">
+              {props.introduction}
+            </p>
+          </div>
+        ) : null}
 
         <div className="guide-sections">
           {this.renderSections()}
         </div>
+
+        <AddProductModal
+          product={props.addProductModalCurrent}
+          onClose={props.closeAddProductModal}
+          isVisible={props.addProductModalIsOpen}
+        />
       </Layout>
     )
   }

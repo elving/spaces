@@ -63,7 +63,7 @@ export default class Sticky extends Component {
             top: 0,
             left: 0,
             width: '100%',
-            zIndex: 1000,
+            zIndex: 1001,
             position: 'fixed'
           } : {}}
           className={classNames({

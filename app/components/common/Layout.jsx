@@ -8,6 +8,7 @@ import Footer from './Footer'
 import Welcome from './Welcome'
 import MobileNav from '../mobile/Nav'
 import AdBlockModal from '../modal/AdBlock'
+import LatestGuideBanner from '../guide/Banner'
 
 import isNotAppRoute from '../../utils/isNotAppRoute'
 
@@ -49,6 +50,10 @@ export default class Layout extends Component {
   }
 
   componentDidMount() {
+    this.checkWelcomeState()
+  }
+
+  checkWelcomeState = () => {
     const { context } = this
     const isLoggedOut = !context.userLoggedIn()
     const isAuthRoute = isNotAppRoute(
@@ -78,6 +83,7 @@ export default class Layout extends Component {
         <MobileNav isVisible={state.mobileNavIsVisible} />
 
         <Header />
+        <LatestGuideBanner />
 
         {state.welcomeIsVisible ? (
           <Welcome onClose={this.persistWelcomeState} />

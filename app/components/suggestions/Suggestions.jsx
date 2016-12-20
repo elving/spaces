@@ -67,7 +67,9 @@ class Suggestions extends Component {
             isVisible={props.addProductModalIsOpen}
           />
 
-          <h1 className="page-title">Your Suggestions</h1>
+          <h1 className="page-title">
+            Here are some suggestions for your spaces
+          </h1>
 
           <div className="grids">
             {map(props.spaces, space =>
@@ -113,8 +115,6 @@ class Suggestions extends Component {
     } else if (isEmpty(props.spaces) && props.hasSpaces) {
       return (
         <Layout>
-          <h1 className="page-title">Your Suggestions</h1>
-
           <div className="feed-empty">
             <h2 className="feed-empty-title">
               It looks like we don&apos;t have any suggestions for your spaces
@@ -134,8 +134,6 @@ class Suggestions extends Component {
     } else if (isEmpty(props.spaces) && !props.hasSpaces) {
       return (
         <Layout>
-          <h1 className="page-title">Your Suggestions</h1>
-
           <div className="feed-empty">
             <h2 className="feed-empty-title">
               It looks like you haven&apos;t designed any spaces yet.

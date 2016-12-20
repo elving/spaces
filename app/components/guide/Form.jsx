@@ -1,6 +1,7 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
+import omit from 'lodash/omit'
 import axios from 'axios'
 import Select from 'react-select'
 import assign from 'lodash/assign'
@@ -525,6 +526,12 @@ export default class GuideForm extends Component {
                   }, {
                     value: 'product-related',
                     label: 'Product + Related'
+                  }, {
+                    value: 'space-grid',
+                    label: 'Space Grid'
+                  }, {
+                    value: 'space-text',
+                    label: 'Space + Text'
                   }]}
                   onChange={this.onChangeCurrentSectionType}
                   disabled={state.isSaving}
@@ -552,7 +559,7 @@ export default class GuideForm extends Component {
                     ref={this.registerSection}
                     key={`section-${type}-${id}`}
                     onRemove={this.removeSection}
-                    {...section}
+                    {...omit(section, ['type'])}
                   />
                 )
               } else if (
@@ -566,7 +573,7 @@ export default class GuideForm extends Component {
                     key={`section-${type}-${id}`}
                     onRemove={this.removeSection}
                     modelName="product"
-                    {...section}
+                    {...omit(section, ['type'])}
                   />
                 )
               } else if (
@@ -580,7 +587,7 @@ export default class GuideForm extends Component {
                     key={`section-${type}-${id}`}
                     onRemove={this.removeSection}
                     modelName="product"
-                    {...section}
+                    {...omit(section, ['type'])}
                   />
                 )
               } else if (
@@ -594,7 +601,35 @@ export default class GuideForm extends Component {
                     key={`section-${type}-${id}`}
                     onRemove={this.removeSection}
                     modelName="product"
-                    {...section}
+                    {...omit(section, ['type'])}
+                  />
+                )
+              } else if (
+                type === 'space-grid' ||
+                (type === 'grid' && modelName === 'Space')
+              ) {
+                return (
+                  <GridSectionForm
+                    id={id}
+                    ref={this.registerSection}
+                    key={`section-${type}-${id}`}
+                    onRemove={this.removeSection}
+                    modelName="space"
+                    {...omit(section, ['type'])}
+                  />
+                )
+              } else if (
+                type === 'space-text' ||
+                (type === 'item-text' && modelName === 'Space')
+              ) {
+                return (
+                  <ItemTextSectionForm
+                    id={id}
+                    ref={this.registerSection}
+                    key={`section-${type}-${id}`}
+                    onRemove={this.removeSection}
+                    modelName="space"
+                    {...omit(section, ['type'])}
                   />
                 )
               }

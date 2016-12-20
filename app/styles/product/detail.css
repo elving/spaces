@@ -7,6 +7,9 @@
   border-bottom: 1px solid #d0d0d0;
   background-color: #ffffff;
   padding: 5px 10px;
+  display: flex;
+  min-height: 78px;
+  align-items: center;
 }
 
 #page-product-detail .sticky-inner--active [data-action="editProduct"],

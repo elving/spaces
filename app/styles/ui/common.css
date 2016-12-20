@@ -1,26 +1,21 @@
 .page-title {
-  color: #999;
-  border-bottom: 1px solid #e5e5e5;
-  background-color: #fafafa;
-  font-size: 42px;
   text-align: center;
   font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 2px;
   width: 100%;
-  margin: 0 auto;
-  padding: 35px;
-}
-
-.page-title--has-margin {
-  margin-bottom: 35px;
+  margin: 35px auto;
+  padding: 0 35px;
+  max-width: 960px;
 }
 
 @media (max-width: 768px) {
   .page-title {
     font-size: 26px;
-    font-weight: 400;
-    padding: 25px 15px;
+    margin: 15px auto;
+    padding: 15px;
+  }
+
+  .page-title--has-top-margin {
+    margin-top: 15px;
   }
 
   .page-title--has-margin {

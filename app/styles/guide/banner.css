@@ -1,0 +1,60 @@
+.guide-banner {
+  background-size: cover;
+  background-position: center center;
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  padding: 35px;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+
+.guide-banner:hover {
+  text-decoration: none;
+}
+
+.guide-banner:before {
+  background-color: rgba(35, 40, 50, 0.3);
+  content: "";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+}
+
+.guide-banner:hover:before {
+  background-color: rgba(35, 40, 50, 0.4);
+}
+
+.guide-banner-text {
+  color: #ffffff;
+  font-size: 22px;
+  text-align: center;
+  line-height: 20px;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.25);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-decoration: none;
+  z-index: 10;
+  position: relative;
+}
+
+.guide-banner:hover .guide-banner-text {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .guide-banner {
+    padding: 15px;
+  }
+
+  .guide-banner-text {
+    font-size: 16px;
+  }
+}

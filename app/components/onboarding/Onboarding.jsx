@@ -86,7 +86,7 @@ export default class Onboarding extends Component {
     return (
       <Layout>
         <h1 className="page-title">
-          Build Your Feed
+          Build your personal feed by following what you like the most
         </h1>
 
         <Sticky>

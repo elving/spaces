@@ -1,12 +1,10 @@
 import map from 'lodash/map'
-import keys from 'lodash/keys'
 import size from 'lodash/size'
-import head from 'lodash/head'
+import omit from 'lodash/omit'
 import assign from 'lodash/assign'
-import filter from 'lodash/filter'
+import forEach from 'lodash/forEach'
 import toArray from 'lodash/toArray'
 import isEmpty from 'lodash/isEmpty'
-import flatten from 'lodash/flatten'
 import uniqueId from 'lodash/uniqueId'
 import defaultTo from 'lodash/defaultTo'
 import upperFirst from 'lodash/upperFirst'
@@ -36,12 +34,16 @@ export default class RelatedSectionForm extends Component {
   constructor(props) {
     super(props)
 
+    let related = {}
+
+    forEach(props.related, item => {
+      related = assign({}, related, { [uniqueId(props.id)]: item })
+    })
+
     this.state = {
       item: defaultTo(props.item, ''),
       title: defaultTo(props.title, ''),
-      related: !isEmpty(props.related) ? map(props.related, related => ({
-        [uniqueId(`related-${props.id}`)]: related
-      })) : {
+      related: !isEmpty(related) ? related : {
         [uniqueId(`related-${props.id}`)]: ''
       }
     }
@@ -66,7 +68,7 @@ export default class RelatedSectionForm extends Component {
       type: props.type,
       title: state.title,
       item: getSid(state.item),
-      related: map(flatten(map(state.related, toArray)), getSid),
+      items: map(toArray(state.related), getSid),
       modelName: upperFirst(props.modelName)
     }
   }
@@ -91,11 +93,11 @@ export default class RelatedSectionForm extends Component {
     })
   }
 
-  removeRelated = cidToRemove => {
+  removeRelated = cid => {
     const { state } = this
 
     this.setState({
-      related: filter(state.related, (related, cid) => cid !== cidToRemove)
+      related: omit(state.related, [cid])
     })
   }
 
@@ -149,35 +151,31 @@ export default class RelatedSectionForm extends Component {
             defaultValue={defaultTo(state.item, '')}
           />
         </div>
-        {map(state.related, related => {
-          const cid = head(keys(related))
-
-          return (
-            <div
-              key={`${props.id}-${cid}`}
-              className="form-group guide-form-section-row"
-            >
-              <input
-                type="text"
-                onChange={({ currentTarget: input }) => {
-                  this.updateRelated(cid, input.value)
-                }}
-                className="textfield"
-                placeholder={`Related ${props.modelName} url or short id`}
-                defaultValue={defaultTo(related[cid], '')}
-              />
-              {size(state.related) > 1 ? (
-                <button
-                  type="button"
-                  onClick={() => this.removeRelated(cid)}
-                  className="button button--danger"
-                >
-                  Remove {upperFirst(props.modelName)}
-                </button>
-              ) : null}
-            </div>
-          )
-        })}
+        {map(state.related, (related, cid) =>
+          <div
+            key={`${props.id}-${cid}`}
+            className="form-group guide-form-section-row"
+          >
+            <input
+              type="text"
+              onChange={({ currentTarget: input }) => {
+                this.updateRelated(cid, input.value)
+              }}
+              className="textfield"
+              placeholder={`Related ${props.modelName} url or short id`}
+              defaultValue={defaultTo(related, '')}
+            />
+            {size(state.related) > 1 ? (
+              <button
+                type="button"
+                onClick={() => this.removeRelated(cid)}
+                className="button button--danger"
+              >
+                Remove {upperFirst(props.modelName)}
+              </button>
+            ) : null}
+          </div>
+        )}
         {size(state.related) < 8 ? (
           <div className="form-group">
             <button

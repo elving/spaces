@@ -217,7 +217,7 @@
   }
 
   .add-product-modal-close {
-    padding: 25px;
+    padding: 20px;
     z-index: 100;
   }
 
@@ -231,6 +231,9 @@
   }
 
   .add-product-modal-left {
+    border-right: 0 none;
+    border-bottom: 1px solid #dadada;
+    display: block;
     min-height: inherit;
   }
 
@@ -239,6 +242,7 @@
   }
 
   .add-product-modal .product-card {
+    align-items: center;
     flex-direction: row;
   }
 
@@ -281,5 +285,10 @@
 
   .add-product-modal-spaces-list-empty {
     padding: 15px;
+  }
+
+  .add-product-modal .space-form {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }

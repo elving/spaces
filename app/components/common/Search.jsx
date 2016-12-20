@@ -10,13 +10,13 @@ import React, { Component, PropTypes } from 'react'
 
 import MaterialDesignIcon from './MaterialDesignIcon'
 
+import $ from '../../utils/dom/selector'
 import inflect from '../../utils/inflect'
 import hasParent from '../../utils/dom/hasParent'
 import toStringId from '../../api/utils/toStringId'
 import toSingular from '../../utils/toSingular'
 import csvToArray from '../../utils/csvToArray'
 import withoutAnyType from '../../utils/spaceType/withoutAnyType'
-import { default as $ } from '../../utils/dom/selector'
 
 export default class Search extends Component {
   static propTypes = {
@@ -31,7 +31,7 @@ export default class Search extends Component {
 
   state = {
     isSearching: false,
-    searchType: 'spaces',
+    searchType: 'products',
     searchTypesAreOpen: false,
     showColors: false,
     showCategories: false,
@@ -208,6 +208,8 @@ export default class Search extends Component {
 
     if (state.searchType === 'spaces') {
       icon = 'space'
+    } else if (state.searchType === 'guides') {
+      icon = 'guide'
     } else if (state.searchType === 'products') {
       icon = 'product'
     } else if (state.searchType === 'designers') {
@@ -221,10 +223,12 @@ export default class Search extends Component {
         type="button"
         onClick={this.onTypeToggleClick}
         className={classNames({
+          tooltip: true,
           'button-unstyled': true,
           'search-type-current': true,
           'search-type-current--is-active': state.searchTypesAreOpen
         })}
+        data-tooltip={`Search ${state.searchType}`}
       >
         <MaterialDesignIcon name={icon} className="search-type-current-icon" />
       </button>
@@ -236,7 +240,7 @@ export default class Search extends Component {
 
     return state.searchTypesAreOpen ? (
       <div className="search-type-list">
-        {map(['spaces', 'products', 'designers'], type =>
+        {map(['products', 'guides', 'spaces', 'designers'], type =>
           <button
             key={type}
             type="button"
@@ -277,12 +281,18 @@ export default class Search extends Component {
       <button
         type="button"
         onClick={this.onFiltersToggleClick}
-        disabled={state.searchType === 'designers' || state.isSearhing}
+        disabled={
+          state.searchType === 'guides' ||
+          state.searchType === 'designers' ||
+          state.isSearhing
+        }
         className={classNames({
+          tooltip: true,
           'button-unstyled': true,
           'search-filters-toggle': true,
           'search-filters-toggle--is-active': state.filtersAreOpen
         })}
+        data-tooltip="Filters"
       >
         <MaterialDesignIcon name="tune" />
       </button>

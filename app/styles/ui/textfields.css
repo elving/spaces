@@ -13,6 +13,7 @@ input:-webkit-autofill {
   box-shadow: none;
   border-radius: 4px;
   background-color: #ffffff;
+  -webkit-appearance: none;
   padding: 10px;
   min-height: 47px;
 }

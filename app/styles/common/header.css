@@ -9,6 +9,10 @@
   position: fixed;
 }
 
+.user-is-onboarding .header {
+  top: 70px;
+}
+
 .header-container {
   width: 100%;
   margin: 0 auto;

@@ -56,9 +56,9 @@ a:active {
   padding-top: 77px;
 }
 
-.user-is-onboarding {
+#app-container.user-is-onboarding {
   position: relative;
-  padding-top: 70px;
+  padding-top: 147px;
 }
 
 .ReactModal__Body--open .user-is-onboarding {

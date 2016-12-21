@@ -2,7 +2,7 @@ import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import includes from 'lodash/includes'
 import passport from 'passport'
-import { default as queryString } from 'query-string'
+import queryString from 'query-string'
 
 import invites from '../constants/invites'
 import sendMail from '../utils/sendMail'
@@ -11,21 +11,14 @@ import setProps from '../utils/middlewares/setProps'
 import setMetadata from '../utils/middlewares/setMetadata'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
-import { default as findUser } from '../api/user/find'
-import { default as createUser } from '../api/user/create'
-import { default as resetUserPassword } from '../api/user/resetPassword'
+import findUser from '../api/user/find'
+import createUser from '../api/user/create'
+import resetUserPassword from '../api/user/resetPassword'
+import claimPasswordResetRequest from '../api/passwordReset/claim'
+import createPasswordResetRequest from '../api/passwordReset/create'
+import validatePasswordResetRequest from '../api/passwordReset/validate'
 
-import {
-  default as claimPasswordResetRequest
-} from '../api/passwordReset/claim'
-
-import {
-  default as createPasswordResetRequest
-} from '../api/passwordReset/create'
-
-import {
-  default as validatePasswordResetRequest
-} from '../api/passwordReset/validate'
+import { susbscribeToNewsletter } from '../utils/mailchimp'
 
 export const redirectToJoin = (req, res) => {
   res.redirect('/join/')
@@ -66,6 +59,7 @@ export const join = async (req, res, next) => {
         return next(err)
       }
 
+      susbscribeToNewsletter(user)
       Reflect.deleteProperty(req.session, 'returnTo')
       res.status(200).json({ user })
     })

@@ -24,6 +24,18 @@ export default (schema) => {
     })
 
   schema
+    .virtual('firstName')
+    .get(function() {
+      return head(split(this.get('fullName'), ' '))
+    })
+
+  schema
+    .virtual('lastName')
+    .get(function() {
+      return last(split(this.get('fullName'), ' '))
+    })
+
+  schema
     .virtual('initials')
     .get(function() {
       const name = this.get('name')

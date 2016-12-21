@@ -3,10 +3,10 @@ import has from 'lodash/has'
 import omit from 'lodash/omit'
 import mongoose from 'mongoose'
 
-import { default as applyHooks } from './hooks'
-import { default as applyMethods } from './methods'
-import { default as applyVirtuals } from './virtuals'
-import { default as applyValidations } from './validations'
+import applyHooks from './hooks'
+import applyMethods from './methods'
+import applyVirtuals from './virtuals'
+import applyValidations from './validations'
 
 import setAssetUrl from '../../utils/setAssetUrl'
 

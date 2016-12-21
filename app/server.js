@@ -8,6 +8,8 @@ import configModels from './config/models'
 import configExpress from './config/express'
 import configPassport from './config/passport'
 import getRedisConfig from './utils/getRedisConfig'
+
+import { initMailchimp } from './utils/mailchimp'
 import { startCache, clearCache } from './api/cache'
 
 dotenv.load()
@@ -31,6 +33,9 @@ mongoose.connection.on('error', err => logError(err))
 
 mongoose.connection.on('open', () => {
   log('Mongoose connection open.')
+
+  // Init Mailchimp API
+  initMailchimp(process.env.MAILCHIMP_KEY)
 
   // Setup redis cache
   startCache('spaces-next-cache', {

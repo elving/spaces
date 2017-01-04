@@ -1,23 +1,8 @@
 import setOgTags from '../utils/middlewares/setOgTags'
 import setMetadata from '../utils/middlewares/setMetadata'
-import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
-export const renderLanding = (req, res, next) => {
-  if (isAuthenticatedUser(req.user)) {
-    return res.redirect('/popular/')
-  }
-
-  setOgTags(req, res, {
-    ogTitle: 'Spaces | Get Early Access'
-  })
-
-  setMetadata(res, {
-    title: 'Spaces | Get Early Access',
-    bodyId: 'landing',
-    bodyClass: 'landing'
-  })
-
-  next()
+export const renderLanding = (req, res) => {
+  res.redirect('/popular/')
 }
 
 export const renderAbout = (req, res, next) => {

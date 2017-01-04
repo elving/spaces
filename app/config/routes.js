@@ -1,6 +1,5 @@
 import logError from '../utils/logError'
 import getVersion from '../utils/getVersion'
-import isJoinRoute from '../utils/isJoinRoute'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import authRouter from '../routes/auth'
@@ -25,16 +24,6 @@ import suggestionsRouter from '../routes/suggestions'
 import notificationRouter from '../routes/notification'
 
 const configRoutes = (server) => {
-  server.use((req, res, next) => {
-    const isLoggedOut = !isAuthenticatedUser(req.user)
-
-    if (isLoggedOut && !isJoinRoute(req.url) && req.url !== '/') {
-      return res.redirect('/')
-    }
-
-    next()
-  })
-
   server.use(ajaxRouter)
   server.use(authRouter)
   server.use(pageRouter)

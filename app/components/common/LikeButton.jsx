@@ -124,6 +124,9 @@ export default class LikeButton extends Component {
         <a
           href="/login/"
           className={btnClassName}
+          data-tooltip={
+            `${state.liked ? 'Unlike' : 'Like'} this ${props.parentType}`
+          }
         >
           <span className="button-text">
             <MaterialDesignIcon name="like" />

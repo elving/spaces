@@ -97,7 +97,7 @@
   margin-right: 15px;
 }
 
-.guide-header-actions > .guide-header-action:last-of-type {
+.guide-header-actions > .guide-header-action:last-child {
   margin-right: 0;
 }
 

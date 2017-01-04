@@ -4,7 +4,7 @@ import size from 'lodash/size'
 import axios from 'axios'
 import concat from 'lodash/concat'
 import isEmpty from 'lodash/isEmpty'
-import { default as queryString } from 'query-string'
+import queryString from 'query-string'
 import React, { Component, PropTypes } from 'react'
 
 import Loader from '../common/Loader'

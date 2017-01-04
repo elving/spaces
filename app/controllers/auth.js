@@ -1,10 +1,8 @@
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import includes from 'lodash/includes'
 import passport from 'passport'
 import queryString from 'query-string'
 
-import invites from '../constants/invites'
 import sendMail from '../utils/sendMail'
 import metadata from '../constants/metadata'
 import setProps from '../utils/middlewares/setProps'
@@ -27,12 +25,6 @@ export const redirectToJoin = (req, res) => {
 export const renderJoin = (req, res, next) => {
   if (isAuthenticatedUser(req.user)) {
     return res.redirect(`/designers/${req.user.username}/`)
-  }
-
-  const invite = get(req, 'query.invite')
-
-  if (isEmpty(invite) || !includes(invites, invite)) {
-    return res.redirect('/')
   }
 
   setMetadata(res, {

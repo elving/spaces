@@ -143,7 +143,9 @@ export default class Header extends Component {
             </button>
             <AddProductButton />
             <AdminNav />
-            <GlobalNotifications />
+            {context.userLoggedIn() ? (
+              <GlobalNotifications />
+            ) : null}
             <CurrentUserNav />
           </div>
         </div>

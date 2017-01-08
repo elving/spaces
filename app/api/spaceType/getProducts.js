@@ -6,7 +6,10 @@ export default (spaceType, limit = 3) => (
   new Promise(async (resolve, reject) => {
     mongoose
       .model('Product')
-      .where({ spaceTypes: { $in: [spaceType] } })
+      .where({
+        spaceTypes: { $in: [spaceType] },
+        isPendingApproval: { $ne: true }
+      })
       .limit(limit)
       .sort('-createdAt')
       .exec((err, products = []) => {

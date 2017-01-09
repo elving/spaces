@@ -131,7 +131,7 @@ export default sid => (
                 )
 
                 const related = await getItems(
-                  section.related, section.modelName
+                  section.items, section.modelName
                 )
 
                 updateIdsToInvalidate(item)

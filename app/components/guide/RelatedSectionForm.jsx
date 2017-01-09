@@ -18,7 +18,7 @@ export default class RelatedSectionForm extends Component {
     type: PropTypes.string,
     item: PropTypes.string,
     title: PropTypes.string,
-    related: PropTypes.array,
+    items: PropTypes.array,
     onRemove: PropTypes.func,
     modelName: PropTypes.string
   }
@@ -27,24 +27,24 @@ export default class RelatedSectionForm extends Component {
     type: 'related',
     item: '',
     title: '',
-    related: [],
+    items: [],
     onRemove: (() => {})
   }
 
   constructor(props) {
     super(props)
 
-    let related = {}
+    let items = {}
 
-    forEach(props.related, item => {
-      related = assign({}, related, { [uniqueId(props.id)]: item })
+    forEach(props.items, item => {
+      items = assign({}, items, { [uniqueId(props.id)]: item })
     })
 
     this.state = {
       item: defaultTo(props.item, ''),
       title: defaultTo(props.title, ''),
-      related: !isEmpty(related) ? related : {
-        [uniqueId(`related-${props.id}`)]: ''
+      items: !isEmpty(items) ? items : {
+        [uniqueId(`items-${props.id}`)]: ''
       }
     }
   }
@@ -68,7 +68,7 @@ export default class RelatedSectionForm extends Component {
       type: props.type,
       title: state.title,
       item: getSid(state.item),
-      items: map(toArray(state.related), getSid),
+      items: map(toArray(state.items), getSid),
       modelName: upperFirst(props.modelName)
     }
   }
@@ -77,8 +77,8 @@ export default class RelatedSectionForm extends Component {
     const { props, state } = this
 
     this.setState({
-      related: assign({}, state.related, {
-        [uniqueId(`related-${props.id}`)]: ''
+      items: assign({}, state.items, {
+        [uniqueId(`items-${props.id}`)]: ''
       })
     })
   }
@@ -87,7 +87,7 @@ export default class RelatedSectionForm extends Component {
     const { state } = this
 
     this.setState({
-      related: assign({}, state.related, {
+      items: assign({}, state.items, {
         [cid]: item
       })
     })
@@ -97,7 +97,7 @@ export default class RelatedSectionForm extends Component {
     const { state } = this
 
     this.setState({
-      related: omit(state.related, [cid])
+      items: omit(state.items, [cid])
     })
   }
 
@@ -151,7 +151,7 @@ export default class RelatedSectionForm extends Component {
             defaultValue={defaultTo(state.item, '')}
           />
         </div>
-        {map(state.related, (related, cid) =>
+        {map(state.items, (related, cid) =>
           <div
             key={`${props.id}-${cid}`}
             className="form-group guide-form-section-row"
@@ -165,7 +165,7 @@ export default class RelatedSectionForm extends Component {
               placeholder={`Related ${props.modelName} url or short id`}
               defaultValue={defaultTo(related, '')}
             />
-            {size(state.related) > 1 ? (
+            {size(state.items) > 1 ? (
               <button
                 type="button"
                 onClick={() => this.removeRelated(cid)}
@@ -176,7 +176,7 @@ export default class RelatedSectionForm extends Component {
             ) : null}
           </div>
         )}
-        {size(state.related) < 8 ? (
+        {size(state.items) < 8 ? (
           <div className="form-group">
             <button
               type="button"

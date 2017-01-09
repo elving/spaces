@@ -1,5 +1,5 @@
 .mini-card .product-card-image-container {
-  min-height: 140px;
+  min-height: inherit;
 }
 
 .mini-card .product-title {

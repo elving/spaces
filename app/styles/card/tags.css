@@ -7,24 +7,8 @@
   justify-content: flex-start;
 }
 
-.card-tags:hover,
-.card-tags:active {
-  overflow-x: scroll;
-}
-
-.card-tags::after {
-  content: "\00a0";
-}
-
 .card-tag {
   border: 1px solid #dadada;
   margin-right: 5px;
   margin-bottom: 5px;
-}
-
-@media (max-width: 736px) {
-  .card-tags:hover,
-  .card-tags:active {
-    -webkit-overflow-scrolling: touch;
-  }
 }

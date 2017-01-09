@@ -219,6 +219,7 @@
 .guide-section-item-text-content-text {
   font-size: 18px;
   line-height: 28px;
+  white-space: pre-line;
 }
 
 .guide-section-text {

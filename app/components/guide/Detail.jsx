@@ -254,6 +254,7 @@ class GuideDetail extends Component {
                 )}
                 className="share-popup"
                 shareText={props.name}
+                shareImage={props.coverImage}
                 onClickClose={this.closeSharePopup}
               />
             ) : null}

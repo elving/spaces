@@ -588,9 +588,9 @@ export default class ProductForm extends Component {
     const shouldDisable = (
       state.isSaving ||
       state.isDeleting ||
-      state.isLoadingImage ||
+      (state.isLoadingImage && isPOST) ||
       state.deletingSuccessful ||
-      state.isLoadingImageFromUrl
+      (state.isLoadingImageFromUrl && isPOST)
     )
 
     const noImageAvailable = (

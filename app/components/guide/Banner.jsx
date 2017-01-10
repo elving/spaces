@@ -11,7 +11,7 @@ export default class LatestGuideBanner extends Component {
   }
 
   componentDidMount() {
-    if (!(/guide/gim).test(window.location.href)) {
+    if (!(/\/guide|g\//gim).test(window.location.href)) {
       this.fetch()
     }
   }

@@ -53,10 +53,12 @@ export const renderDetail = async (req, res, next) => {
     }
 
     const name = get(guide, 'name')
+    const coverImage = get(guide, 'coverImage')
     const description = get(guide, 'description')
 
     setOgTags(req, res, {
       ogTitle: name,
+      ogImage: coverImage,
       ogDescription: description
     })
 

@@ -1,26 +1,37 @@
-import mongoose from 'mongoose'
+import get from 'lodash/get'
 
+import getById from './getById'
 import sanitize from './sanitize'
 import parseError from '../utils/parseError'
+import uploadImageFromUrl from '../../utils/image/uploadImageFromUrl'
 import { invalidateFromCache } from '../cache'
 
-export default (_id, props) => (
-  new Promise((resolve, reject) => {
+export default (id, props) => (
+  new Promise(async (resolve, reject) => {
+    const guide = await getById(id)
     const updates = sanitize(props)
-    const options = {
-      new: true,
-      runValidators: true
+
+    guide.set(updates)
+
+    if (guide.isModified('coverImage')) {
+      try {
+        const coverImage = await uploadImageFromUrl(
+          'guides', get(updates, 'coverImage')
+        )
+
+        guide.set('coverImage', coverImage)
+      } catch (err) {
+        return reject(err)
+      }
     }
 
-    mongoose
-      .model('Guide')
-      .findOneAndUpdate({ _id }, updates, options, async (err, guide) => {
-        if (err) {
-          return reject(parseError(err))
-        }
+    guide.save(async (err, updatedGuide) => {
+      if (err) {
+        return reject(parseError(err))
+      }
 
-        await invalidateFromCache(_id)
-        resolve(guide)
-      })
+      await invalidateFromCache(id)
+      resolve(updatedGuide)
+    })
   })
 )

@@ -253,7 +253,7 @@ class GuideDetail extends Component {
                   `${window.location.origin}/${props.shortUrl}/`
                 )}
                 className="share-popup"
-                shareText={props.name}
+                shareText={`${props.name}: ${props.description}`}
                 shareImage={props.coverImage}
                 onClickClose={this.closeSharePopup}
               />

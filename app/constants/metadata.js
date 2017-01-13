@@ -2,21 +2,18 @@
 const METADATA = {
   url: 'https://joinspaces.co/',
   type: 'website',
-  title: 'Spaces | A visual shopping guide for your home.',
-  image: 'https://d3bjxaeqvrvffj.cloudfront.net/assets/screenshots/home-m.png',
+  title: 'Spaces | A shopping guide for your home curated by people like you.',
+  image: 'https://d2xpms98gwggxd.cloudfront.net/static/images/banner.jpg',
   siteName: 'Spaces',
   imageWidth: '800',
   imageHeight: '800',
   description: (
-    'A visual shopping guide for your home. Join Spaces to collect and ' +
-    'share spaces that inspire you. We deconstruct the best home spaces; ' +
-    'finding matching and similar products for your home. '
+    'A shopping guide for your home curated by people like you. Join Spaces to curate products, design spaces, like spaces and products you love, follow other designers, rooms and categories that interest you, comment on spaces and products that you are passionate about and redesign spaces you like to give them your personal touch.'
   ),
   mediumDescription: (
-    'A visual shopping guide for your home. Join Spaces to collect and ' +
-    'share spaces that inspire you.'
+    'A shopping guide for your home curated by people like you. Join to curate products and design spaces.'
   ),
-  shortDescription: 'A visual shopping guide for your home.',
+  shortDescription: 'A shopping guide for your home curated by people like you.',
 
   facebookAppId: '549973938496886',
   twitterUsername: 'joinspaces',

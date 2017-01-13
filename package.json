@@ -1,7 +1,7 @@
 {
   "name": "Spaces-Next",
-  "version": "0.0.205",
-  "description": "A visual shopping guide for your home.",
+  "version": "0.0.206",
+  "description": "A shopping guide for your home curated by people like you.",
   "license": "ISC",
   "author": "",
   "main": "index.js",

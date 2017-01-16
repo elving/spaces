@@ -39,6 +39,11 @@
   margin-right: 15px;
 }
 
+#page-product-detail .sticky-inner--active .product-detail-image {
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
 #page-product-detail .sticky-inner--active .product-detail-content {
   width: calc(100% - 60px);
   padding: 0;
@@ -235,15 +240,12 @@
   border-bottom: 1px solid #e5e5e5;
   display: flex;
   align-items: stretch;
+  flex-direction: column;
   justify-content: center;
 }
 
-.product-detail-info-container--has-both .product-detail-info {
-  width: 50%;
-}
-
 .product-detail-info-container--has-both > .product-detail-info:first-child {
-  border-right: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .product-detail-info {
@@ -256,18 +258,75 @@
 
 .product-detail-info-title {
   font-size: 28px;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 2px;
   margin: 0 auto;
+  max-width: 960px;
 }
 
 .product-detail-info-text {
   font-size: 18px;
   line-height: 28px;
   white-space: pre-line;
-  max-width: 1024px;
+  margin: 15px auto 25px;
+  max-width: 960px;
 }
 
 .product-detail-info-button {
   margin: 0 auto;
+  max-width: 280px;
+}
+
+.product-detail-info--has-images {
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.product-detail-info-images {
+  width: 100%;
+  display: flex;
+  min-height: 420px;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.product-detail-info-images-grid {
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+}
+
+.product-detail-info-image {
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+}
+
+.product-detail-info-images-grid .product-detail-info-image {
+  height: 100%;
+}
+
+.product-detail-info-images[data-images="3"] .product-detail-info-images-grid .product-detail-info-image {
+  height: 50%;
+  min-height: 50%;
+}
+
+.product-detail-info-images[data-images="3"] > .product-detail-info-image {
+  width: 65%;
+}
+
+.product-detail-info-images[data-images="3"] .product-detail-info-images-grid {
+  width: 35%;
+}
+
+.product-detail-info--has-images .product-detail-info-content {
+  width: 100%;
+  padding: 30px;
 }
 
 .product-detail-activity {
@@ -412,5 +471,32 @@
   .product-detail-info-container--has-both > .product-detail-info:first-child {
     border-right: 0 none;
     border-bottom: 1px solid #e5e5e5;
+  }
+
+  .product-detail-info-images {
+    flex-direction: column;
+  }
+
+  .product-detail-info-image,
+  .product-detail-info-images {
+    min-height: 320px;
+  }
+
+  .product-detail-info-images-grid {
+    flex-direction: row;
+  }
+
+  .product-detail-info-images-grid,
+  .product-detail-info-images-grid .product-detail-info-image {
+    min-height: 150px !important;
+  }
+
+  .product-detail-info-images[data-images="3"] > .product-detail-info-image,
+  .product-detail-info-images[data-images="3"] .product-detail-info-images-grid {
+    width: 100%;
+  }
+
+  .product-detail-info-images[data-images="3"] .product-detail-info-images-grid .product-detail-info-image {
+    width: 50%;
   }
 }

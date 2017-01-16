@@ -2,6 +2,7 @@ import get from 'lodash/get'
 import map from 'lodash/map'
 import size from 'lodash/size'
 import ceil from 'lodash/ceil'
+import slice from 'lodash/slice'
 import concat from 'lodash/concat'
 import uniqBy from 'lodash/uniqBy'
 import isEmpty from 'lodash/isEmpty'
@@ -202,23 +203,73 @@ class ProductDetail extends Component {
           </div>
         ) : null}
         {!isEmpty(note) ? (
-          <div className="product-detail-info">
-            <h3 className="product-detail-info-title">From the curator</h3>
-            <p className="product-detail-info-text">
-              {note}
-            </p>
-            <a
-              href={`/${get(props.product, 'createdBy.detailUrl')}/products/`}
-              className="button button--primary-alt product-detail-info-button"
-            >
-              <span className="button-text">
-                More from @{get(props.product, 'createdBy.username')}
-              </span>
-            </a>
+          <div
+            className={classNames({
+              'product-detail-info': true,
+              'product-detail-info--has-images': size(
+                get(props, 'product.otherImages', [])
+              )
+            })}
+          >
+            {this.renderotherImages()}
+            <div className="product-detail-info-content">
+              <h3 className="product-detail-info-title">From the curator</h3>
+              <p className="product-detail-info-text">
+                {note}
+              </p>
+              <a
+                href={`/${get(props.product, 'createdBy.detailUrl')}/products/`}
+                className={
+                  'button button--primary-alt product-detail-info-button'
+                }
+              >
+                <span className="button-text">
+                  More from @{get(props.product, 'createdBy.username')}
+                </span>
+              </a>
+            </div>
           </div>
         ) : null}
       </div>
     ) : null
+  }
+
+  renderotherImages() {
+    const { props } = this
+    const otherImages = get(props, 'product.otherImages', [])
+    const otherImagesLength = size(otherImages)
+
+    return otherImagesLength >= 2 ? (
+      <div
+        className="product-detail-info-images"
+        data-images={otherImagesLength}
+      >
+        <div
+          style={{ backgroundImage: `url(${otherImages[0]})` }}
+          className="product-detail-info-image"
+        />
+        <div className="product-detail-info-images-grid">
+          {map(slice(otherImages, 1, otherImagesLength), image =>
+            <div
+              style={{ backgroundImage: `url(${image})` }}
+              className="product-detail-info-image"
+            />
+          )}
+        </div>
+      </div>
+    ) : (
+      <div
+        className="product-detail-info-images"
+        data-images={otherImagesLength}
+      >
+        {map(otherImages, image =>
+          <div
+            style={{ backgroundImage: `url(${image})` }}
+            className="product-detail-info-image"
+          />
+        )}
+      </div>
+    )
   }
 
   renderActivity() {

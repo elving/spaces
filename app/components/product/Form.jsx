@@ -46,6 +46,9 @@ export default class ProductForm extends Component {
   constructor(props, context) {
     super(props, context)
 
+    const note = get(props.product, 'note', '')
+    const noteLength = size(note)
+
     const description = get(props.product, 'description', '')
     const descriptionLength = size(description)
 
@@ -70,10 +73,12 @@ export default class ProductForm extends Component {
       isScraping: false,
       isDeleting: false,
       hasScrapped: false,
-      description: get(props.product, 'description', ''),
+      description,
       imageFromUrl: null,
+      noteCharsLeft: (500 - noteLength),
       isLoadingImage: true,
       savingSuccessful: false,
+      hasNoteCharsError: (noteLength > 500),
       deletingSuccessful: false,
       scrappedSuccessful: false,
       descriptionCharsLeft: (500 - descriptionLength),
@@ -128,6 +133,8 @@ export default class ProductForm extends Component {
       axios
         .get(`/ajax/products/fetch/?url=${encodeURIComponent(formData.url)}`)
         .then(({ data: product }) => {
+          const note = get(product, 'note', '')
+          const noteLength = size(note)
           const description = get(product, 'description', '')
           const productImages = get(product, 'images', [])
           const descriptionLength = size(description)
@@ -143,7 +150,7 @@ export default class ProductForm extends Component {
           } else {
             this.setState({
               name: get(product, 'name', ''),
-              note: get(product, 'note', ''),
+              note,
               image: defaultTo(head(productImages), ''),
               price: get(product, 'price', ''),
               brand: get(product, 'brand', ''),
@@ -154,8 +161,10 @@ export default class ProductForm extends Component {
               isScraping: false,
               hasScrapped: true,
               description,
+              noteCharsLeft: (500 - noteLength),
               isLoadingImage: true,
               savingSuccessful: false,
+              hasNoteCharsError: (noteLength > 500),
               productAlreadyExists: false,
               descriptionCharsLeft: (500 - descriptionLength),
               hasDescriptionCharsError: (descriptionLength > 500)
@@ -352,8 +361,12 @@ export default class ProductForm extends Component {
   }
 
   onNoteChange = ({ currentTarget: input }) => {
+    const noteCharsLeft = 500 - size(input.value)
+
     this.setState({
-      note: input.value
+      note: input.value,
+      noteCharsLeft,
+      hasNoteCharsError: noteCharsLeft < 0
     })
   }
 
@@ -742,6 +755,7 @@ export default class ProductForm extends Component {
       state.isSaving ||
       state.isDeleting ||
       (state.isLoadingImage && isPOST) ||
+      state.hasNoteCharsError ||
       state.deletingSuccessful ||
       state.hasDescriptionCharsError
     )
@@ -885,7 +899,14 @@ export default class ProductForm extends Component {
         {isCurator ? (
           <div className="form-group">
             <label htmlFor="name" className="form-label">
-              Curator&apos;s Note <small>optional</small>
+              Curator&apos;s Note
+              <small
+                style={{
+                  color: state.hasNoteCharsError ? '#ED4542' : '#999999'
+                }}
+              >
+                optional &middot; {state.noteCharsLeft} chars left
+              </small>
             </label>
 
             <textarea
@@ -896,7 +917,10 @@ export default class ProductForm extends Component {
               disabled={state.isSaving}
               className={classNames({
                 textfield: true,
-                'textfield--error': hasNoteError
+                'textfield--error': (
+                  hasNoteError ||
+                  state.hasNoteCharsError
+                )
               })}
               placeholder="I bought this product because it's awesome..."
             />

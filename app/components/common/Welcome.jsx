@@ -26,15 +26,15 @@ export default class Header extends Component {
         </button>
         <div className="welcome-banner-inner">
           <h1 className="welcome-banner-title">
-            Spaces is a shopping guide for your home,
-            curated by people like you.
+            Spaces is a shopping guide for your home, curated by people
+            like you. Join to curate products and design spaces.
           </h1>
           <div className="welcome-banner-actions">
             <a
               href="/join/"
               className="button button--primary-alt welcome-banner-action"
             >
-              Join the community
+              Join Now
             </a>
             <a
               href="/about/"

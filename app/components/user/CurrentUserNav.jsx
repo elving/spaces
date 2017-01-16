@@ -65,7 +65,7 @@ export default class CurrentUserNav extends Component {
               )}
             >
               <span className="button-text">
-                Join Spaces
+                Join
               </span>
             </a>
           </div>

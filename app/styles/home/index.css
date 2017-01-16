@@ -17,14 +17,14 @@
 
 .welcome-banner-inner {
   width: 100%;
-  max-width: 720px;
+  max-width: 960px;
 }
 
 .welcome-banner-title {
   color: #888;
-  font-size: 32px;
+  font-size: 26px;
   text-align: center;
-  line-height: 48px;
+  line-height: 42px;
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 2px;

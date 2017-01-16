@@ -195,7 +195,7 @@ class ProductDetail extends Component {
         })}
       >
         {!isEmpty(description) ? (
-          <div className="product-detail-info">
+          <div id="about" className="product-detail-info">
             <h3 className="product-detail-info-title">About this product</h3>
             <p className="product-detail-info-text">
               {description}
@@ -212,7 +212,7 @@ class ProductDetail extends Component {
             })}
           >
             {this.renderotherImages()}
-            <div className="product-detail-info-content">
+            <div id="note" className="product-detail-info-content">
               <h3 className="product-detail-info-title">From the curator</h3>
               <p className="product-detail-info-text">
                 {note}

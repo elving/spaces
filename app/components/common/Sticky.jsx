@@ -1,3 +1,4 @@
+import get from 'lodash/get'
 import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
@@ -26,13 +27,15 @@ export default class Sticky extends Component {
   onScroll = () => {
     const { props } = this
 
-    if (!this.originalOffsetTop) {
+    if (!this.sticky) {
       return false
     }
 
-    const offset = props.offset >= this.originalOffsetTop
-      ? props.offset - this.originalOffsetTop
-      : this.originalOffsetTop - props.offset
+    const offsetTop = get(this.sticky, 'offsetTop', 0)
+
+    const offset = props.offset >= offsetTop
+      ? props.offset - offsetTop
+      : offsetTop - props.offset
 
     this.setState({
       isSticky: window.scrollY >= offset

@@ -241,6 +241,10 @@ class ProductDetail extends Component {
     const otherImages = get(props, 'product.otherImages', [])
     const otherImagesLength = size(otherImages)
 
+    if (!otherImagesLength) {
+      return null
+    }
+
     return otherImagesLength >= 2 ? (
       <div
         className="product-detail-info-images"
@@ -576,7 +580,11 @@ class ProductDetail extends Component {
         />
 
         <Sticky
-          offset={get(this.productDetail, 'offsetHeight', 500) + 250}
+          offset={
+            get(this.productDetail, 'offsetHeight', 500) + 650 + (
+              context.userLoggedIn() ? 400 : 0
+            )
+          }
         >
           {this.renderProduct()}
         </Sticky>

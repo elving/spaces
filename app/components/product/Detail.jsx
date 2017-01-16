@@ -184,6 +184,7 @@ class ProductDetail extends Component {
   renderInfo() {
     const { props } = this
     const note = get(props.product, 'note')
+    const otherImages = get(props.product, 'otherImages', [])
     const description = get(props.product, 'description')
     const hasBoth = !isEmpty(description) && !isEmpty(note)
 
@@ -202,13 +203,14 @@ class ProductDetail extends Component {
             </p>
           </div>
         ) : null}
+        {isEmpty(note) && !isEmpty(otherImages) ? (
+          this.renderotherImages()
+        ) : null}
         {!isEmpty(note) ? (
           <div
             className={classNames({
               'product-detail-info': true,
-              'product-detail-info--has-images': size(
-                get(props, 'product.otherImages', [])
-              )
+              'product-detail-info--has-images': !isEmpty(otherImages)
             })}
           >
             {this.renderotherImages()}

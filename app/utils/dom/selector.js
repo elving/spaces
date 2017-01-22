@@ -1,3 +1,5 @@
-export default (selectors) => (
-  document.querySelector(selectors)
+export default (selectors, all = false) => (
+  all
+    ? document.querySelectorAll(selectors)
+    : document.querySelector(selectors)
 )

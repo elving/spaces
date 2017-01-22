@@ -1,0 +1,120 @@
+.onboarding-tips-backdrop {
+  background-color: rgba(255, 255, 255, 0.75);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  position: fixed;
+}
+
+.onboarding-tip {
+  border: 1px solid #dadada;
+  box-shadow: 0 0px 20px 0 rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  background-color: #ffffff;
+  width: 320px;
+  z-index: 10005;
+  padding: 15px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.onboarding-tip::after,
+.onboarding-tip::before {
+  content: "";
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  top: -10px;
+  left: 8px;
+  position: absolute;
+}
+
+.onboarding-tip::after {
+  top: -9px;
+  border-bottom: 10px solid #ffffff;
+}
+
+.onboarding-tip::before {
+  border-bottom: 10px solid #d0d0d0;
+}
+
+.onboarding-tip[data-tip="recommend"]::after,
+.onboarding-tip[data-tip="recommend"]::before {
+  left: auto;
+  right: 8px;
+}
+
+.onboarding-tip-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.onboarding-tip-header a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.onboarding-tip-header a:hover {
+  text-decoration: none;
+}
+
+.onboarding-tip-header a .icon {
+  margin-left: 4px;
+}
+
+.onboarding-tip-content {
+  margin: 15px 0;
+}
+
+.onboarding-tip-content .button {
+  width: auto;
+  height: auto;
+  padding: 5px;
+  display: inline-flex;
+  min-height: inherit;
+}
+
+.onboarding-tip-actions {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.onboarding-tip-action {
+  width: 100%;
+}
+
+@media (max-width: 736px) {
+  .onboarding-tip {
+    left: 15px !important;
+    width: calc(100% - 30px);
+  }
+
+  .onboarding-tip[data-tip="design"]::after,
+  .onboarding-tip[data-tip="design"]::before {
+    left: 20px !important;
+  }
+
+  .onboarding-tip[data-tip="like"]::after,
+  .onboarding-tip[data-tip="like"]::before {
+    left: 70px !important;
+  }
+
+  .onboarding-tip[data-tip="share"]::after,
+  .onboarding-tip[data-tip="share"]::before {
+    left: 302px !important;
+  }
+
+  .onboarding-tip[data-tip="recommend"]::after,
+  .onboarding-tip[data-tip="recommend"]::before {
+    right: 62px !important;
+  }
+}

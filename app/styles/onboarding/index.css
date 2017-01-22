@@ -1,4 +1,7 @@
+@import './tips.css';
+
 .onboarding-header {
+  border-top: 1px solid #e5e5e5;
   border-bottom: 1px solid #e5e5e5;
   background-color: #ffffff;
   display: flex;
@@ -18,6 +21,7 @@
 }
 
 .onboarding-header-count {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -137,8 +141,4 @@
 
 .onboarding-modal-content-row .onboarding-modal-actions {
   padding: 35px 15px 0;
-}
-
-.ReactModal__Body--open .user-is-onboarding .onboarding-message {
-  display: none;
 }

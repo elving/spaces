@@ -12,7 +12,6 @@ import SpaceCard from '../space/Card'
 import ProductCard from '../product/Card'
 import ProfileCard from '../user/Card'
 import AddProductModal from '../modal/AddProduct'
-import CreateSpaceBanner from '../onboarding/Banner'
 import addProductModalContainer from '../container/AddProductModal'
 
 import inflect from '../../utils/inflect'
@@ -36,10 +35,6 @@ class SearchResults extends Component {
     closeAddProductModal: (() => {}),
     addProductModalIsOpen: false,
     createAddProductModal: false
-  }
-
-  static contextTypes = {
-    currentUserIsOnboarding: PropTypes.func
   }
 
   constructor(props) {
@@ -151,21 +146,13 @@ class SearchResults extends Component {
   }
 
   render() {
-    const { props, context } = this
+    const { props } = this
 
     const type = get(props.location, 'query.type', '')
     const searchType = type.substring(0, size(type) - 1)
 
     return (
-      <Layout
-        className={classNames({
-          'user-is-onboarding': context.currentUserIsOnboarding()
-        })}
-      >
-        {context.currentUserIsOnboarding() && searchType === 'products' ? (
-          <CreateSpaceBanner />
-        ) : null}
-
+      <Layout>
         <AddProductModal
           product={props.addProductModalCurrent}
           onClose={props.closeAddProductModal}

@@ -86,18 +86,14 @@ export default class Onboarding extends Component {
     return (
       <Layout>
         <h1 className="page-title">
-          Build your personal feed by following what you like the most
+          Build your personal feed by following what interests you the most
         </h1>
 
         <Sticky>
           <div className="onboarding-header">
-            <h2 className="onboarding-header-title">
-              Follow at least 5 interests to build your personal feed.
-            </h2>
-
             <div className="onboarding-header-count">
               <span className="onboarding-header-count-left">
-                {state.following} / 5
+                {state.following} / 5 interests
               </span>
               <a
                 href="/feed/"

@@ -8,7 +8,7 @@ const METADATA = {
   imageWidth: '800',
   imageHeight: '800',
   description: (
-    'A shopping guide for your home curated by people like you. Join Spaces to curate products, design spaces, like spaces and products you love, follow other designers, rooms and categories that interest you, comment on spaces and products that you are passionate about and redesign spaces you like to give them your personal touch.'
+    'A shopping guide for your home curated by people like you. Join to curate products and design spaces.'
   ),
   mediumDescription: (
     'A shopping guide for your home curated by people like you. Join to curate products and design spaces.'

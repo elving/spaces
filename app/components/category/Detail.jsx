@@ -9,7 +9,6 @@ import Products from '../product/Products'
 import SharePopup from '../common/SharePopup'
 import FollowButton from '../common/FollowButton'
 import FollowersModal from '../modal/Followers'
-import CreateSpaceBanner from '../onboarding/Banner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import sharePopupContainer from '../container/SharePopup'
 
@@ -25,10 +24,6 @@ class CategoryDetail extends Component {
   static defaultProps = {
     category: {},
     location: {}
-  }
-
-  static contextTypes = {
-    currentUserIsOnboarding: PropTypes.func
   }
 
   constructor(props) {
@@ -297,18 +292,8 @@ class CategoryDetail extends Component {
   }
 
   render() {
-    const { context } = this
-
     return (
-      <Layout
-        className={classNames({
-          'user-is-onboarding': context.currentUserIsOnboarding()
-        })}
-      >
-        {context.currentUserIsOnboarding() ? (
-          <CreateSpaceBanner />
-        ) : null}
-
+      <Layout>
         <div className="category-detail">
           {this.renderHeader()}
           {this.renderSubHeader()}

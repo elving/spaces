@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 import React from 'react'
-import merge from 'lodash/merge'
+import assign from 'lodash/assign'
 import isError from 'lodash/isError'
 import isEmpty from 'lodash/isEmpty'
 import { renderToString } from 'react-dom/server'
@@ -24,7 +24,7 @@ export default (req, res) => {
     props.errors = get(props, 'errors.message', 'Something went wrong.')
   }
 
-  const serverProps = merge({ csrf }, props)
+  const serverProps = assign({ csrf }, props)
 
   if (isAuthenticatedUser(user)) {
     serverProps.user = user
@@ -76,6 +76,8 @@ export default (req, res) => {
       if (isEmpty(res.locals.og)) {
         setOgTags(req, res)
       }
+
+      res.locals.metadata = assign(res.locals.metadata, metadata)
 
       res.render('index', {
         env: process.env.NODE_ENV || 'development',

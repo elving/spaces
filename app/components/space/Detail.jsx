@@ -31,7 +31,6 @@ import AddProductCard from '../product/AddCard'
 import SpaceFormModal from '../modal/SpaceForm'
 import AddProductModal from '../modal/AddProduct'
 import OnboardingModal from '../modal/Onboarding'
-import CreateSpaceBanner from '../onboarding/Banner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import addProductModalContainer from '../container/AddProductModal'
 
@@ -44,8 +43,7 @@ class SpaceDetail extends Component {
     user: PropTypes.object,
     csrf: PropTypes.string,
     userLoggedIn: PropTypes.func,
-    currentUserIsOwner: PropTypes.func,
-    currentUserIsOnboarding: PropTypes.func
+    currentUserIsOwner: PropTypes.func
   }
 
   static propTypes = {
@@ -685,18 +683,10 @@ class SpaceDetail extends Component {
   }
 
   render() {
-    const { props, state, context } = this
+    const { props, state } = this
 
     return (
-      <Layout
-        className={classNames({
-          'user-is-onboarding': context.currentUserIsOnboarding()
-        })}
-      >
-        {context.currentUserIsOnboarding() ? (
-          <CreateSpaceBanner />
-        ) : null}
-
+      <Layout>
         <Notification
           type="success"
           timeout={3500}

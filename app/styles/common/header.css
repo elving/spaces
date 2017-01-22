@@ -9,10 +9,6 @@
   position: fixed;
 }
 
-.user-is-onboarding .header {
-  top: 70px;
-}
-
 .header-container {
   width: 100%;
   margin: 0 auto;
@@ -145,6 +141,15 @@
 
 .admin-nav .dropdown-content {
   min-width: 280px;
+}
+
+.user-is-onboarding .header {
+  z-index: 1000;
+  position: relative;
+}
+
+.user-is-onboarding[data-onboarding="recommend"] .header {
+  z-index: 10001;
 }
 
 @media (max-width: 768px) {

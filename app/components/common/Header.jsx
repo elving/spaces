@@ -118,7 +118,19 @@ export default class Header extends Component {
               Your Suggestions
             </Link>
           </div>
-        ) : null}
+        ) : (
+          <div className="header-nav">
+            <div className="header-link-divider" />
+            <Link
+              to={{ pathname: '/guides/' }}
+              onClick={fullReload}
+              className="header-link"
+              activeClassName="is-active"
+            >
+              Guides
+            </Link>
+          </div>
+        )}
       </nav>
     )
   }

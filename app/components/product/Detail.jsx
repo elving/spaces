@@ -21,7 +21,6 @@ import Comments from '../comment/Comments'
 import SharePopup from '../common/SharePopup'
 import LikeButton from '../common/LikeButton'
 import AddProductModal from '../modal/AddProduct'
-import CreateSpaceBanner from '../onboarding/Banner'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 import addProductModalContainer from '../container/AddProductModal'
 
@@ -35,8 +34,7 @@ class ProductDetail extends Component {
     user: PropTypes.object,
     csrf: PropTypes.string,
     userLoggedIn: PropTypes.func,
-    currentUserIsOwner: PropTypes.func,
-    currentUserIsOnboarding: PropTypes.func
+    currentUserIsOwner: PropTypes.func
   }
 
   static propTypes = {
@@ -564,15 +562,7 @@ class ProductDetail extends Component {
     const { props, context } = this
 
     return (
-      <Layout
-        className={classNames({
-          'user-is-onboarding': context.currentUserIsOnboarding()
-        })}
-      >
-        {context.currentUserIsOnboarding() ? (
-          <CreateSpaceBanner />
-        ) : null}
-
+      <Layout>
         <AddProductModal
           product={props.addProductModalCurrent}
           onClose={props.closeAddProductModal}

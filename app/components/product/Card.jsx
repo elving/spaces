@@ -17,8 +17,7 @@ import isCurator from '../../utils/user/isCurator'
 export default class ProductCard extends Component {
   static contextTypes = {
     csrf: PropTypes.string,
-    userLoggedIn: PropTypes.func,
-    currentUserIsOnboarding: PropTypes.func
+    userLoggedIn: PropTypes.func
   }
 
   static propTypes = {

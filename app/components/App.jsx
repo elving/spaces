@@ -41,7 +41,7 @@ export default class App extends Component {
       currentUserIsOwner: model => canModify(props.user, model),
       currentUserIsCurator: () => isCurator(props.user),
       currentUserIsOnboarding: () => (
-        get(props.user, 'settings.onboarding', false)
+        get(props.user, 'settings.onboarding', true)
       )
     }
   }

@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from 'react'
 import Layout from '../common/Layout'
 import Spaces from '../space/Spaces'
 import Products from '../product/Products'
-import CreateSpaceBanner from '../onboarding/Banner'
+import OnboardingTips from '../onboarding/Tips'
 
 export default class Feed extends Component {
   static propTypes = {
@@ -19,10 +19,6 @@ export default class Feed extends Component {
   static defaultProps = {
     feed: {},
     location: {}
-  }
-
-  static contextTypes = {
-    currentUserIsOnboarding: PropTypes.func
   }
 
   state = {
@@ -104,18 +100,12 @@ export default class Feed extends Component {
   }
 
   render() {
-    const { props, context } = this
+    const { props } = this
 
     return (
       !isEmpty(get(props.feed, 'results', [])) ? (
-        <Layout
-          className={classNames({
-            'user-is-onboarding': context.currentUserIsOnboarding()
-          })}
-        >
-          {context.currentUserIsOnboarding() ? (
-            <CreateSpaceBanner />
-          ) : null}
+        <Layout>
+          <OnboardingTips />
 
           <h1 className="page-title">
             Here are some interesting things we found for you
@@ -127,15 +117,7 @@ export default class Feed extends Component {
           </div>
         </Layout>
       ) : (
-        <Layout
-          className={classNames({
-            'user-is-onboarding': context.currentUserIsOnboarding()
-          })}
-        >
-          {context.currentUserIsOnboarding() ? (
-            <CreateSpaceBanner />
-          ) : null}
-
+        <Layout>
           <div className="feed-empty">
             <h2 className="feed-empty-title">
               It looks like you don&apos;t follow enough interests to generate

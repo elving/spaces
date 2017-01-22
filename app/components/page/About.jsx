@@ -125,8 +125,8 @@ export default class About extends PureComponent {
 
             <ol className="about-index-list">
               <li className="about-index-item">
-                <a href="#adding-products" className="about-index-link">
-                  Adding products
+                <a href="#curating-products" className="about-index-link">
+                  Curating products
                 </a>
               </li>
               <li className="about-index-item">
@@ -251,8 +251,8 @@ export default class About extends PureComponent {
           </div>
         </div>
 
-        <div id="adding-products" className="about-section-container">
-          {renderSectionTitle('adding-products', 'Adding products')}
+        <div id="curating-products" className="about-section-container">
+          {renderSectionTitle('curating-products', 'Curating products')}
           <div className="about-section about-section-content">
             <p>The products featured on Spaces are hand picked to ensure the quality of our product guides and recommendations for the community.</p>
             <p>Only curators can add products directly to Spaces, but anyone can recommend products by clicking the {renderButton('add')} button found on the top right corner of any page.</p>

@@ -13,9 +13,36 @@
   width: 100%;
 }
 
+.user-is-onboarding[data-onboarding="design"] .product-card:first-of-type,
+.user-is-onboarding[data-onboarding="like"] .product-card:first-of-type,
+.user-is-onboarding[data-onboarding="share"] .product-card:first-of-type {
+  z-index: 10001;
+  pointer-events: none;
+}
+
 .user-is-onboarding .card-actions .like-button,
-.user-is-onboarding .card-actions .share-button {
+.user-is-onboarding .card-actions .share-button,
+.user-is-onboarding .card-actions [data-action="add"] {
   display: none;
+}
+
+.user-is-onboarding .card-actions,
+.user-is-onboarding .product-card:first-of-type .card-actions [data-action="add"],
+.user-is-onboarding .product-card:first-of-type .card-actions .like-button,
+.user-is-onboarding .product-card:first-of-type .card-actions .share-button {
+  display: flex;
+}
+
+.user-is-onboarding .product-card:first-of-type .card-actions [data-action="add"],
+.user-is-onboarding .product-card:first-of-type .card-actions .like-button,
+.user-is-onboarding .product-card:first-of-type .card-actions .share-button {
+  opacity: 0.5;
+}
+
+.user-is-onboarding[data-onboarding="design"] .product-card:first-of-type .card-actions [data-action="add"],
+.user-is-onboarding[data-onboarding="like"] .product-card:first-of-type .card-actions .like-button,
+.user-is-onboarding[data-onboarding="share"] .product-card:first-of-type .card-actions .share-button {
+  opacity: 1;
 }
 
 .product-card:not(.product-card--display-only):hover .card-actions-overlay,
@@ -23,16 +50,11 @@
   display: block;
 }
 
-.user-is-onboarding .card-actions,
 .product-card--popup-open .card-actions,
 .product-card:not(.product-card--display-only):hover .card-actions,
 .product-card:not(.product-card--display-only):active .card-actions,
 .product-card.product-card--can-remove:not(.product-card--display-only):hover .like-button,
-.product-card.product-card--can-remove:not(.product-card--display-only):active .like-button,
-.user-is-onboarding .product-card:not(.product-card--display-only):hover .card-actions .like-button,
-.user-is-onboarding .product-card:not(.product-card--display-only):active .card-actions .like-button,
-.user-is-onboarding .product-card:not(.product-card--display-only):hover .card-actions .share-button,
-.user-is-onboarding .product-card:not(.product-card--display-only):active .card-actions .share-button {
+.product-card.product-card--can-remove:not(.product-card--display-only):active .like-button {
   display: flex;
 }
 

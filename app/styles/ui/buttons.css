@@ -214,6 +214,23 @@
   fill: #ffffff;
 }
 
+.button--white,
+.button--white:active {
+  color: #555555;
+  border-color: #ffffff;
+  background-color: #ffffff;
+}
+
+.button--white:hover {
+  color: #555555;
+  border-color: #fafafa;
+  background-color: #fafafa;
+}
+
+.button--white .icon-fill {
+  fill: #555555;
+}
+
 .button--danger,
 .button--danger:active {
   color: #ffffff;

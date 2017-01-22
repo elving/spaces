@@ -545,6 +545,13 @@ export default class ProductForm extends Component {
               All Products
             </a>
           ) : null}
+
+          {!context.currentUserIsCurator() ? (
+            <a href="/about/#curating-products" className="form-title-link">
+              <MaterialDesignIcon name="help" size={18} />
+              Lean more
+            </a>
+          ) : null}
         </h1>
 
         <div className="form-group">
@@ -754,10 +761,10 @@ export default class ProductForm extends Component {
     const shouldDisable = (
       state.isSaving ||
       state.isDeleting ||
-      (state.isLoadingImage && isPOST) ||
-      state.hasNoteCharsError ||
       state.deletingSuccessful ||
-      state.hasDescriptionCharsError
+      (state.isLoadingImage && isPOST) ||
+      (state.hasNoteCharsError && isAdmin) ||
+      (state.hasDescriptionCharsError && isAdmin)
     )
 
     const formAction = isPOST
@@ -836,7 +843,7 @@ export default class ProductForm extends Component {
             name="url"
             value={state.url}
             required
-            readOnly
+            readOnly={!isCurator}
             onChange={this.onUrlChange}
             disabled={state.isSaving}
             className={classNames({
@@ -850,18 +857,20 @@ export default class ProductForm extends Component {
             <small className="form-error">{urlError}</small>
           ) : null}
 
-          <small className="form-help">
-            If you want to change the product&apos;s url go back to the&nbsp;
-            <a
-              href="#"
-              onClick={(event) => {
-                event.preventDefault()
-                this.reset()
-              }}
-            >
-              product search form.
-            </a>
-          </small>
+          {!isCurator ? (
+            <small className="form-help">
+              If you want to change the product&apos;s url go back to the&nbsp;
+              <a
+                href="#"
+                onClick={(event) => {
+                  event.preventDefault()
+                  this.reset()
+                }}
+              >
+                product search form.
+              </a>
+            </small>
+          ) : null}
         </div>
 
         <div className="form-group">
@@ -937,233 +946,277 @@ export default class ProductForm extends Component {
           </div>
         ) : null}
 
-        <div className="form-group">
-          <label htmlFor="description" className="form-label">
-            Description
-            <small
-              style={{
-                color: state.hasDescriptionCharsError ? '#ED4542' : '#999999'
-              }}
-            >
-              optional &middot; {state.descriptionCharsLeft} chars left
-            </small>
-          </label>
+        {isCurator ? (
+          <div className="form-group">
+            <label htmlFor="description" className="form-label">
+              Description
+              <small
+                style={{
+                  color: state.hasDescriptionCharsError ? '#ED4542' : '#999999'
+                }}
+              >
+                optional &middot; {state.descriptionCharsLeft} chars left
+              </small>
+            </label>
 
-          <textarea
-            id="description"
-            name="description"
-            value={state.description}
-            disabled={state.isSaving}
-            onChange={this.onDescriptionChange}
-            className={classNames({
-              textfield: true,
-              'textfield--error': (
-                hasDescriptionError ||
-                state.hasDescriptionCharsError
-              )
-            })}
-            placeholder="Description"
-          />
+            <textarea
+              id="description"
+              name="description"
+              value={state.description}
+              disabled={state.isSaving}
+              onChange={this.onDescriptionChange}
+              className={classNames({
+                textfield: true,
+                'textfield--error': (
+                  hasDescriptionError ||
+                  state.hasDescriptionCharsError
+                )
+              })}
+              placeholder="Description"
+            />
 
-          {hasDescriptionError ? (
-            <small className="form-error">{descriptionError}</small>
-          ) : null}
-        </div>
+            {hasDescriptionError ? (
+              <small className="form-error">{descriptionError}</small>
+            ) : null}
+          </div>
+        ) : null}
 
-        <div className="form-group">
-          <div className="form-group form-group--inline">
-            <div className="form-group">
-              <label htmlFor="brand" className="form-label">
-                Brand <small>required</small>
-              </label>
+        {isCurator ? (
+          <div className="form-group">
+            <div className="form-group form-group--inline">
+              <div className="form-group">
+                <label htmlFor="brand" className="form-label">
+                  Brand <small>required</small>
+                </label>
 
-              <Select
-                id="brand"
-                name="brand"
-                value={state.brand}
-                options={map(props.brands, brand => ({
-                  value: get(brand, 'name'),
-                  label: get(brand, 'name')
-                }))}
-                required
-                onChange={this.onBrandChange}
-                disabled={state.isSaving}
-                className={classNames({
-                  select: true,
-                  'select--error': hasBrandError
-                })}
-                allowCreate
-                placeholder="E.g. Apple"
-                addLabelText={'Add "{label}" as a new brand'}
-              />
+                <Select
+                  id="brand"
+                  name="brand"
+                  value={state.brand}
+                  options={map(props.brands, brand => ({
+                    value: get(brand, 'name'),
+                    label: get(brand, 'name')
+                  }))}
+                  required
+                  onChange={this.onBrandChange}
+                  disabled={state.isSaving}
+                  className={classNames({
+                    select: true,
+                    'select--error': hasBrandError
+                  })}
+                  allowCreate
+                  placeholder="E.g. Apple"
+                  addLabelText={'Add "{label}" as a new brand'}
+                />
 
-              {hasBrandError ? (
-                <small className="form-error">{brandError}</small>
-              ) : null}
-            </div>
+                {hasBrandError ? (
+                  <small className="form-error">{brandError}</small>
+                ) : null}
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="price" className="form-label">
-                Price <small>required</small>
-              </label>
+              <div className="form-group">
+                <label htmlFor="price" className="form-label">
+                  Price <small>required</small>
+                </label>
 
-              <input
-                id="price"
-                type="text"
-                name="price"
-                value={state.price}
-                required
-                onChange={this.onPriceChange}
-                disabled={state.isSaving}
-                className={classNames({
-                  textfield: true,
-                  'textfield--error': hasPriceError
-                })}
-                placeholder="E.g. $99"
-              />
+                <input
+                  id="price"
+                  type="text"
+                  name="price"
+                  value={state.price}
+                  required
+                  onChange={this.onPriceChange}
+                  disabled={state.isSaving}
+                  className={classNames({
+                    textfield: true,
+                    'textfield--error': hasPriceError
+                  })}
+                  placeholder="E.g. $99"
+                />
 
-              {hasPriceError ? (
-                <small className="form-error">{priceError}</small>
-              ) : null}
+                {hasPriceError ? (
+                  <small className="form-error">{priceError}</small>
+                ) : null}
+              </div>
             </div>
           </div>
-        </div>
+        ) : null}
 
-        <div className="form-group">
-          <label htmlFor="categories" className="form-label">
-            Categories <small>required</small>
-          </label>
-
-          <Select
-            id="categories"
-            name="categories"
-            multi
-            value={state.categories}
-            options={map(props.categories, category => ({
-              value: get(category, 'name'),
-              label: get(category, 'name')
-            }))}
-            required
-            onChange={this.onCategoriesChange}
-            disabled={state.isSaving}
-            className={classNames({
-              select: true,
-              'select--error': hasCategoriesError
-            })}
-            allowCreate={isCurator}
-            placeholder="E.g. Pattern, Minimal"
-            addLabelText={'Add "{label}" as a new category'}
+        {!isCurator ? (
+          <input
+            type="hidden"
+            name="brand"
+            value={!isEmpty(state.brand)
+              ? state.brand
+              : get(head(props.brands), 'name', 'Unknown')
+            }
           />
+        ) : null}
 
-          {hasCategoriesError ? (
-            <small className="form-error">{categoriesError}</small>
-          ) : null}
+        {!isCurator ? (
+          <input
+            type="hidden"
+            name="price"
+            value={!isEmpty(state.price) ? state.price : '$0'}
+          />
+        ) : null}
 
-          {isCurator ? (
+        {isCurator ? (
+          <div className="form-group">
+            <label htmlFor="categories" className="form-label">
+              Categories <small>required</small>
+            </label>
+
+            <Select
+              id="categories"
+              name="categories"
+              multi
+              value={state.categories}
+              options={map(props.categories, category => ({
+                value: get(category, 'name'),
+                label: get(category, 'name')
+              }))}
+              required
+              onChange={this.onCategoriesChange}
+              disabled={state.isSaving}
+              className={classNames({
+                select: true,
+                'select--error': hasCategoriesError
+              })}
+              allowCreate={isCurator}
+              placeholder="E.g. Pattern, Minimal"
+              addLabelText={'Add "{label}" as a new category'}
+            />
+
+            {hasCategoriesError ? (
+              <small className="form-error">{categoriesError}</small>
+            ) : null}
+
             <small className="form-help">
               If you are adding new categories for this product, make sure
               that they can be used for other products. We want to ensure that
               categories have plenty of products.
             </small>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
 
-        <div className="form-group">
-          <label htmlFor="colors" className="form-label">
-            Colors <small>optional</small>
-          </label>
+        {isCurator ? (
+          <div className="form-group">
+            <label htmlFor="colors" className="form-label">
+              Colors <small>optional</small>
+            </label>
 
-          <Select
-            id="colors"
-            name="colors"
-            multi
-            value={state.colors}
-            options={map(props.colors, color => ({
-              value: get(color, 'name'),
-              label: get(color, 'name'),
-              color: get(color, 'hex')
-            }))}
-            required
-            onChange={this.onColorsChange}
-            disabled={state.isSaving}
-            className={classNames({
-              select: true,
-              'select--error': hasColorsError
-            })}
-            placeholder="E.g. White, Charcoal Gray"
-            valueRenderer={option =>
-              <span
-                id={`select-value-${get(option, 'value')}`}
-                className="select-value-color-container"
-              >
+            <Select
+              id="colors"
+              name="colors"
+              multi
+              value={state.colors}
+              options={map(props.colors, color => ({
+                value: get(color, 'name'),
+                label: get(color, 'name'),
+                color: get(color, 'hex')
+              }))}
+              required
+              onChange={this.onColorsChange}
+              disabled={state.isSaving}
+              className={classNames({
+                select: true,
+                'select--error': hasColorsError
+              })}
+              placeholder="E.g. White, Charcoal Gray"
+              valueRenderer={option =>
                 <span
-                  style={{ backgroundColor: get(option, 'color') }}
-                  className="select-value-color"
-                />
-                {get(option, 'label')}
-              </span>
-            }
-            optionRenderer={option =>
-              <span
-                id={`select-option-${get(option, 'value')}`}
-                className="select-option-color-container"
-              >
+                  id={`select-value-${get(option, 'value')}`}
+                  className="select-value-color-container"
+                >
+                  <span
+                    style={{ backgroundColor: get(option, 'color') }}
+                    className="select-value-color"
+                  />
+                  {get(option, 'label')}
+                </span>
+              }
+              optionRenderer={option =>
                 <span
-                  style={{ backgroundColor: get(option, 'color') }}
-                  className="select-option-color"
-                />
-                {get(option, 'label')}
-              </span>
-            }
-          />
+                  id={`select-option-${get(option, 'value')}`}
+                  className="select-option-color-container"
+                >
+                  <span
+                    style={{ backgroundColor: get(option, 'color') }}
+                    className="select-option-color"
+                  />
+                  {get(option, 'label')}
+                </span>
+              }
+            />
 
-          {hasColorsError ? (
-            <small className="form-error">{colorsError}</small>
-          ) : null}
+            {hasColorsError ? (
+              <small className="form-error">{colorsError}</small>
+            ) : null}
 
-          <small className="form-help">
-            If there&apos;s a color that&apos;s not present in this list please
-            &nbsp;<a href="mailto:support@joinspaces.co">let us know</a>.
-          </small>
-        </div>
+            <small className="form-help">
+              If there&apos;s a color that&apos;s
+              not present in this list please
+              &nbsp;<a href="mailto:support@joinspaces.co">let us know</a>.
+            </small>
+          </div>
+        ) : null}
 
-        <div className="form-group">
-          <label htmlFor="spaces" className="form-label">
-            Rooms <small>required</small>
-          </label>
+        {isCurator ? (
+          <div className="form-group">
+            <label htmlFor="spaces" className="form-label">
+              Rooms <small>required</small>
+            </label>
 
-          <Select
-            id="spaces"
+            <Select
+              id="spaces"
+              name="spaceTypes"
+              multi
+              value={state.spaceTypes}
+              options={map(props.spaceTypes, spaceTpye => ({
+                value: get(spaceTpye, 'name'),
+                label: get(spaceTpye, 'name')
+              }))}
+              required
+              onChange={this.onSpaceTypesChange}
+              disabled={state.isSaving}
+              className={classNames({
+                select: true,
+                'select--error': hasSpaceTypesError
+              })}
+              placeholder="E.g. Kitchen, Patio"
+              allowCreate={context.currentUserIsAdmin()}
+              addLabelText={'Add "{label}" as a new room'}
+            />
+
+            {hasSpaceTypesError ? (
+              <small className="form-error">{spaceTypesError}</small>
+            ) : null}
+
+            <small className="form-help">
+              Select rooms where this product could be found or used, e.g. a
+              refrigerator is used for kitchens. If this product can be used
+              in any room select the &ldquo;Any&rdquo; room option. This is
+              used to generate product suggestions for spaces.
+            </small>
+          </div>
+        ) : null}
+
+        {!isCurator ? (
+          <input
+            type="hidden"
             name="spaceTypes"
-            multi
-            value={state.spaceTypes}
-            options={map(props.spaceTypes, spaceTpye => ({
-              value: get(spaceTpye, 'name'),
-              label: get(spaceTpye, 'name')
-            }))}
-            required
-            onChange={this.onSpaceTypesChange}
-            disabled={state.isSaving}
-            className={classNames({
-              select: true,
-              'select--error': hasSpaceTypesError
-            })}
-            placeholder="E.g. Kitchen, Patio"
-            allowCreate={context.currentUserIsAdmin()}
-            addLabelText={'Add "{label}" as a new room'}
+            value={!isEmpty(state.spaceTypes) ? state.spaceTypes : 'Any'}
           />
+        ) : null}
 
-          {hasSpaceTypesError ? (
-            <small className="form-error">{spaceTypesError}</small>
-          ) : null}
-
-          <small className="form-help">
-            Select rooms where this product could be found or used, e.g. a
-            refrigerator is used for kitchens. If this product can be used
-            in any room select the &ldquo;Any&rdquo; room option. This is
-            used to generate product suggestions for spaces.
-          </small>
-        </div>
+        {!isCurator ? (
+          <input
+            type="hidden"
+            name="categories"
+            value={!isEmpty(state.categories) ? state.categories : 'Any'}
+          />
+        ) : null}
 
         <div className="form-group">
           <div className="form-group form-group--inline">
@@ -1257,7 +1310,7 @@ export default class ProductForm extends Component {
           isVisible
         >
           Thanks for the recommendation! We&apos;ll review it shortly.
-          &nbsp;<a href="/about/#adding-products">Learn about
+          &nbsp;<a href="/about/#curating-products">Learn about
           recommendations</a>.
         </Notification>
       )

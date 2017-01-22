@@ -51,7 +51,7 @@ class UserRecommendedProducts extends Component {
           <h2 className="user-recommended-products-empty">
             You haven&apos;t recommended any products yet...
             <a
-              href="/about/#adding-products"
+              href="/about/#curating-products"
               className="button button--primary-alt"
             >
               Get started

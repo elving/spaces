@@ -47,16 +47,6 @@ export default class Feed extends Component {
       <div className="navpills" data-links="2">
         <button
           type="button"
-          onClick={this.showSpaces}
-          className={classNames({
-            'navpills-link': true,
-            'navpills-link--active': state.showSpaces
-          })}
-        >
-          Spaces
-        </button>
-        <button
-          type="button"
           onClick={this.showProducts}
           className={classNames({
             'navpills-link': true,
@@ -64,6 +54,16 @@ export default class Feed extends Component {
           })}
         >
           Products
+        </button>
+        <button
+          type="button"
+          onClick={this.showSpaces}
+          className={classNames({
+            'navpills-link': true,
+            'navpills-link--active': state.showSpaces
+          })}
+        >
+          Spaces
         </button>
       </div>
     )

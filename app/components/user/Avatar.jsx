@@ -54,13 +54,14 @@ export default class Avatar extends Component {
     const { props } = this
 
     const imageUrl = get(props.user, 'avatar', props.imageUrl)
-    const fontSize = (props.height - 46)
+    const fontSize = props.height / 2
     const lineHeight = `${fontSize}px`
 
     return (
       <div style={props.style} className={`user-avatar ${props.className}`}>
         {!isEmpty(imageUrl) ? (
           <img
+            alt="avatar"
             src={imageUrl}
             role="presentation"
             width={props.width}

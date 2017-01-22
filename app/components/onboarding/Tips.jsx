@@ -23,7 +23,11 @@ export default class OnboardingTips extends Component {
   }
 
   componentDidMount() {
-    this.startOnboarding()
+    const { context } = this
+
+    if (context.currentUserIsOnboarding()) {
+      this.startOnboarding()
+    }
   }
 
   getTipPosition = (tip) => {

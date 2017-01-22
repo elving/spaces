@@ -77,7 +77,7 @@ export default (req, res) => {
         setOgTags(req, res)
       }
 
-      res.locals.metadata = assign(res.locals.metadata, metadata)
+      res.locals.metadata = assign({}, metadata, res.locals.metadata)
 
       res.render('index', {
         env: process.env.NODE_ENV || 'development',

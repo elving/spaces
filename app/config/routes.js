@@ -47,10 +47,7 @@ const configRoutes = (server) => {
 
   // Misc
   server.get('/sitemap.txt', (req, res) => {
-    console.log(`${__dirname}/sitemap.txt`)
-    res.sendFile(`${__dirname}/sitemap.txt`, (err) => {
-      console.log(err)
-    })
+    res.sendFile(`${__dirname}/sitemap.txt`)
   })
 
   server.get('/400/', (req, res) => {

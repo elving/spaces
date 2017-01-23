@@ -1,6 +1,5 @@
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import classNames from 'classnames'
 import { Link } from 'react-router'
 import React, { PropTypes, PureComponent } from 'react'
 
@@ -8,7 +7,6 @@ import Layout from '../common/Layout'
 import Avatar from './Avatar'
 import FollowButton from '../common/FollowButton'
 import CuratorBadge from './CuratorBadge'
-import CreateSpaceBanner from '../onboarding/Banner'
 
 import inflect from '../../utils/inflect'
 import toStringId from '../../api/utils/toStringId'
@@ -27,8 +25,7 @@ export default class UserProfile extends PureComponent {
   }
 
   static contextTypes = {
-    user: PropTypes.object,
-    currentUserIsOnboarding: PropTypes.func
+    user: PropTypes.object
   }
 
   isProfileOwner() {
@@ -150,23 +147,10 @@ export default class UserProfile extends PureComponent {
   }
 
   render() {
-    const { props, context } = this
-
-    const productsCount = get(props.counters, 'products', 0)
+    const { props } = this
 
     return (
-      <Layout
-        className={classNames({
-          'user-is-onboarding': (
-            context.currentUserIsOnboarding() &&
-            productsCount
-          )
-        })}
-      >
-        {context.currentUserIsOnboarding() && productsCount ? (
-          <CreateSpaceBanner />
-        ) : null}
-
+      <Layout>
         <div className="user-profile">
           {this.renderHeader()}
           <div className="user-profile-content">

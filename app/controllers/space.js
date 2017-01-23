@@ -6,6 +6,7 @@ import toLower from 'lodash/toLower'
 
 import isAdmin from '../utils/user/isAdmin'
 import setProps from '../utils/middlewares/setProps'
+import metadata from '../constants/metadata'
 import setOgTags from '../utils/middlewares/setOgTags'
 import setMetadata from '../utils/middlewares/setMetadata'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
@@ -23,18 +24,21 @@ import toObjectId from '../api/utils/toObjectId'
 import getAllUserSpaces from '../api/user/getSpaces'
 
 export const renderIndex = async (req, res, next) => {
+  const description = (`
+    Discover inspiring spaces designed by the most beautiful
+    and useful products on the web — ${metadata.shortDescription}
+  `)
+
   try {
     setOgTags(req, res, {
-      ogTitle: (
-        'Get inspired by the most beautiful spaces, ' +
-        'designed by our curators.'
-      )
+      ogTitle: description
     })
 
     setMetadata(res, {
       title: 'Discover Spaces | Spaces',
       bodyId: 'all-spaces',
-      bodyClass: 'page page-all-spaces'
+      bodyClass: 'page page-all-spaces',
+      description
     })
 
     next()
@@ -64,7 +68,13 @@ export const renderDetail = async (req, res, next) => {
     const username = get(space, 'createdBy.username')
     const products = size(get(space, 'products', [])) || ''
     const spaceType = get(space, 'spaceType.name')
-    const description = get(space, 'description')
+    const spaceDescription = get(space, 'description')
+
+    const description = (`
+      ${name} — A ${toLower(spaceType)} featuring ${products}
+      beautiful ${products === 1 ? 'product' : 'products'}
+      — ${metadata.shortDescription}
+    `)
 
     setOgTags(req, res, {
       ogTitle: (
@@ -72,13 +82,14 @@ export const renderDetail = async (req, res, next) => {
         `products for your ${toLower(spaceType)}`
       ),
       ogImage: image,
-      ogDescription: description || `Designed by @${username}`
+      ogDescription: spaceDescription || `Designed by @${username}`
     })
 
     setMetadata(res, {
       title: `${get(space, 'name', '')} | Spaces`,
       bodyId: 'space-detail',
-      bodyClass: 'page page-space-detail'
+      bodyClass: 'page page-space-detail',
+      description
     })
 
     setProps(res, {

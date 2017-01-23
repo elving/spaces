@@ -5,6 +5,7 @@ import isEmpty from 'lodash/isEmpty'
 
 import toJSON from '../api/utils/toJSON'
 import setProps from '../utils/middlewares/setProps'
+import metadata from '../constants/metadata'
 import setOgTags from '../utils/middlewares/setOgTags'
 import toStringId from '../api/utils/toStringId'
 import setMetadata from '../utils/middlewares/setMetadata'
@@ -17,18 +18,24 @@ import update from '../api/category/update'
 import destroy from '../api/category/destroy'
 import findBySid from '../api/category/findBySid'
 import findByName from '../api/category/findByName'
-import { default as searchProducts } from '../api/product/search'
+import searchProducts from '../api/product/search'
 
 export const renderIndex = async (req, res, next) => {
+  const description = (`
+    Shop beautiful and useful products from
+    around the web by category — ${metadata.shortDescription}
+  `)
+
   try {
     setOgTags(req, res, {
-      ogTitle: 'Discover spaces by categories'
+      ogTitle: description
     })
 
     setMetadata(res, {
       title: 'Discover Categories | Spaces',
       bodyId: 'all-categories',
-      bodyClass: 'page page-all-categories'
+      bodyClass: 'page page-all-categories',
+      description
     })
 
     setProps(res, await search({ limit: 1000 }))
@@ -53,15 +60,21 @@ export const renderDetail = async (req, res, next) => {
       categories: toStringId(category)
     })
 
+    const description = (`
+      Popular products and
+      spaces in ${get(category, 'name')} — ${metadata.shortDescription}
+    `)
+
     setOgTags(req, res, {
-      ogTitle: `Browse beautiful spaces featuring ${get(category, 'name')}.`,
+      ogTitle: description,
       ogImage: get(category, 'image')
     })
 
     setMetadata(res, {
       title: `${get(category, 'name')} | Spaces`,
       bodyId: 'page-category-detail',
-      bodyClass: 'page page-category-detail'
+      bodyClass: 'page page-category-detail',
+      description
     })
 
     setProps(res, {

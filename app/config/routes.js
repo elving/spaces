@@ -46,6 +46,13 @@ const configRoutes = (server) => {
   server.use(notificationRouter)
 
   // Misc
+  server.get('/sitemap.txt', (req, res) => {
+    console.log(`${__dirname}/sitemap.txt`)
+    res.sendFile(`${__dirname}/sitemap.txt`, (err) => {
+      console.log(err)
+    })
+  })
+
   server.get('/400/', (req, res) => {
     res.render('404', {
       err: null,

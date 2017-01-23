@@ -5,6 +5,7 @@ import isEmpty from 'lodash/isEmpty'
 
 import isAdmin from '../utils/user/isAdmin'
 import isOwner from '../utils/user/isOwner'
+import metadata from '../constants/metadata'
 import setProps from '../utils/middlewares/setProps'
 import setOgTags from '../utils/middlewares/setOgTags'
 import setMetadata from '../utils/middlewares/setMetadata'
@@ -28,18 +29,21 @@ import getAllCategories from '../api/category/getAll'
 import getAllSpaceTypes from '../api/spaceType/getAll'
 
 export const renderIndex = async (req, res, next) => {
+  const description = (`
+    Discover the most beautiful and useful products for
+    your home from around the web — ${metadata.shortDescription}
+  `)
+
   try {
     setOgTags(req, res, {
-      ogTitle: (
-        'Shop and design spaces with the most beautiful ' +
-        'products on the web.'
-      )
+      ogTitle: description
     })
 
     setMetadata(res, {
       title: 'Discover Products | Spaces',
       bodyId: 'all-products',
-      bodyClass: 'page page-all-products'
+      bodyClass: 'page page-all-products',
+      description
     })
 
     next()
@@ -82,7 +86,8 @@ export const renderDetail = async (req, res, next) => {
     setMetadata(res, {
       title: `${get(product, 'name', '')} | Spaces`,
       bodyId: 'page-product-detail',
-      bodyClass: 'page'
+      bodyClass: 'page',
+      description: `${description}. ${url}`
     })
 
     setProps(res, {

@@ -6,6 +6,7 @@ import isEmpty from 'lodash/isEmpty'
 import toJSON from '../api/utils/toJSON'
 import isAdmin from '../utils/user/isAdmin'
 import setProps from '../utils/middlewares/setProps'
+import metadata from '../constants/metadata'
 import setOgTags from '../utils/middlewares/setOgTags'
 import setMetadata from '../utils/middlewares/setMetadata'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
@@ -18,15 +19,21 @@ import destroy from '../api/guide/destroy'
 import getGuide from '../api/guide/get'
 
 export const renderIndex = async (req, res, next) => {
+  const description = (`
+    Each month we make shopping guides for your home based on
+    products the community has curated — ${metadata.shortDescription}
+  `)
+
   try {
     setOgTags(req, res, {
-      ogTitle: 'Shopping guides for your home curated by people like you.'
+      ogTitle: description
     })
 
     setMetadata(res, {
       title: 'Shopping Guides | Spaces',
       bodyId: 'all-guides',
-      bodyClass: 'page page-all-guides'
+      bodyClass: 'page page-all-guides',
+      description
     })
 
     next()
@@ -65,7 +72,8 @@ export const renderDetail = async (req, res, next) => {
     setMetadata(res, {
       title: `${name} | Spaces`,
       bodyId: 'page-guide-detail',
-      bodyClass: 'page'
+      bodyClass: 'page',
+      description
     })
 
     setProps(res, guide)

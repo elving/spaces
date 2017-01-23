@@ -5,6 +5,7 @@ import concat from 'lodash/concat'
 import includes from 'lodash/includes'
 
 import toJSON from '../api/utils/toJSON'
+import metadata from '../constants/metadata'
 import setProps from '../utils/middlewares/setProps'
 import setOgTags from '../utils/middlewares/setOgTags'
 import toStringId from '../api/utils/toStringId'
@@ -24,6 +25,10 @@ export default async (req, res, next) => {
     let relatedRooms = []
     let relatedProducts = []
     let relatedCategories = []
+
+    const description = (
+      `See what's trending and popular on Spaces — ${metadata.shortDescription}`
+    )
 
     const users = await getUsers(6)
     const rooms = await getRooms(6)
@@ -60,13 +65,15 @@ export default async (req, res, next) => {
     }
 
     setOgTags(req, res, {
-      ogTitle: 'What\'s trending on Spaces'
+      ogTitle: 'Trending on Spaces',
+      ogDescription: description
     })
 
     setMetadata(res, {
       title: 'Popular | Spaces',
       bodyId: 'home',
-      bodyClass: 'page page-home'
+      bodyClass: 'page page-home',
+      description
     })
 
     setProps(res, {

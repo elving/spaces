@@ -5,6 +5,8 @@ import isEmpty from 'lodash/isEmpty'
 
 import toJSON from '../api/utils/toJSON'
 import setProps from '../utils/middlewares/setProps'
+import metadata from '../constants/metadata'
+import setOgTags from '../utils/middlewares/setOgTags'
 import setMetadata from '../utils/middlewares/setMetadata'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
@@ -19,16 +21,24 @@ import findByName from '../api/spaceType/findByName'
 import getAllCategories from '../api/category/getAll'
 
 export const renderIndex = async (req, res, next) => {
+  const description = (`
+    Shop beautiful and useful products from
+    around the web by rooms — ${metadata.shortDescription}
+  `)
+
   try {
-    const results = await search({ limit: 1000 })
+    setOgTags(req, res, {
+      ogTitle: description
+    })
 
     setMetadata(res, {
       title: 'Discover Rooms | Spaces',
       bodyId: 'all-rooms',
-      bodyClass: 'page page-all-rooms'
+      bodyClass: 'page page-all-rooms',
+      description
     })
 
-    setProps(res, results)
+    setProps(res, await search({ limit: 1000 }))
 
     next()
   } catch (err) {
@@ -42,14 +52,25 @@ export const renderDetail = async (req, res, next) => {
   try {
     const spaceType = await findByName(slug)
 
+    const description = (`
+      Popular products for
+      your ${get(spaceType, 'name')} — ${metadata.shortDescription}
+    `)
+
     if (isEmpty(spaceType)) {
       return res.redirect('/404/')
     }
 
+    setOgTags(req, res, {
+      ogTitle: description,
+      ogImage: get(spaceType, 'image')
+    })
+
     setMetadata(res, {
       title: `${get(spaceType, 'name')} | Spaces`,
       bodyId: 'page-spaceType-detail',
-      bodyClass: 'page page-spaceType-detail'
+      bodyClass: 'page page-spaceType-detail',
+      description
     })
 
     setProps(res, {

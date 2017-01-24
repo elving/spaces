@@ -74,8 +74,8 @@ a:active {
 @media (max-width: 736px) {
   html,
   body {
+    width: 100% !important;
     height: inherit !important;
-    overflow: inherit !important;
     min-height: inherit !important;
     overflow-y: inherit !important;
     overflow-x: hidden !important;

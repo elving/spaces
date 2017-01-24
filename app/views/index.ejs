@@ -64,19 +64,6 @@
       <script>window.__REACT_PROPS__ = <%- JSON.stringify(reactProps) %>;</script>
       <script src="https://d2xpms98gwggxd.cloudfront.net/static/bundle.js?<%= version %>"></script>
 
-      <!-- Doorbell -->
-      <script type="text/javascript">
-        window.doorbellOptions = {
-          appKey: 'fYkFBhR8UT0m0VNmeRVaPAkAIpBV8vZOryb6y34CMMd4GRXYbv96BZthjpbIKsv3'
-        };
-        (function(w, d, t) {
-          var hasLoaded = false;
-          function l() { if (hasLoaded) { return; } hasLoaded = true; window.doorbellOptions.windowLoaded = true; var g = d.createElement(t);g.id = 'doorbellScript';g.type = 'text/javascript';g.async = true;g.src = 'https://embed.doorbell.io/button/4756?t='+(new Date().getTime());(d.getElementsByTagName('head')[0]||d.getElementsByTagName('body')[0]).appendChild(g); }
-          if (w.attachEvent) { w.attachEvent('onload', l); } else if (w.addEventListener) { w.addEventListener('load', l, false); } else { l(); }
-          if (d.readyState == 'complete') { l(); }
-        }(window, document, 'script'));
-      </script>
-
       <!-- Viglinks -->
       <script type="text/javascript">
         var vglnk = { key: '598a3a0b72159e81dd57202166b4469d' };

@@ -230,7 +230,9 @@ export default class OnboardingTips extends Component {
                   'onboarding-tip-action': true
                 })}
               >
-                Next
+                <span className="button-text">
+                  Next
+                </span>
               </button>
             </div>
           </div>
@@ -266,7 +268,9 @@ export default class OnboardingTips extends Component {
                   'onboarding-tip-action': true
                 })}
               >
-                Next
+                <span className="button-text">
+                  Next
+                </span>
               </button>
             </div>
           </div>
@@ -302,7 +306,9 @@ export default class OnboardingTips extends Component {
                   'onboarding-tip-action': true
                 })}
               >
-                Next
+                <span className="button-text">
+                  Next
+                </span>
               </button>
             </div>
           </div>
@@ -338,7 +344,9 @@ export default class OnboardingTips extends Component {
                   'onboarding-tip-action': true
                 })}
               >
-                Got it!
+                <span className="button-text">
+                  Got it!
+                </span>
               </button>
             </div>
           </div>

@@ -110,7 +110,7 @@
 
   .onboarding-tip[data-tip="share"]::after,
   .onboarding-tip[data-tip="share"]::before {
-    left: 302px !important;
+    left: 290px !important;
   }
 
   .onboarding-tip[data-tip="recommend"]::after,

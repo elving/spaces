@@ -18,3 +18,10 @@
 .current-user-nav-cta > .current-user-nav-link:last-child {
   margin-right: 0;
 }
+
+@media (max-width: 768px) {
+  .current-user-nav .dropdown__content {
+    left: 0 !important;
+    right: auto !important;
+  }
+}

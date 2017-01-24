@@ -69,6 +69,10 @@ export const renderLogin = (req, res, next) => {
     return res.redirect(`/designers/${req.user.username}/`)
   }
 
+  if (/joinspaces\.co/.test(req.headers.referer)) {
+    req.session.returnTo = req.headers.referer
+  }
+
   setMetadata(res, {
     title: 'Login | Spaces',
     bodyId: 'login',
@@ -99,7 +103,10 @@ export const login = (req, res, next) => {
         })
       }
 
-      res.status(200).json({ user })
+      res.status(200).json({
+        user,
+        redirect: req.session.returnTo
+      })
     })
   })(req, res, next)
 }

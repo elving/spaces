@@ -38,8 +38,9 @@ export default class Login extends Component {
       }, () => {
         axios
           .post('/ajax/login/', formData)
-          .then(() => {
-            window.location.href = '/feed/'
+          .then((res) => {
+            const redirect = get(res, 'data.redirect', '/feed/')
+            window.location.href = redirect
           })
           .catch(({ response }) => {
             this.setState({

@@ -34,11 +34,11 @@ export default class Landing extends Component {
               <p>Discover products curated by people with a passion for design and home decor.</p>
             </div>
             <div className="landing-about-text">
-              <h3>Become a designer</h3>
+              <h3>Join Now</h3>
               <p>Design spaces with beautiful products to create a wish list for your home or an idea board for your next home project.</p>
             </div>
             <div className="landing-about-text">
-              <h3>Follow interesting products and designers</h3>
+              <h3>Follow interesting products and people</h3>
               <p>Stay up to date with the products you&apos;re interested in and discover what other people are in to.</p>
             </div>
           </div>

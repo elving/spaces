@@ -1,7 +1,17 @@
-#search-spaces .page-content {
-  padding: 30px;
+#search-results .product-finder-filters {
+  margin-top: -20px;
+  padding-left: 35px;
+  padding-right: 35px;
 }
 
-#search-spaces .search-form {
-  margin: 0 auto 30px;
+@media (max-width: 736px) {
+  #search-results .page-title {
+    margin-top: 0;
+  }
+
+  #search-results .product-finder-filters {
+    margin-top: -15px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }

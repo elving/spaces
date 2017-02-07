@@ -7,6 +7,7 @@ import * as controller from '../controllers/auth'
 const router = express.Router()
 
 router.get('/join/', controller.renderJoin)
+router.get('/join/', controller.renderJoin)
 router.get('/signup/', controller.redirectToJoin)
 router.get('/register/', controller.redirectToJoin)
 router.get('/login/', controller.renderLogin)

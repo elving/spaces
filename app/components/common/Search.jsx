@@ -190,7 +190,7 @@ export default class Search extends Component {
         <input
           ref={input => { this.searchInput = input }}
           type="text"
-          name={state.searchType === 'designers' ? 'username' : 'name'}
+          name={state.searchType === 'users' ? 'username' : 'name'}
           disabled={state.isSearching}
           className="search-input textfield"
           placeholder="Search"
@@ -212,8 +212,8 @@ export default class Search extends Component {
       icon = 'guide'
     } else if (state.searchType === 'products') {
       icon = 'product'
-    } else if (state.searchType === 'designers') {
-      icon = 'designer'
+    } else if (state.searchType === 'users') {
+      icon = 'user'
     } else {
       icon = 'space'
     }
@@ -240,7 +240,7 @@ export default class Search extends Component {
 
     return state.searchTypesAreOpen ? (
       <div className="search-type-list">
-        {map(['products', 'guides', 'spaces', 'designers'], type =>
+        {map(['products', 'guides', 'spaces', 'users'], type =>
           <button
             key={type}
             type="button"
@@ -283,7 +283,7 @@ export default class Search extends Component {
         onClick={this.onFiltersToggleClick}
         disabled={
           state.searchType === 'guides' ||
-          state.searchType === 'designers' ||
+          state.searchType === 'users' ||
           state.isSearhing
         }
         className={classNames({

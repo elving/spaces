@@ -4,10 +4,7 @@ input:-webkit-autofill {
   transition: unset;
 }
 
-.textfield,
-#doorbell-email,
-#doorbell-feedback,
-.DraftEditor-editorContainer {
+.textfield {
   color: #555;
   border: 1px solid #dadada;
   box-shadow: none;
@@ -23,7 +20,9 @@ input:-webkit-autofill {
 .textfield[readonly]:hover,
 .textfield:read-only:hover,
 .textfield[readonly]:focus,
-.textfield:read-only:focus {
+.textfield:read-only:focus,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
   cursor: default;
   border-color: #f0f0f0;
   background-color: #f0f0f0;
@@ -46,13 +45,7 @@ textarea.textfield--small {
 }
 
 .textfield:focus,
-.textfield:active,
-#doorbell-email:focus,
-#doorbell-email:active,
-#doorbell-feedback:focus,
-#doorbell-feedback:active,
-.DraftEditor-editorContainer:focus,
-.DraftEditor-editorContainer:active {
+.textfield:active {
   border-color: #bababa;
 }
 
@@ -61,7 +54,8 @@ textarea.textfield--small {
   pointer-events: none;
 }
 
-.textfield--error {
+.textfield--error,
+input:-webkit-autofill.textfield--error {
   color: #fb5465;
   border-color: #fb5465;
 }

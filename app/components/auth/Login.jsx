@@ -75,10 +75,6 @@ export default class Login extends Component {
         >
           <input type="hidden" name="_csrf" value={context.csrf} />
 
-          <h1 className="form-title">
-            Good to see you again!
-          </h1>
-
           <div className="auth-form-social">
             <a
               href="/auth/facebook/"

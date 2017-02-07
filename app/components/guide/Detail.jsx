@@ -231,6 +231,7 @@ class GuideDetail extends Component {
                 button: true,
                 tooltip: true,
                 'share-button': true,
+                'popup-trigger': true,
                 'button--small': true,
                 'guide-header-action': true
               })}

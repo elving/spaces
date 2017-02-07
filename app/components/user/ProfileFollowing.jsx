@@ -7,7 +7,7 @@ import React, { Component, PropTypes } from 'react'
 
 import Rooms from '../spaceType/Rooms'
 import Loader from '../common/Loader'
-import Designers from '../user/Designers'
+import Users from '../user/Users'
 import Categories from '../category/Categories'
 
 import toStringId from '../../api/utils/toStringId'
@@ -25,7 +25,7 @@ export default class ProfileFollowing extends Component {
     following: [],
     isWaiting: true,
     showRooms: false,
-    showDesigners: true,
+    showUsers: true,
     showCategories: false
   }
 
@@ -37,7 +37,7 @@ export default class ProfileFollowing extends Component {
     const { props } = this
 
     axios
-      .get(`/ajax/designers/${toStringId(props.profile)}/following/`)
+      .get(`/ajax/users/${toStringId(props.profile)}/following/`)
       .then(({ data: following }) => {
         this.setState({
           following,
@@ -51,10 +51,10 @@ export default class ProfileFollowing extends Component {
       })
   }
 
-  showDesigners = () => {
+  showUsers = () => {
     this.setState({
       showRooms: false,
-      showDesigners: true,
+      showUsers: true,
       showCategories: false
     })
   }
@@ -62,7 +62,7 @@ export default class ProfileFollowing extends Component {
   showRooms = () => {
     this.setState({
       showRooms: true,
-      showDesigners: false,
+      showUsers: false,
       showCategories: false
     })
   }
@@ -70,7 +70,7 @@ export default class ProfileFollowing extends Component {
   showCategories = () => {
     this.setState({
       showRooms: false,
-      showDesigners: false,
+      showUsers: false,
       showCategories: true
     })
   }
@@ -82,13 +82,13 @@ export default class ProfileFollowing extends Component {
       <div className="navpills" data-links="3">
         <button
           type="button"
-          onClick={this.showDesigners}
+          onClick={this.showUsers}
           className={classNames({
             'navpills-link': true,
-            'navpills-link--active': state.showDesigners
+            'navpills-link--active': state.showUsers
           })}
         >
-          Designers
+          Users
         </button>
         <button
           type="button"
@@ -123,7 +123,7 @@ export default class ProfileFollowing extends Component {
       follow.parentType === 'spaceType'
     )
 
-    const designers = filter(state.following, follow =>
+    const users = filter(state.following, follow =>
       follow.parentType === 'user'
     )
 
@@ -138,13 +138,13 @@ export default class ProfileFollowing extends Component {
           emptyMessage={`${user} isn't following any rooms yet...`}
         />
       )
-    } else if (state.showDesigners) {
+    } else if (state.showUsers) {
       return (
-        <Designers
+        <Users
           params={{
-            id: map(designers, designer => toStringId(get(designer, 'parent')))
+            id: map(users, user => toStringId(get(user, 'parent')))
           }}
-          emptyMessage={`${user} isn't following any designers yet...`}
+          emptyMessage={`${user} isn't following anyone yet...`}
         />
       )
     } else if (state.showCategories) {

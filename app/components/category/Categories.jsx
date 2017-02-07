@@ -6,6 +6,7 @@ import axios from 'axios'
 import assign from 'lodash/assign'
 import concat from 'lodash/concat'
 import isEmpty from 'lodash/isEmpty'
+import isString from 'lodash/isString'
 import classNames from 'classnames'
 import queryString from 'query-string'
 import React, { Component, PropTypes } from 'react'
@@ -16,6 +17,7 @@ import Dropdown, {
 } from 'react-simple-dropdown'
 
 import Loader from '../common/Loader'
+import GridCTA from '../cta/GridCTA'
 import Category from './Card'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
@@ -40,14 +42,18 @@ export default class Categories extends Component {
     params: PropTypes.object,
     sorting: PropTypes.string,
     categories: PropTypes.object,
-    emptyMessage: PropTypes.string
+    emptyMessage: PropTypes.string,
+    disableSorting: PropTypes.bool,
+    disablePagination: PropTypes.bool
   }
 
   static defaultProps = {
     params: {},
     sorting: 'Popular',
     categories: {},
-    emptyMessage: 'No Categories Found...'
+    emptyMessage: 'No Categories Found...',
+    disableSorting: false,
+    disablePagination: false
   }
 
   constructor(props) {
@@ -56,6 +62,10 @@ export default class Categories extends Component {
     const sort = reverseKebabCase(get(props, 'sorting', 'Popular'))
     const count = get(props.categories, 'count', 0)
     const results = get(props.categories, 'results', [])
+
+    if (size(results) > 6) {
+      results.splice(6, 0, 'cta')
+    }
 
     this.state = {
       skip: 40,
@@ -85,8 +95,9 @@ export default class Categories extends Component {
 
   fetch = sorting => {
     const { props } = this
+    const newSorting = isString(sorting) ? sorting : null
 
-    const reset = sorting ? {
+    const reset = newSorting ? {
       count: 0,
       offset: 0,
       results: [],
@@ -95,24 +106,30 @@ export default class Categories extends Component {
     } : {}
 
     this.setState(assign(reset, {
-      sort: (sorting || this.state.sort),
+      sort: (newSorting || this.state.sort),
       isFetching: true
     }), () => {
       const { state } = this
-      const sort = this.getSorting(sorting || state.sort)
+      const sort = this.getSorting(newSorting || state.sort)
       const params = queryString.stringify(
         assign(get(props, 'params', {}), { sort })
       )
+      const allParams = `skip=${state.offset}&${params}`
 
       axios
-        .get(`/ajax/categories/search/?limit=1000&skip=${state.offset}&${params}`)
+        .get(`/ajax/categories/search/?limit=1000&${allParams}`)
         .then(({ data }) => {
           const results = get(data, 'results', [])
+          const updatedResults = concat([], state.results, results)
+
+          if (size(updatedResults) > 6 && updatedResults[6] !== 'cta') {
+            updatedResults.splice(6, 0, 'cta')
+          }
 
           this.setState({
             count: get(data, 'count', 0),
             offset: state.offset + size(results),
-            results: concat(state.results, results),
+            results: updatedResults,
             isFetching: false,
             hasFetched: true,
             lastResults: results
@@ -127,7 +144,11 @@ export default class Categories extends Component {
   }
 
   renderPagination() {
-    const { state } = this
+    const { props, state } = this
+
+    if (props.disablePagination) {
+      return null
+    }
 
     return size(state.results) < state.count ? (
       <div className="grid-pagination">
@@ -197,18 +218,28 @@ export default class Categories extends Component {
 
     return (
       <div className="grid">
-        <div className="grid-sorting">
-          {this.renderSorting()}
-        </div>
+        {!props.disableSorting ? (
+          <div className="grid-sorting">
+            {this.renderSorting()}
+          </div>
+        ) : null}
         <div className="grid-items grid-items--3-cards">
           {hasNoResults ? (
             <p className="grid-items-empty">
               {props.emptyMessage}
             </p>
           ) : (
-            map(state.results, category =>
-              <Category {...category} key={toStringId(category)} />
-            )
+            map(state.results, category => {
+              if (category === 'cta') {
+                return (
+                  <GridCTA />
+                )
+              }
+
+              return (
+                <Category {...category} key={toStringId(category)} />
+              )
+            })
           )}
         </div>
       </div>
@@ -220,7 +251,7 @@ export default class Categories extends Component {
 
     return state.isFetching && !state.hasFetched ? (
       <div className="grids">
-        <Loader size="52" />
+        <Loader size={52} />
       </div>
     ) : (
       <div className="grids">

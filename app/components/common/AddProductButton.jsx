@@ -9,14 +9,14 @@ export default class AddProductButton extends Component {
   }
 
   render() {
-    const { context } = this
+    const shouldRender = (
+      this.context.userLoggedIn() &&
+      this.context.currentUserIsCurator()
+    )
 
-    return context.userLoggedIn() ? (
+    return shouldRender ? (
       <a
-        href={context.currentUserIsCurator()
-          ? '/products/add/'
-          : '/products/recommend/'
-        }
+        href="/products/add/"
         className="add-product-button button button--icon button--primary"
       >
         <span className="button-text">

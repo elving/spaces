@@ -5,9 +5,5 @@ export default (req, res, next) => {
     return next()
   }
 
-  if (req.method === 'GET') {
-    req.session.returnTo = req.url
-  }
-
   res.redirect('/login')
 }

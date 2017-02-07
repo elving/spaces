@@ -24,7 +24,7 @@ import ProductDetail from '../components/product/Detail'
 import ProductsIndex from '../components/product/Index'
 import UpdateProduct from '../components/product/Update'
 import ProductsTable from '../components/product/Table'
-import RecommendedProducts from '../components/product/Recommended'
+import RecommendedProducts from '../components/productRecommendation/Admin'
 
 import AddCategory from '../components/category/Add'
 import CategoryDetail from '../components/category/Detail'
@@ -49,6 +49,7 @@ import SpaceTypesIndex from '../components/spaceType/Index'
 import SpacesIndex from '../components/space/Index'
 import SpaceDetail from '../components/space/Detail'
 
+import Friends from '../components/user/Friends'
 import UsersIndex from '../components/user/Index'
 import UserProfile from '../components/user/Profile'
 import EditProfile from '../components/user/EditProfile'
@@ -60,6 +61,7 @@ import ProfileFollowers from '../components/user/ProfileFollowers'
 import ProfileFollowing from '../components/user/ProfileFollowing'
 import UserRecommendedProducts from '../components/user/Recommended'
 
+import Finder from '../components/finder/Index'
 import SearchResults from '../components/search/Results'
 import Notifications from '../components/notification/Index'
 
@@ -76,10 +78,10 @@ const routes = (
     <Route path="reset-password" component={ResetPassword} />
     <Route path="set-password/:code" component={SetPassword} />
 
-    <Route path="/about/" component={About} />
-    <Route path="/terms/" component={Terms} />
-    <Route path="/privacy/" component={Privacy} />
-    <Route path="/copyright/" component={Copyright} />
+    <Route path="/about" component={About} />
+    <Route path="/terms" component={Terms} />
+    <Route path="/privacy" component={Privacy} />
+    <Route path="/copyright" component={Copyright} />
 
     <Route path="/" component={Landing} />
     <Route path="/popular" component={Home} />
@@ -98,9 +100,11 @@ const routes = (
     <Route path="s/:sid" component={SpaceDetail} />
     <Route path="spaces/:sid/:name" component={SpaceDetail} />
 
-    <Route path="designers" component={UsersIndex} />
+    <Route path="users" component={UsersIndex} />
+    <Route path="friends" component={Friends} />
+    <Route path="community" component={UsersIndex} />
 
-    <Route path="designers/:username" component={UserProfile}>
+    <Route path="users/:username" component={UserProfile}>
       <Route path="likes" component={ProfileLikes} />
       <Route path="spaces" component={ProfileSpaces} />
       <Route path="products" component={ProfileProducts} />
@@ -108,12 +112,24 @@ const routes = (
       <Route path="following" component={ProfileFollowing} />
     </Route>
 
-    <Route path="designers/:username/edit" component={EditProfile} />
-    <Route path="designers/:username/password" component={ChangePassword} />
+    <Route path="u/:username" component={UserProfile}>
+      <Route path="likes" component={ProfileLikes} />
+      <Route path="spaces" component={ProfileSpaces} />
+      <Route path="products" component={ProfileProducts} />
+      <Route path="followers" component={ProfileFollowers} />
+      <Route path="following" component={ProfileFollowing} />
+    </Route>
+
+    <Route path="users/:username/edit" component={EditProfile} />
+    <Route path="users/:username/password" component={ChangePassword} />
     <Route
-      path="designers/:username/recommended"
+      path="users/:username/recommended"
       component={UserRecommendedProducts}
     />
+
+    <Route path="u/:username/edit" component={EditProfile} />
+    <Route path="u/:username/password" component={ChangePassword} />
+    <Route path="u/:username/recommended" component={UserRecommendedProducts} />
 
     <Route path="categories" component={CategoriesIndex} />
     <Route path="categories/:slug" component={CategoryDetail} />
@@ -121,6 +137,7 @@ const routes = (
     <Route path="rooms" component={SpaceTypesIndex} />
     <Route path="rooms/:slug" component={SpaceTypeDetail} />
 
+    <Route path="finder" component={Finder} />
     <Route path="search" component={SearchResults} />
     <Route path="notifications" components={Notifications} />
 
@@ -133,7 +150,7 @@ const routes = (
     <Route path="admin/guides" component={GuidesAdmin} />
 
     <Route path="admin/products" component={ProductsTable} />
-    <Route path="admin/products/recommended" component={RecommendedProducts} />
+    <Route path="admin/recommendations" component={RecommendedProducts} />
 
     <Route path="admin/categories" component={CategoriesTable} />
     <Route path="admin/categories/add" component={AddCategory} />

@@ -6,6 +6,7 @@ import axios from 'axios'
 import assign from 'lodash/assign'
 import concat from 'lodash/concat'
 import isEmpty from 'lodash/isEmpty'
+import isString from 'lodash/isString'
 import classNames from 'classnames'
 import queryString from 'query-string'
 import React, { Component, PropTypes } from 'react'
@@ -17,6 +18,7 @@ import Dropdown, {
 
 import Room from './Card'
 import Loader from '../common/Loader'
+import GridCTA from '../cta/GridCTA'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
@@ -40,14 +42,18 @@ export default class Rooms extends Component {
     rooms: PropTypes.object,
     params: PropTypes.object,
     sorting: PropTypes.string,
-    emptyMessage: PropTypes.string
+    emptyMessage: PropTypes.string,
+    disableSorting: PropTypes.bool,
+    disablePagination: PropTypes.bool
   }
 
   static defaultProps = {
     rooms: {},
     params: {},
     sorting: 'Popular',
-    emptyMessage: 'No Rooms Found...'
+    emptyMessage: 'No Rooms Found...',
+    disableSorting: false,
+    disablePagination: false
   }
 
   constructor(props) {
@@ -56,6 +62,10 @@ export default class Rooms extends Component {
     const sort = reverseKebabCase(get(props, 'sorting', 'Popular'))
     const count = get(props.rooms, 'count', 0)
     const results = get(props.rooms, 'results', [])
+
+    if (size(results) > 6) {
+      results.splice(6, 0, 'cta')
+    }
 
     this.state = {
       skip: 40,
@@ -85,8 +95,9 @@ export default class Rooms extends Component {
 
   fetch = sorting => {
     const { props } = this
+    const newSorting = isString(sorting) ? sorting : null
 
-    const reset = sorting ? {
+    const reset = newSorting ? {
       count: 0,
       offset: 0,
       results: [],
@@ -95,11 +106,11 @@ export default class Rooms extends Component {
     } : {}
 
     this.setState(assign(reset, {
-      sort: (sorting || this.state.sort),
+      sort: (newSorting || this.state.sort),
       isFetching: true
     }), () => {
       const { state } = this
-      const sort = this.getSorting(sorting || state.sort)
+      const sort = this.getSorting(newSorting || state.sort)
       const params = queryString.stringify(
         assign(get(props, 'params', {}), { sort })
       )
@@ -108,11 +119,16 @@ export default class Rooms extends Component {
         .get(`/ajax/rooms/search/?limit=1000&skip=${state.offset}&${params}`)
         .then(({ data }) => {
           const results = get(data, 'results', [])
+          const updatedResults = concat([], state.results, results)
+
+          if (size(updatedResults) > 6 && updatedResults[6] !== 'cta') {
+            updatedResults.splice(6, 0, 'cta')
+          }
 
           this.setState({
             count: get(data, 'count', 0),
             offset: state.offset + size(results),
-            results: concat(state.results, results),
+            results: updatedResults,
             isFetching: false,
             hasFetched: true,
             lastResults: results
@@ -127,7 +143,11 @@ export default class Rooms extends Component {
   }
 
   renderPagination() {
-    const { state } = this
+    const { props, state } = this
+
+    if (props.disablePagination) {
+      return null
+    }
 
     return size(state.results) < state.count ? (
       <div className="grid-pagination">
@@ -196,18 +216,28 @@ export default class Rooms extends Component {
 
     return (
       <div className="grid">
-        <div className="grid-sorting">
-          {this.renderSorting()}
-        </div>
+        {!props.disableSorting ? (
+          <div className="grid-sorting">
+            {this.renderSorting()}
+          </div>
+        ) : null}
         <div className="grid-items grid-items--3-cards">
           {hasNoResults ? (
             <p className="grid-items-empty">
               {props.emptyMessage}
             </p>
           ) : (
-            map(state.results, room =>
-              <Room {...room} key={toStringId(room)} />
-            )
+            map(state.results, room => {
+              if (room === 'cta') {
+                return (
+                  <GridCTA />
+                )
+              }
+
+              return (
+                <Room {...room} key={toStringId(room)} />
+              )
+            })
           )}
         </div>
       </div>

@@ -17,12 +17,7 @@ export default (limit = 8, upcoming = false) => (
     getFromCacheOrQuery(cacheKey, () => {
       mongoose
         .model('Product')
-        .where(upcoming ? {
-          likesCount: { $gte: 1 },
-          isPendingApproval: { $ne: true }
-        } : {
-          isPendingApproval: { $ne: true }
-        })
+        .where(upcoming ? { likesCount: { $gte: 1 } } : {})
         .limit(limit)
         .populate('brand')
         .populate('colors')

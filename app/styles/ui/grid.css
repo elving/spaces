@@ -196,7 +196,7 @@
   }
 
   .grid-title {
-    font-size: 22px;
+    font-size: 18px;
     margin: 0 0 15px;
   }
 
@@ -226,6 +226,10 @@
   .grid-sorting {
     display: flex;
     padding: 0 15px 15px;
+  }
+
+  .grid-sorting .dropdown-trigger {
+    font-size: 16px;
   }
 
   .mini-card .card-actions {

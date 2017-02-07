@@ -1,5 +1,6 @@
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
+import replace from 'lodash/replace'
 import mongoose from 'mongoose'
 import { Strategy as TwitterStrategy } from 'passport-twitter'
 
@@ -15,9 +16,13 @@ export default () => {
     callbackURL: TWITTER_CALLBACK,
     consumerSecret: TWITTER_SECRET
   }, (token, tokenSecret, profile, done) => {
+    const avatar = replace(
+      get(profile, '_json.profile_image_url_https'), '_normal', ''
+    )
+
     const profileData = {
       bio: get(profile, '_json.description'),
-      avatar: get(profile, '_json.profile_image_url_https'),
+      avatar,
       fullName: get(profile, '_json.name'),
       username: get(profile, '_json.screen_name')
     }

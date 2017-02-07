@@ -79,7 +79,7 @@ export default class UserProfile extends PureComponent {
             />
             {this.isProfileOwner() ? (
               <a
-                href={`/designers/${username}/edit/`}
+                href={`/u/${username}/edit/`}
                 className="button button--small button--primary-alt"
               >
                 <span className="button-text">
@@ -108,35 +108,35 @@ export default class UserProfile extends PureComponent {
     return (
       <nav className="navbar">
         <Link
-          to={{ pathname: `/designers/${username}/spaces` }}
+          to={{ pathname: `/u/${username}/spaces` }}
           className="navbar-link"
           activeClassName="is-active"
         >
           {`${spacesCount || ''} ${inflect(spacesCount, 'Space')}`}
         </Link>
         <Link
-          to={{ pathname: `/designers/${username}/products` }}
+          to={{ pathname: `/u/${username}/products` }}
           className="navbar-link"
           activeClassName="is-active"
         >
           {`${productsCount || ''} ${inflect(productsCount, 'Product')}`}
         </Link>
         <Link
-          to={{ pathname: `/designers/${username}/likes` }}
+          to={{ pathname: `/u/${username}/likes` }}
           className="navbar-link"
           activeClassName="is-active"
         >
           {`${likesCount || ''} ${inflect(likesCount, 'Like')}`}
         </Link>
         <Link
-          to={{ pathname: `/designers/${username}/followers` }}
+          to={{ pathname: `/u/${username}/followers` }}
           className="navbar-link"
           activeClassName="is-active"
         >
           {`${followersCount || ''} ${inflect(followersCount, 'Follower')}`}
         </Link>
         <Link
-          to={{ pathname: `/designers/${username}/following` }}
+          to={{ pathname: `/u/${username}/following` }}
           className="navbar-link"
           activeClassName="is-active"
         >

@@ -42,7 +42,7 @@ export default class RedesignPopup extends Component {
   }
 
   onSubmit = (event) => {
-    const formData = serialize(this.form, { hash: true })
+    const formData = serialize(this.form, { hash: true, empty: true })
     const { props } = this
 
     event.preventDefault()

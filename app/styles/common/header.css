@@ -12,21 +12,10 @@
 .header-container {
   width: 100%;
   margin: 0 auto;
-  padding: 15px;
+  padding: 10px 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.header-main-navigation {
-  display: flex;
-  padding: 0 25px;
-  align-items: center;
-  justify-content: center;
-}
-
-.header-main-navigation .dropdown-content {
-  top: calc(100%);
 }
 
 .header-container-right {
@@ -60,12 +49,41 @@
   color: #333333;
 }
 
-.header-link-logo {
-  margin-right: 0;
+.header-link--dropdown .dropdown-trigger::after {
+  border-top: 6px solid #999999;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  margin-top: 2px;
+  margin-left: 5px;
+}
+
+.header-link--dropdown .dropdown-content {
+  border-top: 0 none;
+  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.085);
+  border-radius: 0 0 4px 4px;
+  top: calc(100% + 16px);
+}
+
+.header-link--dropdown .dropdown-link {
+  font-size: 16px;
+  text-align: left;
+  padding: 10px;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.header-link--dropdown .dropdown-content {
+  min-width: 320px;
 }
 
 .header-nav > .header-link:last-child {
   margin-right: 0;
+}
+
+.header-link--description {
+  color: #999999;
+  margin-top: 2px;
 }
 
 .header-link-divider {
@@ -119,7 +137,7 @@
   border-bottom: 1px solid #e5e5e5;
   width: 100%;
   display: flex;
-  padding: 15px;
+  padding: 10px 15px;
   align-items: center;
   justify-content: space-between;
 }
@@ -155,6 +173,12 @@
 }
 
 @media (max-width: 768px) {
+  .popup-open .header,
+  .ReactModal__Body--open .header {
+    z-index: 1;
+    position: static;
+  }
+
   .header .search,
   .header .admin-nav,
   .header .header-link,
@@ -169,7 +193,7 @@
   .header .add-product-button {
     width: 40px;
     height: 35px;
-    margin: 0 0 0 15px;
+    margin: 0 0 0 10px;
     padding: 0;
     min-height: 35px;
   }
@@ -186,21 +210,42 @@
   }
 
   .header .user-notifications {
-    margin: 0 0 0 15px;
+    border: 1px solid #dadada;
+    border-radius: 4px;
+    margin: 0 0 0 10px;
+    min-width: 40px;
+    min-height: 35px;
+  }
+
+  .header .user-notifications .icon-notifications {
+    width: 22px;
+    height: 22px;
   }
 
   .header .user-notifications .dropdown__content {
-    top: calc(100% + 15px);
+    border-radius: 0;
+    top: 55px;
     right: 0;
-    width: 320px;
-    margin-right: -135px;
+    width: 100%;
+    height: calc(100% - 55px);
+    position: fixed;
   }
 
   .header [data-action="toggleMobileNav"] {
     display: flex !important;
+    margin-left: 10px;
+  }
+
+  .header [data-action="toggleMobileNav"] .icon {
+    width: 26px;
+    height: 26px;
   }
 
   .header-main-navigation {
     display: none;
+  }
+
+  .header-link--dropdown .dropdown-link {
+    padding: 10px 15px;
   }
 }

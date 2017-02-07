@@ -112,9 +112,18 @@
 
   .modal-content {
     flex: 1;
+    padding: 0 15px 15px;
   }
 
   .modal-content img {
     min-height: 100px;
+  }
+
+  .modal-actions {
+    padding: 15px;
+  }
+
+  .modal-actions .button {
+    min-height: 42px;
   }
 }

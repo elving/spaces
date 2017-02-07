@@ -8,7 +8,7 @@ import queryString from 'query-string'
 import React, { Component, PropTypes } from 'react'
 
 import Loader from '../common/Loader'
-import Designer from '../user/Card'
+import User from '../user/Card'
 
 import toStringId from '../../api/utils/toStringId'
 
@@ -120,7 +120,7 @@ export default class Followers extends Component {
             </p>
           ) : (
             map(state.results, follow =>
-              <Designer
+              <User
                 key={toStringId(follow.createdBy)}
                 user={follow.createdBy}
               />
@@ -136,7 +136,7 @@ export default class Followers extends Component {
 
     return state.isFetching && !state.hasFetched ? (
       <div className="grids">
-        <Loader size="52" />
+        <Loader size={52} />
       </div>
     ) : (
       <div className="grids">

@@ -384,3 +384,25 @@
 .follow-button--following.follow-button--show-text:active .button-text::after {
   content: "Unfollow"
 }
+
+@media (max-width: 768px) {
+  .button {
+    font-size: 14px;
+    line-height: 18px;
+    padding: 5px 12px 6px;
+    min-height: inherit;
+  }
+
+  .button:not(.button--icon) {
+    min-height: 38px;
+  }
+
+  .button--icon {
+    padding: 5px;
+  }
+
+  .button--icon > .icon {
+    width: 16px;
+    height: 16px;
+  }
+}

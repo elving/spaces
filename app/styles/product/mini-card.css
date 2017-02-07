@@ -15,16 +15,16 @@
 }
 
 .mini-card .product-card-price,
-.mini-card .product-card-designer {
+.mini-card .product-card-user {
   font-size: 12px;
   min-height: 24px;
 }
 
-.mini-card .product-card-designer-name {
+.mini-card .product-card-user-name {
   font-size: 12px;
 }
 
-.mini-card .product-card-designer {
+.mini-card .product-card-user {
   padding: 2px 6px;
 }
 
@@ -40,7 +40,7 @@
 
 @media (max-width: 736px) {
   .mini-card .product-card-actions,
-  .mini-card .product-card-designer {
+  .mini-card .product-card-user {
     display: none;
   }
 

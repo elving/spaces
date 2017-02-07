@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react'
 import cdnUrl from '../../utils/cdnUrl'
 
 import Layout from '../common/Layout'
-import Designers from '../user/Designers'
+import Users from '../user/Users'
 import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 const renderSectionTitle = (id, title) => (
@@ -94,26 +94,46 @@ export default class About extends PureComponent {
       <Layout className="about">
         <div className="about-header">
           <h1 className="about-header-text">
-            About Spaces
+            Find curated products for your home
           </h1>
+        </div>
+
+        <div className="about-section-container">
+          <div className="about-section about-section-content">
+            <h2 className="about-title">
+              Spaces features the best products for your home from all over
+              the web, curated and maintained by our community.
+            </h2>
+          </div>
+
+          <h3 className="about-section-title">
+            <div className="about-section">
+              <span
+                style={{ cursor: 'default' }}
+                className="button button--icon button--transparent"
+              >
+                <MaterialDesignIcon name="star" />
+              </span>
+              Meet the team
+            </div>
+          </h3>
+
+          <div className="about-section about-section-content">
+            <Users params={{ usernames: ['elving', 'karla'] }} />
+          </div>
         </div>
 
         <div className="about-index-container">
           <div className="about-index">
             <ol className="about-index-list">
               <li className="about-index-item">
-                <a href="#about-spaces" className="about-index-link">
-                  About Spaces
-                </a>
-              </li>
-              <li className="about-index-item">
                 <a href="#getting-started" className="about-index-link">
                   Getting started
                 </a>
               </li>
               <li className="about-index-item">
-                <a href="#creating-spaces" className="about-index-link">
-                  Creating spaces
+                <a href="#designing-spaces" className="about-index-link">
+                  Designing spaces
                 </a>
               </li>
               <li className="about-index-item">
@@ -121,14 +141,14 @@ export default class About extends PureComponent {
                   Redesigning spaces
                 </a>
               </li>
-            </ol>
-
-            <ol className="about-index-list">
               <li className="about-index-item">
                 <a href="#curating-products" className="about-index-link">
                   Curating products
                 </a>
               </li>
+            </ol>
+
+            <ol className="about-index-list">
               <li className="about-index-item">
                 <a href="#becoming-a-curator" className="about-index-link">
                   Becoming a curator
@@ -148,39 +168,26 @@ export default class About extends PureComponent {
           </div>
         </div>
 
-        <div id="about-spaces" className="about-section-container">
-          {renderSectionTitle('about-spaces', 'About Spaces')}
-          <div className="about-section about-section-content">
-            <h2 className="about-title">
-              Spaces is a shopping guide for your home where you can find the
-              best products curated by people like you.
-            </h2>
-
-            <h3 className="about-subtitle">Meet the team</h3>
-            <Designers params={{ usernames: ['elving', 'karla'] }} />
-          </div>
-        </div>
-
         <div id="getting-started" className="about-section-container">
           {renderSectionTitle('getting-started', 'Getting Started')}
           <div className="about-section about-section-content">
-            <p>Start by <a rel="noreferrer noopener" href="/join/" target="_blank">joining the community</a>. Once you join, you become designer.</p>
-            <p>As a designer you can:</p>
+            <p>Start by <a rel="noreferrer noopener" href="/join/" target="_blank">joining the community</a>. Once you join, you&apos;ll be able to:</p>
             <ul>
-              <li>Create spaces.</li>
-              <li>Like spaces and products you love.</li>
-              <li>Follow other designers, rooms and categories that interest you.</li>
+              <li>Curate products.</li>
+              <li>Design spaces.</li>
+              <li>Like products and spaces you love.</li>
+              <li>Follow other people, rooms and categories that interest you.</li>
               <li>Comment on spaces and products that you are passionate about.</li>
               <li>Redesign spaces you like to give them your personal touch.</li>
             </ul>
           </div>
         </div>
 
-        <div id="creating-spaces" className="about-section-container">
-          {renderSectionTitle('creating-spaces', 'Creating spaces')}
+        <div id="designing-spaces" className="about-section-container">
+          {renderSectionTitle('designing-spaces', 'Designing spaces')}
           <div className="about-section about-section-content">
-            <p>A space is a collection of products. It’s where you experiment and generate ideas for your next project. When you a design a space you are helping others make informed decisions when shopping for their homes.</p>
-            <p>You can create different types of spaces, like a <a href="/rooms/kitchen/" target="_blank" rel="noreferrer noopener">kitchen</a>, a <a href="/rooms/office/" target="_blank" rel="noreferrer noopener">home office</a>, a <a href="/rooms/bedroom/" target="_blank" rel="noreferrer noopener">bedroom</a>, etc. To create a space, click on the {renderButton('design')} button on any product you like. A popup will appear with one of two things:</p>
+            <p>A space is a collection of products. It’s where you experiment and generate ideas for your next project. Design spaces to showcase your taste and help others make informed decisions when shopping for their homes.</p>
+            <p>You can design different types of spaces, like a <a href="/rooms/kitchen/" target="_blank" rel="noreferrer noopener">kitchen</a>, a <a href="/rooms/office/" target="_blank" rel="noreferrer noopener">home office</a>, a <a href="/rooms/bedroom/" target="_blank" rel="noreferrer noopener">bedroom</a>, etc. To design a space, click on the {renderButton('design')} button on any product you like. A popup will appear with one of two things:</p>
             <div className="about-section-media-container">
               <a
                 rel="noreferrer noopener"
@@ -189,6 +196,7 @@ export default class About extends PureComponent {
                 className="about-section-media"
               >
                 <img
+                  alt="How to design a space"
                   src={cdnUrl('/static/images/how_to_design_a_space_1.png')}
                   role="presentation"
                 />
@@ -200,12 +208,13 @@ export default class About extends PureComponent {
                 className="about-section-media"
               >
                 <img
+                  alt="How to design a space"
                   src={cdnUrl('/static/images/how_to_design_a_space.png')}
                   role="presentation"
                 />
               </a>
             </div>
-            <p>You can create a new space with the selected product by clicking the {renderButton('create')} button and filling the form. You can also add that product to any of your existing spaces by clicking on the {renderButton('check')} icon.</p>
+            <p>You can design a new space with the selected product by clicking the {renderButton('create')} button and filling the form. You can also add that product to any of your existing spaces by clicking on the {renderButton('check')} icon.</p>
             <a
               rel="noreferrer noopener"
               href={cdnUrl('/static/videos/design_space.mp4?v=2')}
@@ -254,7 +263,7 @@ export default class About extends PureComponent {
         <div id="curating-products" className="about-section-container">
           {renderSectionTitle('curating-products', 'Curating products')}
           <div className="about-section about-section-content">
-            <p>The products featured on Spaces are hand picked to ensure the quality of our product guides and recommendations for the community.</p>
+            <p>The products featured on Spaces are hand-picked to ensure the quality of our guides and recommendations for the community.</p>
             <p>Only curators can add products directly to Spaces, but anyone can recommend products by clicking the {renderButton('add')} button found on the top right corner of any page.</p>
             <a
               rel="noreferrer noopener"
@@ -269,7 +278,6 @@ export default class About extends PureComponent {
               />
             </a>
             <p>We review every recommendation and approve products based on what’s currently trending on Spaces. As the community grows, this process will be more organic and community-driven.</p>
-            <p>Our goal is for Spaces to be a place where people find beautiful and useful products for their homes everyday.</p>
           </div>
         </div>
 
@@ -290,7 +298,7 @@ export default class About extends PureComponent {
         <div id="following-and-liking" className="about-section-container">
           {renderSectionTitle('following-and-liking', 'Following and liking')}
           <div className="about-section about-section-content">
-            <p>You can follow designers, rooms and categories. Your <a href="/feed/" target="_blank" rel="noreferrer noopener">personal feed</a> will show you spaces and products based on who and what you follow.</p>
+            <p>You can follow people, rooms and categories. Your <a href="/feed/" target="_blank" rel="noreferrer noopener">personal feed</a> will show you spaces and products based on who and what you follow.</p>
             <div className="about-section-media-container">
               <a
                 rel="noreferrer noopener"

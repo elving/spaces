@@ -266,6 +266,17 @@ button.space-detail-counter {
     margin-top: 15px;
   }
 
+  .space-detail-action,
+  .space-detail-action [data-action="share"] {
+    width: 35px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .space-detail-actions > .space-detail-action:first-child {
+    width: auto;
+  }
+
   .space-detail-suggestions {
     flex-wrap: wrap;
   }
@@ -276,5 +287,18 @@ button.space-detail-counter {
 
   .page-space-detail #comments {
     padding: 15px 0;
+  }
+
+  .space-detail-action,
+  .space-detail-action .button {
+    width: 28px;
+    height: 28px;
+    min-height: 28px;
+  }
+
+  .space-detail-action [data-action="redesign"] {
+    width: auto;
+    padding: 4px 12px;
+    min-height: 28px;
   }
 }

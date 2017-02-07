@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 
 import Layout from '../common/Layout'
-import Designers from './Designers'
+import Users from './Users'
 
 export default class UsersIndex extends Component {
   render() {
     return (
       <Layout contentClassName="page-content--padding-top">
-        <Designers />
+        <Users />
       </Layout>
     )
   }

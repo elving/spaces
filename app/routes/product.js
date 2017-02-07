@@ -7,15 +7,11 @@ const ajaxRoot = '/ajax/products'
 
 router.get('/products/', controller.renderIndex)
 router.get('/products/add/', controller.renderAddProduct)
-router.get('/products/recommend/', controller.renderAddProduct)
 router.get('/products/:sid/update/', controller.renderUpdateProduct)
 router.get('/p/:sid/', controller.renderDetail)
 router.get('/products/:sid/:name/', controller.renderDetail)
 
 router.get('/admin/products/', isAdmin, controller.renderAdminProducts)
-router.get(
-  '/admin/products/recommended/', isAdmin, controller.renderRecommended
-)
 
 router.get(`${ajaxRoot}/fetch/`, controller.fetchProductInfo)
 router.post(`${ajaxRoot}/add/`, controller.addProduct)

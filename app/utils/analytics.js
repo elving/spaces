@@ -1,12 +1,21 @@
+import get from 'lodash/get'
 import ReactGA from 'react-ga'
 import isEmpty from 'lodash/isEmpty'
 
 import metadata from '../constants/metadata'
 
-export default (userId, page) => {
+const exitIfNotInProduction = () => {
+  if (get(process, 'env.NODE_ENV') !== 'production') {
+    return false
+  }
+}
+
+export const init = (userId, page) => {
   const config = {
     titleCase: false
   }
+
+  exitIfNotInProduction()
 
   if (!isEmpty(userId)) {
     config.userId = userId
@@ -21,4 +30,9 @@ export default (userId, page) => {
   })
 
   ReactGA.pageview(page)
+}
+
+export const event = data => {
+  exitIfNotInProduction()
+  ReactGA.event(data)
 }

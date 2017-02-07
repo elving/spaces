@@ -39,6 +39,7 @@ textarea {
 }
 
 .no-scroll,
+.popup-open,
 .ReactModal__Body--open,
 .ReactModal__Body--open body {
   height: 100% !important;
@@ -55,7 +56,7 @@ a:active {
 }
 
 #app-container {
-  padding-top: 77px;
+  padding-top: 68px;
 }
 
 .user-is-onboarding #app-container {
@@ -88,6 +89,6 @@ a:active {
   }
 
   #app-container {
-    padding-top: 66px;
+    padding-top: 56px;
   }
 }

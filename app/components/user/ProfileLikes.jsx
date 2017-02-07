@@ -37,7 +37,7 @@ export default class ProfileLikes extends Component {
     const { props } = this
 
     axios
-      .get(`/ajax/designers/${toStringId(props.profile)}/likes/`)
+      .get(`/ajax/users/${toStringId(props.profile)}/likes/`)
       .then(({ data: likes }) => {
         this.setState({
           likes,

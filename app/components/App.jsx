@@ -6,7 +6,7 @@ import isAdmin from '../utils/user/isAdmin'
 import canModify from '../utils/user/canModify'
 import isCurator from '../utils/user/isCurator'
 import toStringId from '../api/utils/toStringId'
-import initAnalytics from '../utils/initAnalytics'
+import { init as initAnalytics } from '../utils/analytics'
 
 export default class App extends Component {
   static propTypes = {

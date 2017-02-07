@@ -72,7 +72,7 @@ export default class ColorForm extends Component {
     const { props } = this
 
     const isPOST = props.formMethod === 'POST'
-    const formData = serialize(this.form, { hash: true })
+    const formData = serialize(this.form, { hash: true, empty: true })
     const endpoint = isPOST
       ? '/ajax/colors/'
       : `/ajax/colors/${toStringId(props.color)}/`

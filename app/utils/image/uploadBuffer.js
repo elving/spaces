@@ -3,7 +3,6 @@ import mime from 'mime'
 import knox from 'knox'
 import uuid from 'node-uuid'
 import sharp from 'sharp'
-import sizeOf from 'image-size'
 import fileType from 'file-type'
 
 import knoxConfig from '../../config/knox'
@@ -14,6 +13,8 @@ const optimize = (image) => (
       .resize(1024, null)
       .min()
       .withoutEnlargement()
+      .background({ r: 255, g: 255, b: 255, alpha: 1 })
+      .flatten()
       .jpeg()
       .toBuffer((err, buffer, info) => {
         if (err) {

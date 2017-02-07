@@ -26,3 +26,5 @@
 @import './onboarding/index.css';
 @import './suggestions/index.css';
 @import './notification/index.css';
+@import './finder/index.css';
+@import './cta/index.css';

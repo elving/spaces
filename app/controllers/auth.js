@@ -3,10 +3,11 @@ import isEmpty from 'lodash/isEmpty'
 import passport from 'passport'
 import queryString from 'query-string'
 
-import sendMail from '../utils/sendMail'
 import metadata from '../constants/metadata'
 import setProps from '../utils/middlewares/setProps'
+import sendEmail from '../email/send'
 import setMetadata from '../utils/middlewares/setMetadata'
+import sendWelcomeEmail from  '../email/sendWelcomeEmail'
 import isAuthenticatedUser from '../utils/user/isAuthenticatedUser'
 
 import findUser from '../api/user/find'
@@ -24,7 +25,7 @@ export const redirectToJoin = (req, res) => {
 
 export const renderJoin = (req, res, next) => {
   if (isAuthenticatedUser(req.user)) {
-    return res.redirect(`/designers/${req.user.username}/`)
+    return res.redirect(`/u/${req.user.username}/`)
   }
 
   setMetadata(res, {
@@ -51,8 +52,8 @@ export const join = async (req, res, next) => {
         return next(err)
       }
 
+      sendWelcomeEmail(get(user, 'email'))
       susbscribeToNewsletter(user)
-      Reflect.deleteProperty(req.session, 'returnTo')
       res.status(200).json({ user })
     })
   } catch (err) {
@@ -66,11 +67,7 @@ export const redirectToLogin = (req, res) => {
 
 export const renderLogin = (req, res, next) => {
   if (isAuthenticatedUser(req.user)) {
-    return res.redirect(`/designers/${req.user.username}/`)
-  }
-
-  if (/joinspaces\.co/.test(req.headers.referer)) {
-    req.session.returnTo = req.headers.referer
+    return res.redirect(`/u/${req.user.username}/`)
   }
 
   setMetadata(res, {
@@ -128,14 +125,13 @@ export const authCallback = (req, res) => {
     })}`)
   }
 
-  const redirectTo = req.session.returnTo || 'back'
-  Reflect.deleteProperty(req.session, 'returnTo')
+  const redirectTo = req.session.returnTo || `/u/${req.user.username}/`
   res.redirect(redirectTo)
 }
 
 export const renderResetPassword = (req, res, next) => {
   if (isAuthenticatedUser(req.user)) {
-    return res.redirect(`/designers/${req.user.username}/`)
+    return res.redirect(`/u/${req.user.username}/`)
   }
 
   setMetadata(res, {
@@ -152,7 +148,7 @@ export const requestPasswordReset = async (req, res) => {
   const emailOrUsername = get(req, 'body.emailOrUsername')
 
   if (isAuthenticatedUser(req.user)) {
-    return res.redirect(`/designers/${username}/`)
+    return res.redirect(`/u/${username}/`)
   }
 
   try {
@@ -166,7 +162,7 @@ export const requestPasswordReset = async (req, res) => {
       )
 
       try {
-        await sendMail({
+        await sendEmail({
           to: email,
           text: (
             'You previously requested to reset your password. \n' +
@@ -249,7 +245,6 @@ export const setPassword = async (req, res) => {
         }
 
         await claimPasswordResetRequest(code)
-        Reflect.deleteProperty(req.session, 'returnTo')
         res.status(200).json({ success: true })
       })
     } catch (passwordRequestErr) {

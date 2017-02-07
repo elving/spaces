@@ -1,0 +1,17 @@
+.finder-actions-container {
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 35px;
+}
+
+.friends-actions {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  max-width: 960px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.friends-action {
+  width: calc(100% / 3 - 15px);
+}

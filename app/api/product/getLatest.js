@@ -15,7 +15,7 @@ export default (limit = 8) => (
     getFromCacheOrQuery(cacheKey, () => {
       mongoose
         .model('Product')
-        .find({ isPendingApproval: { $ne: true } })
+        .find()
         .limit(limit)
         .populate('brand')
         .populate('colors')

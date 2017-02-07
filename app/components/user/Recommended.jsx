@@ -4,35 +4,49 @@ import isEmpty from 'lodash/isEmpty'
 import React, { Component, PropTypes } from 'react'
 
 import Layout from '../common/Layout'
-import ProductCard from '../product/Card'
-import AddProductModal from '../modal/AddProduct'
-import addProductModalContainer from '../container/AddProductModal'
+import MaterialDesignIcon from '../common/MaterialDesignIcon'
 
 import toStringId from '../../api/utils/toStringId'
 
-class UserRecommendedProducts extends Component {
+export default class UserRecommendedProducts extends Component {
   static propTypes = {
     params: PropTypes.object,
-    products: PropTypes.array
+    recommendations: PropTypes.array
   }
 
   static defaultProps = {
     params: {},
-    products: []
+    recommendations: []
   }
 
-  renderProductsPageUrl = () => {
-    const { props } = this
+  getIconName = status => {
+    switch (status) {
+      case 'pending': {
+        return 'link'
+      }
 
-    return (
-      <a href={`/designers/${get(props.params, 'username')}/products/`}>
-        your products page
-      </a>
-    )
+      case 'approved': {
+        return 'approve'
+      }
+
+      case 'declined': {
+        return 'disapprove'
+      }
+
+      default: {
+        return 'link'
+      }
+    }
   }
+
+  renderProductsPageUrl = () => (
+    <a href={`/users/${get(this.props, 'params.username')}/products/`}>
+      your products page
+    </a>
+  )
 
   render() {
-    const { props } = this
+    const recommendations = this.props.recommendations
 
     return (
       <Layout className="user-recommended-products">
@@ -40,7 +54,7 @@ class UserRecommendedProducts extends Component {
           Your recommendations
         </h1>
 
-        {!isEmpty(props.products) ? (
+        {!isEmpty(recommendations) ? (
           <h2 className="user-recommended-products-subtitle">
             These products have been recommended by you and are being
             reviewed to see if they get to be featured on Spaces.
@@ -59,44 +73,34 @@ class UserRecommendedProducts extends Component {
           </h2>
         )}
 
-        {!isEmpty(props.products) ? (
-          <AddProductModal
-            product={props.addProductModalCurrent}
-            onClose={props.closeAddProductModal}
-            isVisible={props.addProductModalIsOpen}
-          />
-        ) : null}
-
-        {!isEmpty(props.products) ? (
-          <div className="grid-container">
-            <div className="grid-title-container">
-              <h3 className="grid-title">Products you&apos;ve recommended</h3>
-              <a
-                href={`/designers/${get(props.params, 'username')}/products/`}
-                className="button button--small button--outline"
+        {!isEmpty(recommendations) ? (
+          <ul className="user-recommended-products-list">
+            {map(recommendations, recommendation =>
+              <li
+                key={toStringId(recommendation)}
+                className="user-recommended-product"
               >
-                <span className="button-text">
-                  Approved Products
-                </span>
-              </a>
-            </div>
-            <div className="grid">
-              <div className="grid-items">
-                {map(props.products, product =>
-                  <ProductCard
-                    {...product}
-                    key={toStringId(product)}
-                    forDisplayOnly
-                    onAddButtonClick={() => props.openAddProductModal(product)}
+                <span
+                  className="user-recommended-product-icon"
+                  data-status={get(recommendation, 'status')}
+                >
+                  <MaterialDesignIcon
+                    name={this.getIconName(get(recommendation, 'status'))}
+                    size={16}
                   />
-                )}
-              </div>
-            </div>
-          </div>
+                </span>
+                <a
+                  rel="noopener noreferrer"
+                  href={get(recommendation, 'url')}
+                  target="_blank"
+                >
+                  {get(recommendation, 'url')}
+                </a>
+              </li>
+            )}
+          </ul>
         ) : null}
       </Layout>
     )
   }
 }
-
-export default addProductModalContainer(UserRecommendedProducts)

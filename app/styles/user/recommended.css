@@ -1,11 +1,13 @@
 .user-recommended-products-subtitle {
-  color: #999;
+  color: #888888;
   border-bottom: 1px solid #e5e5e5;
-  font-size: 22px;
-  line-height: 36px;
+  font-size: 18px;
+  text-align: center;
+  line-height: 28px;
   width: 100%;
-  margin: 0 auto;
-  padding: 30px;
+  margin: 0 auto 35px;
+  padding: 0 35px 35px;
+  max-width: 1024px;
 }
 
 .user-recommended-products-subtitle a {
@@ -29,6 +31,59 @@
   margin-top: 30px;
 }
 
-.user-recommended-products .table-container {
-  padding: 0 30px;
+.user-recommended-products-list {
+  list-style-type: none;
+  margin: 0 auto;
+  padding: 0 35px 35px;
+  max-width: 1024px;
+}
+
+.user-recommended-product {
+  border-bottom: 1px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  justify-content: flex-start;
+}
+
+.user-recommended-product-icon {
+  border-radius: 100px;
+  background-color: #dadada;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: 15px;
+  justify-content: center;
+}
+
+.user-recommended-product .icon {
+  flex-shrink: 0;
+}
+
+.user-recommended-product-icon[data-status="approved"] {
+  background-color: #2ecc71;
+}
+
+.user-recommended-product-icon[data-status="declined"] {
+  background-color: #fb5465;
+}
+
+.user-recommended-product-icon[data-status="approved"] .icon-fill,
+.user-recommended-product-icon[data-status="declined"] .icon-fill {
+  fill: #ffffff;
+}
+
+.user-recommended-product a {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-decoration: none;
+}
+
+.user-recommended-product a:hover {
+  text-decoration: underline;
 }

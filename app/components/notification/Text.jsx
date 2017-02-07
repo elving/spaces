@@ -23,7 +23,7 @@ const getCreatedBy = notification => {
   return action === 'approve' ? (
     'We '
   ) : (
-    <a href={`/designers/${username}/`}>
+    <a href={`/u/${username}/`}>
       {username}
     </a>
   )

@@ -408,14 +408,14 @@ class SpaceDetail extends Component {
     return (
       <div className="space-detail-subheader-container">
         <div className="space-detail-subheader">
-          {this.renderDesigner()}
+          {this.renderUser()}
           {this.renderActions()}
         </div>
       </div>
     )
   }
 
-  renderDesigner() {
+  renderUser() {
     const { props } = this
 
     return (
@@ -471,7 +471,14 @@ class SpaceDetail extends Component {
           <button
             type="button"
             onClick={this.openRedesignPopup}
-            className="button button--primary button--small button--outline"
+            className={classNames({
+              button: true,
+              'button--small': true,
+              'popup-trigger': true,
+              'button--outline': true,
+              'button--primary': true
+            })}
+            data-action="redesign"
           >
             <span className="button-text">
               <MaterialDesignIcon name="redesign" />
@@ -491,7 +498,13 @@ class SpaceDetail extends Component {
           <button
             type="button"
             onClick={this.openSharePopup}
-            className="button button--icon button--small button--outline"
+            className={classNames({
+              button: true,
+              'button--icon': true,
+              'button--small': true,
+              'popup-trigger': true,
+              'button--outline': true
+            })}
             data-action="share"
           >
             <MaterialDesignIcon name="send" fill="#439fe0" />

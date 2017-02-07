@@ -1,6 +1,3 @@
-import map from 'lodash/map'
-import join from 'lodash/join'
-import classNames from 'classnames'
 import React, { Component, PropTypes } from 'react'
 
 import MaterialDesignIcon from '../common/MaterialDesignIcon'

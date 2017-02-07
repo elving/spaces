@@ -74,7 +74,7 @@
   border-color: #c0c0c0;
   border-radius: 3px;
   background-color: #f8f8f8;
-  margin: 9px 10px -1px -1px;
+  margin: 10px 10px -1px -1px;
   display: flex;
   align-self: center;
   justify-content: flex-start;
@@ -242,4 +242,9 @@
 .select.select--small .Select-value-icon {
   font-size: 13px;
   padding: 0 6px;
+}
+
+.select.select--small .Select-item,
+.select.select--small .Select-value {
+  margin-top: 5px;
 }

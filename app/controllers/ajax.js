@@ -1,7 +1,6 @@
-import getSearchFilters from '../api/common/getSearchFilters'
-
 import toJSON from '../api/utils/toJSON'
-import { default as getAllSpaceTypes } from '../api/spaceType/getAll'
+import getAllSpaceTypes from '../api/spaceType/getAll'
+import getSearchFilters from '../api/common/getSearchFilters'
 
 export const getFilters = async (req, res) => {
   try {

@@ -34,3 +34,15 @@
 .redesign-badge-icon .icon-fill {
   fill: #ffffff;
 }
+
+@media (max-width: 736px) {
+  .redesign-badge-icon-container {
+    width: 18px;
+    height: 18px;
+  }
+
+  .redesign-badge-icon-container .icon {
+    width: 12px;
+    height: 12px;
+  }
+}

@@ -21,7 +21,7 @@ export default class Avatar extends Component {
     width: 32,
     height: 32,
     imageUrl: '',
-    initials: '?',
+    initials: '@',
     className: ''
   }
 

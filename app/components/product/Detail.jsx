@@ -13,7 +13,6 @@ import React, { Component, PropTypes } from 'react'
 import Tag from '../common/Tag'
 import Space from '../space/Card'
 import Layout from '../common/Layout'
-import Sticky from '../common/Sticky'
 import Avatar from '../user/Avatar'
 import Loader from '../common/Loader'
 import Product from './Card'
@@ -34,7 +33,7 @@ class ProductDetail extends Component {
     user: PropTypes.object,
     csrf: PropTypes.string,
     userLoggedIn: PropTypes.func,
-    currentUserIsOwner: PropTypes.func
+    currentUserIsAdmin: PropTypes.func
   }
 
   static propTypes = {
@@ -110,9 +109,6 @@ class ProductDetail extends Component {
 
   renderImage() {
     const { props, state, context } = this
-    const maxWidth = state.imageWidth
-    const maxHeight = state.imageHeight
-
 
     return (
       <div
@@ -121,7 +117,7 @@ class ProductDetail extends Component {
           'product-detail-image-container--loading': state.imageIsLoading
         })}
       >
-        {context.currentUserIsOwner(props.product) ? (
+        {context.currentUserIsAdmin() ? (
           <a
             href={`/products/${get(props.product, 'sid')}/update/`}
             className="button button--primary button--small"
@@ -143,7 +139,6 @@ class ProductDetail extends Component {
             src={get(props.product, 'image')}
             alt={get(props.product, 'name')}
             title={get(props.product, 'name')}
-            style={{ maxWidth, maxHeight }}
             className="product-detail-image"
           />
         ) : null}
@@ -176,6 +171,18 @@ class ProductDetail extends Component {
           @{get(props.product, 'createdBy.username')}
         </a>
       </p>
+    )
+  }
+
+  renderCommentCTA() {
+    const comments = get(this.props, 'product.commentsCount', 0)
+
+    return (
+      <a href="#comments" className="product-detail-comment-cta">
+        <MaterialDesignIcon name="comment" />
+        {comments === 1 || !comments ? 'Join the discussion' : null}
+        {comments ? `Join ${comments} others in the discussion` : null}
+      </a>
     )
   }
 
@@ -425,7 +432,7 @@ class ProductDetail extends Component {
         >
           <span className="button-text">
             <MaterialDesignIcon name="check-simple" />
-            Collect
+            Add to space
           </span>
         </button>
 
@@ -442,7 +449,7 @@ class ProductDetail extends Component {
           <button
             type="button"
             onClick={this.openSharePopup}
-            className="button share-button"
+            className="button share-button popup-trigger"
           >
             <span className="button-text">
               <MaterialDesignIcon name="send" />
@@ -559,7 +566,7 @@ class ProductDetail extends Component {
   }
 
   render() {
-    const { props, context } = this
+    const { props } = this
 
     return (
       <Layout>
@@ -569,16 +576,8 @@ class ProductDetail extends Component {
           isVisible={props.addProductModalIsOpen}
         />
 
-        <Sticky
-          offset={
-            get(this.productDetail, 'offsetHeight', 500) + 650 + (
-              context.userLoggedIn() ? 400 : 0
-            )
-          }
-        >
-          {this.renderProduct()}
-        </Sticky>
-
+        {this.renderProduct()}
+        {this.renderCommentCTA()}
         {this.renderInfo()}
 
         <div className="grids">
@@ -599,6 +598,35 @@ class ProductDetail extends Component {
         </div>
 
         {this.renderComments()}
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: (`
+              {
+                "@context": "http://schema.org/",
+                "@type": "Product",
+                "name": ${get(props, 'product.name')},
+                "image": ${get(props, 'product.image')},
+                "description": ${get(props, 'product.description')},
+                "brand": {
+                  "@type": "Thing",
+                  "name": ${get(props, 'product.brand.name')}
+                },
+                "offers": {
+                  "@type": "Offer",
+                  "priceCurrency": "USD",
+                  "price": ${get(props, 'product.price')},
+                  "seller": {
+                    "@type": "Organization",
+                    "name": ${get(props, 'product.brand.name')}
+                  }
+                }
+              }
+            `)
+          }}
+        />
+
       </Layout>
     )
   }

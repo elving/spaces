@@ -28,8 +28,6 @@ export default (params = {}, operation = 'where') => (
     let query
     const searchParams = makeSearchQuery(params)
 
-    set(searchParams, 'isPendingApproval', { $ne: true })
-
     if (operation === 'and') {
       query = mongoose.model('Product').find({
         $and: makeConditionalSearchQuery(searchParams)

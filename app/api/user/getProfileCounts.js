@@ -21,7 +21,7 @@ const getProductsCount = createdBy => (
   new Promise((resolve, reject) => {
     mongoose
       .model('Product')
-      .where({ createdBy, isPendingApproval: { $ne: true } })
+      .where({ createdBy })
       .count((err, count = 0) => {
         if (err) {
           return reject(parseError(err))

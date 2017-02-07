@@ -49,3 +49,9 @@
 .comment-form.form--has-focused .comment-form-actions {
   display: flex;
 }
+
+@media (max-width: 736px) {
+  .comment-form {
+    margin-bottom: 15px;
+  }
+}

@@ -74,7 +74,7 @@ export const getUserFollowers = async (req, res) => {
     res.status(500).json({
       err: {
         genereic: (
-          'There was an error while trying to fetch followers of this designer.'
+          'There was an error while trying to fetch followers of this user.'
         )
       }
     })

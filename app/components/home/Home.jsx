@@ -115,7 +115,7 @@ class Home extends Component {
     )
   }
 
-  renderDesigners() {
+  renderUsers() {
     const { props } = this
 
     return (
@@ -284,19 +284,19 @@ class Home extends Component {
           {!isEmpty(props.users) ? (
             <div className="grid-container">
               <div className="grid-title-container">
-                <h3 className="grid-title">Popular Designers</h3>
+                <h3 className="grid-title">Popular Users</h3>
                 <Link
-                  to={{ pathname: '/designers/' }}
+                  to={{ pathname: '/community/' }}
                   onClick={fullReload}
                   className="button button--small button--outline"
                   activeClassName="is-active"
                 >
                   <span className="button-text">
-                    All Designers
+                    Community
                   </span>
                 </Link>
               </div>
-              {this.renderDesigners()}
+              {this.renderUsers()}
             </div>
           ) : null}
 

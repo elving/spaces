@@ -26,7 +26,6 @@ export default class Popup extends Component {
       document.body.classList.add('popup-open')
       $body.addEventListener('click', this.onBodyClick)
     } else {
-      document.body.classList.remove('popup-open')
       $body.removeEventListener('click', this.onBodyClick)
     }
   }
@@ -38,7 +37,6 @@ export default class Popup extends Component {
       document.body.classList.add('popup-open')
       $body.addEventListener('click', this.onBodyClick)
     } else {
-      document.body.classList.remove('popup-open')
       $body.removeEventListener('click', this.onBodyClick)
     }
   }
@@ -51,7 +49,11 @@ export default class Popup extends Component {
   onBodyClick = (event) => {
     const { props } = this
 
-    if (!hasParent(event, 'popup')) {
+    if (
+      !hasParent(event, 'popup') &&
+      !event.target.classList.contains('popup')
+    ) {
+      document.body.classList.remove('popup-open')
       props.onClickClose()
     }
   }

@@ -6,9 +6,13 @@
     <meta charSet="utf-8"/>
     <meta httpEquiv="x-ua-compatible" content="ie=edge"/>
     <meta name="description" content="<%= ogDescription %>"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta name="p:domain_verify" content="d852f83724170b801212b6bdc3b6be3f"/>
     <meta name="google-site-verification" content="6exAOz-gyyXQBFmCzgUu2IvROo_5XmetNz617HFXI7U"/>
+
+    <meta name="apple-mobile-web-app-title" content="Spaces"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 
     <meta property="fb:app_id" content="<%= fbId %>"/>
     <meta property="og:url" content="<%= ogUrl %>"/>
@@ -90,5 +94,53 @@
       /></noscript>
       <!-- End Facebook Pixel Code -->
     <% } %>
+
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "WebSite",
+        "url": "https://joinspaces.co",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://joinspaces.co/search/?type=products&name={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "WebSite",
+        "name": "Spaces",
+        "alternateName": "joinspaces",
+        "url": "https://joinspaces.co"
+      }
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "url": "https://joinspaces.co",
+        "logo": "https://d2xpms98gwggxd.cloudfront.net/static/images/logo_small.png"
+      }
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "name": "Spaces",
+        "url": "https://joinspaces.co",
+        "sameAs": [
+          "https://www.facebook.com/joinspaces/",
+          "https://twitter.com/joinspaces/",
+          "https://www.pinterest.com/joinspaces/",
+          "https://www.instagram.com/joinspaces/"
+          "https://www.flipboard.com/@joinspaces/"
+        ]
+      }
+    </script>
   </body>
 </html>

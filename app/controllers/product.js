@@ -1,4 +1,5 @@
 import get from 'lodash/get'
+import set from 'lodash/set'
 import merge from 'lodash/merge'
 import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
@@ -17,7 +18,6 @@ import destroy from '../api/product/destroy'
 import findBySid from '../api/product/findBySid'
 import fromBrand from '../api/product/fromBrand'
 import getRelated from '../api/product/getRelated'
-import getRecommended from '../api/product/getRecommended'
 import getRelatedSpaces from '../api/product/getRelatedSpaces'
 import fetchProductData from '../api/product/fetchProductData'
 
@@ -62,7 +62,7 @@ export const renderDetail = async (req, res, next) => {
   try {
     const product = await findBySid(sid)
 
-    if (isEmpty(product) || get(product, 'isPendingApproval') === true) {
+    if (isEmpty(product)) {
       return res.redirect('/404/')
     }
 
@@ -157,18 +157,13 @@ export const renderAddProduct = async (req, res, next) => {
   }
 
   try {
-    const action = (
-      !get(req, 'user.isCurator', false) ||
-      !get(req, 'user.isAdmin', false)
-    ) ? 'Recommend' : 'Add'
-
     const brands = await getAllBrands()
     const colors = await getAllColors()
     const categories = await getAllCategories()
     const spaceTypes = await getAllSpaceTypes()
 
     setMetadata(res, {
-      title: `${action} Product | Spaces`,
+      title: 'Add Product | Spaces',
       bodyId: 'add-product',
       bodyClass: 'page page-add-product'
     })
@@ -196,14 +191,11 @@ export const addProduct = async (req, res) => {
   }
 
   try {
+    const userId = get(req, 'user.id')
     const product = await create(
       merge(req.body, {
-        createdBy: get(req, 'user.id'),
-        updatedBy: get(req, 'user.id'),
-        isPendingApproval: (
-          !get(req, 'user.isCurator', false) ||
-          !get(req, 'user.isAdmin', false)
-        )
+        createdBy: get(req, 'body.createdBy', userId),
+        updatedBy: userId
       })
     )
 
@@ -272,11 +264,15 @@ export const updateProduct = async (req, res) => {
   }
 
   try {
-    const product = await update(
-      id, merge(req.body, {
-        updatedBy: get(req, 'user.id')
-      })
-    )
+    const data = merge(req.body, {
+      updatedBy: get(req, 'user.id')
+    })
+
+    if (!isEmpty(req.body.createdBy)) {
+      set(data, 'createdBy', req.body.createdBy)
+    }
+
+    const product = await update(id, data)
 
     res.status(200).json(product)
   } catch (err) {
@@ -300,25 +296,5 @@ export const destroyProduct = async (req, res) => {
     res.status(200).json({ success: true })
   } catch (err) {
     res.status(500).json({ err })
-  }
-}
-
-export const renderRecommended = async (req, res, next) => {
-  try {
-    const products = await getRecommended()
-
-    setMetadata(res, {
-      title: 'Recommended Products | Spaces',
-      bodyId: 'recommended-products',
-      bodyClass: 'page page-recommended-products page-admin-table'
-    })
-
-    setProps(res, {
-      products: toJSON(products)
-    })
-
-    next()
-  } catch (err) {
-    next(err)
   }
 }

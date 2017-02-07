@@ -29,7 +29,7 @@ export default class CurrentUserNav extends Component {
             </DropdownTrigger>
             <DropdownContent className="dropdown-content">
               <a
-                href={`/designers/${username}/`}
+                href={`/u/${username}/`}
                 className="dropdown-link"
               >
                 Profile <MaterialDesignIcon name="profile" />
@@ -40,9 +40,15 @@ export default class CurrentUserNav extends Component {
               >
                 Notifications <MaterialDesignIcon name="notifications" />
               </a>
+              <a
+                href={'/friends/'}
+                className="dropdown-link"
+              >
+                Invite Friends <MaterialDesignIcon name="follow" />
+              </a>
               {!context.currentUserIsCurator() ? (
                 <a
-                  href={`/designers/${username}/recommended/`}
+                  href={`/u/${username}/recommended/`}
                   className="dropdown-link"
                 >
                   Recommended <MaterialDesignIcon name="approve" size={17} />

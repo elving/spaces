@@ -159,7 +159,7 @@ export default class AddProductModal extends Component {
       const { context } = this
 
       axios
-        .get(`/ajax/spaces/designer/${toStringId(context.user)}/`)
+        .get(`/ajax/spaces/user/${toStringId(context.user)}/`)
         .then(({ data }) => {
           resolve(get(data, 'spaces', []))
         })

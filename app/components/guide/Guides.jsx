@@ -6,6 +6,7 @@ import axios from 'axios'
 import assign from 'lodash/assign'
 import concat from 'lodash/concat'
 import isEmpty from 'lodash/isEmpty'
+import isString from 'lodash/isString'
 import classNames from 'classnames'
 import queryString from 'query-string'
 import React, { Component, PropTypes } from 'react'
@@ -34,14 +35,17 @@ export default class Guides extends Component {
   static propTypes = {
     params: PropTypes.object,
     guides: PropTypes.object,
-    emptyMessage: PropTypes.string
+    emptyMessage: PropTypes.string,
+    disableSorting: PropTypes.bool,
+    disablePagination: PropTypes.bool
   }
 
   static defaultProps = {
     params: {},
     guides: {},
     emptyMessage: 'No Guides Found...',
-    displayMiniProfile: false
+    disableSorting: false,
+    disablePagination: false
   }
 
   constructor(props) {
@@ -78,8 +82,9 @@ export default class Guides extends Component {
 
   fetch = sorting => {
     const { props } = this
+    const newSorting = isString(sorting) ? sorting : null
 
-    const reset = sorting ? {
+    const reset = newSorting ? {
       count: 0,
       offset: 0,
       results: [],
@@ -88,11 +93,11 @@ export default class Guides extends Component {
     } : {}
 
     this.setState(assign(reset, {
-      sort: (sorting || this.state.sort),
+      sort: (newSorting || this.state.sort),
       isFetching: true
     }), () => {
       const { state } = this
-      const sort = this.getSorting(sorting || state.sort)
+      const sort = this.getSorting(newSorting || state.sort)
       const params = queryString.stringify(
         assign(get(props, 'params', {}), { sort })
       )
@@ -120,7 +125,11 @@ export default class Guides extends Component {
   }
 
   renderPagination() {
-    const { state } = this
+    const { props, state } = this
+
+    if (props.disablePagination) {
+      return null
+    }
 
     return size(state.results) < state.count ? (
       <div className="grid-pagination">
@@ -190,9 +199,11 @@ export default class Guides extends Component {
 
     return (
       <div className="grid">
-        <div className="grid-sorting">
-          {this.renderSorting()}
-        </div>
+        {!props.disableSorting ? (
+          <div className="grid-sorting">
+            {this.renderSorting()}
+          </div>
+        ) : null}
         <div className="grid-items grid-items--2-cards">
           {hasNoResults ? (
             <p className="grid-items-empty">
@@ -216,7 +227,7 @@ export default class Guides extends Component {
 
     return state.isFetching && !state.hasFetched ? (
       <div className="grids">
-        <Loader size="52" />
+        <Loader size={52} />
       </div>
     ) : (
       <div className="grids">

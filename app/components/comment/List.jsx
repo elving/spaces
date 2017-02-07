@@ -1,4 +1,5 @@
 import map from 'lodash/map'
+import isEmpty from 'lodash/isEmpty'
 import React, { Component, PropTypes } from 'react'
 
 import Loader from '../common/Loader'
@@ -22,10 +23,10 @@ export default class CommentsList extends Component {
   render() {
     const { props } = this
 
-    return (
+    return isEmpty(props.comments) && !props.isFetching ? null : (
       <div className="comments-list">
         {props.isFetching ? (
-          <Loader size={55} />
+          <Loader size={52} />
         ) : (
           map(props.comments, comment =>
             <Comment

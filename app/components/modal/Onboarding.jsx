@@ -96,7 +96,7 @@ export default class OnboardingModal extends Component {
               Share this <strong>{toLower(props.room)}</strong> with your
               friends to start a discussion. Get followers and gain influence
               to become a curator. Curators can add products that other
-              designers can use to design their spaces.
+              people can use to design their spaces.
             </p>
           </div>
         </div>

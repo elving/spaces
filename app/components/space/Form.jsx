@@ -159,7 +159,7 @@ export default class SpaceForm extends Component {
     const isPOST = props.formMethod === 'POST'
 
     const formData = assign(
-      serialize(this.form, { hash: true }),
+      serialize(this.form, { hash: true, empty: true }),
       isPOST ? { products: props.products } : {},
       !isEmpty(state.coverImage) ? {
         coverImage: state.coverImage

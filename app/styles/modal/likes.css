@@ -159,17 +159,22 @@ likes-modal-item[data-type="space"] .likes-modal-item-title {
   }
 
   .likes-modal-close {
-    top: -15px;
-    right: -15px;
+    top: -10px;
+    right: -10px;
     padding: 5px;
   }
 
-  .likes-modal-close .ui-icon {
-    width: 16px;
-    height: 16px;
+  .likes-modal-close .icon {
+    width: 26px;
+    height: 26px;
   }
 
   .likes-modal-count {
     margin: 0 -15px 15px;
+  }
+
+  .likes-modal-user {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
   }
 }

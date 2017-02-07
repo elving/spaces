@@ -67,7 +67,7 @@ export default class OnboardingTips extends Component {
   endOnboarding = () => {
     const { context } = this
 
-    axios.put(`/ajax/designers/${toStringId(context.user)}/`, {
+    axios.put(`/ajax/users/${toStringId(context.user)}/`, {
       _csrf: context.csrf,
       settings: updateSettings(context.user, {
         onboarding: false
@@ -178,7 +178,7 @@ export default class OnboardingTips extends Component {
     let url
 
     if (tip === 'design') {
-      url = '/about/#creating-spaces'
+      url = '/about/#designing-spaces'
     } else if (tip === 'like') {
       url = '/about/#following-and-liking'
     } else if (tip === 'share') {

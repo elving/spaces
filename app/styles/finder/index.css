@@ -1,0 +1,153 @@
+.product-finder .page-content {
+  padding: 0 35px;
+}
+
+.product-finder .loader {
+  margin-bottom: 35px;
+}
+
+.product-finder--searching .page-content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.product-finder-header {
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  width: 100%;
+  margin: 35px auto;
+  max-width: 960px;
+}
+
+.product-finder-filters,
+.product-finder-categories,
+.product-finder-sub-filters {
+  width: 100%;
+  margin: -15px auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-finder-filters {
+  padding-bottom: 35px;
+}
+
+.product-finder-categories,
+.product-finder-sub-filters {
+  padding: 0;
+}
+
+.product-finder-categories {
+  margin-top: 15px;
+}
+
+.product-finder-sub-filters {
+  border-bottom: 1px solid #e5e5e5;
+  margin: 0 auto 15px;
+  padding: 0 0 35px;
+}
+
+.product-finder-sub-filters .product-finder-filters {
+  padding-bottom: 0;
+}
+
+.product-finder-filters-title {
+  color: #999999;
+  font-size: 26px;
+  text-align: center;
+  line-height: 26px;
+  width: 100%;
+  margin: 0 auto 35px;
+  max-width: 960px;
+}
+
+.product-finder-filter {
+  border-radius: 100px;
+  margin-top: 15px;
+  margin-right: 15px;
+}
+
+.product-finder-filters > .product-finder-filter:last-child {
+  margin-right: 0;
+}
+
+.product-finder-actions {
+  width: 100%;
+  margin: -2px auto 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-finder-action {
+  margin: 0 15px;
+  min-width: 120px;
+}
+
+@media (max-width: 768px) {
+  .product-finder .page-content {
+    padding: 0 15px;
+  }
+
+  .product-finder .loader {
+    margin-bottom: 15px;
+  }
+
+  .product-finder-title {
+    font-size: 22px;
+    line-height: 28px;
+    margin: 15px auto;
+    padding: 0 15px;
+  }
+
+  .product-finder-header {
+    margin: 15px auto;
+  }
+
+  .product-finder-filters,
+  .product-finder-categories,
+  .product-finder-sub-filters {
+    margin: -7.5px auto 0;
+  }
+
+  .product-finder-filters {
+    padding-bottom: 15px;
+  }
+
+  .product-finder-categories {
+    margin-top: 7.5px;
+  }
+
+  .product-finder-sub-filters {
+    margin: 0 auto 10px;
+    padding: 0 0 15px;
+  }
+
+  .product-finder-filters-title {
+    color: #999999;
+    font-size: 22px;
+    line-height: 24px;
+    margin: 0 auto 15px;
+  }
+
+  .product-finder-filter {
+    border-radius: 100px;
+    font-size: 14px;
+    padding: 5px 8px;
+    margin-top: 5px;
+    margin-right: 5px;
+  }
+
+  .product-finder-actions {
+    margin: -2px auto 15px;
+  }
+
+  .product-finder-action {
+    width: calc(50% - 15px);
+    margin: 0 auto;
+  }
+}

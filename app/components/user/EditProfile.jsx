@@ -68,12 +68,12 @@ export default class EditProfile extends Component {
       isWaiting: true
     }, () => {
       axios
-      .put(`/ajax/designers/${toStringId(context.user)}/`, formData)
+      .put(`/ajax/users/${toStringId(context.user)}/`, formData)
       .then(({ data: user }) => {
         const username = get(user, 'username')
 
         if (username !== get(context.user, 'username')) {
-          window.location.href = `/designers/${username}/edit/`
+          window.location.href = `/u/${username}/edit/`
         } else {
           this.setState({
             bio: get(user, 'bio', ''),
@@ -239,7 +239,7 @@ export default class EditProfile extends Component {
         <form
           ref={form => { this.form = form }}
           method="POST"
-          action={`/designers/${username}/edit/`}
+          action={`/u/${username}/edit/`}
           encType="multipart/form-data"
           onSubmit={this.onSubmit}
           className="edit-profile-form"
@@ -373,7 +373,7 @@ export default class EditProfile extends Component {
 
             <a
               id="password"
-              href={`/designers/${username}/password/`}
+              href={`/u/${username}/password/`}
               className="button"
             >
               <span className="button-text">

@@ -59,13 +59,13 @@ export default (schema) => {
   schema
     .virtual('detailUrl')
     .get(function() {
-      return `designers/${this.get('username')}`
+      return `u/${this.get('username')}`
     })
 
   schema
     .virtual('shortUrl')
     .get(function() {
-      return `d/${this.get('sid')}`
+      return `u/${this.get('sid')}`
     })
 
   return schema

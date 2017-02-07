@@ -1,7 +1,6 @@
 import React from 'react'
 import Modal from 'react-modal'
 import ReactDOM from 'react-dom'
-import FastClick from 'fastclick'
 import { Router, browserHistory as history } from 'react-router'
 
 import './styles/index.css'
@@ -16,7 +15,6 @@ const createElement = (Component, props) => {
 }
 
 const render = () => {
-  FastClick.attach(document.body)
   Modal.setAppElement('#app')
 
   ReactDOM.render((

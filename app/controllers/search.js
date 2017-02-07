@@ -9,6 +9,7 @@ import setMetadata from '../utils/middlewares/setMetadata'
 import searchAllUsers from '../api/user/search'
 import searchAllSpaces from '../api/space/search'
 import searchAllGuides from '../api/guide/search'
+import getSearchFilters from '../api/common/getSearchFilters'
 import searchAllFollows from '../api/follow/search'
 import searchAllProducts from '../api/product/search'
 import searchAllCategories from '../api/category/search'
@@ -21,13 +22,15 @@ export const renderSearchResults = async (req, res, next) => {
   const searchParams = omit(params, ['type'])
 
   try {
+    const filters = await getSearchFilters()
+
     if (isEqual(searchType, 'guides')) {
       results = await searchAllGuides(searchParams)
     } else if (isEqual(searchType, 'products')) {
       results = await searchAllProducts(searchParams)
     } else if (isEqual(searchType, 'spaces')) {
       results = await searchAllSpaces(searchParams)
-    } else if (isEqual(searchType, 'designers')) {
+    } else if (isEqual(searchType, 'users')) {
       results = await searchAllUsers(searchParams)
     }
 
@@ -43,7 +46,33 @@ export const renderSearchResults = async (req, res, next) => {
       bodyClass: 'page page-search-results'
     })
 
-    setProps(res, results)
+    setProps(res, {
+      filters,
+      ...results
+    })
+
+    next()
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const renderFinder = async (req, res, next) => {
+  try {
+    const filters = await getSearchFilters()
+
+    setOgTags(req, res, {
+      ogTitle: 'Find the perfect product for your home.'
+    })
+
+    setMetadata(res, {
+      title: 'Product Finder | Spaces',
+      bodyId: 'finder',
+      bodyClass: 'page page-finder',
+      description: 'Find the perfect product for your home.'
+    })
+
+    setProps(res, { filters })
 
     next()
   } catch (err) {

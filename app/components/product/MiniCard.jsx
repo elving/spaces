@@ -143,7 +143,7 @@ export default class ProductMiniCard extends Component {
           />
         ) : null}
 
-        {this.renderDesigner()}
+        {this.renderUser()}
         {this.renderPrice()}
       </div>
     )
@@ -202,7 +202,14 @@ export default class ProductMiniCard extends Component {
           <button
             type="button"
             onClick={this.openSharePopup}
-            className="card-action share-button button button--icon tooltip"
+            className={classNames({
+              button: true,
+              tooltip: true,
+              'card-action': true,
+              'share-button': true,
+              'button--icon': true,
+              'popup-trigger': true
+            })}
             data-action="send"
             data-tooltip="Share this product"
           >
@@ -213,7 +220,7 @@ export default class ProductMiniCard extends Component {
     )
   }
 
-  renderDesigner() {
+  renderUser() {
     const { props } = this
 
     return (
@@ -221,16 +228,16 @@ export default class ProductMiniCard extends Component {
         rel="noreferrer noopener"
         href={`/${get(props.createdBy, 'detailUrl')}/`}
         target="_blank"
-        className="product-card-designer tooltip"
+        className="product-card-user tooltip"
         data-tooltip={`@${get(props.createdBy, 'username')}`}
       >
         <Avatar
           user={props.createdBy}
           width={18}
           height={18}
-          className="product-card-designer-avatar"
+          className="product-card-user-avatar"
         />
-        <span className="product-card-designer-name">
+        <span className="product-card-user-name">
           {isCurator(props.createdBy) ? 'Curated' : 'Recommended'}
         </span>
       </a>

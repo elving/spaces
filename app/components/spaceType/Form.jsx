@@ -77,7 +77,7 @@ export default class SpaceTypeForm extends Component {
 
     const form = this.form
     const isPOST = props.formMethod === 'POST'
-    const formData = serialize(form, { hash: true })
+    const formData = serialize(form, { hash: true, empty: true })
     const endpoint = isPOST
       ? '/ajax/space-types/'
       : `/ajax/space-types/${toStringId(props.spaceType)}/`

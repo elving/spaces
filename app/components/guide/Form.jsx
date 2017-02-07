@@ -101,7 +101,7 @@ export default class GuideForm extends Component {
 
     const form = this.form
     const isPOST = props.formMethod === 'POST'
-    const formData = assign({}, serialize(form, { hash: true }), {
+    const formData = assign({}, serialize(form, { hash: true, empty: true }), {
       sections: map(this.sectionRefs, ref => result(ref, 'getData'))
     })
     const endpoint = isPOST

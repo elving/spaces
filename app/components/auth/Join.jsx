@@ -138,11 +138,7 @@ export default class Join extends Component {
             <input type="hidden" name="provider" value={socialNetwork} />
           ) : null}
 
-          {isEmpty(socialNetwork) ? (
-            <h1 className="form-title">
-              Join Spaces
-            </h1>
-          ) : this.renderUserInfo()}
+          {!isEmpty(socialNetwork) ? this.renderUserInfo() : null}
 
           {isEmpty(socialNetwork) ? (
             <div className="auth-form-social">

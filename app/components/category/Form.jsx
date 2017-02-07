@@ -71,7 +71,7 @@ export default class CategoryForm extends Component {
 
     const form = this.form
     const isPOST = props.formMethod === 'POST'
-    const formData = serialize(form, { hash: true })
+    const formData = serialize(form, { hash: true, empty: true })
     const endpoint = isPOST
       ? '/ajax/categories/'
       : `/ajax/categories/${toStringId(props.category)}/`

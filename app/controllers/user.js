@@ -10,7 +10,7 @@ import setOgTags from '../utils/middlewares/setOgTags'
 import getFollows from '../api/user/getFollows'
 import toStringId from '../api/utils/toStringId'
 import setMetadata from '../utils/middlewares/setMetadata'
-import getRecommended from '../api/product/getRecommended'
+import getRecommended from '../api/productRecommendation/getAll'
 import updatePassword from '../api/user/updatePassword'
 import findByUsername from '../api/user/findByUsername'
 import getProfileCounts from '../api/user/getProfileCounts'
@@ -21,11 +21,11 @@ export const renderIndex = async (req, res, next) => {
     const results = await search()
 
     setOgTags(req, res, {
-      ogTitle: 'Discover awesome designers on Spaces'
+      ogTitle: 'Discover awesome people on Spaces'
     })
 
     setMetadata(res, {
-      title: 'Discover Designers | Spaces',
+      title: 'Discover People | Spaces',
       bodyId: 'all-users',
       bodyClass: 'page page-all-users'
     })
@@ -38,8 +38,22 @@ export const renderIndex = async (req, res, next) => {
   }
 }
 
+export const renderFriends = (req, res, next) => {
+  setOgTags(req, res, {
+    ogTitle: 'Invite your friends over to Spaces'
+  })
+
+  setMetadata(res, {
+    title: 'Invite Your Friends | Spaces',
+    bodyId: 'friends',
+    bodyClass: 'page page-friends'
+  })
+
+  next()
+}
+
 export const redirectToProfileSpaces = (req, res) => {
-  res.redirect(`/designers/${get(req, 'params.username')}/spaces/`)
+  res.redirect(`/u/${get(req, 'params.username')}/spaces/`)
 }
 
 export const renderProfile = async (req, res, next) => {
@@ -222,7 +236,9 @@ export const renderRecommended = async (req, res, next) => {
       return res.redirect('/404/')
     }
 
-    const products = await getRecommended(toStringId(req.user))
+    const recommendations = await getRecommended({
+      createdBy: toStringId(req.user)
+    })
 
     setMetadata(res, {
       title: 'Your Recommendations | Spaces',
@@ -230,7 +246,7 @@ export const renderRecommended = async (req, res, next) => {
       bodyClass: 'page page-profile'
     })
 
-    setProps(res, { products: toJSON(products) })
+    setProps(res, { recommendations: toJSON(recommendations) })
 
     next()
   } catch (err) {

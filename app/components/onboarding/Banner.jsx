@@ -36,7 +36,7 @@ export default class CreateSpaceBanner extends Component {
       isWaiting: true
     }, () => {
       axios
-      .put(`/ajax/designers/${toStringId(context.user)}/`, formData)
+      .put(`/ajax/users/${toStringId(context.user)}/`, formData)
       .then(refresh)
       .catch(refresh)
     })
@@ -54,7 +54,7 @@ export default class CreateSpaceBanner extends Component {
         </button>
         Design your first space by adding a product.
         {'\u00A0'}
-        <a href="/about/#creating-spaces">Learn more</a>
+        <a href="/about/#designing-spaces">Learn more</a>
         {'\u00A0'}
         or
         {'\u00A0'}

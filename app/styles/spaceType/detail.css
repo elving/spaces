@@ -121,4 +121,10 @@ button.spaceType-detail-counter:hover .spaceType-detail-counter-text {
   .spaceType-detail .navpills {
     margin-top: 15px;
   }
+
+  .spaceType-detail-follow-button {
+    height: 28px !important;
+    padding: 4px 12px !important;
+    min-height: 28px !important;
+  }
 }

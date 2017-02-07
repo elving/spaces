@@ -18,7 +18,7 @@ export default () => {
   }, (accessToken, refreshToken, profile, done) => {
     const profileData = {
       email: get(profile, '_json.email'),
-      avatar: get(profile, '_json.picture.data.url'),
+      avatar: `https://graph.facebook.com/${get(profile, '_json.id')}/picture?width=320&height=320`,
       fullName: get(profile, '_json.name')
     }
 

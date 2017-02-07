@@ -1,5 +1,13 @@
+.about .join-cta {
+  display: none;
+}
+
 .about .page-content {
   margin-bottom: 35px;
+}
+
+.about .grids {
+  margin-bottom: 15px;
 }
 
 .about .grid-sorting {
@@ -15,7 +23,7 @@
 }
 
 .about-header {
-  background-image: url(https://d2xpms98gwggxd.cloudfront.net/static/images/landing_bg_no_logo.jpg);
+  background-image: url(https://d2xpms98gwggxd.cloudfront.net/static/images/bg_pattern.jpg);
   background-repeat: no-repeat;
   background-position: center center;
   display: flex;
@@ -74,7 +82,7 @@
   margin: 0 auto;
   display: flex;
   max-width: 960px;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 }
 
@@ -135,6 +143,7 @@
   border-bottom: 1px solid #e5e5e5;
   font-size: 22px;
   margin: 0 0 35px;
+  min-height: 60px;
   padding-top: 5px;
   padding-bottom: 5px;
 }

@@ -22,6 +22,7 @@ import spaceTypeRouter from '../routes/spaceType'
 import onboardingRouter from '../routes/onboarding'
 import suggestionsRouter from '../routes/suggestions'
 import notificationRouter from '../routes/notification'
+import productRecommendationRouter from '../routes/productRecommendation'
 
 const configRoutes = (server) => {
   server.use(ajaxRouter)
@@ -44,6 +45,7 @@ const configRoutes = (server) => {
   server.use(onboardingRouter)
   server.use(suggestionsRouter)
   server.use(notificationRouter)
+  server.use(productRecommendationRouter)
 
   // Misc
   server.get('/sitemap.txt', (req, res) => {
@@ -70,6 +72,14 @@ const configRoutes = (server) => {
       version: getVersion(),
       reactProps: {}
     })
+  })
+
+  server.use((req, res, next) => {
+    if (req.session && !(/ajax|login|join/).test(req.url)) {
+      req.session.returnTo = req.url
+    }
+
+    next()
   })
 
   server.use((err, req, res, next) => {

@@ -74,7 +74,7 @@ export const getUserLikes = async (req, res) => {
     res.status(500).json({
       err: {
         genereic: (
-          'There was an error while trying to fetch likes from this designer.'
+          'There was an error while trying to fetch likes from this user.'
         )
       }
     })

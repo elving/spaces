@@ -10,7 +10,8 @@ import {
   getEmailUrl,
   getTwitterUrl,
   getFacebookUrl,
-  getPinterestUrl
+  getPinterestUrl,
+  getFlipboardUrl
 } from '../../utils/getShareUrl'
 
 export default class SharePopup extends Component {
@@ -66,8 +67,6 @@ export default class SharePopup extends Component {
       >
         <SocialIcon
           name="facebook"
-          size={16}
-          color="#3A579D"
           className="popup-item-icon"
         />
         <span className="popup-item-text">Share via Facebook</span>
@@ -88,8 +87,6 @@ export default class SharePopup extends Component {
       >
         <SocialIcon
           name="twitter"
-          size={16}
-          color="#50ABF1"
           className="popup-item-icon"
         />
         <span className="popup-item-text">Share via Twitter</span>
@@ -110,11 +107,29 @@ export default class SharePopup extends Component {
       >
         <SocialIcon
           name="pinterest"
-          size={16}
-          color="#CD1B1F"
           className="popup-item-icon"
         />
         <span className="popup-item-text">Share via Pinterest</span>
+      </a>
+    )
+  }
+
+  renderFlipboard() {
+    const { props } = this
+    const url = result(props, 'shareUrl', '#')
+
+    return (
+      <a
+        rel="noopener noreferrer"
+        href={getFlipboardUrl(url, props.shareText)}
+        target="_blank"
+        className="popup-item popup-item--clickable"
+      >
+        <SocialIcon
+          name="flipboard"
+          className="popup-item-icon"
+        />
+        <span className="popup-item-text">Share via Flipboard</span>
       </a>
     )
   }
@@ -128,7 +143,7 @@ export default class SharePopup extends Component {
         href={getEmailUrl(url, props.shareText)}
         className="popup-item popup-item--clickable"
       >
-        <MaterialDesignIcon
+        <SocialIcon
           name="email"
           className="popup-item-icon"
         />
@@ -155,6 +170,7 @@ export default class SharePopup extends Component {
             {this.renderFacebook()}
             {this.renderTwitter()}
             {this.renderPinterest()}
+            {this.renderFlipboard()}
             {this.renderEmail()}
           </div>
         </div>

@@ -11,6 +11,7 @@ import registerCategoryModel from '../models/category/schema'
 import registerSpaceTypeModel from '../models/spaceType/schema'
 import registerNotificationModel from '../models/notification/schema'
 import registerPasswordResetModel from '../models/passwordReset/schema'
+import registerRecommendationModel from '../models/productRecommendation/schema'
 
 const configModels = () => {
   registerUserModel()
@@ -26,6 +27,7 @@ const configModels = () => {
   registerSpaceTypeModel()
   registerNotificationModel()
   registerPasswordResetModel()
+  registerRecommendationModel()
 }
 
 export default configModels

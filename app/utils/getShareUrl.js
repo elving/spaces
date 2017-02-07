@@ -64,3 +64,17 @@ export const getPinterestUrl = (url, imageUrl, text) => {
 
   return shareUrl
 }
+
+export const getFlipboardUrl = (url, text) => {
+  let shareUrl = 'https://share.flipboard.com/bookmarklet/popout?v=2&'
+
+  if (!isEmpty(url)) {
+    shareUrl += `url=${encodeURIComponent(url)}&`
+  }
+
+  if (!isEmpty(text)) {
+    shareUrl += `title=${encodeURIComponent(text)}`
+  }
+
+  return shareUrl
+}

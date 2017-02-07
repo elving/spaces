@@ -8,6 +8,7 @@ import fullReload from '../../utils/fullReload'
 
 export default class MobileNav extends Component {
   static contextTypes = {
+    userLoggedIn: PropTypes.func,
     toggleMobileNav: PropTypes.func
   }
 
@@ -20,16 +21,14 @@ export default class MobileNav extends Component {
   }
 
   render() {
-    const { props, context } = this
-
-    return props.isVisible ? (
-      <nav className="mobile-nav">
+    return this.props.isVisible ? (
+      <nav className="mobile-nav header-link--dropdown">
         <div className="mobile-nav-top">
-          <a href="/">
+          <a href="/" style={{ height: 35 }}>
             <Logo width={35} height={35} />
           </a>
           <button
-            onClick={context.toggleMobileNav}
+            onClick={this.context.toggleMobileNav}
             className="button button--icon button--outline"
             data-action="toggleMobileNav"
           >
@@ -37,60 +36,109 @@ export default class MobileNav extends Component {
           </button>
         </div>
         <Link
-          to={{ pathname: '/' }}
+          to={{ pathname: '/finder/' }}
           onClick={fullReload}
-          className="mobile-nav-link"
-          activeClassName="mobile-nav-link--active"
+          className="dropdown-link"
+          activeClassName="dropdown-link--active"
         >
-          Trending
+          Product Finder
+          <small className="header-link--description">
+            Find products curated for your home.
+          </small>
         </Link>
+        {this.context.userLoggedIn() ? (
+          <Link
+            to={{ pathname: '/feed/' }}
+            onClick={fullReload}
+            className="dropdown-link"
+            activeClassName="dropdown-link--active"
+          >
+            Your Feed
+            <small className="header-link--description">
+              Discover products based on your interests.
+            </small>
+          </Link>
+        ) : null}
+        {this.context.userLoggedIn() ? (
+          <Link
+            to={{ pathname: '/suggestions/' }}
+            onClick={fullReload}
+            className="dropdown-link"
+            activeClassName="dropdown-link--active"
+          >
+            Your Suggestions
+            <small className="header-link--description">
+              Discover products for the spaces you&apos;ve designed.
+            </small>
+          </Link>
+        ) : null}
         <Link
-          to={{ pathname: '/guides/' }}
+          to={{ pathname: '/products/' }}
           onClick={fullReload}
-          className="mobile-nav-link"
-          activeClassName="mobile-nav-link--active"
+          className="dropdown-link"
+          activeClassName="dropdown-link--active"
         >
-          Guides
+          Products
+          <small className="header-link--description">
+            Discover products hand-picked by
+            our curators and community.
+          </small>
         </Link>
         <Link
           to={{ pathname: '/spaces/' }}
           onClick={fullReload}
-          className="mobile-nav-link"
-          activeClassName="mobile-nav-link--active"
+          className="dropdown-link"
+          activeClassName="dropdown-link--active"
         >
           Spaces
+          <small className="header-link--description">
+            Discover spaces designed by the community.
+          </small>
         </Link>
         <Link
-          to={{ pathname: '/products/' }}
+          to={{ pathname: '/guides/' }}
           onClick={fullReload}
-          className="mobile-nav-link"
-          activeClassName="mobile-nav-link--active"
+          className="dropdown-link"
+          activeClassName="dropdown-link--active"
         >
-          Products
+          Guides
+          <small className="header-link--description">
+            Our shopping guides showcase the best
+            spaces and products curated by the community
+          </small>
         </Link>
         <Link
-          to={{ pathname: '/designers/' }}
+          to={{ pathname: '/rooms/' }}
           onClick={fullReload}
-          className="mobile-nav-link"
-          activeClassName="mobile-nav-link--active"
+          className="dropdown-link"
+          activeClassName="dropdown-link--active"
         >
-          Designers
+          Rooms
+          <small className="header-link--description">
+            Discover products and spaces by rooms.
+          </small>
         </Link>
         <Link
-          to={{ pathname: '/feed/' }}
+          to={{ pathname: '/categories/' }}
           onClick={fullReload}
-          className="mobile-nav-link"
-          activeClassName="mobile-nav-link--active"
+          className="dropdown-link"
+          activeClassName="dropdown-link--active"
         >
-          Your Feed
+          Categories
+          <small className="header-link--description">
+            Discover products and spaces by categories.
+          </small>
         </Link>
         <Link
-          to={{ pathname: '/suggestions/' }}
+          to={{ pathname: '/community/' }}
           onClick={fullReload}
-          className="mobile-nav-link"
-          activeClassName="mobile-nav-link--active"
+          className="dropdown-link"
+          activeClassName="dropdown-link--active"
         >
-          Your Suggestions
+          Community
+          <small className="header-link--description">
+            Discover people with your same interests and taste.
+          </small>
         </Link>
       </nav>
     ) : null

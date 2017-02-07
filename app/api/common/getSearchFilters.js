@@ -1,10 +1,10 @@
 import toJSON from '../utils/toJSON'
-import { default as getAllColors } from '../color/getAll'
-import { default as getAllCategories } from '../category/getAll'
-import { default as getAllSpaceTypes } from '../spaceType/getAll'
+import getAllColors from '../color/getAll'
+import getAllCategories from '../category/getAll'
+import getAllSpaceTypes from '../spaceType/getAll'
 
-export default () => {
-  return new Promise(async (resolve, reject) => {
+export default () => (
+  new Promise(async (resolve, reject) => {
     try {
       const colors = await getAllColors()
       const categories = await getAllCategories()
@@ -19,4 +19,4 @@ export default () => {
       reject(err)
     }
   })
-}
+)

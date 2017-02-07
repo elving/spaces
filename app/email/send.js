@@ -1,13 +1,13 @@
 import defaults from 'lodash/defaults'
 import nodemailer from 'nodemailer'
 
-import makeError from './makeError'
+import makeError from '../utils/makeError'
 
 let smtpTransport
 let smtpTransportCreated = false
 
-export default (options) => {
-  return new Promise((resolve, reject) => {
+export default options => (
+  new Promise((resolve, reject) => {
     const mailOptions = defaults(options, {
       from: process.env.SUPPORT_EMAIL,
       envelope: {
@@ -36,4 +36,4 @@ export default (options) => {
       }
     })
   })
-}
+)

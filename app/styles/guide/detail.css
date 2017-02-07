@@ -5,7 +5,7 @@
   margin: 0 auto;
   height: 60vh;
   display: flex;
-  z-index: 100;
+  z-index: 5;
   position: relative;
   max-height: 420px;
   align-items: center;
@@ -246,13 +246,32 @@
     padding: 15px;
   }
 
+  .guide-header-action {
+    margin-right: 10px;
+  }
+
   .guide-header-name {
-    font-size: 32px;
-    line-height: 48px;
+    font-size: 26px;
+    line-height: 32px;
+  }
+
+  .guide-header-date,
+  .guide-header-description {
+    font-size: 16px;
   }
 
   .guide-introduction-container {
     padding: 15px;
+  }
+
+  .guide-introduction {
+    font-size: 16px;
+    line-height: 28px;
+  }
+
+  .guide-introduction::first-letter {
+    font-size: 56px;
+    margin-right: 14px;
   }
 
   .guide-section {
@@ -284,5 +303,10 @@
     font-size: 22px;
     line-height: 32px;
     padding: 0 15px;
+  }
+
+  .guide-section-item-text-content-text {
+    font-size: 16px;
+    line-height: 24px;
   }
 }

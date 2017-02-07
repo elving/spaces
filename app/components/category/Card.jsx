@@ -95,7 +95,7 @@ export default class CategoryCard extends Component {
         data-products={size(props.products)}
       >
         {state.imagesAreLoading ? (
-          <Loader size={50} />
+          <Loader size={52} />
         ) : null}
 
         {state.imagesAreLoaded ? (

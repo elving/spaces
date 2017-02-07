@@ -1,0 +1,16 @@
+.recommend-modal {
+  padding: 15px;
+  max-width: 520px;
+}
+
+.recommend-modal-title {
+  border-bottom: 1px solid #dadada;
+  font-size: 26px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  justify-content: space-between;
+}

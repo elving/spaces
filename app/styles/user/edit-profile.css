@@ -63,6 +63,14 @@
 }
 
 @media (max-width: 736px) {
+  #user-profile .page-title {
+    padding-bottom: 5px;
+  }
+
+  .edit-profile-form .button {
+    min-height: 47px;
+  }
+
   .edit-profile-header {
     padding: 15px;
   }
@@ -77,6 +85,10 @@
   .edit-profile-form {
     margin: 15px auto;
     padding: 15px;
+  }
+
+  .edit-profile-avatar-wrapper .user-avatar {
+    margin-bottom: 15px;
   }
 
   .edit-profile-avatar-actions {

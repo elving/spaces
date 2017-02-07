@@ -15,7 +15,7 @@ export default () => (
     getFromCacheOrQuery(key, () => {
       mongoose
         .model('Product')
-        .find({ isPendingApproval: { $ne: true } })
+        .find()
         .populate('brand')
         .populate('colors')
         .populate('createdBy')

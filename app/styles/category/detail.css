@@ -135,4 +135,10 @@ button.category-detail-counter:hover .category-detail-counter-text {
   .category-detail .navpills {
     margin-top: 15px;
   }
+
+  .category-detail-follow-button {
+    height: 28px !important;
+    padding: 4px 12px !important;
+    min-height: 28px !important;
+  }
 }

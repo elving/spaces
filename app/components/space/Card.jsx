@@ -150,7 +150,7 @@ export default class SpaceCard extends Component {
         <a href={`/${props.detailUrl}/`} className="card-actions-overlay" />
 
         {this.renderActions()}
-        {this.renderDesigner()}
+        {this.renderUser()}
         {this.renderRedesignBadge()}
 
         {state.imagesAreLoading ? (
@@ -201,6 +201,7 @@ export default class SpaceCard extends Component {
               tooltip: true,
               'card-action': true,
               'button--icon': true,
+              'popup-trigger': true,
               'button--active': state.redesignPopupIsOpen
             })}
             data-action="redesign"
@@ -229,6 +230,7 @@ export default class SpaceCard extends Component {
               'card-action': true,
               'share-button': true,
               'button--icon': true,
+              'popup-trigger': true,
               'button--active': state.sharePopupIsOpen
             })}
             data-action="share"
@@ -275,7 +277,7 @@ export default class SpaceCard extends Component {
     )
   }
 
-  renderDesigner() {
+  renderUser() {
     const { props } = this
 
     return (
@@ -283,16 +285,16 @@ export default class SpaceCard extends Component {
         rel="noopener noreferrer"
         href={`/${get(props.createdBy, 'detailUrl')}/`}
         target="_blank"
-        className="space-card-designer tooltip"
+        className="space-card-user tooltip"
         data-tooltip={`@${get(props.createdBy, 'username')}`}
       >
         <Avatar
           user={props.createdBy}
           width={18}
           height={18}
-          className="space-card-designer-avatar"
+          className="space-card-user-avatar"
         />
-        <span className="space-card-designer-name">
+        <span className="space-card-user-name">
           {isRedesign(props) ? 'Redesigned' : 'Designed'}
         </span>
       </a>

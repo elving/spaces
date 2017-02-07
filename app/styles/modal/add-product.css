@@ -248,7 +248,7 @@
 
   .add-product-modal .product-card .product-card-overlay,
   .add-product-modal .product-card .product-tags,
-  .add-product-modal .product-card .product-card-designer,
+  .add-product-modal .product-card .product-card-user,
   .add-product-modal .product-card .product-card-price {
     display: none;
   }

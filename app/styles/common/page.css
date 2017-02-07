@@ -111,6 +111,14 @@
 }
 
 @media (max-width: 768px) {
+  .page-content {
+    min-height: 100%;
+  }
+
+  .page-content--padding-top {
+    padding-top: 15px;
+  }
+
   .page-basic {
     padding: 15px;
   }

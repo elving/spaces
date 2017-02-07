@@ -63,7 +63,7 @@ export default class ChangePassword extends Component {
       isWaiting: true
     }, () => {
       axios
-      .put(`/ajax/designers/${toStringId(context.user)}/password/`, formData)
+      .put(`/ajax/users/${toStringId(context.user)}/password/`, formData)
       .then(() => {
         this.setState({
           errors: {},

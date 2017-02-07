@@ -38,7 +38,7 @@ export default class CommentsForm extends Component {
   onSubmit = (event) => {
     event.preventDefault()
 
-    const formData = serialize(this.form, { hash: true })
+    const formData = serialize(this.form, { hash: true, empty: true })
     const { state, context } = this
 
     if (!isEmpty(state.content)) {

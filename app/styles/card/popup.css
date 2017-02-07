@@ -9,6 +9,10 @@
   right: 25px;
 }
 
+.share-popup .popup-item .icon-social {
+  margin-right: 10px;
+}
+
 .spaces-popup:after,
 .spaces-popup:before,
 .redesign-popup:after,
@@ -95,15 +99,4 @@
 
 .spaces-popup [data-action="addSpace"] {
   border-top: 1px solid #dadada;
-}
-
-@media (max-width: 736px) {
-  .popup {
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    position: fixed !important;
-    z-index: 10000;
-  }
 }

@@ -24,7 +24,6 @@ const ProductSchema = new mongoose.Schema({
   commentsCount: { type: Number, default: 0 },
   followersCount: { type: Number, default: 0 },
   owners: { type: mongoose.Schema.ObjectId, ref: 'User' },
-  isPendingApproval: { type: Boolean, default: false },
   approvedBy: { type: mongoose.Schema.ObjectId, ref: 'User' }
 }, { timestamps: true })
 

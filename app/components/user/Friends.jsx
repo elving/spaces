@@ -5,10 +5,7 @@ import Users from './Users'
 import Layout from '../common/Layout'
 import SocialIcon from '../common/SocialIcon'
 
-import {
-  getTwitterUrl,
-  getFacebookUrl
-} from '../../utils/getShareUrl'
+import { getTwitterUrl } from '../../utils/getShareUrl'
 
 export default class Friends extends Component {
   render() {
@@ -21,6 +18,7 @@ export default class Friends extends Component {
           <div className="friends-actions">
             <a
               href="mailto:?subject=Join%20me%20on%20Spaces%20%E2%9C%8C%EF%B8%8F%EF%B8%8F&body=Hello!%0A%0AI%20would%20love%20to%20see%20you%20on%20Spaces!%20Come%20join%20me%20at%20https%3A%2F%2Fjoinspaces.co%2F"
+              target="_blank"
               className="friends-action button"
             >
               <SocialIcon name="email" />
@@ -28,13 +26,15 @@ export default class Friends extends Component {
             </a>
             <a
               href={getTwitterUrl('https:/joinspaces.co/join/', 'Come join me on Spaces!')}
+              target="_blank"
               className="friends-action button"
             >
               <SocialIcon name="twitter" />
               Invite via Twitter
             </a>
             <a
-              href={getFacebookUrl('https:/joinspaces.co/join/')}
+              href="https://www.facebook.com/sharer/sharer.php?u=http%3A//joinspaces.co/join"
+              target="_blank"
               className="friends-action button"
             >
               <SocialIcon name="facebook" />

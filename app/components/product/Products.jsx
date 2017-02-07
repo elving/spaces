@@ -137,7 +137,7 @@ class ProductsIndex extends Component {
           const results = get(data, 'results', [])
           const updatedResults = concat([], state.results, results)
 
-          if (size(updatedResults) > 8 && updatedResults[8] !== 'cta') {
+          if (size(updatedResults) > 8 && !find(updatedResults, r => r === 'cta')) {
             updatedResults.splice(8, 0, 'cta')
           }
 

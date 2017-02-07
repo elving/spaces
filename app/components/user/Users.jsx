@@ -115,7 +115,7 @@ export default class Users extends Component {
           const results = get(data, 'results', [])
           const updatedResults = concat([], state.results, results)
 
-          if (size(updatedResults) > 6 && updatedResults[6] !== 'cta') {
+          if (size(updatedResults) > 6 && !find(updatedResults, r => r === 'cta')) {
             updatedResults.splice(6, 0, 'cta')
           }
 

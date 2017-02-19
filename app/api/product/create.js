@@ -126,6 +126,10 @@ export default (props) => (
       return reject(parseError(validationErrors))
     }
 
+    if (has(sanitizedProps, 'approved')) {
+      product.shouldNotifyApproval = true
+    }
+
     try {
       const imageUrl = await uploadImageFromUrl(
         'products', get(sanitizedProps, 'image')

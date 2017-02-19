@@ -196,7 +196,9 @@ export const addProduct = async (req, res) => {
       merge(req.body, {
         createdBy: get(req, 'body.createdBy', userId),
         updatedBy: userId
-      })
+      }, get(req, 'body.createdBy') ? {
+        approved: true
+      } : {})
     )
 
     res.status(200).json(product)

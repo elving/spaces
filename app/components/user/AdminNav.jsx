@@ -60,7 +60,7 @@ export default class CurrentUserNav extends Component {
               Manage Products
             </a>
             <a
-              href="/admin/products/recommended/"
+              href="/admin/recommendations/"
               className="dropdown-link"
             >
               Manage Recommendations

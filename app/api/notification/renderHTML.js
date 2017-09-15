@@ -8,11 +8,17 @@ const getContext = notification => {
   const contextType = get(notification, 'contextType')
   const contextName = get(notification, 'context.name')
 
-  return action !== 'follow' ? (`
-    <a href=${`/${contextUrl}/`} title=${contextName} style="font-family: 'Lato', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; color: #439fe0; font-size: 18px;">
-      ${contextType}: ${truncate(contextName, { length: 50 })}
-    </a>
-  `) : ''
+  if (contextUrl && action !== 'follow') {
+    return (`
+      <a href=${`/${contextUrl}/`} title=${contextName} style="font-family: 'Lato', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; color: #439fe0; font-size: 18px;">
+        ${contextType}: ${truncate(contextName, { length: 50 })}
+      </a>
+    `)
+  } else if (action !== 'follow') {
+    return contextType
+  } else {
+    return ''
+  }
 }
 
 const getCreatedBy = notification => {

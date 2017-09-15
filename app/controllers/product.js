@@ -192,11 +192,12 @@ export const addProduct = async (req, res) => {
 
   try {
     const userId = get(req, 'user.id')
+    const bodyCreatedBy = get(req, 'body.createdBy')
     const product = await create(
       merge(req.body, {
-        createdBy: get(req, 'body.createdBy', userId),
+        createdBy: bodyCreatedBy || userId,
         updatedBy: userId
-      }, get(req, 'body.createdBy') ? {
+      }, !isEmpty(bodyCreatedBy) ? {
         approved: true
       } : {})
     )

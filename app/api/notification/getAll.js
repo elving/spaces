@@ -6,7 +6,7 @@ export default recipient => (
   new Promise((resolve, reject) => {
     mongoose
       .model('Notification')
-      .where({ recipient })
+      .where({ recipient, unread: { $eq: true } })
       .populate('context', 'sid name')
       .populate('createdBy', 'avatar username')
       .sort('createdAt')

@@ -25,7 +25,7 @@
     "accounting": "0.4.1",
     "aspectratio": "2.2.2",
     "autoprefixer": "6.7.2",
-    "axios": "0.15.3",
+    "axios": "0.21.1",
     "blockadblock": "3.2.1",
     "body-parser": "1.16.1",
     "cacheman": "2.2.1",

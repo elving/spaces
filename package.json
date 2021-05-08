@@ -30,7 +30,7 @@
     "body-parser": "1.16.1",
     "cacheman": "2.2.1",
     "cacheman-redis": "1.1.2",
-    "canvas": "1.6.3",
+    "canvas": "1.6.11",
     "cheerio": "0.22.0",
     "classnames": "2.2.5",
     "compression": "1.6.2",

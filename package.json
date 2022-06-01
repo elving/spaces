@@ -74,7 +74,7 @@
     "react-waypoint": "5.1.0",
     "request": "2.79.0",
     "sha1": "1.1.1",
-    "sharp": "0.17.2",
+    "sharp": "0.30.5",
     "shortid": "2.2.6",
     "timeago.js": "2.0.5"
   },

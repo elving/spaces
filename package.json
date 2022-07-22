@@ -43,7 +43,7 @@
     "eslint-plugin-jsx-a11y": "2.2.3",
     "express": "4.14.1",
     "express-session": "1.15.1",
-    "file-type": "4.1.0",
+    "file-type": "16.5.4",
     "form-serialize": "0.7.1",
     "image-size": "0.5.1",
     "jsosort": "0.0.0",
